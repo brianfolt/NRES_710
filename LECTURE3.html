@@ -1,0 +1,763 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+<meta name="author" content="NRES 710" />
+
+
+<title>Taxonomy of statistics</title>
+
+<script src="site_libs/header-attrs-2.14/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/yeti.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.tab('show');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">NRES 710</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li>
+  <a href="schedule.html">Schedule</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    Lectures
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="INTRO.html">Introduction to NRES 710</a>
+    </li>
+    <li>
+      <a href="LECTURE1.html">Basic Concepts</a>
+    </li>
+    <li>
+      <a href="LECTURE2.html">Sampling uncertainty</a>
+    </li>
+    <li>
+      <a href="LECTURE3.html">Taxonomy of common statistics</a>
+    </li>
+    <li>
+      <a href="LECTURE4.html">t-test and z-test</a>
+    </li>
+    <li>
+      <a href="LECTURE5.html">chi-squared tests</a>
+    </li>
+    <li>
+      <a href="LECTURE6.html">Analysis- ANOVA</a>
+    </li>
+    <li>
+      <a href="LECTURE7.html">Analysis- GLM and GLMM</a>
+    </li>
+    <li>
+      <a href="LECTURE7.html">Next steps</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    Exercises
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="EXERCISE1.html">Exercise- data summary functions</a>
+    </li>
+    <li>
+      <a href="EXERCISE2.html">Exercise- t-tests</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    More Resources
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="Links.html">Links</a>
+    </li>
+    <li>
+      <a href="FINALPROJ.html">Final Projects</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    Datasets
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="Data1.dat">Data1</a>
+    </li>
+  </ul>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+
+
+<h1 class="title toc-ignore">Taxonomy of statistics</h1>
+<h4 class="author">NRES 710</h4>
+<h4 class="date">Fall 2022</h4>
+
+</div>
+
+
+<div id="overview-of-statistical-methods" class="section level2">
+<h2>Overview of statistical methods</h2>
+<p>Before we delve into common statistical tests, let’s first take a
+quick walk through the analyses we will cover in this class. As we do
+this, we will try to put these analysis into a framework - a field guide
+of sorts – that will help us to make sense of these methods and when to
+use them.</p>
+<p>And before we do that, let’s briefly talk about <em>parametric</em>
+vs <em>nonparametric</em> statistical tests…</p>
+<div id="aside-parametric-vs-nonparametric" class="section level3">
+<h3>Aside: parametric vs nonparametric</h3>
+<p>As we saw in the last lecture, <strong>Parameters</strong> are the
+arguments used to describe probability distributions - they describe the
+exact shape and location of the distribution. Different probability
+distributions are associated with different parameters. For example, the
+normal distribution is described by 2 parameters: mean and standard
+deviation. The Poisson distribution has only one parameter (the Poisson
+mean, also known as Lambda). The binomial distribution is described by 2
+parameters: size (number of trials) and prob (success probability for
+each trial).</p>
+<div id="parametric-statistics" class="section level4">
+<h4>Parametric statistics</h4>
+<p>In <em>parametric statistics</em>, our statistical tests relate
+directly to the parameters of well-defined probability distributions
+(e.g., the mean of a normal distribution). That is, we assume <em>a
+priori</em> that our population follows a certain well-defined
+distribution (e.g., a normal distribution) and we make hypothesis about
+one or more of these parameters (often the mean of a normal
+distribution).</p>
+<p>Because of the Central Limit Theorem (CLT), we have good reason (in
+many cases) to assume that our sampling distribution should follow a
+particular distribution (e.g., z, t, Chi-squared) even if the underlying
+data don’t perfectly match the underlying assumptions of the analysis.
+However, this is not always a fair assumption – sometimes the
+assumptions of parametric tests are clearly violated!!</p>
+<p>We are fortunate that statisticians have developed a number of tests
+that do not depend on our data or data summaries following any defined
+probability distribution. These methods are the so-called
+<strong>distribution-free</strong> statistical tests, which are often
+referred to as <strong>non-parametric tests</strong>.</p>
+</div>
+<div id="nonparametric-statistics" class="section level4">
+<h4>Nonparametric statistics</h4>
+<p>Unlike parametric statistics, <em>nonparametric statistics</em> do
+not require us to make strong assumptions, such as that the underlying
+statistical population follows a normal error distribution (like in a
+t-test or linear regression). Using these methods, we can still test
+similar (but not identical) hypotheses even if our data do not meet
+standard parametric assumptions</p>
+<p>Confusingly, we often use the term “nonparametric” to refer to two
+different classes of statistical models:<br />
+1. Statistical tests that do not require any assumptions about the
+distribution of data or residuals. These methods are also known as
+<strong>distribution-free</strong> tests.<br />
+2. Statistical models that do not require assumptions about the
+<strong>shape</strong> of the relationship between two or more
+variables. These methods include generalized additive models, spline
+regressions, gaussian processes, and many methods collectively known as
+<strong>machine learning</strong> (e.g., random forest). These methods
+are often referred to as <strong>nonparametric regression</strong>.</p>
+</div>
+<div id="independence-of-data" class="section level4">
+<h4>Independence of data</h4>
+<p>It is important to note that most classical parametric and
+nonparametric statistics all make one very important assumption – that
+observations are independent! Violation of this assumption are often
+called <strong>pseudoreplication</strong> and can wreak havoc with our
+type I error rates!</p>
+<p><strong>Q</strong> Given the CLT makes many classical tests robust to
+non-normal data distributions, why do we need non-parametric
+statistics?</p>
+<p>Okay, let’s get back to our main purpose, which is to provide a
+“field guide” of sorts for determining which statistical analyses to
+run. This guide will involve characterizing the type of response
+variable and predictor variable we have at hand – most importantly,
+whether we have continuous or categorical data for our response and
+predictor variables.</p>
+</div>
+</div>
+<div id="continuous-response-variable" class="section level3">
+<h3>Continuous response variable</h3>
+<p>If your response variable is continuous, common classical statistical
+analyses include: t-tests, ANOVA, linear regression. Each of these tests
+is associated with non-parametric alternatives. In each case (for the
+parametric tests, that is!), we are interested in testing if the
+<em>population mean</em> of the continuous response variable is affected
+by the predictor variables (null hypothesis: nope, there is no effect!).
+Predictor variables, in turn, can be continuous or categorical (factor
+variables in R) – but as you suspected, different predictor variable
+types will lead us to choose different statistical models!</p>
+<div id="continuous-response-binary-categorical-predictor"
+class="section level4">
+<h4>Continuous response, binary categorical predictor</h4>
+<p>If your categorical predictor variable is binary (two levels) and
+your response variable is continuous, you can use a <strong>two-sample
+t-test</strong>.</p>
+<p>The non-parametric alternative is called the <strong>Mann-Whitney
+test</strong>.</p>
+<p>You can visualize the effect size using a boxplot or barplot with
+error bars.</p>
+<p><strong>Example</strong>: Are females larger than males? (null
+hypothesis: no difference). The response variable (body size) is
+continuous. The predictor variable (sex) is binary.</p>
+</div>
+<div id="continuous-response-multi-level-categorical-predictor"
+class="section level4">
+<h4>Continuous response, multi-level categorical predictor</h4>
+<p>If your categorical predictor has more than two levels, you can use
+an <strong>ANalysis Of Variance (ANOVA)</strong> followed by
+<em>pairwise comparisons</em> to test which categories differ from one
+another.</p>
+<p>The non-parametric alternative is the <strong>Kruskal-Wallis
+test</strong>.</p>
+<p>You can visualize these relationships with (e.g.) a boxplot or
+barplot with error bars.</p>
+<p><strong>Example</strong> Do three different brands of nail polish
+differ in their durability? (null hypothesis: no effect). The predictor
+variable (nail polish brand) is categorical, the response variable (time
+until product wears off) is continuous.</p>
+</div>
+<div id="continuous-response-continuous-predictor"
+class="section level4">
+<h4>Continuous response, continuous predictor</h4>
+<p>If your predictor variable and response variable are both continuous,
+you can use <strong>linear regression</strong> analysis.</p>
+<p>You can visualize the effect size using a scatterplot with a
+regression line and confidence “ribbon”.</p>
+<p>If you just want to know if two variables are correlated but you are
+not interested in modeling one (the response) as a function of another
+(the predictor) you can run a <strong>Pearson correlation
+test</strong>.</p>
+<p>The non-parametric alternative to a Pearson correlation test is a
+<strong>Spearman rank-correlation test</strong>.</p>
+<p>If you don’t want to assume a linear relationship, you can use
+polynomial regression, spline fits (GAM), or machine learning
+methods.</p>
+<p><strong>Example</strong>: What is the relationship between tree
+diameter and age- can tree diameter be used to effectively predict the
+age of a tree? (null hypothesis: nope, there is no relationship). The
+predictor variable (age) is continuous, and the response variable (tree
+diameter) is also continuous.</p>
+</div>
+<div id="continuous-response-both-continuous-and-categorical-predictors"
+class="section level4">
+<h4>Continuous response, both continuous and categorical predictors</h4>
+<p>If you have one categorical variable that you hypothesize may be
+influencing a continuous response variable– but there is also a “pesky”
+continuous variable that you also suspect is influencing your continuous
+response – you can use <strong>Analysis of Covariance
+(ANCOVA)</strong></p>
+<p>More generally, if you have a set of continuous and categorical
+predictor variables that you hypothesize may be influencing your
+continuous response variable, you can use <strong>multiple linear
+regression</strong>.</p>
+<p>You can visualize these relationships using boxplots and scatterplots
+with regression lines (and confidence intervals).</p>
+<p>Practically speaking, linear regression and ANOVA/ANCOVA are two
+sides of the same coin. Both involve modeling the mean of a continuous
+response as a function of one or more predictor variables. Both assume
+an underlying normally distributed population.</p>
+<p>You can run all of these analyses using the workhorse of linear
+modeling in R, the <code>lm()</code> function. Basically, if you have a
+continuous response variable, you can use the <code>lm()</code>
+function!</p>
+<p>Linear regression is parametric, and assumes the residuals
+(differences between observed data and predictions) are normally
+distributed. More generally, it assumes that the error distribution for
+the underlying population is normally distributed.</p>
+<p>The non-parametric alternative might be something like a
+<strong>distribution-free regression tree</strong> analysis (e.g.,
+<code>party()</code> in R, which makes no assumptions about the
+distribution of residuals or the shape of the relationship) or a
+<strong>generalized additive model (GAM)</strong> (which assumes the
+residuals follow a defined distribution, but makes not assumption about
+the shape of the functional response).</p>
+</div>
+</div>
+<div id="discrete-count-response-variable" class="section level3">
+<h3>Discrete (count) response variable</h3>
+<p>With a discrete count response, you can either assume a continuous
+response variable and use the same techniques as you would for a
+continuous response (e.g., linear regression). If this is not
+justifiable, you can use <strong>generalized linear models
+(GLM)</strong> with an error distribution that follows a
+<strong>discrete</strong> probability distribution such as a Poisson
+distribution (see previous lecture).</p>
+<p>This type of relationship can be visualized with a scatterplot and
+regression line (with confidence band)</p>
+<p><strong>Generalized Linear Models (GLM)</strong> are a widely used
+parametric class of models that enable researchers to perform regression
+analysis while <em>relaxing</em> the assumption that residuals must be
+normally distributed. In GLM, residual error can be distributed
+according to discrete distributions like Bernoulli (binary), Binomial,
+Poisson and Negative Binomial – or according to non-normal continuous
+distributions like the Gamma or Exponential distributions.</p>
+<p>Nonparametric options include classification/regression trees and
+GAM.</p>
+<p>Example: does the number of eggs produced per year by a desert
+tortoise depend on the availability of food in the prior year?</p>
+</div>
+<div id="categorical-response-variable" class="section level3">
+<h3>Categorical response variable</h3>
+<p>If your response variable is categorical (factor variable, ordinal
+variable, binary variable) then your choice of statistical methods
+changes:</p>
+<div id="categorical-response-variable-categorical-predictor"
+class="section level4">
+<h4>Categorical response variable, categorical predictor</h4>
+<p>If both your response variable and your predictor variable are
+categorical, then you can use a <strong>chi-squared test</strong> or a
+<strong>Fisher exact test</strong> to test for an association between
+the two variables.</p>
+<p>In this case, it can be informative to summarize your data as a
+<em>contingency table</em> like we did with the ‘lady tasting tea’
+example. That is, we make a table that summarized the number of
+observation in each unique category of our response and predictor
+variables.</p>
+<p>Example: test for an association between salamander color morph
+(melanistic vs wild-type) and mating behavior (‘sneaker’ vs territory
+holder).</p>
+</div>
+<div id="categorical-response-variable-continuous-predictor"
+class="section level4">
+<h4>Categorical response variable, continuous predictor</h4>
+<p>If your response variable is binary (true/false, two levels) and your
+predictor variable is continuous, you can use <strong>logistic
+regression</strong> (which is a type of <em>generalized linear model
+(GLM)</em>).</p>
+<p>Example: Does the probability of site-occupancy for American pika
+depend on elevation?</p>
+<p>If your categorical response variable has more than two levels, you
+can use <strong>multinomial logistic regression</strong> (for
+categorical responses) or <strong>ordinal logistic regression</strong>
+(for ordinal responses). I don’t plan to explore these methods in this
+class, but it can still be useful to know they exist!</p>
+</div>
+</div>
+<div id="when-the-taxonomy-breaks-down" class="section level3">
+<h3>When the taxonomy breaks down</h3>
+<p>Not all statistical tests fall into this neat hierarchy. Take a
+one-sample t-test for example. Imagine you are asking the question: Is
+the sample mean equal to 32? What exactly is the predictor variable?</p>
+<p>Another example might be a normality test. We want to test if our
+data are normally distributed – again, what is the predictor variable in
+this case?</p>
+</div>
+</div>
+<div id="discussion-final-projects" class="section level2">
+<h2>Discussion: final projects</h2>
+<p>For the remainder of the class period, let’s discuss your final
+projects. Take a minute to think through your data set and try to
+determine: what is your response variable, what is your predictor
+variable? Are these data continuous or discrete? Based on the taxonomy,
+what main analysis or analyses do you anticipate using for your final
+projects???</p>
+<p><a href="LECTURE4.html">–go to next lecture–</a></p>
+</div>
+
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+<script>
+$(document).ready(function ()  {
+
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

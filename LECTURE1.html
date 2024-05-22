@@ -1,0 +1,768 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+<meta name="author" content="NRES 710" />
+
+
+<title>Basic Concepts of Prob. and Stats.</title>
+
+<script src="site_libs/header-attrs-2.14/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/yeti.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.tab('show');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">NRES 710</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li>
+  <a href="schedule.html">Schedule</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    Lectures
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="INTRO.html">Introduction to NRES 710</a>
+    </li>
+    <li>
+      <a href="LECTURE1.html">Basic Concepts</a>
+    </li>
+    <li>
+      <a href="LECTURE2.html">Sampling uncertainty</a>
+    </li>
+    <li>
+      <a href="LECTURE3.html">Taxonomy of common statistics</a>
+    </li>
+    <li>
+      <a href="LECTURE4.html">t-test and z-test</a>
+    </li>
+    <li>
+      <a href="LECTURE5.html">chi-squared tests</a>
+    </li>
+    <li>
+      <a href="LECTURE6.html">Linear Regression</a>
+    </li>
+    <li>
+      <a href="LECTURE7.html">ANOVA</a>
+    </li>
+    <li>
+      <a href="LECTURE8.html">GLM</a>
+    </li>
+    <li>
+      <a href="LECTURE9.html">GLMM</a>
+    </li>
+    <li>
+      <a href="LECTURE10.html">Next steps</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    Exercises
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="EXERCISE1.html">Exercise- data summary functions</a>
+    </li>
+    <li>
+      <a href="EXERCISE2.html">Exercise- t-tests</a>
+    </li>
+    <li>
+      <a href="EXERCISE3.html">Exercise- simple linear regression</a>
+    </li>
+    <li>
+      <a href="EXERCISE4.html">Exercise- multiple linear regression</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    More Resources
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="Links.html">Links</a>
+    </li>
+    <li>
+      <a href="FINALPROJ.html">Final Projects</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    Datasets
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="Data1.dat">Data1</a>
+    </li>
+  </ul>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+
+
+<h1 class="title toc-ignore">Basic Concepts of Prob. and Stats.</h1>
+<h4 class="author">NRES 710</h4>
+<h4 class="date">Fall 2022</h4>
+
+</div>
+
+
+<div id="overview-of-basic-concepts-of-probability-and-statistics"
+class="section level2">
+<h2>Overview of basic concepts of probability and statistics</h2>
+<p>We use probability and statistics to make inferences from data!</p>
+<p>For example, say I asked you: can people with last names beginning
+A-M jump higher than those with last names beginning N-Z?</p>
+<p>As a scientist, what would we do?</p>
+<p>We would want to identify, and then sample, the population of
+interest! The process of making inferences about the world based on
+sample data is called <strong>statistics</strong>!</p>
+<div id="statistics" class="section level3">
+<h3>Statistics</h3>
+<p>The figure below illustrates the basic concepts of statistics (we’ve
+already seen this). The bold line separates the unseen population of
+interest (left) from the observed sample (right):</p>
+<p><img src="statistics1.png" style="width:40.0%" /></p>
+<p>Statistics is about using the things we can observe (the sample) to
+say something meaningful about the things we can’t observe (the
+population).</p>
+<p><strong>Q</strong>: what is the population in the above
+example?<br />
+<strong>Q</strong> what is the parameter in the above example?</p>
+<p><strong>Q</strong> what is the sample in the above example?<br />
+<strong>Q</strong> what is the ‘statistic’ in the above example?</p>
+<p><em>Population</em>: ???<br />
+<em>Parameter</em>: ???<br />
+<em>Sample</em>: ???<br />
+<em>Statistic</em>: ???</p>
+<p>For statistical inference to make sense, we must make several
+assumptions about the sample (i.e., that the sample is representative of
+the population).</p>
+<p>Classical statistics often involves comparing a <em>statistic</em>
+computed from the data (the “signal”) with a (usually theoretical)
+‘sampling distribution’ to quantify the “noise” or sampling error and
+ultimately determine whether or not we can say anything meaningful about
+the unseen <em>parameter</em>.</p>
+<p>Where does probability come in? Well, samples are random- all
+<em>statistics</em> are derived from random sampling processes.</p>
+<p>How can we tease apart signal from noise- i.e., determine that our
+result is <em>meaningful</em> and not simply an artifact of random
+sampling?</p>
+<p><em>Probability</em> helps us to quantify uncertainty and make sense
+of processes that come out different every time -like random
+sampling!</p>
+<p>Specifically, we use a special type of probability distribution known
+as a “sampling distribution” to quantify how much noise to expect from
+our random sampling process (this is also the topic of our next
+lecture).</p>
+</div>
+<div id="sampling-distributions" class="section level3">
+<h3>Sampling distributions</h3>
+<p><strong>Q</strong>: what is the probability of getting four heads out
+of 4 coin flips from a fair coin?</p>
+<p>We assume that heads or tails are equally likely outcomes of a single
+coin flip (fair coin) and that the four flips are completely
+independent.</p>
+<p>How many possible outcomes are there?</p>
+<p>TTTT<br />
+TTTH<br />
+TTHT<br />
+TTHH<br />
+THTT<br />
+THTH<br />
+THHT<br />
+THHH<br />
+HTTT<br />
+HTTH<br />
+HTHT<br />
+HTHH<br />
+HHTT<br />
+HHTH<br />
+HHHT<br />
+HHHH</p>
+<p>Assuming a ‘fair’ coin each of these outcomes/sequences is equally
+likely!</p>
+<p>What is the probability (expected frequency) of all four coin flips
+coming out heads?</p>
+<p>If you get four heads in a row, are you <em>surprised</em> enough by
+that outcome to reject the assumption that the coin is ‘fair’? What
+about if you got 100 heads in a row?</p>
+<p><strong>Q</strong> What is the probability of getting at least three
+of the same face (heads or tails) out of 4 coin flips? Would this cause
+you to reject the fairness of the coin?</p>
+<p>The distribution of possible outcomes from your sampling process
+(often under strict assumptions- like assuming a fair coin) is a
+<em>sampling distribution</em>.</p>
+<p>The notion that the coin is a fair coin is an example of a <em>null
+hypothesis</em>…</p>
+</div>
+</div>
+<div id="null-hypotheses-and-statistical-tests" class="section level2">
+<h2>Null hypotheses and statistical tests</h2>
+<p>The null hypothesis is the notion that the particular signal you are
+looking for is entirely absent in the population of interest.</p>
+<p>Under the null hypothesis, any hypothetical random samples you
+collect might have some apparent signal, but that apparent signal is
+just a meaningless artifact of random sampling, and not representative
+of the population (after all, the signal is completely absent in the
+population under the null hypothesis).</p>
+<p><strong>Q</strong> what is the null hypothesis for the jump-height
+example?</p>
+<div id="p-values" class="section level3">
+<h3>P values</h3>
+<p>The <em>p value</em> is a key concept of frequentist statistics, but
+one that is often misinterpreted and misunderstood.</p>
+<p>The p value only has meaning in the context of the null hypothesis-
+that is, in a world where the null hypothesis is true. I will sometimes
+refer to this as the “null universe”.</p>
+<p>The p value answers the question: “what’s the probability that my
+observed result (or one even more”extreme” –i.e., with even more
+“signal”) could have occurred by chance <em>given the null hypothesis is
+true</em>?”</p>
+<p>The lower the p-value, the more surprised you will be that your
+observed data could be a meaningless result of random chance alone AND
+the more likely you might be to <em>reject</em> the null hypothesis!</p>
+<p><strong>Q</strong>: What does a p-value tell you about your
+<em>alternative hypothesis</em>?</p>
+<div id="aside-extremeness" class="section level4">
+<h4>Aside: extremeness</h4>
+<p>The p value definition is accompanied by the word “extreme”: <em>the
+probability of observing a result at least as extreme as your observed
+result, given the null hypothesis is true</em>.</p>
+<p>A result ‘at least as extreme as your observed result’ means a sample
+dataset that has at least as much “signal” as your observed data.</p>
+<p>For example:</p>
+<p><em>Sample size</em>: 20, 10 with names between A and M and 10 with
+names between N and Z.<br />
+<em>Observed result</em>: mean jump-height for A-M is 0.2 cm greater
+than mean height for N-Z<br />
+<strong>Q</strong> Would you be comfortable rejecting the null
+hypothesis if random sampling under the null hypothesis could produce a
+result as or more extreme approximately 20% of the time (p = 0.2)?</p>
+</div>
+</div>
+<div id="statistical-tests-rejecting-the-null" class="section level3">
+<h3>Statistical tests: rejecting the null!</h3>
+<p>A p value is not in itself a statistical test. A p-value is a
+probability, which can take values between 0 and 1. It doesn’t in itself
+tell you whether or not you should reject the null hypothesis!</p>
+<p>We reject the null hypothesis if the p value falls below a threshold
+- this threshold is known as alpha, or <span
+class="math inline">\(\alpha\)</span>).</p>
+<p><span class="math inline">\(\alpha\)</span> is usually set by the
+researcher. It is arbitrary and has to do with your risk tolerance as a
+researcher.</p>
+<p>How comfortable are you with rejecting the null if there is a 10%
+chance that your result could have been generated under the null?</p>
+<p>How comfortable are you with rejecting the null if there is a 1%
+chance that your result could have been generated under the null?</p>
+<p>Fisher proposed <span class="math inline">\(\alpha =0.05\)</span> as
+striking a nice balance between mistakenly rejecting a true null
+hypothesis (Type 1 error), and failing to reject a false null hypothesis
+(a Type 2 error). This cutoff value was NEVER intended to be a fixed
+value to be applied unthinkingly!!!</p>
+</div>
+<div id="example-fishers-cups-of-tea" class="section level3">
+<h3>Example: Fisher’s cups of tea:</h3>
+<p>A Woman claimed she could tell if milk was added to a cup of tea
+first or last.</p>
+<p>Fisher suggested we give her 8 seemingly identical cups of tea at
+once, 4 with milk first and 4 with tea first. The woman is asked to
+identify the four cups that were poured with milk first, given the 8
+cups are presented to the woman in a randomized order.</p>
+<p>There are 70 possible ways of choosing four cups out of 8. The
+probability of getting all of them right by random chance (assuming the
+null is true) would be 1/70 = 0.014 = 1.4%. That would be kinda
+surprising, right? So if the lady selected all four cups correctly, are
+we surprised enough to reject the null?</p>
+<p><strong>Q</strong>: How would you state the null hypothesis in
+words?</p>
+<p><strong>Q</strong>: If we decide to reject the null, what do we now
+believe about our tea-taster?</p>
+<p><strong>Q</strong>: If we fail to reject the null, what do we now
+believe about our tea-taster? More specifically, do we now know she is a
+fraud?</p>
+<p>Here are the possibilities (X=incorrect id, O=correct id), which
+under the null hypothesis are equally likely (since the lady can’t
+actually tell the difference under the null hypothesis). Let’s assume
+cups 5-8 are milk first and 1-4 are milk last. The number of correct
+choices is in parentheses.</p>
+<p>X1/X2/X3/X4 (0) X1/X3/X4/O5 (1) X1/X4/O7/O8 (2) X2/X4/O5/O6 (2)
+X3/X4/O7/O8 (2)<br />
+X1/X2/X3/O5 (1) X1/X3/X4/O6 (1) X1/O5/O6/O7 (3) X2/X4/O5/O7 (2)
+X3/O5/O6/O7 (3)<br />
+X1/X2/X3/O6 (1) X1/X3/X4/O7 (1) X1/O5/O6/O8 (3) X2/X4/O5/O8 (2)
+X3/O5/O6/O8 (3)<br />
+X1/X2/X3/O7 (1) X1/X3/X4/O8 (1) X1/O5/O7/O8 (3) X2/X4/O6/O7 (2)
+X3/O5/O7/O8 (3)<br />
+X1/X2/X3/O8 (1) X1/X3/O5/O6 (2) X1/O6/O7/O8 (3) X2/X4/O6/O8 (2)
+X3/O6/O7/O8 (3)<br />
+X1/X2/X4/O5 (1) X1/X3/O5/O7 (2) X2/X3/X4/O5 (1) X2/X4/O7/O8 (2)
+X4/O5/O6/O7 (3)<br />
+X1/X2/X4/O6 (1) X1/X3/O5/O8 (2) X2/X3/X4/O6 (1) X2/O5/O6/O7 (3)
+X4/O5/O6/O8 (3)<br />
+X1/X2/X4/O7 (1) X1/X3/O6/O7 (2) X2/X3/X4/O7 (1) X2/O5/O6/O8 (3)
+X4/O5/O7/O8 (3)<br />
+X1/X2/X4/O8 (1) X1/X3/O6/O8 (2) X2/X3/X4/O8 (1) X2/O5/O7/O8 (3)
+X4/O6/O7/O8 (3)<br />
+X1/X2/O5/O6 (2) X1/X3/O7/O8 (2) X2/X3/O5/O6 (2) X2/O6/O7/O8 (3)
+<strong>O5/O6/O7/O8</strong> (4)<br />
+X1/X2/O5/O7 (2) X1/X4/O5/O6 (2) X2/X3/O5/O7 (2) X3/X4/O5/O6 (2)<br />
+X1/X2/O5/O8 (2) X1/X4/O5/O7 (2) X2/X3/O5/O8 (2) X3/X4/O5/O7 (2)<br />
+X1/X2/O6/O7 (2) X1/X4/O5/O8 (2) X2/X3/O6/O7 (2) X3/X4/O5/O8 (2)<br />
+X1/X2/O6/O8 (2) X1/X4/O6/O7 (2) X2/X3/O6/O8 (2) X3/X4/O6/O7 (2)<br />
+X1/X2/O7/O8 (2) X1/X4/O6/O8 (2) X2/X3/O7/O8 (2) X3/X4/O6/O8 (2)</p>
+<p><strong>Q</strong> what if the lady selected 3 of 4 correctly? [there
+are 17 ways of getting at least three of the four correct out of 70
+total combinations]. Would you be surprised enough to reject the null
+hypothesis. Is it possible that you (and the lady) are living in the
+null universe? How surprised would you have to be to reject the null and
+admit that she can tell the difference?</p>
+<p>ASIDE: the test above is called ‘Fisher’s exact test’ because it
+literally enumerates all the possible outcomes to compute the exact
+probability of observing any particular outcome under the null
+hypothesis. Most tests we will use in this class are (necessarily)
+approximations that rely on certain assumptions that may or not be met
+in practice. Fisher’s exact test assumes that all observations are
+independent, but otherwise makes no additional assumptions.</p>
+</div>
+<div id="statistics-terminology-type-1-and-type-2-errors"
+class="section level3">
+<h3>Statistics Terminology: Type 1 and Type 2 errors</h3>
+<p>A <em>type 1 error</em> is mistakenly rejecting the null hypothesis
+(false positive).</p>
+<p>The type 1 error rate (alpha) is the probability of committing a
+false positive error- given the null is true, how often would you reject
+the null?</p>
+<p>A <em>type 2 error</em> is mistakenly failing to reject a false null
+hypothesis (you are not living in the null universe but you fail to
+acknowledge it!).</p>
+<p>The type 2 error rate is called <strong>Beta</strong>, or <span
+class="math inline">\(\beta\)</span>, and is the probability of fail to
+reject the null assuming the null is false.</p>
+<p><strong>Q</strong> what would it mean to set the Beta level? Why do
+we set alpha rather than beta?<br />
+<strong>A</strong> there is only one universe in which the null
+hypothesis is true. There are infinite ways in which the null hypothesis
+could be false. It only makes sense to fix the alpha level…</p>
+<p>Finally <em>Power</em> is defined as the probability of correctly
+rejecting an incorrect null hypothesis. Power is simply defined as <span
+class="math inline">\(1-\beta\)</span>!</p>
+<p>Power is influenced by sample size (amount of information at your
+disposal) and effect size (the degree to which the null is not true!),
+among other things. A <em>Power analysis</em> is an attempt to see how
+much power you have to detect a true signal under a given sampling
+design.</p>
+<p><img src="clt1.jpg" /></p>
+<p><a href="LECTURE2.html">–go to next lecture–</a></p>
+</div>
+</div>
+
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+<script>
+$(document).ready(function ()  {
+
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
