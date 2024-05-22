@@ -1,5 +1,6 @@
 ---
-title: "NRES 710: Graduate Environmental Statistics"
+title: "NRES 710"
+author: "Graduate Environmental Statistics"
 date: "**Fall 2024**"
 output:
   html_document:
@@ -13,6 +14,7 @@ body{ /* Normal  */ font-size: 16px; font-family: Arial; color:black}
 th { /* Table Header */ font-size: 16px; /}
 td {  /* Table  */ font-size: 14px;}
 h1.title {font-size: 38px; color: Black; font-weight: bold;}
+.author {font-size: 38px; color: Black; font-weight: bold;}
 h1 { /* Header 1 */ font-size: 28px; color: Black; font-weight: bold;}
 h2 { /* Header 2 */ font-size: 22px; color: Black; font-weight: bold;}
 h3 { /* Header 3 */ font-size: 18px; color: Black; font-weight: bold;}
