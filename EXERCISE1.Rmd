@@ -1,5 +1,5 @@
 ---
-title: "Exercise 1: R"
+title: "Exercise 1: Data Summary Functions in R"
 author: "NRES 710"
 date: "Fall 2024"
 output: 
