@@ -51,12 +51,7 @@ navbar:
       href: Links.html
     - text: Final Projects 
       href: FINALPROJ.html
-  - text: Datasets
-    menu: 
-    - text: Data1 
-      href: Data1.dat
 output:
   html_document:
     lib_dir: site_libs
     self_contained: no
-
