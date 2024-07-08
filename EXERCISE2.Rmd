@@ -122,4 +122,6 @@ Please provide your well-commented R code and report the following:
 3. t-statistic and p-value for your t-test
 4. assessment and discussion of whether the assumptions of t-tests were met
 5. results of any alternative (e.g. non-parametric) analyses conducted as a result of violations of assumptions found in the previous step
-6. your final conclusions regarding the hypothesized relationship between watering treatment and seedling plasticity with respect to root:shoot ratios. 
+6. your final conclusions regarding the hypothesized relationship between watering treatment and seedling plasticity with respect to root:shoot ratios.
+
+--- End of Exercise 2 ---

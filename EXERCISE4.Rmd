@@ -20,6 +20,7 @@ knitr::opts_chunk$set(
 )
 ```
 
+### Exercise 4
 
 Today's exercises provide hands-on experience working with multiple linear regression in R, with an emphasis on drawing valid statistical interpretations from your results. 
 
@@ -78,7 +79,6 @@ Some hints:
 
 The assignment will be due on the deadline specified in WebCampus. 
 
-
 Your report should include: 
 
 1. R code
@@ -86,22 +86,4 @@ Your report should include:
 3. Your regression model parameters for the final model that you believe to be the “true model” (see above for explanation) 
 4. A concluding section outlining your main findings, describing analysis steps or approaches that you considered especially helpful, and any remaining uncertainties. 
 
-
-
-
--- End of exercise 4 ---
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+--- End of Exercise 4 ---

@@ -91,3 +91,5 @@ Write a function to compute the CV for any data vector and apply this to the “
 ### Part 4: drawing a regression line through a scatter plot 
 
 Write a function for drawing a regression line through a scatter plot. [hint: Within your custom function, you will use the existing `plot()`, `lm()`, and `abline()` functions]. You will need to include at least two arguments in your function, specifying the response vector and the predictor vector]. Apply this function to the “height” (predictor) and “volume” (response) columns in the “trees” dataset, and then to the “waiting” (predictor) and “eruptions” (response) columns in the “faithful” dataset. Your submission should include (1) the function code, (2) a command (line of code) using your function on the "trees" dataset as specified, and (3) a command (line of code) using your function on the "faithful" dataset as specified.
+
+--- End of Exercise 1 ---

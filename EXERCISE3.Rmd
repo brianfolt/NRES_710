@@ -225,19 +225,4 @@ And here are some additional things to try!
 4.  Fit interaction terms as appropriate to try to improve model fit. 
 5.	Fit nonlinear relationships by including polynomial terms in your model, as appropriate to improve model fit.
 
-
----End exercise 3---
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+--- End of Exercise 3 ---

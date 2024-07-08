@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+<meta name="author" content="NRES 710" />
+
+
+<title>Exercise 4: Multiple Linear Regression</title>
+
+<script src="site_libs/header-attrs-2.27/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/yeti.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/jqueryui-1.13.2/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+<link rel="stylesheet" href="styles.css" type="text/css" />
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "\e258";
+  font-family: 'Glyphicons Halflings';
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">NRES 710</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li>
+  <a href="schedule.html">Schedule</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    Lectures
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="INTRO.html">Introduction to NRES 710</a>
+    </li>
+    <li>
+      <a href="LECTURE1.html">Basic Concepts</a>
+    </li>
+    <li>
+      <a href="LECTURE2.html">Sampling uncertainty</a>
+    </li>
+    <li>
+      <a href="LECTURE3.html">Taxonomy of common statistics</a>
+    </li>
+    <li>
+      <a href="LECTURE4.html">t-test and z-test</a>
+    </li>
+    <li>
+      <a href="LECTURE5.html">chi-squared tests</a>
+    </li>
+    <li>
+      <a href="LECTURE6.html">Linear Regression</a>
+    </li>
+    <li>
+      <a href="LECTURE7.html">ANOVA</a>
+    </li>
+    <li>
+      <a href="LECTURE8.html">GLM</a>
+    </li>
+    <li>
+      <a href="LECTURE9.html">GLMM</a>
+    </li>
+    <li>
+      <a href="LECTURE10.html">Machine Learning</a>
+    </li>
+    <li>
+      <a href="GIT_tutorial.html">Intro to GIT</a>
+    </li>
+    <li>
+      <a href="LECTURE11.html">Next steps</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    Exercises
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="EXERCISE1.html">Exercise 1 - Data Summary Functions</a>
+    </li>
+    <li>
+      <a href="EXERCISE2.html">Exercise 2 - t-tests</a>
+    </li>
+    <li>
+      <a href="EXERCISE3.html">Exercise 3 - Simple Linear Regression</a>
+    </li>
+    <li>
+      <a href="EXERCISE4.html">Exercise 4 - Multiple Linear Regression</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    More Resources
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="Links.html">Links</a>
+    </li>
+    <li>
+      <a href="FINALPROJ.html">Final Projects</a>
+    </li>
+  </ul>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+
+
+<h1 class="title toc-ignore">Exercise 4: Multiple Linear Regression</h1>
+<h4 class="author">NRES 710</h4>
+<h4 class="date">Fall 2024</h4>
+
+</div>
+
+
+<div id="exercise-4" class="section level3">
+<h3>Exercise 4</h3>
+<p>Today’s exercises provide hands-on experience working with multiple
+linear regression in R, with an emphasis on drawing valid statistical
+interpretations from your results.</p>
+<p>I encourage you to work in teams.</p>
+<p>Please submit your responses <strong>individually</strong> on
+webcampus. If you worked with a team, please include the names of your
+team members at the top of your submission.</p>
+<p>Reports must be uploaded to Webcampus by the date indicated (see
+WebCampus).</p>
+<p>It is not expected that you will complete the whole process during
+the class period. Good luck!!</p>
+<p><img src="roadrunner.gif" /></p>
+<p>A new bird species has recently been discovered, the Pinyon
+Roadrunner(<em>Geococcyx fictus</em>). Like its famous cousin the
+Greater Roadrunner (<em>Geococcyx californianus</em>), this species
+prefers open country, is predatory on a wide variety of reptiles,
+insects, arthropods, and rodents; and forages primarily through rapid
+movements on the ground (or sometimes running in slow motion through the
+air), continuously vocalizing with its “beep beep” or “hmeep hmeep”
+call.</p>
+<p>The new species occurs in cooler Great Basin environments where the
+Greater Roadrunner is not found, preferring montane sagebrush
+communities or sparse woodlands dominated by pinyon pine and juniper
+tree species. Not much is known yet about the specific habitat
+requirements of this newly discovered species, although data from recent
+surveys are available from several scattered mountain ranges where it
+has been observed to be surprisingly abundant.</p>
+<p>You are provided (see file <a
+href="PJRoadRunner.csv">PJRoadRunner.csv</a>) with the following data
+from 100 site locations where extensive point count surveys were
+implemented, including roadrunner density (response variable) as well as
+predictor variables representing topographic, edaphic (soil-related) and
+woodland vegetation structure:</p>
+<ol style="list-style-type: decimal">
+<li>RR: Pinyon Roadrunner density (birds/km2). This is your response
+variable</li>
+<li>Steep: slope steepness (%)</li>
+<li>Elev: elevation (feet)</li>
+<li>TreeDens: Tree Density (trees/ha), all stems &gt; 2-cm diameter at
+breast height (dbh)</li>
+<li>CosAsp: Slope aspect, linearized from degrees using a cosine
+transformation such that 1.0 represents northeast-facing (45 degree)
+slopes (i.e., cooler slopes that receive less solar insolation) and -1.0
+represents southwest-facing (225 degree) slopes.</li>
+<li>PatchSize: Area (ha) of the habitat patch where observations were
+made (or the closest patch to the observation point), estimated from
+aerial photography</li>
+<li>SoilpH: Surface soil pH from an aggregate sample (to 8-cm depth)
+obtained from numerous locations around the observation point.<br />
+</li>
+<li>SoilD: Soil depth (m) averaged from numerous locations around the
+observation point.<br />
+</li>
+<li>CanCov: Tree canopy cover (% aerial cover) estimated from aerial
+photography through image analysis.</li>
+</ol>
+<p>Of course, this is actually a simulated data set. The true habitat
+relationships for this species are perfectly known as the parameters in
+a linear equation used to calculate the abundances.</p>
+<p>You should therefore be able to reconstruct the true parameters
+through a multiple linear equation analysis!</p>
+<p>However, some challenges that may make this a nontrivial exercise in
+regression modeling:</p>
+<ol style="list-style-type: lower-alpha">
+<li>Some random noise (uncorrelated error) has been added to the
+observations</li>
+<li>You are provided with a random sample of data from the underlying
+population of observations that was calculated</li>
+<li>The predictor variables may be correlated with one another, as one
+expects for variables representing topography, soils and vegetation</li>
+<li>There may be nonlinear relationships between predictor and response
+variables</li>
+<li>There may be <strong>interaction effects</strong> in the
+relationship between predictor and response variables</li>
+<li>There may be other confounding influences at play.</li>
+</ol>
+<p>Your group’s assignment is to reconstruct the true parameters of the
+Pinyon Roadrunner species-habitat relationship, and to outline the
+process by which you arrived at your result.</p>
+<p>Some hints:</p>
+<ul>
+<li>Explore the correlation structure of your dataset carefully.</li>
+<li>Use the vif function (<code>car</code> package) to explore possible
+multicollinearity, and refit your regression models accordingly.</li>
+<li>Use regression diagnostic plots</li>
+<li>You can use the <code>poly()</code> function to add polynomial terms
+to a regression model. Alternatively, use the <code>I()</code> operator:
+eg, to add a squared term use <code>y ~ x1 + I(x1^2)</code>.<br />
+</li>
+<li>Try using the <code>effects</code> package to easily visualize the
+effects of predictor variables modeled from your regression models,
+including interaction and polynomial terms</li>
+<li>Try using the <code>coplot()</code> function to generate graphs of
+suspected interaction terms empirically (from the data, not from a
+modeled relationship)</li>
+<li>Use the <code>anova()</code> function on multiple, nested models to
+statistically test model parsimony using an F-Test or likelihood ratio
+test (increase in variance explained vs. number of parameters added).
+You could also use the AIC function to calculate AIC coefficients (which
+we will cover later in the course).</li>
+<li>Adopt (and consistently follow) an approach for addressing the
+multicollinearity that is present in the dataset.</li>
+</ul>
+<p>The assignment will be due on the deadline specified in
+WebCampus.</p>
+<p>Your report should include:</p>
+<ol style="list-style-type: decimal">
+<li>R code</li>
+<li>Key outputs (tables, figures) for describing important elements of
+your workflow and for supporting your conclusions.</li>
+<li>Your regression model parameters for the final model that you
+believe to be the “true model” (see above for explanation)</li>
+<li>A concluding section outlining your main findings, describing
+analysis steps or approaches that you considered especially helpful, and
+any remaining uncertainties.</li>
+</ol>
+<p>— End of Exercise 4 —</p>
+</div>
+
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+<script>
+$(document).ready(function ()  {
+
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
