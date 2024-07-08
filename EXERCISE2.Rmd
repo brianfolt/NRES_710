@@ -1,13 +1,32 @@
 ---
 title: "Exercise 2: t-tests"
 author: "NRES 710"
-date: "Fall 2022"
+date: "Fall 2024"
 output: 
   html_document: 
     theme: yeti
     toc: yes
     toc_float: yes
 ---
+
+<style type="text/css">
+body{ /* Normal  */ font-size: 16px; font-family: Arial; color:black}
+th { /* Table Header */ font-size: 16px; /}
+td {  /* Table  */ font-size: 14px;}
+h1.title {font-size: 30px; color: Black; font-weight: bold;}
+.author {font-size: 30px; color: Black; font-weight: bold;}
+h1 { /* Header 1 */ font-size: 28px; color: Black; font-weight: bold;}
+h2 { /* Header 2 */ font-size: 22px; color: Black; font-weight: bold;}
+h3 { /* Header 3 */ font-size: 18px; color: Black; font-weight: bold;}
+h4 { /* Header 4 */ font-size: 16px; color: Black; font-weight: bold;}
+code.r{ /* Code block */ font-size: 12px;}
+pre { /* Code block - determines code spacing between lines */ font-size: 14px;}
+.main-container {padding-left: 25px;}
+.toc-content {
+  width: 75%; /* Increase the width of the main content area */
+  margin-left: 27%; /* Ensure this aligns properly with the TOC width */
+}
+</style>
 
 ```{r setup, include=FALSE}
 
@@ -19,20 +38,19 @@ knitr::opts_chunk$set(
 )
 ```
 
-
 Today's exercises provide hands-on experience working with t-tests (and nonparametric alternatives) in R, with an emphasis on drawing valid statistical interpretations from your results. 
 
 I encourage you to work in teams of three. This way, one team member can focus on a single problem, and then all team members can review their solution and results with other members of the team. 
 
-Please submit your responses individually on webcampus. If you worked with a team, please include the names of your team members at the top of your submission. 
+Please submit your responses individually on WebCampus. If you worked with a team, please include the names of your team members at the top of your submission. 
 
-Reports must be uploaded to Webcampus by the date indicated (see WebCampus).
+Reports must be uploaded to WebCampus by the date indicated (see WebCampus).
 
 It is not expected that you will complete the whole process during the class period. 
 
 You are of course welcome to ask for help outside of your groups by using the Statistical Concepts Discussion Forum, or by asking the instructor for hints. 
 
-Good luck!!
+Good luck!
 
 
 ### Problem 1.  
@@ -123,20 +141,3 @@ Please provide your well-commented R code and report the following:
 4. assessment and discussion of whether the assumptions of t-tests were met
 5. results of any alternative (e.g. non-parametric) analyses conducted as a result of violations of assumptions found in the previous step
 6. your final conclusions regarding the hypothesized relationship between watering treatment and seedling plasticity with respect to root:shoot ratios. 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

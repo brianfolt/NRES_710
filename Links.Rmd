@@ -1,7 +1,7 @@
 ---
 title: "Links"
 author: "NRES 710"
-date: "Fall 2022"
+date: "Fall 2024"
 output: 
   html_document: 
     theme: yeti
@@ -9,55 +9,74 @@ output:
     toc_float: yes
 ---
 
+<style type="text/css">
+body{ /* Normal  */ font-size: 16px; font-family: Arial; color:black}
+th { /* Table Header */ font-size: 16px; /}
+td {  /* Table  */ font-size: 14px;}
+h1.title {font-size: 30px; color: Black; font-weight: bold;}
+.author {font-size: 30px; color: Black; font-weight: bold;}
+h1 { /* Header 1 */ font-size: 28px; color: Black; font-weight: bold;}
+h2 { /* Header 2 */ font-size: 22px; color: Black; font-weight: bold;}
+h3 { /* Header 3 */ font-size: 18px; color: Black; font-weight: bold;}
+h4 { /* Header 4 */ font-size: 16px; color: Black; font-weight: bold;}
+code.r{ /* Code block */ font-size: 12px;}
+pre { /* Code block - determines code spacing between lines */ font-size: 14px;}
+.main-container {padding-left: 25px;}
+.toc-content {
+  width: 75%; /* Increase the width of the main content area */
+  margin-left: 27%; /* Ensure this aligns properly with the TOC width */
+}
+</style>
+
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
 Please let me know if there are other links that you think should be included on this page!
 
-[Weekly math/bio "Stats chats"](https://kevintshoemaker.github.io/StatsChats/)
+[Weekly math/bio "Stats Chats"](https://guides.library.unr.edu/StatsChats)
 
-# Methods links
+### Methods links
 
-## Download R:
+#### Download R:
  [CRAN website](https://cran.r-project.org/)  
  
-## Download R Studio:   
- [Rstudio main site](https://www.rstudio.com/)     
+#### Download RStudio:   
+ [RStudio main site](https://www.rstudio.com/)     
  [R projects (useful feature of RStudio)](https://support.rstudio.com/hc/en-us/articles/200526207-Using-Projects)        
- [Rstudio online learning resources](https://www.rstudio.com/online-learning/)      
+ [RStudio online learning resources](https://www.rstudio.com/online-learning/)      
  
-## R Introductory Tutorials and Courses
+#### R Introductory Tutorials and Courses
  [Datacamp's- "Intro to R"](https://www.datacamp.com/home)   
  [Prelude in R](https://preludeinr.com)      
  [R for beginners](https://cran.r-project.org/doc/contrib/Paradis-rdebuts_en.pdf)   
- [Hadley Wickhams "R for Data Science"](http://r4ds.had.co.nz/index.html)
+ [Hadley Wickhams "R for Data Science" (version 2)](https://r4ds.hadley.nz/)
  [Modern Dive](https://ismayc.github.io/moderndiver-book/)     
  [Data carpentry course](http://www.datacarpentry.org/semester-biology/)
  [Many other resources](https://cran.r-project.org/other-docs.html) 
  [Many R Books (and other useful resources)](http://rbasicsworkshop.weebly.com/books.html)    
- [NCEAS tutorial- oldie but goodie](https://www.nceas.ucsb.edu/files/scicomp/Dloads/RProgramming/BestFirstRTutorial.pdf)
+ [NCEAS tutorial - oldie but goodie](https://www.nceas.ucsb.edu/files/scicomp/Dloads/RProgramming/BestFirstRTutorial.pdf)
 
-## R Examples (some people learn best by just playing with existing code!)            
+#### R Examples (some people learn best by just playing with existing code!)            
  [R by example](http://www.mayin.org/ajayshah/KB/R/)      
 
-## R reference cards (print 'em out and hang by your office desk!)      
+#### R reference cards (print 'em out and hang by your office desk!)      
  [Short Reference Card](https://cran.r-project.org/doc/contrib/Short-refcard.pdf)  
  [More comprehensive reference card](https://cran.r-project.org/doc/contrib/Baggott-refcard-v2.pdf)    
  [Data management reference card](https://sites.ualberta.ca/~ahamann/teaching/renr690/R_Cheat_Data.pdf)      
  [RStudio cheatsheets- very useful!](https://www.rstudio.com/resources/cheatsheets/)     
      Includes cheatsheets for R markdown, shiny, data wrangling with "dplyr" and much more!     
 
-## R Markdown (for publishing and communicating in R. This website was built in R Markdown!)          
+#### R Markdown (for publishing and communicating in R. This website was built in R Markdown!)          
  [Guide for Pandoc Markdown](http://rmarkdown.rstudio.com/authoring_pandoc_markdown.html)   
  [Website development for RMarkdown](http://rmarkdown.rstudio.com/rmarkdown_websites.html)   
  [YAML: YAML Ain't Markup Language!](http://yaml.org/)   
  [a nice simple Markdown syntax guide](https://confluence.atlassian.com/bitbucketserver/markdown-syntax-guide-776639995.html)  
 
-## GIT (for sharing your code and collaborating with others!)        
+#### GIT (for sharing your code and collaborating with others!)        
  [Excellent intro GIT tutorial](https://try.github.io/)  
 
-## Bayesian Statistics
+#### Bayesian Statistics
  [Install JAGS](http://mcmc-jags.sourceforge.net/)         
  [MCMC for Dummies...](http://twiecki.github.io/blog/2015/11/10/mcmc-sampling/) (basis of MCMC lecture...)  
  [BUGS online manual](http://www.mrc-bsu.cam.ac.uk/wp-content/uploads/manual14.pdf)  
@@ -66,37 +85,36 @@ Please let me know if there are other links that you think should be included on
  [Bayesian Methods for Hackers!](http://camdavidsonpilon.github.io/Probabilistic-Programming-and-Bayesian-Methods-for-Hackers/)    
  [NIMBLE (alternative implementation of BUGS language for R)](https://r-nimble.org/)  
  
-## Generalized Linear Mixed Models
+#### Generalized Linear Mixed Models
  [Solving convergence issues](https://rstudio-pubs-static.s3.amazonaws.com/33653_57fc7b8e5d484c909b615d8633c01d51.html)         
 
-## Time Series Analysis
+#### Time Series Analysis
  [A regression approach to time series analysis](http://node101.psych.cornell.edu/Darlington/series/series0.htm)  
  
-## Ordination
+#### Ordination
  [Practical guide to ordination for Ecologists](http://ordination.okstate.edu/index.html)  
  
-## Tree-based machine learning
+#### Tree-based machine learning
  [Breiman's guide to Random Forest](http://www.stat.berkeley.edu/~breiman/RandomForests/cc_home.htm)  
  [Vignette: boosted regression trees for species distribution modeling](https://cran.r-project.org/web/packages/dismo/vignettes/brt.pdf)  
 
-## Structural Equation Modeling and Bayes Nets
+#### Structural Equation Modeling and Bayes Nets
  [Random but relevant blog post](http://blog.efpsa.org/2015/12/14/structural-equation-modeling-what-is-it-what-does-it-have-in-common-with-hippie-music-and-why-does-it-eat-cake-to-get-rid-of-measurement-error/)  
  ["bnlearn" package documentation for Bayes nets](http://www.bnlearn.com/)  
  
-## Spatial Analysis in R
+#### Spatial Analysis in R
  ["raster" package vignette](https://cran.r-project.org/web/packages/raster/vignettes/Raster.pdf)   
 
-## Spatial Capture Recapture (secr)   
+#### Spatial Capture Recapture (secr)   
  ['secr' Google Group](https://groups.google.com/forum/#!forum/secrgroup)    
  [BUGS code for secr](http://www.mikemeredith.net/blog/1309_SECR_in_JAGS_patchy_habitat.htm)
  
- 
-# Data links
+### Data links
 
-## Publicly available datasets, potentially for final project...  
+#### Publicly available datasets, potentially for final project...  
 (many links courtesy Tom Langen) 
 
-### GOVERNMENT AGENCY DATA PORTALS 
+#### GOVERNMENT AGENCY DATA PORTALS 
 
 [National Map](https://nationalmap.gov/) (Geospatial data on the environment, economy, and people of the US).   
 
@@ -134,13 +152,11 @@ Please let me know if there are other links that you think should be included on
 
 [Socioeconomic DAAC](http://sedac.ciesin.columbia.edu/)      
 
-
-
-### ENVIRONMENTAL DATA CLEARINGHOUSES
+#### ENVIRONMENTAL DATA CLEARINGHOUSES
 
 [Pole to Pole Ecological Research Lattice of Sites (P2ERLS)](http://www.p2erls.net/) (Portal to research stations and research networks, including their data archives.)  
 
-[Weatherspark](http://weatherspark.com/) (Visualized time-series data on local climate at sites around the globe.)  
+[Weatherspark](http://weatherspark.com/) (Visualized time-series data on local climate at sites around the globe.)
 
 [Long Term Ecological Research (LTER) Network](http://www.lternet.edu/) (Network of research stations that have standardized monitoring programs as well as site-specific research. Sites are mandated to make data publicly available on the web.)  
 
@@ -151,9 +167,7 @@ Please let me know if there are other links that you think should be included on
 [WorldClim](http://www.worldclim.org/) (global climate layers (gridded climate data) with a spatial resolution of about 1 km2)     
 
 [DayMet](https://daymet.ornl.gov/dataaccess.html) (gridded estimates of daily weather parameters for North America)    
-
-
-### BIODIVERSITY DATA CLEARINGHOUSES /ARCHIVES
+#### BIODIVERSITY DATA CLEARINGHOUSES /ARCHIVES
 [International Union for the Conservation of Nature (IUCN) Redlist](http://www.iucnredlist.org/) (Searchable list of the world’s threatened and endangered plants and animal species on the IUCN Redlist.)   
 
 [National Biological Information Infrastructure](http://www.nbii.gov/) (Data archive and clearinghouse for biological data from the US. Also provides standards for metadata.)  
@@ -174,8 +188,7 @@ Please let me know if there are other links that you think should be included on
 
 [NEON: National Ecological Observatory Network](https://www.neonscience.org/)  (NEON collects and provides open data from 81 field sites across the United States that characterize and quantify how our nation's ecosystems are changing)      
 
-
-### RESEARCH PROJECT DATA ARCHIVES
+#### RESEARCH PROJECT DATA ARCHIVES
 [Dryad](http://datadryad.org/) (Data archives for bioscience data from peer-reviewed journal articles from a large consortium of journals)   
 
 [Ecological Society of America (ESA) Data Registry](https://data.esa.org/esa/style/skins/esa/index.jsp)
@@ -184,8 +197,3 @@ Archive of ecological and environmental data from ESA publications)
 [National Center for Ecological Assessment & Synthesis (NCEAS) Data Repository](http://knb.ecoinformatics.org/knb/style/skins/nceas/index.jsp) (Data archive of contributed data sets of all types of ecological data.)    
 
 [EDI Data Portal](https://portal.edirepository.org/nis/home.jsp) (NSF-funded iniative to archive data from NSF DEB funded research projects)     
-
-
-
-
-

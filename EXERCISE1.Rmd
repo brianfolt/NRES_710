@@ -1,13 +1,32 @@
 ---
-title: "Exercise 1"
+title: "Exercise 1: R"
 author: "NRES 710"
-date: "Fall 2022"
+date: "Fall 2024"
 output: 
   html_document: 
     theme: yeti
     toc: yes
     toc_float: yes
 ---
+
+<style type="text/css">
+body{ /* Normal  */ font-size: 16px; font-family: Arial; color:black}
+th { /* Table Header */ font-size: 16px; /}
+td {  /* Table  */ font-size: 14px;}
+h1.title {font-size: 30px; color: Black; font-weight: bold;}
+.author {font-size: 30px; color: Black; font-weight: bold;}
+h1 { /* Header 1 */ font-size: 28px; color: Black; font-weight: bold;}
+h2 { /* Header 2 */ font-size: 22px; color: Black; font-weight: bold;}
+h3 { /* Header 3 */ font-size: 18px; color: Black; font-weight: bold;}
+h4 { /* Header 4 */ font-size: 16px; color: Black; font-weight: bold;}
+code.r{ /* Code block */ font-size: 12px;}
+pre { /* Code block - determines code spacing between lines */ font-size: 14px;}
+.main-container {padding-left: 25px;}
+.toc-content {
+  width: 75%; /* Increase the width of the main content area */
+  margin-left: 27%; /* Ensure this aligns properly with the TOC width */
+}
+</style>
 
 ```{r setup, include=FALSE}
 
@@ -90,21 +109,3 @@ Write a function to compute the CV for any data vector and apply this to the “
 ### Part 4: drawing a regression line through a scatter plot 
 
 Write a function for drawing a regression line through a scatter plot. [hint: Within your custom function, you will use the existing `plot()`, `lm()`, and `abline()` functions]. You will need to include at least two arguments in your function, specifying the response vector and the predictor vector]. Apply this function to the “height” (predictor) and “volume” (response) columns in the “trees” dataset, and then to the “waiting” (predictor) and “eruptions” (response) columns in the “faithful” dataset. Your submission should include (1) the function code, (2) a command (line of code) using your function on the "trees" dataset as specified, and (3) a command (line of code) using your function on the "faithful" dataset as specified.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

@@ -1,17 +1,17 @@
-Week,Mon class meeting,Wed class meeting,Exercises/deadlines
-Aug. 29 (week 1),[Overview: R and statistics](INTRO.html),"[P-values, statistical tests](LECTURE1.html)",
-Sept. 5 (week 2),*No Class (labor day)*,[Exercise 1: functions and summary stats](EXERCISE1.html),
-Sept. 12  (week 3),[Central limit theorem (CLT) and sampling distributions](LECTURE2.html),[Central limit theorem (CLT) and sampling distributions](LECTURE2.html),Exercise 1 due 9/16
-Sept. 19 (week 4),[Taxonomy of statistics](LECTURE3.html),[t-tests and z tests](LECTURE4.html),Project proposals due 9/23
-Sept. 26 (week 5),[t-tests and z-tests](LECTURE4.html),[Exercise 2: t-tests](EXERCISE2.html),Exercise 2 due 10/5
-Oct. 3 (week 6),[Chi-squared tests](LECTURE5.html),*No class (Kevin at conference)*,
-Oct. 10 (week 7),[Linear regression](LECTURE6.html),[Exercise 3: linear regression](EXERCISE3.html),Exercise 3 due 10/19
-Oct. 17 (week 8),[Linear regression](LECTURE6.html),Discussion: p-values,p-value readings (see WebCampus)
-Oct. 24 (week 9),[Linear regression](LECTURE6.html),[Exercise 4: Multiple linear regression](EXERCISE4.html),Exercise 4 due 11/4
-Oct. 31 (week 10),[ANOVA](LECTURE7.html),[ANOVA](LECTURE7.html),
-Nov. 7 (week 11),*No class (Kevin at conference)*,*No class (Kevin at conference)*,
-Nov. 14 (week 12),[GLM](LECTURE8.html),[GLM](LECTURE8.html),Draft project ms due 11/18
-Nov. 21 (week 13),[GLMM](LECTURE9.html),OPTIONAL: review roadrunner assignment (multiple linear regression),
-Nov. 28 (week 14),[GLMM](LECTURE9.html),*No class (Kevin at conference)*,Peer reviews due 11/30
-Dec. 5 (week 15),[Machine Learning](LECTURE10.html),[Discussion: code and data sharing](Git_tutorial.html),
-Dec. 12 (week 16),"[Next steps- multivariate, Bayesian, etc.](LECTURE11.html)",*no class*,Final projects due Dec 16
+Week,Tuesday class meeting,Thursday class meeting,Exercises/deadlines
+Week 1: Aug. 26,[Overview: R and statistics](INTRO.html),"[P-values, statistical tests](LECTURE1.html)",
+Week 2: Sep. 2,[Exercise 1: functions and summary stats](EXERCISE1.html),TBD,
+Week 3: Sep. 9,[Central limit theorem (CLT) and sampling distributions](LECTURE2.html),[Central limit theorem (CLT) and sampling distributions](LECTURE2.html),Exercise 1 due 9/13
+Week 4: Sep. 16,[Taxonomy of statistics](LECTURE3.html),[t-tests and z tests](LECTURE4.html),Project proposals due 9/20
+Week 5: Sep. 23,[t-tests and z-tests](LECTURE4.html),[Exercise 2: t-tests](EXERCISE2.html),Exercise 2 due 10/2
+Week 6: Sep. 30,[Chi-squared tests](LECTURE5.html),TBD,
+Week 7: Oct. 7,[Linear regression](LECTURE6.html),[Exercise 3: linear regression](EXERCISE3.html),Exercise 3 due 10/16
+Week 8: Oct. 14,[Linear regression](LECTURE6.html),Discussion: p-values,p-value readings (see WebCampus)
+Week 9: Oct. 21,*No class (Brian at conference)*,*No class (Brian at conference)*,
+Week 10: Oct. 28,[Linear regression](LECTURE6.html),[Exercise 4: Multiple linear regression](EXERCISE4.html),Exercise 4 due 11/1
+Week 11: Nov. 4,[ANOVA](LECTURE7.html),[ANOVA](LECTURE7.html),
+Week 12: Nov. 11,[GLM](LECTURE8.html),[GLM](LECTURE8.html),Draft project ms due 11/15
+Week 13: Nov. 18,[GLMM](LECTURE9.html),OPTIONAL: review roadrunner assignment (multiple linear regression),
+Week 14: Nov. 25,[GLMM](LECTURE9.html),*No class (Thanksgiving)*,Peer reviews due 11/27
+Week 15: Dec. 2,[Machine Learning](LECTURE10.html),[Discussion: code and data sharing](Git_tutorial.html),
+Finals Week: Dec. 9,"[Next steps- multivariate, Bayesian, etc.](LECTURE11.html)",*No class*,Final projects due 12/13

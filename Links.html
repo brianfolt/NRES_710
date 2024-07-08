@@ -14,7 +14,7 @@
 
 <title>Links</title>
 
-<script src="site_libs/header-attrs-2.14/header-attrs.js"></script>
+<script src="site_libs/header-attrs-2.27/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/yeti.min.css" rel="stylesheet" />
@@ -30,7 +30,7 @@
        h6 {font-size: 12px;}
        code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
        pre:not([class]) { background-color: white }</style>
-<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<script src="site_libs/jqueryui-1.13.2/jquery-ui.min.js"></script>
 <link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
 <script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
@@ -145,11 +145,15 @@ $(document).ready(function () {
     href = "index.html";
   var menuAnchor = $('a[href="' + href + '"]');
 
-  // mark it active
-  menuAnchor.tab('show');
-
-  // if it's got a parent navbar menu mark it active as well
-  menuAnchor.closest('li.dropdown').addClass('active');
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
 
   // Navbar adjustments
   var navHeight = $(".navbar").first().height() + 15;
@@ -178,8 +182,8 @@ $(document).ready(function () {
   border-radius: 4px;
 }
 
-.tabset-dropdown > .nav-tabs > li.active:before {
-  content: "";
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
   font-family: 'Glyphicons Halflings';
   display: inline-block;
   padding: 10px;
@@ -187,16 +191,9 @@ $(document).ready(function () {
 }
 
 .tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
-  content: "&#xe258;";
-  border: none;
-}
-
-.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
-  content: "";
+  content: "\e258";
   font-family: 'Glyphicons Halflings';
-  display: inline-block;
-  padding: 10px;
-  border-right: 1px solid #ddd;
+  border: none;
 }
 
 .tabset-dropdown > .nav-tabs > li.active {
@@ -354,13 +351,25 @@ div.tocify {
       <a href="LECTURE5.html">chi-squared tests</a>
     </li>
     <li>
-      <a href="LECTURE6.html">Analysis- ANOVA</a>
+      <a href="LECTURE6.html">Linear Regression</a>
     </li>
     <li>
-      <a href="LECTURE7.html">Analysis- GLM and GLMM</a>
+      <a href="LECTURE7.html">ANOVA</a>
     </li>
     <li>
-      <a href="LECTURE7.html">Next steps</a>
+      <a href="LECTURE8.html">GLM</a>
+    </li>
+    <li>
+      <a href="LECTURE9.html">GLMM</a>
+    </li>
+    <li>
+      <a href="LECTURE10.html">Machine Learning</a>
+    </li>
+    <li>
+      <a href="GIT_tutorial.html">Intro to GIT</a>
+    </li>
+    <li>
+      <a href="LECTURE11.html">Next steps</a>
     </li>
   </ul>
 </li>
@@ -376,6 +385,12 @@ div.tocify {
     </li>
     <li>
       <a href="EXERCISE2.html">Exercise- t-tests</a>
+    </li>
+    <li>
+      <a href="EXERCISE3.html">Exercise- simple linear regression</a>
+    </li>
+    <li>
+      <a href="EXERCISE4.html">Exercise- multiple linear regression</a>
     </li>
   </ul>
 </li>
@@ -420,41 +435,59 @@ div.tocify {
 
 <h1 class="title toc-ignore">Links</h1>
 <h4 class="author">NRES 710</h4>
-<h4 class="date">Fall 2022</h4>
+<h4 class="date">Fall 2024</h4>
 
 </div>
 
 
+<style type="text/css">
+body{ /* Normal  */ font-size: 16px; font-family: Arial; color:black}
+th { /* Table Header */ font-size: 16px; /}
+td {  /* Table  */ font-size: 14px;}
+h1.title {font-size: 30px; color: Black; font-weight: bold;}
+.author {font-size: 30px; color: Black; font-weight: bold;}
+h1 { /* Header 1 */ font-size: 28px; color: Black; font-weight: bold;}
+h2 { /* Header 2 */ font-size: 22px; color: Black; font-weight: bold;}
+h3 { /* Header 3 */ font-size: 18px; color: Black; font-weight: bold;}
+h4 { /* Header 4 */ font-size: 16px; color: Black; font-weight: bold;}
+code.r{ /* Code block */ font-size: 12px;}
+pre { /* Code block - determines code spacing between lines */ font-size: 14px;}
+.main-container {padding-left: 25px;}
+.toc-content {
+  width: 75%; /* Increase the width of the main content area */
+  margin-left: 27%; /* Ensure this aligns properly with the TOC width */
+}
+</style>
 <p>Please let me know if there are other links that you think should be
 included on this page!</p>
-<p><a href="https://kevintshoemaker.github.io/StatsChats/">Weekly
-math/bio “Stats chats”</a></p>
-<div id="methods-links" class="section level1">
-<h1>Methods links</h1>
-<div id="download-r" class="section level2">
-<h2>Download R:</h2>
+<p><a href="https://guides.library.unr.edu/StatsChats">Weekly math/bio
+“Stats Chats”</a></p>
+<div id="methods-links" class="section level3">
+<h3>Methods links</h3>
+<div id="download-r" class="section level4">
+<h4>Download R:</h4>
 <p><a href="https://cran.r-project.org/">CRAN website</a></p>
 </div>
-<div id="download-r-studio" class="section level2">
-<h2>Download R Studio:</h2>
-<p><a href="https://www.rstudio.com/">Rstudio main site</a><br />
+<div id="download-rstudio" class="section level4">
+<h4>Download RStudio:</h4>
+<p><a href="https://www.rstudio.com/">RStudio main site</a><br />
 <a
 href="https://support.rstudio.com/hc/en-us/articles/200526207-Using-Projects">R
 projects (useful feature of RStudio)</a><br />
-<a href="https://www.rstudio.com/online-learning/">Rstudio online
+<a href="https://www.rstudio.com/online-learning/">RStudio online
 learning resources</a></p>
 </div>
-<div id="r-introductory-tutorials-and-courses" class="section level2">
-<h2>R Introductory Tutorials and Courses</h2>
+<div id="r-introductory-tutorials-and-courses" class="section level4">
+<h4>R Introductory Tutorials and Courses</h4>
 <p><a href="https://www.datacamp.com/home">Datacamp’s- “Intro to
 R”</a><br />
 <a href="https://preludeinr.com">Prelude in R</a><br />
 <a
 href="https://cran.r-project.org/doc/contrib/Paradis-rdebuts_en.pdf">R
 for beginners</a><br />
-<a href="http://r4ds.had.co.nz/index.html">Hadley Wickhams “R for Data
-Science”</a> <a href="https://ismayc.github.io/moderndiver-book/">Modern
-Dive</a><br />
+<a href="https://r4ds.hadley.nz/">Hadley Wickhams “R for Data Science”
+(version 2)</a> <a
+href="https://ismayc.github.io/moderndiver-book/">Modern Dive</a><br />
 <a href="http://www.datacarpentry.org/semester-biology/">Data carpentry
 course</a> <a href="https://cran.r-project.org/other-docs.html">Many
 other resources</a> <a
@@ -462,18 +495,18 @@ href="http://rbasicsworkshop.weebly.com/books.html">Many R Books (and
 other useful resources)</a><br />
 <a
 href="https://www.nceas.ucsb.edu/files/scicomp/Dloads/RProgramming/BestFirstRTutorial.pdf">NCEAS
-tutorial- oldie but goodie</a></p>
+tutorial - oldie but goodie</a></p>
 </div>
 <div
 id="r-examples-some-people-learn-best-by-just-playing-with-existing-code"
-class="section level2">
-<h2>R Examples (some people learn best by just playing with existing
-code!)</h2>
+class="section level4">
+<h4>R Examples (some people learn best by just playing with existing
+code!)</h4>
 <p><a href="http://www.mayin.org/ajayshah/KB/R/">R by example</a></p>
 </div>
 <div id="r-reference-cards-print-em-out-and-hang-by-your-office-desk"
-class="section level2">
-<h2>R reference cards (print ’em out and hang by your office desk!)</h2>
+class="section level4">
+<h4>R reference cards (print ’em out and hang by your office desk!)</h4>
 <p><a
 href="https://cran.r-project.org/doc/contrib/Short-refcard.pdf">Short
 Reference Card</a><br />
@@ -490,9 +523,9 @@ and much more!</p>
 </div>
 <div
 id="r-markdown-for-publishing-and-communicating-in-r.-this-website-was-built-in-r-markdown"
-class="section level2">
-<h2>R Markdown (for publishing and communicating in R. This website was
-built in R Markdown!)</h2>
+class="section level4">
+<h4>R Markdown (for publishing and communicating in R. This website was
+built in R Markdown!)</h4>
 <p><a
 href="http://rmarkdown.rstudio.com/authoring_pandoc_markdown.html">Guide
 for Pandoc Markdown</a><br />
@@ -504,12 +537,12 @@ href="https://confluence.atlassian.com/bitbucketserver/markdown-syntax-guide-776
 nice simple Markdown syntax guide</a></p>
 </div>
 <div id="git-for-sharing-your-code-and-collaborating-with-others"
-class="section level2">
-<h2>GIT (for sharing your code and collaborating with others!)</h2>
+class="section level4">
+<h4>GIT (for sharing your code and collaborating with others!)</h4>
 <p><a href="https://try.github.io/">Excellent intro GIT tutorial</a></p>
 </div>
-<div id="bayesian-statistics" class="section level2">
-<h2>Bayesian Statistics</h2>
+<div id="bayesian-statistics" class="section level4">
+<h4>Bayesian Statistics</h4>
 <p><a href="http://mcmc-jags.sourceforge.net/">Install JAGS</a><br />
 <a href="http://twiecki.github.io/blog/2015/11/10/mcmc-sampling/">MCMC
 for Dummies…</a> (basis of MCMC lecture…)<br />
@@ -528,25 +561,25 @@ Methods for Hackers!</a><br />
 <a href="https://r-nimble.org/">NIMBLE (alternative implementation of
 BUGS language for R)</a></p>
 </div>
-<div id="generalized-linear-mixed-models" class="section level2">
-<h2>Generalized Linear Mixed Models</h2>
+<div id="generalized-linear-mixed-models" class="section level4">
+<h4>Generalized Linear Mixed Models</h4>
 <p><a
 href="https://rstudio-pubs-static.s3.amazonaws.com/33653_57fc7b8e5d484c909b615d8633c01d51.html">Solving
 convergence issues</a></p>
 </div>
-<div id="time-series-analysis" class="section level2">
-<h2>Time Series Analysis</h2>
+<div id="time-series-analysis" class="section level4">
+<h4>Time Series Analysis</h4>
 <p><a
 href="http://node101.psych.cornell.edu/Darlington/series/series0.htm">A
 regression approach to time series analysis</a></p>
 </div>
-<div id="ordination" class="section level2">
-<h2>Ordination</h2>
+<div id="ordination" class="section level4">
+<h4>Ordination</h4>
 <p><a href="http://ordination.okstate.edu/index.html">Practical guide to
 ordination for Ecologists</a></p>
 </div>
-<div id="tree-based-machine-learning" class="section level2">
-<h2>Tree-based machine learning</h2>
+<div id="tree-based-machine-learning" class="section level4">
+<h4>Tree-based machine learning</h4>
 <p><a
 href="http://www.stat.berkeley.edu/~breiman/RandomForests/cc_home.htm">Breiman’s
 guide to Random Forest</a><br />
@@ -555,22 +588,22 @@ href="https://cran.r-project.org/web/packages/dismo/vignettes/brt.pdf">Vignette:
 boosted regression trees for species distribution modeling</a></p>
 </div>
 <div id="structural-equation-modeling-and-bayes-nets"
-class="section level2">
-<h2>Structural Equation Modeling and Bayes Nets</h2>
+class="section level4">
+<h4>Structural Equation Modeling and Bayes Nets</h4>
 <p><a
 href="http://blog.efpsa.org/2015/12/14/structural-equation-modeling-what-is-it-what-does-it-have-in-common-with-hippie-music-and-why-does-it-eat-cake-to-get-rid-of-measurement-error/">Random
 but relevant blog post</a><br />
 <a href="http://www.bnlearn.com/">“bnlearn” package documentation for
 Bayes nets</a></p>
 </div>
-<div id="spatial-analysis-in-r" class="section level2">
-<h2>Spatial Analysis in R</h2>
+<div id="spatial-analysis-in-r" class="section level4">
+<h4>Spatial Analysis in R</h4>
 <p><a
 href="https://cran.r-project.org/web/packages/raster/vignettes/Raster.pdf">“raster”
 package vignette</a></p>
 </div>
-<div id="spatial-capture-recapture-secr" class="section level2">
-<h2>Spatial Capture Recapture (secr)</h2>
+<div id="spatial-capture-recapture-secr" class="section level4">
+<h4>Spatial Capture Recapture (secr)</h4>
 <p><a href="https://groups.google.com/forum/#!forum/secrgroup">‘secr’
 Google Group</a><br />
 <a
@@ -578,14 +611,15 @@ href="http://www.mikemeredith.net/blog/1309_SECR_in_JAGS_patchy_habitat.htm">BUG
 code for secr</a></p>
 </div>
 </div>
-<div id="data-links" class="section level1">
-<h1>Data links</h1>
+<div id="data-links" class="section level3">
+<h3>Data links</h3>
 <div id="publicly-available-datasets-potentially-for-final-project"
-class="section level2">
-<h2>Publicly available datasets, potentially for final project…</h2>
+class="section level4">
+<h4>Publicly available datasets, potentially for final project…</h4>
 <p>(many links courtesy Tom Langen)</p>
-<div id="government-agency-data-portals" class="section level3">
-<h3>GOVERNMENT AGENCY DATA PORTALS</h3>
+</div>
+<div id="government-agency-data-portals" class="section level4">
+<h4>GOVERNMENT AGENCY DATA PORTALS</h4>
 <p><a href="https://nationalmap.gov/">National Map</a> (Geospatial data
 on the environment, economy, and people of the US).</p>
 <p><a href="http://www.agcensus.usda.gov/">US Department of Agriculture
@@ -645,8 +679,8 @@ DAAC</a></p>
 <p><a href="http://sedac.ciesin.columbia.edu/">Socioeconomic
 DAAC</a></p>
 </div>
-<div id="environmental-data-clearinghouses" class="section level3">
-<h3>ENVIRONMENTAL DATA CLEARINGHOUSES</h3>
+<div id="environmental-data-clearinghouses" class="section level4">
+<h4>ENVIRONMENTAL DATA CLEARINGHOUSES</h4>
 <p><a href="http://www.p2erls.net/">Pole to Pole Ecological Research
 Lattice of Sites (P2ERLS)</a> (Portal to research stations and research
 networks, including their data archives.)</p>
@@ -665,12 +699,9 @@ US-based site for obtaining GIS layers relevant for fire modeling)</p>
 layers (gridded climate data) with a spatial resolution of about 1
 km2)</p>
 <p><a href="https://daymet.ornl.gov/dataaccess.html">DayMet</a> (gridded
-estimates of daily weather parameters for North America)</p>
-</div>
-<div id="biodiversity-data-clearinghouses-archives"
-class="section level3">
-<h3>BIODIVERSITY DATA CLEARINGHOUSES /ARCHIVES</h3>
-<p><a href="http://www.iucnredlist.org/">International Union for the
+estimates of daily weather parameters for North America)<br />
+#### BIODIVERSITY DATA CLEARINGHOUSES /ARCHIVES <a
+href="http://www.iucnredlist.org/">International Union for the
 Conservation of Nature (IUCN) Redlist</a> (Searchable list of the
 world’s threatened and endangered plants and animal species on the IUCN
 Redlist.)</p>
@@ -713,8 +744,8 @@ Observatory Network</a> (NEON collects and provides open data from 81
 field sites across the United States that characterize and quantify how
 our nation’s ecosystems are changing)</p>
 </div>
-<div id="research-project-data-archives" class="section level3">
-<h3>RESEARCH PROJECT DATA ARCHIVES</h3>
+<div id="research-project-data-archives" class="section level4">
+<h4>RESEARCH PROJECT DATA ARCHIVES</h4>
 <p><a href="http://datadryad.org/">Dryad</a> (Data archives for
 bioscience data from peer-reviewed journal articles from a large
 consortium of journals)</p>
@@ -730,7 +761,6 @@ ecological data.)</p>
 <p><a href="https://portal.edirepository.org/nis/home.jsp">EDI Data
 Portal</a> (NSF-funded iniative to archive data from NSF DEB funded
 research projects)</p>
-</div>
 </div>
 </div>
 
