@@ -15,4 +15,7 @@ pre { /* Code block - determines code spacing between lines */ font-size: 14px;}
   width: 75%; /* Increase the width of the main content area */
   margin-left: 27%; /* Ensure this aligns properly with the TOC width */
 }
+.tocify-header, .tocify-item {
+  font-weight: bold; /* Make the text bold */
+}
 </style>
