@@ -173,11 +173,11 @@ The University of Nevada, Reno is committed to providing a safe learning and wor
 Your student fees cover usage of the University Math Center (https://www.unr.edu/university-math-center), (775) 784-4433; University Tutoring Center (https://www.unr.edu/tutoring-center), (775) 784-6801; and University Writing & Speaking Center (https://www.unr.edu/writing-speaking-center), (775) 784-6030. These centers support your classroom learning; it is your responsibility to take advantage of their services. Keep in mind that seeking help outside of class is the sign of a responsible and successful student.
 
 ```{r echo=FALSE, eval=FALSE}
-rmarkdown::render('index.Rmd', 'word_document')
+rmarkdown::render('syllabus.Rmd', 'word_document')
 rmarkdown::render('schedule.Rmd', 'word_document')
 
 knitr::opts_chunk$set(echo = TRUE, message = FALSE)
-rmarkdown::render('index.Rmd', rmarkdown::pdf_document())
+rmarkdown::render('syllabus.Rmd', rmarkdown::pdf_document())
 rmarkdown::render('schedule.Rmd', rmarkdown::pdf_document())
 rmarkdown::render('INTRO.Rmd', rmarkdown::pdf_document())
 rmarkdown::render('LECTURE1.Rmd', rmarkdown::pdf_document())
@@ -191,8 +191,6 @@ rmarkdown::render('LECTURE8.Rmd', rmarkdown::pdf_document())
 rmarkdown::render('LECTURE9.Rmd', rmarkdown::pdf_document())
 rmarkdown::render('LECTURE10.Rmd', rmarkdown::pdf_document())
 rmarkdown::render('LECTURE11.Rmd', rmarkdown::pdf_document())
-
-
 ```
 
 ```{r echo=FALSE}
