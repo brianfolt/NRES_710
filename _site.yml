@@ -4,7 +4,7 @@ navbar:
   title: NRES 710
   left:
   - text: Syllabus
-    href: syllabus.html
+    href: index.html
   - text: Schedule
     href: schedule.html
   - text: Lectures
