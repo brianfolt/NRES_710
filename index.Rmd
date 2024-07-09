@@ -178,7 +178,7 @@ rmarkdown::render('schedule.Rmd', 'word_document')
 knitr::opts_chunk$set(echo = TRUE, message = FALSE)
 rmarkdown::render('index.Rmd', output_file = 'syllabus.pdf', rmarkdown::pdf_document())
 rmarkdown::render('schedule.Rmd', rmarkdown::pdf_document())
-# rmarkdown::render('INTRO.Rmd', rmarkdown::pdf_document())
+rmarkdown::render('INTRO.Rmd', rmarkdown::pdf_document())
 # rmarkdown::render('LECTURE1.Rmd', rmarkdown::pdf_document())
 # rmarkdown::render('LECTURE2.Rmd', rmarkdown::pdf_document())  # latex_engine="xelatex"
 # rmarkdown::render('LECTURE3.Rmd', rmarkdown::pdf_document())
@@ -195,9 +195,9 @@ rmarkdown::render('schedule.Rmd', rmarkdown::pdf_document())
 ```{r echo=FALSE}
 rmd2rscript <- function(infile="LECTURE2.Rmd"){    # function for converting markdown to scripts
   outfile <- gsub(".Rmd",".R",infile)
-  close( file( outfile, open="w" ) )   # clear output file
-  con1 <- file(infile,open="r")
-  con2 <- file(outfile,"w")
+  close(file(outfile, open="w"))   # clear output file
+  con1 <- file(infile, open="r")
+  con2 <- file(outfile, "w")
   stringToFind <- "```{r*"
   stringToFind2 <- "echo"
   isrblock <- FALSE

@@ -8,27 +8,28 @@
 
 # Use R as a calculator 
 
-2+2               # use R as a calculator
-four <- 2+2       # define your first variable!
+2 + 2                 # use R as a calculator
+four <- 2 + 2         # define your first variable!
 four
-five<-2+2         # you can make mistakes and define misleading labels- R will let you!
+five <- 2 + 2         # you can make mistakes and define misleading labels- R will let you!
 three <- four + five
 
 
-# R's built in datasets 
+# R has many built in datasets 
 
-# data()     # 'uncomment' this command and run it to explore built-in datasets
+# data()    # 'uncomment' this command and run it to explore built-in datasets
+            # code can be uncommented with CTRL SHIFT C (PC) or COMMAND SHIFT C (Mac)
 
 
-#iris                   # this is a data frame- the basic data storage type in R
-head(iris)             # [add your own comment here!]
+#iris                 # this is a data frame -- the basic data storage type in R
+head(iris)            # [add your own comment here!]
 # tail(iris)
 
-#  ?iris               # uncomment this to learn more about the iris dataset
+#  ?iris              # uncomment this to learn more about the iris dataset
 # str(iris)
 
 
-len<-iris$Petal.Length
+len <- iris$Petal.Length
 hist(len)             # what does this do? How could you learn more about this 'hist' function?
 
 # Q: what kind of data are petal lengths?
@@ -52,26 +53,25 @@ head(titanic_train)
 # lets pull 15 numbers from the standard normal distribution
 
 a <- rnorm(15)
-a <- rnorm(15,mean=2,sd=0.5)
+a <- rnorm(15, mean = 2, sd = 0.5)
 
 # let's pull 15 numbers from the binomial distribution
-b<- rbinom(15, size=1, prob=0.2) # we could "weight the coin"
+b <- rbinom(15, size = 1, prob = 0.2) # we could "weight the coin"
 
 
 # we can create categories: 
-unit<-rep(c("Control","+N","+P","+NP"),each=20)
+unit <- rep(c("Control","+N","+P","+NP"), each = 20)
 
 
 # we can even create a whole dataframe
 my.data <- data.frame(
   Obs.Id = 1:100,
-  Treatment = rep(c("A","B","C","D","E"),each=20),
-  Block = rep(1:20,times=5),
-  Germination = rpois(100,lambda=rep(c(1,5,4,7,1),each=20)),
-  AvgHeight = rnorm(100,mean=rep(c(10,30,31,25,35,7),each=20))
+  Treatment = rep(c("A","B","C","D","E"), each = 20),
+  Block = rep(1:20, times=5),
+  Germination = rpois(100, lambda = rep(c(1,5,4,7,1), each = 20)),
+  AvgHeight = rnorm(100, mean = rep(c(10,30,31,25,35,7), each = 20))
 )
 head(my.data)
-
 
 
 # import data from file ----------------------
