@@ -446,20 +446,20 @@ statistics, and armed with some basic computer programming abilities
 making sense of data and communicating that understanding with
 others!!</p>
 <div id="install-r-and-rstudio" class="section level2">
-<h2>Install R and Rstudio</h2>
+<h2>Install R and RStudio</h2>
 <p><a href="https://cran.r-project.org/">CRAN website for downloading
 R</a><br />
-<a href="https://www.rstudio.com/">Rstudio main site</a></p>
+<a href="https://www.rstudio.com/">RStudio main site</a></p>
 <p>Make sure you have the most recent versions!</p>
 </div>
 <div id="make-a-new-rstudio-project-for-this-class"
 class="section level2">
-<h2>Make a new Rstudio “project” for this class</h2>
+<h2>Make a new RStudio “project” for this class</h2>
 <p><a
 href="https://support.rstudio.com/hc/en-us/articles/200526207-Using-Projects">R
-projects are a useful feature of RStudio</a>. Just store all the code
-and data for this course in your project folder and it will make your
-life easier!</p>
+projects are an <strong>extremely useful</strong> feature of
+RStudio</a>. Just store all the code and data for this course in your
+project folder and it will make your life much, much easier!</p>
 </div>
 <div id="download-the-r-code-for-this-lecture" class="section level2">
 <h2>Download the R code for this lecture!</h2>
@@ -566,16 +566,21 @@ scatterplots.</li>
 <h3>Notes about working in R:</h3>
 <p>R is an open source project, and new packages are being added all the
 time.</p>
-<p>R is incredibly powerful and feature rich- you are NOT expected to
-memorize syntax right away, just know that the answer is always a few
-clicks away!</p>
-<p>When in doubt, Google it!!</p>
-<p>Here is a <a href="base-r.pdf">base R cheat sheet</a>- this is a
-great reference for most of the basic tasks you will need to perform in
-R.</p>
-<p>Learn to use R scripts- and save your scripts frequently!! This is
-the primary record of what you’ve done and allows you and others to
+<p>R is incredibly powerful and feature rich. You are NOT expected to
+memorize syntax right away, but rather just know that the answer is
+always a few clicks away!</p>
+<p>‘Base R’ is the default software built into R that does not including
+loading any additional packages. Here is a <a href="base-r.pdf">‘base R’
+cheat sheet</a>; this is a great reference for most of the basic tasks
+you will need to perform in R.</p>
+<p>Learn to use R scripts, and save your scripts frequently! This is the
+primary record of what you’ve done and allows you and others to
 reproduce your workflows.</p>
+<p>If you have a problem, Google it! Someone has likely had the same
+problem as you in the past and asked for solutions online. Or, query
+ChatGPT for suggestions on how to solve the problem. When either
+Googling or prompting ChatGPT for help, be mindful that potential
+solutions presented to you may not be ideal for your problem.</p>
 </div>
 <div id="first-r-demo" class="section level3">
 <h3>First R demo!</h3>
@@ -583,37 +588,34 @@ reproduce your workflows.</p>
 R-based demo in class, <a href="INTRO.R">click here</a> for an R-script
 that contains all the code blocks in this web-based lecture.</p>
 <p>All of you should have R and RStudio installed on your computers. See
-the <a href="https://kevintshoemaker.github.io/NRES-710/">links page</a>
-for some useful references. I will be leading <a
-href="https://kevintshoemaker.github.io/R-Bootcamp/index.html">workshops
-on getting started with R</a> in two upcoming Saturday afternoons (Sep
-10 and 17)- please consider attending if you don’t have much experience
-in R!</p>
+the <a href="https://brianfolt.github.io/NRES_710/Links.html">links
+page</a> for some useful references.</p>
 <p>Starting at the most basic level, R can be used as a calculator. Try
 it!</p>
 <pre class="r"><code># Getting started with R ----------------- 
 
 # Use R as a calculator 
 
-2+2               # use R as a calculator</code></pre>
+2 + 2                 # use R as a calculator</code></pre>
 <pre><code>## [1] 4</code></pre>
-<pre class="r"><code>four &lt;- 2+2       # define your first variable!
+<pre class="r"><code>four &lt;- 2 + 2         # define your first variable!
 four</code></pre>
 <pre><code>## [1] 4</code></pre>
-<pre class="r"><code>five&lt;-2+2         # you can make mistakes and define misleading labels- R will let you!
+<pre class="r"><code>five &lt;- 2 + 2         # you can make mistakes and define misleading labels- R will let you!
 three &lt;- four + five</code></pre>
 <p>What about those hashtags (#) in the above code block? These are
 ‘comments’ and they are super helpful- use them early and often!</p>
-<p>Use Rstudio’s autofill feature to avoid typos!</p>
+<p>Use RStudio’s autofill feature to avoid typos!</p>
 <div id="explore-rs-existing-datasets" class="section level4">
 <h4>Explore R’s existing datasets</h4>
-<pre class="r"><code># R&#39;s built in datasets 
+<pre class="r"><code># R has many built in datasets 
 
-# data()     # &#39;uncomment&#39; this command and run it to explore built-in datasets</code></pre>
+# data()    # &#39;uncomment&#39; this command and run it to explore built-in datasets
+            # code can be uncommented with CTRL SHIFT C (PC) or COMMAND SHIFT C (Mac)</code></pre>
 <p>Let’s start by working with Fisher’s famous iris dataset:</p>
 <p><img src="iris1.png" /></p>
-<pre class="r"><code>#iris                   # this is a data frame- the basic data storage type in R
-head(iris)             # [add your own comment here!]</code></pre>
+<pre class="r"><code>#iris                 # this is a data frame -- the basic data storage type in R
+head(iris)            # [add your own comment here!]</code></pre>
 <pre><code>##   Sepal.Length Sepal.Width Petal.Length Petal.Width Species
 ## 1          5.1         3.5          1.4         0.2  setosa
 ## 2          4.9         3.0          1.4         0.2  setosa
@@ -623,11 +625,11 @@ head(iris)             # [add your own comment here!]</code></pre>
 ## 6          5.4         3.9          1.7         0.4  setosa</code></pre>
 <pre class="r"><code># tail(iris)
 
-#  ?iris               # uncomment this to learn more about the iris dataset
+#  ?iris              # uncomment this to learn more about the iris dataset
 # str(iris)
 
 
-len&lt;-iris$Petal.Length
+len &lt;- iris$Petal.Length
 hist(len)             # what does this do? How could you learn more about this &#39;hist&#39; function?</code></pre>
 <p><img src="INTRO_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
 <pre class="r"><code># Q: what kind of data are petal lengths?</code></pre>
@@ -670,32 +672,32 @@ head(titanic_train)</code></pre>
 # lets pull 15 numbers from the standard normal distribution
 
 a &lt;- rnorm(15)
-a &lt;- rnorm(15,mean=2,sd=0.5)
+a &lt;- rnorm(15, mean = 2, sd = 0.5)
 
 # let&#39;s pull 15 numbers from the binomial distribution
-b&lt;- rbinom(15, size=1, prob=0.2) # we could &quot;weight the coin&quot;
+b &lt;- rbinom(15, size = 1, prob = 0.2) # we could &quot;weight the coin&quot;
 
 
 # we can create categories: 
-unit&lt;-rep(c(&quot;Control&quot;,&quot;+N&quot;,&quot;+P&quot;,&quot;+NP&quot;),each=20)
+unit &lt;- rep(c(&quot;Control&quot;,&quot;+N&quot;,&quot;+P&quot;,&quot;+NP&quot;), each = 20)
 
 
 # we can even create a whole dataframe
 my.data &lt;- data.frame(
   Obs.Id = 1:100,
-  Treatment = rep(c(&quot;A&quot;,&quot;B&quot;,&quot;C&quot;,&quot;D&quot;,&quot;E&quot;),each=20),
-  Block = rep(1:20,times=5),
-  Germination = rpois(100,lambda=rep(c(1,5,4,7,1),each=20)),
-  AvgHeight = rnorm(100,mean=rep(c(10,30,31,25,35,7),each=20))
+  Treatment = rep(c(&quot;A&quot;,&quot;B&quot;,&quot;C&quot;,&quot;D&quot;,&quot;E&quot;), each = 20),
+  Block = rep(1:20, times=5),
+  Germination = rpois(100, lambda = rep(c(1,5,4,7,1), each = 20)),
+  AvgHeight = rnorm(100, mean = rep(c(10,30,31,25,35,7), each = 20))
 )
 head(my.data)</code></pre>
 <pre><code>##   Obs.Id Treatment Block Germination AvgHeight
-## 1      1         A     1           1 11.035051
-## 2      2         A     2           0 11.059027
-## 3      3         A     3           2  9.457404
-## 4      4         A     4           3  9.304159
-## 5      5         A     5           0 10.026888
-## 6      6         A     6           1  9.584460</code></pre>
+## 1      1         A     1           0  8.759258
+## 2      2         A     2           0 10.705368
+## 3      3         A     3           2 10.795990
+## 4      4         A     4           0 10.807384
+## 5      5         A     5           0  8.342814
+## 6      6         A     6           0 10.279862</code></pre>
 <p>We can also import data from files stored on our computers (or even
 directly from the web)</p>
 <pre class="r"><code># import data from file ----------------------
@@ -709,24 +711,33 @@ directly from the web)</p>
 # Pleach&lt;-read.csv(&quot;PbyTime_Bio.csv&quot;, header=T) # obvs, this won&#39;t work for you because you don&#39;t have this file. 
 
 # Use your own file to try it out. This is an example! </code></pre>
-<p>Note: I recommend always using Rstudio Projects. This reduces the
-hassle of setting working directories. By default the project directory
-becomes your working directory!</p>
+<p>Note: I recommend always using RStudio projects whenever you are
+working on any statistical analysis in R (homework exercises, class
+projects, analysis for your thesis chapter, etc.). This reduces the
+hassle of setting working directories. By default, the project directory
+automatically becomes the working directory for your analysis!</p>
 </div>
 </div>
 </div>
-<div id="mathbio-stats-chats" class="section level2">
-<h2><a href="https://kevintshoemaker.github.io/StatsChats/">math/bio
-“stats chats”</a></h2>
-<p>Paul Hurtado (math/stats dept), Ken Nussear (geography), Perry
-Williams (NRES) and I host informal sessions for grad students in EECB,
+<div id="statschats" class="section level2">
+<h2><a
+href="https://guides.library.unr.edu/StatsChats">“StatsChats”</a></h2>
+<p>Faculty from various departments – Paul Hurtado (math/stats dept),
+Ken Nussear (geography), Perry Williams (NRES), Kevin Shoemaker (NRES)
+and others – have hosted informal sessions for grad students in EECB,
 NRES, Geography etc (and faculty) to discuss data analysis questions.
-This can be a good opportunity to ask questions, find out more about
-what types of data and questions your peers are working with, and
-contribute some insights! We haven’t figured out a time yet for this
-semester, but I’ll keep you posted.</p>
-<p>Remember, I need your frequent and honest feedback in order to make
-sure that the level is appropriate and the topics are useful!</p>
+This can be a good opportunity to ask questions about statistics, find
+out more about what types of data and questions your peers are working
+with, and help others (thereby reinforcing concepts for yourself!). Keep
+an eye on that website linked above and if the group identifies a
+regular meeting time, I will relay that information to you all in
+class.</p>
+</div>
+<div id="feedback" class="section level2">
+<h2>Feedback</h2>
+<p>This is my first time teaching this class. I welcome frequent and
+honest feedback on course topics to understand whether course topics are
+appropriate and/or useful. So, any feedback is welcomed - thank you!</p>
 <p><a href="LECTURE1.html">–go to next lecture–</a></p>
 </div>
 
