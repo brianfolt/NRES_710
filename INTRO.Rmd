@@ -1,7 +1,7 @@
 ---
 title: "Intro to NRES 710"
-date: "Fall 2024"
 author: "Welcome!"
+date: "Last compiled: `r Sys.Date()`"
 output: 
   html_document: 
     theme: yeti

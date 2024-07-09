@@ -1,6 +1,7 @@
 ---
 title: "NRES 710: Graduate Environmental Statistics"
-date: "**Fall 2024**"
+author: "**Fall 2024**"
+date: "**Last compiled: `r Sys.Date()`**"
 output:
   html_document:
     theme: yeti
@@ -8,7 +9,7 @@ output:
     toc_float: yes
     css: styles.css
 ---
-      
+
 ### Instructor
 
 [Brian Folt](https://www.unr.edu/nvcfwru/folt-brian)<br>
