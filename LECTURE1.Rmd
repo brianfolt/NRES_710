@@ -60,7 +60,7 @@ In the above example about jumping height:
 
 For statistical inference to make sense, we must make several assumptions about the sample. One assumptions is that the sample is **representative** of the population.
 
-Classic statistics often involve comparing a **statistic** computed from the data (i.e., the "signal") with a (usually theoretical) 'sampling distribution' to quantify the "noise" or sampling error and ultimately determine whether or not we can say anything meaningful about the unseen *parameter*. This helps us test whether the variation we observe in nature is due to a real effect or if it's observed more simply due to random chance.
+Classical statistics often involve comparing a **statistic** computed from the data (i.e., the "signal") with a (usually theoretical) 'sampling distribution' to quantify the "noise" or sampling error and ultimately determine whether or not we can say anything meaningful about the unseen *parameter*. This helps us test whether the variation we observe in nature is due to a real effect or if it's observed more simply due to random chance.
 
 Where does probability come in? Well, our samples are random, and all *statistics* are also derived from random sampling processes.
 
