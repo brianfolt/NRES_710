@@ -45,31 +45,33 @@ Make sure you have the most recent versions!
  
 ## Download the R code for this lecture!
 
-To follow along with the R-based lessons and demos, [right (or command) click on this link and save the script to your project directory](INTRO.R)
+To follow along with the R-based lessons and demos, [right (or command) click on this link and save the script to your project directory](INTRO.R). Open your RStudio project in RStudio, then open the R code file.
 
 ## Why do we need (this particular) stats class?
-Many professors recommend that grad students take the least coursework possible and focus on gathering knowledge as needed while conducting their research. But typically, with statistics coursework as a notable exception. It can be more efficient, fun, and rewarding to learn statistics as a group rather than on your own. I hope you agree by the end of this class!
+
+Many professors recommend that grad students take the least coursework possible and focus on gathering knowledge as needed while conducting their research. However, statistics coursework may be a notable exception to this rule. It can be more efficient, fun, and rewarding to learn statistics as a group rather than on your own. I hope you agree by the end of this class!
 
 ## Course Overview
+
 We will discuss the course organization and expectations. Please see [course syllabus](syllabus.pdf) and [schedule](schedule.pdf) documents, provided separately.
 
 ## What is statistics?
 
-“Statistics is like grout –the word feels decidedly unpleasant in the mouth, but it describes something essential for holding a mosaic in place. Statistics is a common bond supporting all other science.”
-   -Ramsey and Schafer (2013), The Statistical Sleuth, 3rd Edition. 
+“Statistics is like grout –- the word feels decidedly unpleasant in the mouth, but it describes something essential for holding a mosaic in place. Statistics is a common bond supporting all other science.” --Ramsey and Schafer (2013), *The Statistical Sleuth*, 3rd Edition. 
 
-![](statistics1.png){width=40%}
+![](statistics1.png){width=75%}
 
 Statistics is the process of making inference about a property of a *population* (a parameter) from a representative *sample*. The vertical line separates the stuff we can observe and measure directly (right side) and the stuff we can't observe but want to make inference about (left side).
 
-Commonly, statistical analysis is conducted to compare parameters from multiple populations (e.g., “are the population means different?”), or to compare parameters estimated from a sampled data set with those of an idealized model representing an underlying hypothesis of interest (or null hypothesis). 
+Commonly, statistical analysis is conducted to compare parameters from multiple populations (e.g., “are the population different, on average?”), or to compare parameters estimated from a sampled data set with those of an idealized model representing an underlying hypothesis of interest (or null hypothesis).
 
 More broadly, a common dictionary definition of statistics includes “... the collection, organization, analysis, interpretation, and presentation of data” (Oxford Dictionary, Wikipedia, etc.). Given this broader definition, statistics includes key components of data collection (via study design), data analysis, data science, scientific inference, and science communication. 
 
 ## Different Approaches to “the Scientific Method”
-Scientific inquiry is furthered through using both inductive and hypothetico-deductive approaches. Both require statistics in order to test hypotheses about how nature works. The inductive approach involves a continuous and cyclical generation of hypotheses from observations; developing predictions from hypotheses; matching new observations to predictions in order to test hypotheses; and revising hypotheses -until a hypothesis is ultimately confirmed. The emphasis is on hypothesis verification. The hypothetico-deductive approach, on the other hand, proposes multiple working hypotheses from the outset, with an emphasis on falsifying incorrect hypotheses. An “accepted truth” is one that stands up to repeated attempts at falsification. Here is an illustration of the inductive method, taken from Gotelli and Ellison (2004):
 
-![](gotell1.jpg){width=50%}              
+Scientific inquiry is furthered through using both inductive and hypothetico-deductive approaches. Both require statistics in order to test hypotheses about how nature works. The inductive approach involves a continuous and cyclical generation of hypotheses from observations; developing predictions from hypotheses; matching new observations to predictions in order to test hypotheses; and revising hypotheses as new information emerges. Ultimately, numerous tests of a hypothesis in space and time that results may result in an overall support for said hypothesis, and the hypothesis is confirmed as theory. This approach emphasizes hypothesis verification. The hypothetico-deductive approach, on the other hand, proposes multiple working hypotheses from the outset, with an emphasis on rejecting or falsifying incorrect hypotheses. An “accepted truth” is one that stands up to repeated attempts at falsification. Here is an illustration of the inductive method, taken from Gotelli and Ellison (2004):
+
+![](gotell1.jpg){width=70%}              
 
 And here, an illustration of the hypothetico-deductive method, taken from the same source:
 
@@ -77,42 +79,42 @@ And here, an illustration of the hypothetico-deductive method, taken from the sa
 
 ## Data are fundamental to science!
 
-All of science is empirical- that is, it relies on data for evaluating the validity of conclusions.
+All of science is empirical -- that is, science relies on measurements of nature (data) for evaluating the validity of conclusions.
 
 Statistics is fundamental to science because it allows us to better understand what our data can and can not tell us. 
 
 What types of data are there? 
 
-1.	Categorical – represents qualitative (labeled) characteristics      
-    a.	Nominal (> 2 categories)     
-    b.	Dichotomous (2 categories)    
+1.	Categorical -- represents qualitative (labeled) characteristics      
+    a.	Nominal (> 2 categories)
+    b.	Dichotomous (2 categories)  
     
-2.	Quantitative     
-    a.	Discrete: can be counted (number of individuals in a population)
+2.	Quantitative
+    a.	Discrete: can be counted with whole numbers (number of individuals in a population)
     b.	Continuous: not countable, but can be measured (total body length, temperature)
         
-Why do we need to know about data types? We have to analyze and visualize these data types differently! 
+Why do we need to know about data types? We have to analyze and visualize these data types differently!
 
-For example: 
+For example:
 
 * Nominal data can be visualized with bar plots and pie charts
-* Continuous data can be visualized with histograms or scatterplots. 
+* Continuous data can be visualized with histograms or scatterplots
 
 ## Working with data in R: 
 
-Let's explore some of R's built in data sets: iris, mtcars, titanic (install titanic package first)
+Let's explore some of R's built-in data sets (e.g., iris, mtcars, titanic).  We will install the 'titanic' package first.
 
 ### Notes about working in R:
 
-R is an open source project, and new packages are being added all the time. 
+R is an open-source project, and new packages are being added all the time. 
 
-R is incredibly powerful and feature rich. You are NOT expected to memorize syntax right away, but rather just know that the answer is always a few clicks away!
+R is incredibly powerful and feature rich. You are NOT expected to memorize syntax right away, but rather just know that the answer is always a few clicks away! 'help' files in R are extremely useful, as is information about how to use R that is found in books or on the internet.
 
 'Base R' is the default software built into R that does not including loading any additional packages. Here is a ['base R' cheat sheet](base-r.pdf); this is a great reference for most of the basic tasks you will need to perform in R.
 
 Learn to use R scripts, and save your scripts frequently! This is the primary record of what you've done and allows you and others to reproduce your workflows.
 
-If you have a problem, Google it! Someone has likely had the same problem as you in the past and asked for solutions online. Or, query ChatGPT for suggestions on how to solve the problem. When either Googling or prompting ChatGPT for help, be mindful that potential solutions presented to you may not be ideal for your problem.
+If you have a problem, Google it! Someone has likely had the same problem as you in the past and asked for solutions online. Or, ask ChatGPT for help on how to solve your coding problem in R. When either Googling or prompting ChatGPT for help, be mindful that potential solutions presented to you may not be ideal for your problem.
 
 ### First R demo!
 
@@ -126,17 +128,19 @@ Starting at the most basic level, R can be used as a calculator. Try it!
 
 # Getting started with R ----------------- 
 
-# Use R as a calculator 
+# Use R as a calculator. Run the following code from your script (top-left panel in RStudio)
+# through your Console (bottom-left panel in RStudio)
 
 2 + 2                 # use R as a calculator
-four <- 2 + 2         # define your first variable!
+four <- 2 + 2         # define your first variable! This creates an 'object' called 'four'
 four
-five <- 2 + 2         # you can make mistakes and define misleading labels- R will let you!
+five <- 2 + 2         # BEWARE: you can make mistakes and define misleading labels - so be careful!
 three <- four + five
+three
 
 ```
 
-What about those hashtags (#) in the above code block? These are 'comments' and they are super helpful- use them early and often!
+What about those hashtags (#) in the above code block? These are 'comments' that can be used to annotate your code so that your code is more understandable to someone reading it (you!). Comments are super helpful; use them early and often!
 
 Use RStudio's autofill feature to avoid typos!
 
@@ -147,13 +151,13 @@ Use RStudio's autofill feature to avoid typos!
 # R has many built in datasets 
 
 # data()    # 'uncomment' this command and run it to explore built-in datasets
-            # code can be uncommented with CTRL SHIFT C (PC) or COMMAND SHIFT C (Mac)
+#           # code can be uncommented with CTRL SHIFT C (PC) or COMMAND SHIFT C (Mac)
 
 ```
 
 Let's start by working with Fisher's famous iris dataset:
 
-![](iris1.png)
+![](iris1.png){width=85%}
 
 ```{r}
 
@@ -176,7 +180,7 @@ Now let's switch to the 'titanic' dataset. To get this dataset you need to insta
 
 ```{r}
 
-#install.packages("titanic")     # uncomment this command to install the package- you only need to install once!
+#install.packages("titanic")    # uncomment this command to install the package. you only need to install once! so comment the code after installing.
  
 library(titanic)              # this 'loads' the package and needs to be done every time you run this script
 
@@ -184,9 +188,9 @@ data("titanic_train")
 head(titanic_train)
 # ?titanic_train              # uncomment and run to learn more about the data
 
-# Q: What kind of data are those in the "Embarked" column? 
+# Q: What kind of data are those in the "Embarked" column? How might you learn more 
 # Q: What kind of data are those in "Pclass?"
-
+# Q: How might you learn more about data types for all variables?
 
 ```
 
@@ -206,18 +210,18 @@ b <- rbinom(15, size = 1, prob = 0.2) # we could "weight the coin"
 
 
 # we can create categories: 
-unit <- rep(c("Control","+N","+P","+NP"), each = 20)
+unit <- rep(c("Control", "+N", "+P", "+NP"), each = 20)
 
 
 # we can even create a whole dataframe
-my.data <- data.frame(
-  Obs.Id = 1:100,
-  Treatment = rep(c("A","B","C","D","E"), each = 20),
-  Block = rep(1:20, times=5),
-  Germination = rpois(100, lambda = rep(c(1,5,4,7,1), each = 20)),
-  AvgHeight = rnorm(100, mean = rep(c(10,30,31,25,35,7), each = 20))
+plant.data <- data.frame(
+  Obs.Id = 1:100, # 100 plants
+  Treatment = rep(c("A", "B", "C", "D", "E"), each = 20), # 5 treatments
+  Block = rep(1:20, times = 5), # 5 randomized blocks
+  Germination = rpois(100, lambda = rep(c(1, 5, 4, 7, 1), each = 20)), # Germination status: 1 (yes), 0 (no)
+  AvgHeight = rnorm(100, mean = rep(c(10, 30, 31, 25, 35, 7), each = 20)) # Final plant height
 )
-head(my.data)
+head(plant.data)
 
 ```
 
@@ -232,22 +236,25 @@ We can also import data from files stored on our computers (or even directly fro
 
 # setwd("~/Desktop")       # uncomment and run if you want to set the desktop as your working directory.
 
-#Read in the data. Note that the file needs to be in csv format, the name must be in quotes, and the name must include the csv extension.
+#Read in the data. Note that the file needs to be in CSV format, the name must be in quotes, and the name must include the csv extension.
 
-# Pleach<-read.csv("PbyTime_Bio.csv", header=T) # obvs, this won't work for you because you don't have this file. 
+# Pleach <- read.csv("PbyTime_Bio.csv", header=T) # this won't work for you because you don't have this file. 
 
-# Use your own file to try it out. This is an example! 
+# Use your own file to try it out. Or, download a file by entering this link into your web browser: https://brianfolt.github.io/NRES_710/CourseSchedule.csv
 
 
 ```
 
-Note: I recommend always using RStudio projects whenever you are working on any statistical analysis in R (homework exercises, class projects, analysis for your thesis chapter, etc.). This reduces the hassle of setting working directories. By default, the project directory automatically becomes the working directory for your analysis!
+Note: I recommend always using RStudio projects whenever you are working on any statistical analysis in R (homework exercises, class projects, analysis for your thesis chapter, etc.). This reduces the hassle of setting working directories and is a great habit to get into. By default, the project directory automatically becomes the working directory for your analysis!
 
 ## ["StatsChats"](https://guides.library.unr.edu/StatsChats)
+
 Faculty from various departments -- Paul Hurtado (math/stats dept), Ken Nussear (geography), Perry Williams (NRES), Kevin Shoemaker (NRES) and others -- have hosted informal sessions for grad students in EECB, NRES, Geography etc (and faculty) to discuss data analysis questions. This can be a good opportunity to ask questions about statistics, find out more about what types of data and questions your peers are working with, and help others (thereby reinforcing concepts for yourself!). Keep an eye on that website linked above and if the group identifies a regular meeting time, I will relay that information to you all in class.
 
 ## Feedback
 
-This is my first time teaching this class. I welcome frequent and honest feedback on course topics to understand whether course topics are appropriate and/or useful. So, any feedback is welcomed - thank you!
+This is my first time teaching this class. It was originally developed by Dr. Kevin Shoemaker, but I am making adjustments to cater it to my understanding of statistics and the best ways that I can teach you all about it.
+
+Given this is my first time teaching this specific material in this format, I welcome frequent and honest feedback on course topics to understand whether course topics are appropriate and/or useful. So, any feedback is welcomed -- thank you!
 
 [--go to next lecture--](LECTURE1.html)

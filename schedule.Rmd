@@ -24,8 +24,9 @@ courseSchedule <- read.csv("CourseSchedule.csv")
 ```
 
 ```{r results='asis', echo=FALSE}
-knitr::kable(courseSchedule, caption="", col.names = c("Week", "Tuesday",
-                                                     "Thursday (R mini-lab)",
-                                                     "Assignments"))
+knitr::kable(courseSchedule, caption="", col.names = c("Week", "Dates",
+                                                       "Tuesday",
+                                                       "Thursday (R mini-lab)",
+                                                       "Assignments"))
 ```
 

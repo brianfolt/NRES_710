@@ -12,7 +12,7 @@
 <meta name="author" content="NRES 710" />
 
 
-<title>Basic Concepts of Prob. and Stats.</title>
+<title>Basic Concepts of Probability and Statistics</title>
 
 <script src="site_libs/header-attrs-2.27/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
@@ -422,9 +422,10 @@ div.tocify {
 
 
 
-<h1 class="title toc-ignore">Basic Concepts of Prob. and Stats.</h1>
+<h1 class="title toc-ignore">Basic Concepts of Probability and
+Statistics</h1>
 <h4 class="author">NRES 710</h4>
-<h4 class="date">Last compiled: 2024-07-09</h4>
+<h4 class="date">Last compiled: 2024-07-11</h4>
 
 </div>
 
@@ -432,58 +433,69 @@ div.tocify {
 <div id="overview-of-basic-concepts-of-probability-and-statistics"
 class="section level2">
 <h2>Overview of basic concepts of probability and statistics</h2>
-<p>We use probability and statistics to make inferences from data!</p>
-<p>For example, say I asked you: can people with last names beginning
+<p>We use probability and statistics to (1) <strong>learn from
+data</strong> and (2) <strong>test hypotheses</strong> about how the
+world works.</p>
+<p>For example, say I asked you: Can people with last names beginning
 A-M jump higher than those with last names beginning N-Z?</p>
 <p>As a scientist, what would we do?</p>
-<p>We would want to identify, and then sample, the population of
-interest! The process of making inferences about the world based on
-sample data is called <strong>statistics</strong>!</p>
+<p>We would want to identify, and then <strong>sample</strong>, the
+population of interest! Some might say that the process of making
+inferences (i.e., learning) about the world based on sample data is
+called <strong>statistics</strong>!</p>
 <div id="statistics" class="section level3">
 <h3>Statistics</h3>
-<p>The figure below illustrates the basic concepts of statistics (we’ve
-already seen this). The bold line separates the unseen population of
-interest (left) from the observed sample (right):</p>
-<p><img src="statistics1.png" style="width:40.0%" /></p>
-<p>Statistics is about using the things we can observe (the sample) to
-say something meaningful about the things we can’t observe (the
-population).</p>
-<p><strong>Q</strong>: what is the population in the above
-example?<br />
-<strong>Q</strong> what is the parameter in the above example?</p>
-<p><strong>Q</strong> what is the sample in the above example?<br />
-<strong>Q</strong> what is the ‘statistic’ in the above example?</p>
+<p>The figure below illustrates the basic concepts of statistics; we
+discussed this during the last lecture. The bold vertical line separates
+the <strong>unseen population of interest</strong> (left) from the
+<strong>observed sample</strong> (right):</p>
+<p><img src="statistics1.png" style="width:75.0%" /></p>
+<p>Statistics involves using the things we can observe – the
+<strong>sample</strong> – to say something meaningful about the things
+we can’t observe – the <strong>population</strong>. We can use
+statistics to estimate the <strong>parameter of interest</strong> and
+learn about whether it is real or not.</p>
+<p>In the above example about jumping height:</p>
+<p><strong>Q</strong>: What is the ‘population’?<br />
+<strong>Q</strong>: What is the ‘parameter’?<br />
+<strong>Q</strong>: What is the ‘sample’?<br />
+<strong>Q</strong>: What is the ‘statistic’?</p>
 <p><em>Population</em>: ???<br />
 <em>Parameter</em>: ???<br />
 <em>Sample</em>: ???<br />
 <em>Statistic</em>: ???</p>
 <p>For statistical inference to make sense, we must make several
-assumptions about the sample (i.e., that the sample is representative of
-the population).</p>
-<p>Classical statistics often involves comparing a <em>statistic</em>
-computed from the data (the “signal”) with a (usually theoretical)
-‘sampling distribution’ to quantify the “noise” or sampling error and
-ultimately determine whether or not we can say anything meaningful about
-the unseen <em>parameter</em>.</p>
-<p>Where does probability come in? Well, samples are random- all
-<em>statistics</em> are derived from random sampling processes.</p>
-<p>How can we tease apart signal from noise- i.e., determine that our
-result is <em>meaningful</em> and not simply an artifact of random
-sampling?</p>
-<p><em>Probability</em> helps us to quantify uncertainty and make sense
-of processes that come out different every time -like random
+assumptions about the sample. One assumptions is that the sample is
+<strong>representative</strong> of the population.</p>
+<p>Classic statistics often involve comparing a
+<strong>statistic</strong> computed from the data (i.e., the “signal”)
+with a (usually theoretical) ‘sampling distribution’ to quantify the
+“noise” or sampling error and ultimately determine whether or not we can
+say anything meaningful about the unseen <em>parameter</em>. This helps
+us test whether the variation we observe in nature is due to a real
+effect or if it’s observed more simply due to random chance.</p>
+<p>Where does probability come in? Well, our samples are random, and all
+<em>statistics</em> are also derived from random sampling processes.</p>
+<p>How can we tease apart <strong>signal</strong> from random
+<strong>noise</strong>? In other words, how can we determine that our
+result is <strong>meaningful</strong> and not simply an artefact of
+random sampling? Or, how can we determine that our result is
+<strong>real</strong> and due to signal, rather than simply being the
+product of random chance within noise?</p>
+<p><strong>Probability</strong> helps us to quantify uncertainty and
+make sense of processes that come out different every time – like random
 sampling!</p>
-<p>Specifically, we use a special type of probability distribution known
-as a “sampling distribution” to quantify how much noise to expect from
-our random sampling process (this is also the topic of our next
-lecture).</p>
+<p>Specifically, we use a special type of <strong>probability
+distribution</strong> known as a ‘sampling distribution’ to quantify how
+much noise to expect from our random sampling process (this is also the
+topic of our next lecture).</p>
 </div>
 <div id="sampling-distributions" class="section level3">
 <h3>Sampling distributions</h3>
-<p><strong>Q</strong>: what is the probability of getting four heads out
-of 4 coin flips from a fair coin?</p>
+<p><strong>Q</strong>: what is the probability of recording ‘heads’ four
+times out of four coin flips with a fair coin?</p>
 <p>We assume that heads or tails are equally likely outcomes of a single
-coin flip (fair coin) and that the four flips are completely
+coin flip (i.e., fair coin) and that the four flips are completely
 independent.</p>
 <p>How many possible outcomes are there?</p>
 <p>TTTT<br />
@@ -502,18 +514,17 @@ HHTT<br />
 HHTH<br />
 HHHT<br />
 HHHH</p>
-<p>Assuming a ‘fair’ coin each of these outcomes/sequences is equally
-likely!</p>
-<p>What is the probability (expected frequency) of all four coin flips
-coming out heads?</p>
-<p>If you get four heads in a row, are you <em>surprised</em> enough by
-that outcome to reject the assumption that the coin is ‘fair’? What
-about if you got 100 heads in a row?</p>
-<p><strong>Q</strong> What is the probability of getting at least three
-of the same face (heads or tails) out of 4 coin flips? Would this cause
-you to reject the fairness of the coin?</p>
+<p>Assuming a ‘fair’ coin, each of these outcomes is equally likely!</p>
+<p><strong>Q</strong>: What is the probability (expected frequency) of
+all four coin flips coming out heads?</p>
+<p><strong>Q</strong>: If you get four heads in a row, would you be
+<em>surprised</em> enough by that outcome to reject the assumption that
+the coin is ‘fair’? What if you got 100 heads in a row?</p>
+<p><strong>Q</strong>: What is the probability of getting at least three
+of the same face (heads or tails) out of four coin flips? Would this
+cause you to reject the fairness of the coin?</p>
 <p>The distribution of possible outcomes from your sampling process
-(often under strict assumptions- like assuming a fair coin) is a
+(often under strict assumptions – like assuming a fair coin) is a
 <em>sampling distribution</em>.</p>
 <p>The notion that the coin is a fair coin is an example of a <em>null
 hypothesis</em>…</p>
@@ -525,62 +536,82 @@ hypothesis</em>…</p>
 looking for is entirely absent in the population of interest.</p>
 <p>Under the null hypothesis, any hypothetical random samples you
 collect might have some apparent signal, but that apparent signal is
-just a meaningless artifact of random sampling, and not representative
+just a meaningless artefact of random sampling, and not representative
 of the population (after all, the signal is completely absent in the
 population under the null hypothesis).</p>
-<p><strong>Q</strong> what is the null hypothesis for the jump-height
+<p><strong>Q</strong>: What is the null hypothesis for the jump-height
 example?</p>
-<div id="p-values" class="section level3">
-<h3>P values</h3>
-<p>The <em>p value</em> is a key concept of frequentist statistics, but
-one that is often misinterpreted and misunderstood.</p>
-<p>The p value only has meaning in the context of the null hypothesis-
-that is, in a world where the null hypothesis is true. I will sometimes
-refer to this as the “null universe”.</p>
-<p>The p value answers the question: “what’s the probability that my
-observed result (or one even more”extreme” –i.e., with even more
-“signal”) could have occurred by chance <em>given the null hypothesis is
-true</em>?”</p>
-<p>The lower the p-value, the more surprised you will be that your
-observed data could be a meaningless result of random chance alone AND
-the more likely you might be to <em>reject</em> the null hypothesis!</p>
-<p><strong>Q</strong>: What does a p-value tell you about your
-<em>alternative hypothesis</em>?</p>
+<div id="probability-values-p-values" class="section level3">
+<h3>Probability values (<em>p</em>-values)</h3>
+<p>The <strong>probability value</strong> (‘<em>p</em>-value’, for
+short) is a key concept of most common approaches to statistics
+(hereafter, frequentist statistics), but one that is often
+misinterpreted and misunderstood.</p>
+<p>The <em>p</em>-value only has meaning in the context of the
+<strong>null hypothesis</strong>. That is, in a world where the null
+hypothesis is true. The null hypothesis is often that there is no signal
+in your data. The <em>p</em>-value can be used to <strong>test</strong>
+the null hypothesis.</p>
+<p>The <em>p</em>-value provides an answer to the question: “what’s the
+probability that my observed result (or one even more ‘extreme’ – i.e.,
+with even more ‘signal’) could have occurred by chance, <em>given the
+null hypothesis is true</em>? (Johnson 1999).</p>
+<p>Mathematically, we can present that with a conditional probabilistic
+statement:</p>
+<p><em>p</em> = Pr[observed data or more extreme data | Ho]</p>
+<p>The lower the <em>p</em>-value, the more surprised you will be that
+your observed data could be a meaningless result of random chance alone
+AND the more likely you might be to <strong>reject</strong> the null
+hypothesis!</p>
+<p><strong>Q</strong>: What does a <em>p</em>-value tell you about your
+<strong>alternative hypothesis</strong>?</p>
 <div id="aside-extremeness" class="section level4">
 <h4>Aside: extremeness</h4>
-<p>The p value definition is accompanied by the word “extreme”: <em>the
-probability of observing a result at least as extreme as your observed
-result, given the null hypothesis is true</em>.</p>
+<p>The <em>p</em>-value definition is accompanied by the word ‘extreme’:
+<em>the probability of observing a result at least as extreme as your
+observed result, given the null hypothesis is true</em>.</p>
 <p>A result ‘at least as extreme as your observed result’ means a sample
 dataset that has at least as much “signal” as your observed data.</p>
 <p>For example:</p>
-<p><em>Sample size</em>: 20, 10 with names between A and M and 10 with
-names between N and Z.<br />
-<em>Observed result</em>: mean jump-height for A-M is 0.2 cm greater
-than mean height for N-Z<br />
-<strong>Q</strong> Would you be comfortable rejecting the null
-hypothesis if random sampling under the null hypothesis could produce a
-result as or more extreme approximately 20% of the time (p = 0.2)?</p>
+<p><em>Sample size</em>: N = 20; 10 with names between A–M and 10 with
+names between N–Z.<br />
+<em>Observed result</em>: mean jump-height for A–M is 0.2 cm greater
+than mean height for N–Z</p>
+<p><strong>Q</strong>: Would you be comfortable rejecting the null
+hypothesis, if random sampling given the null hypothesis could produce a
+result as or more extreme approximately 20% of the time (<em>p</em> =
+0.2)?</p>
+<p><strong>A</strong>: The <em>p</em>-value suggests there is a 0.2
+probability that the signal we observed is due to random variation,
+which is pretty high. If this was much smaller, say less than 0.05, then
+we might be more sure that the outcome was <em>not</em> due to random
+chance, and rather that some <em>other signal</em> or
+<strong>effect</strong> might be at play…</p>
 </div>
 </div>
-<div id="statistical-tests-rejecting-the-null" class="section level3">
-<h3>Statistical tests: rejecting the null!</h3>
-<p>A p value is not in itself a statistical test. A p-value is a
-probability, which can take values between 0 and 1. It doesn’t in itself
-tell you whether or not you should reject the null hypothesis!</p>
-<p>We reject the null hypothesis if the p value falls below a threshold
-- this threshold is known as alpha, or <span
+<div id="statistical-tests-rejecting-the-null-hypothesis"
+class="section level3">
+<h3>Statistical tests: rejecting the null hypothesis!</h3>
+<p>A <em>p</em>-value is not in itself a statistical test. A
+<em>p</em>-value is a probability, which by definition includes values
+between 0 and 1. It does not in itself tell you whether or not you
+should reject the null hypothesis!</p>
+<p>We reject the null hypothesis if the <em>p</em>-value falls below a
+threshold. This threshold is often known as alpha (<span
 class="math inline">\(\alpha\)</span>).</p>
 <p><span class="math inline">\(\alpha\)</span> is usually set by the
 researcher. It is arbitrary and has to do with your risk tolerance as a
-researcher.</p>
-<p>How comfortable are you with rejecting the null if there is a 10%
-chance that your result could have been generated under the null?</p>
-<p>How comfortable are you with rejecting the null if there is a 1%
-chance that your result could have been generated under the null?</p>
-<p>Fisher proposed <span class="math inline">\(\alpha =0.05\)</span> as
+researcher. It might reflect the risk you are willing to take to ‘get
+things wrong’ and incorrectly reject a true null hypothesis.</p>
+<p>How comfortable are you with rejecting the null hypothesis, if there
+is a <strong>10% chance</strong> that your result could have been
+generated by random chance under the null?</p>
+<p>How comfortable are you with rejecting the null, if there is a
+<strong>1% chance</strong> that your result could have been generated
+under the null?</p>
+<p>Fisher proposed <span class="math inline">\(\alpha = 0.05\)</span> as
 striking a nice balance between mistakenly rejecting a true null
-hypothesis (Type 1 error), and failing to reject a false null hypothesis
+hypothesis (Type 1 error) and failing to reject a false null hypothesis
 (a Type 2 error). This cutoff value was NEVER intended to be a fixed
 value to be applied unthinkingly!!!</p>
 </div>
@@ -588,27 +619,27 @@ value to be applied unthinkingly!!!</p>
 <h3>Example: Fisher’s cups of tea:</h3>
 <p>A Woman claimed she could tell if milk was added to a cup of tea
 first or last.</p>
-<p>Fisher suggested we give her 8 seemingly identical cups of tea at
-once, 4 with milk first and 4 with tea first. The woman is asked to
-identify the four cups that were poured with milk first, given the 8
-cups are presented to the woman in a randomized order.</p>
-<p>There are 70 possible ways of choosing four cups out of 8. The
-probability of getting all of them right by random chance (assuming the
-null is true) would be 1/70 = 0.014 = 1.4%. That would be kinda
-surprising, right? So if the lady selected all four cups correctly, are
-we surprised enough to reject the null?</p>
+<p>Fisher suggested we give her eight seemingly identical cups of tea at
+once: four with milk first and four with tea first. The woman was asked
+to identify the four cups that were poured with milk first, given the
+eight cups are presented to the woman in a randomized order.</p>
 <p><strong>Q</strong>: How would you state the null hypothesis in
 words?</p>
+<p>There are 70 possible ways of correctly identifying four cups out of
+eight. The probability of getting all of them right by random chance
+(assuming the null is true) would be 1/70 = 0.014 = 1.4%. That would be
+pretty surprising, right? So if the lady selected all four cups
+correctly, are we surprised enough to reject the null?</p>
 <p><strong>Q</strong>: If we decide to reject the null, what do we now
 believe about our tea-taster?</p>
 <p><strong>Q</strong>: If we fail to reject the null, what do we now
 believe about our tea-taster? More specifically, do we now know she is a
 fraud?</p>
-<p>Here are the possibilities (X=incorrect id, O=correct id), which
-under the null hypothesis are equally likely (since the lady can’t
-actually tell the difference under the null hypothesis). Let’s assume
-cups 5-8 are milk first and 1-4 are milk last. The number of correct
-choices is in parentheses.</p>
+<p>In reality, the woman can’t actually tell the difference, and the
+null hypothesis is true. Here are the possibilities (X = incorrect
+identification, O = correct identification), which under the null
+hypothesis are equally likely. Let’s assume cups 5–8 are milk first and
+1-4 are milk last. The number of correct choices is in parentheses.</p>
 <p>X1/X2/X3/X4 (0) X1/X3/X4/O5 (1) X1/X4/O7/O8 (2) X2/X4/O5/O6 (2)
 X3/X4/O7/O8 (2)<br />
 X1/X2/X3/O5 (1) X1/X3/X4/O6 (1) X1/O5/O6/O7 (3) X2/X4/O5/O7 (2)
@@ -634,45 +665,60 @@ X1/X2/O5/O8 (2) X1/X4/O5/O7 (2) X2/X3/O5/O8 (2) X3/X4/O5/O7 (2)<br />
 X1/X2/O6/O7 (2) X1/X4/O5/O8 (2) X2/X3/O6/O7 (2) X3/X4/O5/O8 (2)<br />
 X1/X2/O6/O8 (2) X1/X4/O6/O7 (2) X2/X3/O6/O8 (2) X3/X4/O6/O7 (2)<br />
 X1/X2/O7/O8 (2) X1/X4/O6/O8 (2) X2/X3/O7/O8 (2) X3/X4/O6/O8 (2)</p>
-<p><strong>Q</strong> what if the lady selected 3 of 4 correctly? [there
-are 17 ways of getting at least three of the four correct out of 70
-total combinations]. Would you be surprised enough to reject the null
-hypothesis. Is it possible that you (and the lady) are living in the
-null universe? How surprised would you have to be to reject the null and
-admit that she can tell the difference?</p>
-<p>ASIDE: the test above is called ‘Fisher’s exact test’ because it
-literally enumerates all the possible outcomes to compute the exact
-probability of observing any particular outcome under the null
-hypothesis. Most tests we will use in this class are (necessarily)
-approximations that rely on certain assumptions that may or not be met
-in practice. Fisher’s exact test assumes that all observations are
-independent, but otherwise makes no additional assumptions.</p>
+<p><strong>Q</strong>: What if the tea-taster selected 3 of 4 correctly?
+There are 17 ways of getting at least three of the four correct out of
+70 total combinations. Would you be surprised enough to reject the null
+hypothesis? Or, is it possible that you (and the tea-taster) are ‘living
+in the null universe’? How surprised would you have to be to reject the
+null and admit that she can tell the difference?</p>
+<p><strong>A</strong>: 17/70 = 0.243 indicates that there is a 24.3%
+chance of getting at least 3 out of 4 correct purely by random chance
+under the null hypothesis. Since 0.243 is much higher than our usual
+<span class="math inline">\(\alpha\)</span> of 0.05, we would not be
+surprised enough to reject the null hypothesis. This means that even if
+the tea-taster selected 3 out of 4 cups correctly, we would not have
+sufficient evidence to conclude that she can tell the difference between
+milk-first and tea-first cups.</p>
+<p>Note: the test above is called ‘<strong>Fisher’s <em>exact</em>
+test</strong>’ because it literally enumerates all the possible outcomes
+to compute the <em>exact</em> probability of observing any particular
+outcome under the null hypothesis. Most tests we will use in this class
+are (necessarily) approximations that rely on certain assumptions that
+may or not be met in practice. Fisher’s exact test assumes that all
+observations are independent, but otherwise makes no additional
+assumptions.</p>
 </div>
 <div id="statistics-terminology-type-1-and-type-2-errors"
 class="section level3">
 <h3>Statistics Terminology: Type 1 and Type 2 errors</h3>
-<p>A <em>type 1 error</em> is mistakenly rejecting the null hypothesis
-(false positive).</p>
-<p>The type 1 error rate (alpha) is the probability of committing a
-false positive error- given the null is true, how often would you reject
-the null?</p>
-<p>A <em>type 2 error</em> is mistakenly failing to reject a false null
-hypothesis (you are not living in the null universe but you fail to
-acknowledge it!).</p>
-<p>The type 2 error rate is called <strong>Beta</strong>, or <span
-class="math inline">\(\beta\)</span>, and is the probability of fail to
-reject the null assuming the null is false.</p>
-<p><strong>Q</strong> what would it mean to set the Beta level? Why do
-we set alpha rather than beta?<br />
-<strong>A</strong> there is only one universe in which the null
+<p>What if we get things wrong? What if we mistakenly reject the null
+hypothesis, but in reality the null hypothesis is true?</p>
+<p>A <strong>type 1 error</strong> is mistakenly rejecting the null
+hypothesis (‘false positive’).</p>
+<p>The type 1 error rate (<span class="math inline">\(\alpha\)</span>)
+is the probability of committing a false positive error</p>
+<p><strong>Q</strong>: Given the null is true and <span
+class="math inline">\(\alpha\)</span> = 0.05, how often would you
+incorrectly reject the null?</p>
+<p>A <strong>type 2 error</strong> is mistakenly failing to reject a
+false null hypothesis (you are ‘not living in the null universe’, but
+you fail to realize it!).</p>
+<p>The type 2 error rate is called <strong>Beta</strong> (<span
+class="math inline">\(\beta\)</span>), and is the probability of failing
+to reject the null hypothesis , when the null is actually false.</p>
+<p><strong>Q</strong>: What would it mean to set the <span
+class="math inline">\(\beta\)</span> level? Why do we set <span
+class="math inline">\(\alpha\)</span> rather than <span
+class="math inline">\(\beta\)</span>?</p>
+<p><strong>A</strong>: There is only one universe in which the null
 hypothesis is true. There are infinite ways in which the null hypothesis
 could be false. It only makes sense to fix the alpha level…</p>
-<p>Finally <em>Power</em> is defined as the probability of correctly
+<p>Finally, <em>power</em> is defined as the probability of correctly
 rejecting an incorrect null hypothesis. Power is simply defined as <span
-class="math inline">\(1-\beta\)</span>!</p>
+class="math inline">\(1 - \beta\)</span>!</p>
 <p>Power is influenced by sample size (amount of information at your
 disposal) and effect size (the degree to which the null is not true!),
-among other things. A <em>Power analysis</em> is an attempt to see how
+among other things. A <em>power analysis</em> is an attempt to see how
 much power you have to detect a true signal under a given sampling
 design.</p>
 <p><img src="clt1.jpg" /></p>
