@@ -1,6 +1,6 @@
 Week,Dates,Tuesday class meeting,Thursday class meeting,Exercises/deadlines
-1,"Aug. 27, 29",[Overview: R and statistics](INTRO.html),"[P-values, statistical tests](LECTURE1.html)",[Johnson 1999](papers/Johnson1999.pdf)
-2,"Sep. 3, 5",[Exercise 1: functions and summary stats](EXERCISE1.html),TBD,
+1,"Aug. 27, 29",Syllabus and the Purpose of Statistics,[Intro to R and Statistics](INTRO.html),
+2,"Sep. 3, 5","[P-values, statistical tests](LECTURE1.html)",[Exercise 1: functions and summary stats](EXERCISE1.html),
 3,"Sep. 10, 12",[Central limit theorem (CLT) and sampling distributions](LECTURE2.html),[Central limit theorem (CLT) and sampling distributions](LECTURE2.html),Exercise 1 due 9/13
 4,"Sep. 17, 19",[Taxonomy of statistics](LECTURE3.html),[t-tests and z tests](LECTURE4.html),Project proposals due 9/20
 5,"Sep. 24, 26",[t-tests and z-tests](LECTURE4.html),[Exercise 2: t-tests](EXERCISE2.html),Exercise 2 due 10/2
