@@ -12,7 +12,7 @@
 <meta name="author" content="NRES 710" />
 
 
-<title>Taxonomy of statistics</title>
+<title>Taxonomy of Statistics</title>
 
 <script src="site_libs/header-attrs-2.27/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
@@ -422,9 +422,9 @@ div.tocify {
 
 
 
-<h1 class="title toc-ignore">Taxonomy of statistics</h1>
+<h1 class="title toc-ignore">Taxonomy of Statistics</h1>
 <h4 class="author">NRES 710</h4>
-<h4 class="date">Last compiled: 2024-07-09</h4>
+<h4 class="date">Last compiled: 2024-07-14</h4>
 
 </div>
 
@@ -432,37 +432,40 @@ div.tocify {
 <div id="overview-of-statistical-methods" class="section level2">
 <h2>Overview of statistical methods</h2>
 <p>Before we delve into common statistical tests, let’s first take a
-quick walk through the analyses we will cover in this class. As we do
-this, we will try to put these analysis into a framework - a field guide
-of sorts – that will help us to make sense of these methods and when to
-use them.</p>
-<p>And before we do that, let’s briefly talk about <em>parametric</em>
-vs <em>nonparametric</em> statistical tests…</p>
-<div id="aside-parametric-vs-nonparametric" class="section level3">
-<h3>Aside: parametric vs nonparametric</h3>
-<p>As we saw in the last lecture, <strong>Parameters</strong> are the
-arguments used to describe probability distributions - they describe the
-exact shape and location of the distribution. Different probability
-distributions are associated with different parameters. For example, the
-normal distribution is described by 2 parameters: mean and standard
-deviation. The Poisson distribution has only one parameter (the Poisson
-mean, also known as Lambda). The binomial distribution is described by 2
-parameters: size (number of trials) and prob (success probability for
-each trial).</p>
+high-level walk-through of the analyses we will cover in this class. As
+we do this, we will try to put these analysis into a framework – a field
+guide of sorts – that will help us to make sense of these methods and
+when to use them.</p>
+<p>Before we do that, let’s briefly talk about
+<strong>parametric</strong> vs. <strong>nonparametric</strong>
+statistical tests.</p>
+<div id="parametric-vs.-nonparametric-tests" class="section level3">
+<h3>Parametric vs. nonparametric tests</h3>
+<p>As we saw in the last lecture, <strong>parameters</strong> are the
+arguments used to describe probability distributions. Parameters
+describe the exact <strong>shape</strong> and <strong>location</strong>
+of each distribution. Different probability distributions are associated
+with different parameters. For example, the <strong>normal
+distribution</strong> is described by two parameters: mean and standard
+deviation. The <strong>Poisson distribution</strong> has only one
+parameter, the Poisson mean (lambda; <span
+class="math inline">\(\lambda\)</span>). The <strong>binomial
+distribution</strong> is described by two parameters: size (number of
+trials) and probability (success probability for each trial).</p>
 <div id="parametric-statistics" class="section level4">
 <h4>Parametric statistics</h4>
 <p>In <em>parametric statistics</em>, our statistical tests relate
 directly to the parameters of well-defined probability distributions
 (e.g., the mean of a normal distribution). That is, we assume <em>a
-priori</em> that our population follows a certain well-defined
-distribution (e.g., a normal distribution) and we make hypothesis about
+priori</em> that our population follows this certain well-defined
+distribution (e.g., a normal distribution) and we make hypotheses about
 one or more of these parameters (often the mean of a normal
 distribution).</p>
 <p>Because of the Central Limit Theorem (CLT), we have good reason (in
 many cases) to assume that our sampling distribution should follow a
-particular distribution (e.g., z, t, Chi-squared) even if the underlying
-data don’t perfectly match the underlying assumptions of the analysis.
-However, this is not always a fair assumption – sometimes the
+particular distribution (e.g., z, t, Chi-squared), even if the
+underlying data don’t perfectly match the underlying assumptions of the
+analysis. However, this is not always a fair assumption – sometimes the
 assumptions of parametric tests are clearly violated!!</p>
 <p>We are fortunate that statisticians have developed a number of tests
 that do not depend on our data or data summaries following any defined
@@ -472,12 +475,12 @@ referred to as <strong>non-parametric tests</strong>.</p>
 </div>
 <div id="nonparametric-statistics" class="section level4">
 <h4>Nonparametric statistics</h4>
-<p>Unlike parametric statistics, <em>nonparametric statistics</em> do
-not require us to make strong assumptions, such as that the underlying
-statistical population follows a normal error distribution (like in a
-t-test or linear regression). Using these methods, we can still test
-similar (but not identical) hypotheses even if our data do not meet
-standard parametric assumptions</p>
+<p>Unlike parametric statistics, <strong>nonparametric
+statistics</strong> do not require us to make strong assumptions, such
+as that the underlying statistical population follows a normal error
+distribution (like in a t-test or linear regression). Using these
+methods, we can still test similar (but not identical) hypotheses, even
+if our data do not meet standard parametric assumptions.</p>
 <p>Confusingly, we often use the term “nonparametric” to refer to two
 different classes of statistical models:<br />
 1. Statistical tests that do not require any assumptions about the
@@ -489,39 +492,42 @@ variables. These methods include generalized additive models, spline
 regressions, gaussian processes, and many methods collectively known as
 <strong>machine learning</strong> (e.g., random forest). These methods
 are often referred to as <strong>nonparametric regression</strong>.</p>
+<p>In this class, we will mainly use the term ‘nonparameter statistics’
+to refer to distribution-free tests (#1).</p>
+<p><strong>Q</strong>: Given the CLT makes many classical tests robust
+to non-normal data distributions, why do we need non-parametric
+statistics?</p>
 </div>
 <div id="independence-of-data" class="section level4">
 <h4>Independence of data</h4>
 <p>It is important to note that most classical parametric and
-nonparametric statistics all make one very important assumption – that
-observations are independent! Violation of this assumption are often
-called <strong>pseudoreplication</strong> and can wreak havoc with our
-type I error rates!</p>
-<p><strong>Q</strong> Given the CLT makes many classical tests robust to
-non-normal data distributions, why do we need non-parametric
-statistics?</p>
-<p>Okay, let’s get back to our main purpose, which is to provide a
-“field guide” of sorts for determining which statistical analyses to
-run. This guide will involve characterizing the type of response
-variable and predictor variable we have at hand – most importantly,
-whether we have continuous or categorical data for our response and
-predictor variables.</p>
+nonparametric statistics all make one very important assumption –
+<strong>that observations are independent</strong>! Violation of this
+assumption are often called <strong>pseudoreplication</strong> and can
+cause issues with our type I error rates!</p>
+<p>Let’s get back to our main purpose, which is to provide a “field
+guide” of sorts for determining which statistical analyses to run. This
+guide will involve characterizing the type of response variable and
+predictor variable we have at hand – most importantly, whether we have
+continuous or categorical data for our response and predictor
+variables.</p>
 </div>
 </div>
 <div id="continuous-response-variable" class="section level3">
 <h3>Continuous response variable</h3>
 <p>If your response variable is continuous, common classical statistical
-analyses include: t-tests, ANOVA, linear regression. Each of these tests
-is associated with non-parametric alternatives. In each case (for the
-parametric tests, that is!), we are interested in testing if the
-<em>population mean</em> of the continuous response variable is affected
-by the predictor variables (null hypothesis: nope, there is no effect!).
-Predictor variables, in turn, can be continuous or categorical (factor
-variables in R) – but as you suspected, different predictor variable
+analyses include: <strong>t-tests</strong>, <strong>analysis of variance
+(ANOVA)</strong>, and <strong>linear regression</strong>. Each of these
+tests is associated with non-parametric alternatives. For the parametric
+tests, we are interested in testing if the <strong>population
+mean</strong> of the continuous response variable is affected by the
+predictor variables. Wish we to test the null hypothesis that is that
+there is no effect. Predictor variables, in turn, can be continuous or
+categorical (i.e., factor variables in R). Different predictor variable
 types will lead us to choose different statistical models!</p>
 <div id="continuous-response-binary-categorical-predictor"
 class="section level4">
-<h4>Continuous response, binary categorical predictor</h4>
+<h4>1) Continuous response, binary categorical predictor</h4>
 <p>If your categorical predictor variable is binary (two levels) and
 your response variable is continuous, you can use a <strong>two-sample
 t-test</strong>.</p>
@@ -529,33 +535,38 @@ t-test</strong>.</p>
 test</strong>.</p>
 <p>You can visualize the effect size using a boxplot or barplot with
 error bars.</p>
-<p><strong>Example</strong>: Are females larger than males? (null
-hypothesis: no difference). The response variable (body size) is
-continuous. The predictor variable (sex) is binary.</p>
+<p><strong>Example</strong>: Are female tortoises larger than males? The
+null hypothesis (<span class="math inline">\(H_{0}\)</span>) is that
+there is no difference. Body size is the response variable and is
+continuous. Sex is the predictor variable and is a binary, categorial
+variable.</p>
+<p><img src="LECTURE3_files/figure-html/graph1-1.png" width="672" /></p>
 </div>
 <div id="continuous-response-multi-level-categorical-predictor"
 class="section level4">
-<h4>Continuous response, multi-level categorical predictor</h4>
+<h4>2) Continuous response, multi-level categorical predictor</h4>
 <p>If your categorical predictor has more than two levels, you can use
-an <strong>ANalysis Of Variance (ANOVA)</strong> followed by
+an <strong>Analysis of variance (ANOVA)</strong> followed by
 <em>pairwise comparisons</em> to test which categories differ from one
 another.</p>
 <p>The non-parametric alternative is the <strong>Kruskal-Wallis
 test</strong>.</p>
-<p>You can visualize these relationships with (e.g.) a boxplot or
-barplot with error bars.</p>
-<p><strong>Example</strong> Do three different brands of nail polish
-differ in their durability? (null hypothesis: no effect). The predictor
-variable (nail polish brand) is categorical, the response variable (time
-until product wears off) is continuous.</p>
+<p>You can visualize these relationships with a boxplot or barplot with
+error bars.</p>
+<p><strong>Example</strong>: Do three different brands of nail polish
+differ in their durability? <span class="math inline">\(H_{0}\)</span>:
+no difference in durability among brands. The predictor variable (nail
+polish brand) is categorical, and the response variable (time until
+product wears off) is continuous.</p>
+<p><img src="LECTURE3_files/figure-html/graph2-1.png" width="672" /></p>
 </div>
 <div id="continuous-response-continuous-predictor"
 class="section level4">
-<h4>Continuous response, continuous predictor</h4>
+<h4>3) Continuous response, continuous predictor</h4>
 <p>If your predictor variable and response variable are both continuous,
 you can use <strong>linear regression</strong> analysis.</p>
 <p>You can visualize the effect size using a scatterplot with a
-regression line and confidence “ribbon”.</p>
+regression line and confidence “ribbon” (95% confidence intervals).</p>
 <p>If you just want to know if two variables are correlated but you are
 not interested in modeling one (the response) as a function of another
 (the predictor) you can run a <strong>Pearson correlation
@@ -566,19 +577,21 @@ test</strong>.</p>
 polynomial regression, spline fits (GAM), or machine learning
 methods.</p>
 <p><strong>Example</strong>: What is the relationship between tree
-diameter and age- can tree diameter be used to effectively predict the
-age of a tree? (null hypothesis: nope, there is no relationship). The
-predictor variable (age) is continuous, and the response variable (tree
-diameter) is also continuous.</p>
+diameter and age? Can tree diameter be used to effectively predict the
+age of a tree? <span class="math inline">\(H_{0}\)</span>: no
+relationship between tree diameter and age. The predictor variable (age)
+is continuous, and the response variable (tree diameter) is also
+continuous.</p>
+<p><img src="LECTURE3_files/figure-html/graph3-1.png" width="672" /></p>
 </div>
 <div id="continuous-response-both-continuous-and-categorical-predictors"
 class="section level4">
-<h4>Continuous response, both continuous and categorical predictors</h4>
-<p>If you have one categorical variable that you hypothesize may be
-influencing a continuous response variable– but there is also a “pesky”
-continuous variable that you also suspect is influencing your continuous
-response – you can use <strong>Analysis of Covariance
-(ANCOVA)</strong></p>
+<h4>4) Continuous response, both continuous and categorical
+predictors</h4>
+<p>Your response various is continuous as before, but now you have both
+a categorical and continuous variable that you hypothesize may be
+influencing the continuous response variable. The situation calls for
+<strong>Analysis of Covariance (ANCOVA).</strong></p>
 <p>More generally, if you have a set of continuous and categorical
 predictor variables that you hypothesize may be influencing your
 continuous response variable, you can use <strong>multiple linear
@@ -593,7 +606,11 @@ an underlying normally distributed population.</p>
 modeling in R, the <code>lm()</code> function. Basically, if you have a
 continuous response variable, you can use the <code>lm()</code>
 function!</p>
-<p>Linear regression is parametric, and assumes the residuals
+<p><strong>Example</strong>: Is the relationship between tree diameter
+and age different depending on soil type? The response variable (tree
+diameter) is also continuous.</p>
+<p><img src="LECTURE3_files/figure-html/graph4-1.png" width="672" /></p>
+<p>Linear regression is parametric and assumes the residuals
 (differences between observed data and predictions) are normally
 distributed. More generally, it assumes that the error distribution for
 the underlying population is normally distributed.</p>
@@ -613,10 +630,10 @@ response variable and use the same techniques as you would for a
 continuous response (e.g., linear regression). If this is not
 justifiable, you can use <strong>generalized linear models
 (GLM)</strong> with an error distribution that follows a
-<strong>discrete</strong> probability distribution such as a Poisson
+<strong>discrete</strong> probability distribution, such as a Poisson
 distribution (see previous lecture).</p>
 <p>This type of relationship can be visualized with a scatterplot and
-regression line (with confidence band)</p>
+regression line (with confidence band).</p>
 <p><strong>Generalized Linear Models (GLM)</strong> are a widely used
 parametric class of models that enable researchers to perform regression
 analysis while <em>relaxing</em> the assumption that residuals must be
@@ -626,11 +643,13 @@ Poisson and Negative Binomial – or according to non-normal continuous
 distributions like the Gamma or Exponential distributions.</p>
 <p>Nonparametric options include classification/regression trees and
 GAM.</p>
-<p>Example: does the number of eggs produced per year by a desert
-tortoise depend on the availability of food in the prior year?</p>
+<p><strong>Example</strong>: does the number of eggs produced per year
+by a desert tortoise depend on the availability of food in the prior
+year?</p>
+<p><img src="LECTURE3_files/figure-html/graph5-1.png" width="672" /></p>
 </div>
 <div id="categorical-response-variable" class="section level3">
-<h3>Categorical response variable</h3>
+<h3>6) Categorical response variable</h3>
 <p>If your response variable is categorical (factor variable, ordinal
 variable, binary variable) then your choice of statistical methods
 changes:</p>
@@ -638,8 +657,9 @@ changes:</p>
 class="section level4">
 <h4>Categorical response variable, categorical predictor</h4>
 <p>If both your response variable and your predictor variable are
-categorical, then you can use a <strong>chi-squared test</strong> or a
-<strong>Fisher exact test</strong> to test for an association between
+categorical, then you can use a <strong>Chi-squared (<span
+class="math inline">\(\chi^2\)</span>) test</strong> or a
+<strong>Fisher’s exact test</strong> to test for an association between
 the two variables.</p>
 <p>In this case, it can be informative to summarize your data as a
 <em>contingency table</em> like we did with the ‘lady tasting tea’
@@ -647,23 +667,25 @@ example. That is, we make a table that summarized the number of
 observation in each unique category of our response and predictor
 variables.</p>
 <p>Example: test for an association between salamander color morph
-(melanistic vs wild-type) and mating behavior (‘sneaker’ vs territory
+(melanistic vs. wild-type) and mating behavior (‘sneaker’ vs. territory
 holder).</p>
+<p><img src="LECTURE3_files/figure-html/graph6-1.png" width="672" /></p>
 </div>
 <div id="categorical-response-variable-continuous-predictor"
 class="section level4">
 <h4>Categorical response variable, continuous predictor</h4>
 <p>If your response variable is binary (true/false, two levels) and your
 predictor variable is continuous, you can use <strong>logistic
-regression</strong> (which is a type of <em>generalized linear model
-(GLM)</em>).</p>
-<p>Example: Does the probability of site-occupancy for American pika
-depend on elevation?</p>
+regression</strong> – which is a type of <em>generalized linear model
+(GLM)</em> that assumes a binary response distribution.</p>
+<p>Example: Does the site occupancy for American Pika (<em>Ochotona
+princeps</em>) depend on elevation?</p>
+<p><img src="LECTURE3_files/figure-html/graph7-1.png" width="672" /></p>
 <p>If your categorical response variable has more than two levels, you
 can use <strong>multinomial logistic regression</strong> (for
 categorical responses) or <strong>ordinal logistic regression</strong>
-(for ordinal responses). I don’t plan to explore these methods in this
-class, but it can still be useful to know they exist!</p>
+(for ordinal responses). We don’t plan to explore these methods in this
+class, but it remains useful to know they exist!</p>
 </div>
 </div>
 <div id="when-the-taxonomy-breaks-down" class="section level3">
@@ -674,6 +696,8 @@ the sample mean equal to 32? What exactly is the predictor variable?</p>
 <p>Another example might be a normality test. We want to test if our
 data are normally distributed – again, what is the predictor variable in
 this case?</p>
+<p>However, these tests might be useful for testing hypotheses in
+different contexts.</p>
 </div>
 </div>
 <div id="discussion-final-projects" class="section level2">
@@ -682,8 +706,8 @@ this case?</p>
 projects. Take a minute to think through your data set and try to
 determine: what is your response variable, what is your predictor
 variable? Are these data continuous or discrete? Based on the taxonomy,
-what main analysis or analyses do you anticipate using for your final
-projects???</p>
+what analysis or analyses do you anticipate being useful for your
+project?</p>
 <p><a href="LECTURE4.html">–go to next lecture–</a></p>
 </div>
 
