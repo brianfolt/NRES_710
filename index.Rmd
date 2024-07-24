@@ -181,6 +181,7 @@ knitr::opts_chunk$set(echo = TRUE, message = FALSE)
 rmarkdown::render('index.Rmd', output_file = 'syllabus.pdf', rmarkdown::pdf_document())
 rmarkdown::render('schedule.Rmd', rmarkdown::pdf_document())
 rmarkdown::render('INTRO.Rmd', rmarkdown::pdf_document())
+rmarkdown::render('lecture_0.Rmd', rmarkdown::pdf_document())
 # rmarkdown::render('LECTURE1.Rmd', rmarkdown::pdf_document())
 # rmarkdown::render('LECTURE2.Rmd', rmarkdown::pdf_document())  # latex_engine="xelatex"
 # rmarkdown::render('LECTURE3.Rmd', rmarkdown::pdf_document())
@@ -225,6 +226,8 @@ rmd2rscript <- function(infile="LECTURE2.Rmd"){    # function for converting mar
 
 ```{r echo=FALSE, eval=FALSE}
 ## Manually run these lines through console to turn the RMD to R scripts
+rmd2rscript("lecture_0.Rmd")
+rmd2rscript("lecture_1.Rmd")
 rmd2rscript("INTRO.Rmd")
 rmd2rscript("LECTURE1.Rmd")
 rmd2rscript("LECTURE2.Rmd")

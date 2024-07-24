@@ -1,0 +1,95 @@
+---
+title: "Exercise 1: Data Summary Functions in R"
+author: "NRES 710"
+date: "Last compiled: `r Sys.Date()`"
+output: 
+  html_document: 
+    theme: yeti
+    toc: yes
+    toc_float: yes
+    css: styles.css
+---
+
+```{r setup, include=FALSE}
+
+knitr::opts_chunk$set(
+	echo = TRUE,
+	message = FALSE,
+	warning = FALSE,
+	cache = TRUE
+)
+```
+
+
+## EXERCISE 1: Data summaries and custom functions
+
+Please submit your responses to all questions below via WebCampus (text box submission) on the date indicated (see WebCampus).  
+
+If you are new to R or would like a refresher, some university faculty held an R workshop last spring last spring. The material is all hosted [here](https://kevintshoemaker.github.io/R-Bootcamp/). You can work through the modules at your own pace:
+
+* [Working with data objects](https://kevintshoemaker.github.io/R-Bootcamp/module1_1.html)    
+* [Managing data](https://kevintshoemaker.github.io/R-Bootcamp/module1_2.html)   
+* [Programming](https://kevintshoemaker.github.io/R-Bootcamp/module2_2.html)   
+
+This material would help you gain more capacity at working in R; review at your own pace.
+
+### Background: custom functions
+
+Let’s look at the syntax of a custom R function:
+```
+f <- function( <arguments>){ 
+  ## Do something interesting 
+}
+```
+
+The argument are passed to the function when it is called and can specify default values (using equals sign). The value returned by a function is the last expression in the body of the function to be evaluated, or else can be specified using the `return()` function. 
+
+For example, the `lm()` function comes with base R and is used for simple linear regression. Type the following in your R console to see what the arguments of that function are:
+
+```
+args(lm)
+```
+
+Here is a simple custom function for calculating any number cubed, with example applications:
+
+```
+Cube.me <- function ( x= 1) {
+  x * x * x
+}
+Cube.me()
+Cube.me(3)
+
+x.vec <- c(2, 19, 99)
+Cube.me(x.vec)
+
+```
+
+Try it in R!
+
+When you're ready, follow the instructions below and write four functions. Apply them and testing them as indicated. 
+
+Please submit all responses (answers to all questions) in a single text box submission via the assignment link posted in WebCampus by the indicated date/time (on WebCampus). All answers should include readable, **well-commented** R code along with with any requested code for testing your functions. Please make sure your submission is as clear and legible as possible!
+
+Please note that these assignments are not formal exams -- you are encouraged to ask for help as needed! You may also work in groups, but please submit your own assignment to demonstrate that you completed the Exercise and so you get credit.
+
+### Part 1: Sample variance
+
+Using the formula [here](LECTURE2.html) (see "summary metrics" section) and reproduced below, write a function that computes the **sample variance** of any arbitrary data vector. Use this function to compute the sample variance for the "height" column in the "trees" dataset built into base R. Compare your answer with the results from using the `var()` function -- a built-in function from base R. Your submission should include (1) the function code, (2) a command (line of code) using your function to compute the sample variance of the "height" column, and (3) a test using the `var()` function to compute the same thing.  
+
+Here's the formula: $s^2 = \sum_{n=1}^{i}{\frac{(x_i-\bar{x})^2}{(N-1)}}$
+
+### Part 2: Population standard deviation
+
+Using the formula [here](LECTURE2.html) (see "summary metrics" section), write a function that computes the **population standard deviation** (standard deviation for a complete population rather than an incomplete sample) for any arbitrary data vector. Use this function to compute the standard deviation for the "height" column in the "trees" dataset built into base R. Compare your answer with the results from using the `sd()` function. **Note that the result should not be exactly the same**! Your submission should include (1) the function code, (2) a command (line of code) using your function to compute the population SD for the "height" column, and (3) a test using the `sd()` function to compute the sample SD.
+
+Here's the formula: $\sigma = \sqrt{\sum_{n=1}^{i}{\frac{(x_i-\mu)^2}{N}}}$
+
+### Part 3: Coefficient of Variation (CV)
+
+Write a function to compute the CV for any data vector and apply this to the “height” column in the “trees” dataset. The Coefficient of Variation (CV) is the ratio of the (sample) standard deviation to the mean. Use the formula for the sample standard deviation (not the population standard deviation) to compute the CV. You are welcome to use the `sd()` function in base R within your function if you'd like. Your submission should include (1) the function code and (2) a command (line of code) using your function to compute the CV of the "height" column in the 'trees' dataset.
+
+### Part 4: Drawing a regression line through a scatter plot 
+
+Write a function for drawing a regression line through a scatter plot. Hint: Within your custom function, you will use the existing `plot()`, `lm()`, and `abline()` functions. You will need to include at least two arguments in your function, specifying the response vector and the predictor vector]. Apply this function to the “height” (predictor) and “volume” (response) columns in the “trees” dataset, and then to the “waiting” (predictor) and “eruptions” (response) columns in the “faithful” dataset. Your submission should include (1) the function code, (2) a command (line of code) using your function on the "trees" dataset as specified, and (3) a command (line of code) using your function on the "faithful" dataset as specified.
+
+--- End of Exercise 1 ---

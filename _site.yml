@@ -9,12 +9,14 @@ navbar:
     href: schedule.html
   - text: Lectures
     menu:
-    - text: Introduction to NRES 710
-      href: INTRO.html
-    - text: Basic Concepts
-      href: LECTURE1.html
+    - text: Syllabus and the Purpose of Statistics
+      href: lecture_1.html
+    - text: P-value discussion and Intro to R
+      href: lecture_2.html
     - text: Sampling uncertainty
-      href: LECTURE2.html
+      href: lecture_3.html
+    - text: Linear regression
+      href: lecture_4.html
     - text: Taxonomy of common statistics
       href: LECTURE3.html
     - text: t-test and z-test

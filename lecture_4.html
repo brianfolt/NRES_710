@@ -1,0 +1,858 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+<meta name="author" content="NRES 710" />
+
+
+<title>Linear Regression</title>
+
+<script src="site_libs/header-attrs-2.27/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/yeti.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/jqueryui-1.13.2/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+<link rel="stylesheet" href="styles.css" type="text/css" />
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "\e258";
+  font-family: 'Glyphicons Halflings';
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">NRES 710</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Syllabus</a>
+</li>
+<li>
+  <a href="schedule.html">Schedule</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    Lectures
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="lecture_1.html">Syllabus and the Purpose of Statistics</a>
+    </li>
+    <li>
+      <a href="lecture_2.html">P-value discussion and Intro to R</a>
+    </li>
+    <li>
+      <a href="lecture_3.html">Sampling uncertainty</a>
+    </li>
+    <li>
+      <a href="lecture_4.html">Linear regression</a>
+    </li>
+    <li>
+      <a href="LECTURE3.html">Taxonomy of common statistics</a>
+    </li>
+    <li>
+      <a href="LECTURE4.html">t-test and z-test</a>
+    </li>
+    <li>
+      <a href="LECTURE5.html">chi-squared tests</a>
+    </li>
+    <li>
+      <a href="LECTURE6.html">Linear Regression</a>
+    </li>
+    <li>
+      <a href="LECTURE7.html">ANOVA</a>
+    </li>
+    <li>
+      <a href="LECTURE8.html">GLM</a>
+    </li>
+    <li>
+      <a href="LECTURE9.html">GLMM</a>
+    </li>
+    <li>
+      <a href="LECTURE10.html">Machine Learning</a>
+    </li>
+    <li>
+      <a href="GIT_tutorial.html">Intro to GIT</a>
+    </li>
+    <li>
+      <a href="LECTURE11.html">Next steps</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    Exercises
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="EXERCISE1.html">Exercise 1 - Data Summary Functions</a>
+    </li>
+    <li>
+      <a href="EXERCISE2.html">Exercise 2 - t-tests</a>
+    </li>
+    <li>
+      <a href="EXERCISE3.html">Exercise 3 - Simple Linear Regression</a>
+    </li>
+    <li>
+      <a href="EXERCISE4.html">Exercise 4 - Multiple Linear Regression</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    More Resources
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="Links.html">Links</a>
+    </li>
+    <li>
+      <a href="FINALPROJ.html">Final Projects</a>
+    </li>
+  </ul>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+
+
+<h1 class="title toc-ignore">Linear Regression</h1>
+<h4 class="author">NRES 710</h4>
+<h4 class="date">Last compiled: 2024-07-24</h4>
+
+</div>
+
+
+<div id="linear-regression" class="section level2">
+<h2>Linear regression</h2>
+<p>Linear regression is a common statistical analysis when you have both
+a <strong>continuous x-variable and a continuous y-variable</strong>.
+The idea is that the x-variable is meant to cause changes in the
+y-variable. X is the ‘predictor variable’, and y is the ‘response
+variable’.</p>
+<ul>
+<li><strong>The purpose of regression is to fit a line to the data and
+determine the slope of the line.</strong></li>
+<li>Linear regression is <strong>not</strong> meant to determine if the
+relationship is ‘significant’ – although that is something that we can
+do.</li>
+</ul>
+<p><img src="lecture_4_files/figure-html/simulate-plot-1.png" width="672" /></p>
+<p><strong>Q:</strong> Thinking back to algebra class from high school:
+what is the equation for this line?</p>
+<p><strong>y = mx + b</strong></p>
+<ul>
+<li><strong>M = slope = rise over run = <span
+class="math inline">\(\frac{\Delta Y}{\Delta X}\)</span></strong></li>
+<li><strong>b = the y-intercept</strong></li>
+</ul>
+<p>In statistics class, we change this equation a bit:</p>
+<ul>
+<li><strong><span class="math inline">\(\hat{Y} = \beta_0 +
+\beta_1X\)</span>, where <span class="math inline">\(\beta_0\)</span> is
+the y-intercept and <span class="math inline">\(\beta_1\)</span> is the
+slope.</strong></li>
+</ul>
+<p><img src="lecture_4_files/figure-html/simulate-plot-2-1.png" width="672" /></p>
+<p>This formula isn’t exactly right for statistics. What we want to do
+is to associate every single X value with every single Y value.</p>
+<ul>
+<li><span class="math inline">\(Y_i = \beta_0 + \beta_1x_i +
+\epsilon\)</span>, where <span class="math inline">\(\epsilon\)</span>
+is error.</li>
+<li><span class="math inline">\(\epsilon \sim N(0, \sigma)\)</span></li>
+</ul>
+<p>This means that we have a line that we are trying to estimate and
+around this line is error. The error is normally distributed.</p>
+<p><strong>How might we visualize that?</strong></p>
+<p>The distance between every point and the line on our graph is our
+<strong>error</strong>. Some people call this deviance, other people
+call it residuals – but it is error. The mean of the residuals will be
+zero, and the standard deviation will be <span
+class="math inline">\(\sigma\)</span>.</p>
+<p>We use linear regression to estimate three parameters: an intercept,
+a slope, and a standard deviation. If <span
+class="math inline">\(\sigma\)</span> is small, all the points will be
+close to the line. If <span class="math inline">\(\sigma\)</span> is
+large, the points will be far from the line.</p>
+<div id="plotting-a-regression-line" class="section level3">
+<h3>Plotting a regression line</h3>
+<p>How does one plot or ‘fit’ a regression line to data?</p>
+<p>Let’s plot two continuous variables on the board again, similar to
+above, and have a student draw what they think is a best-fit line to the
+data.</p>
+<p>What is it that makes that the ‘best-fit line’?</p>
+<ul>
+<li>Does it… approximately go through the middle of the data?</li>
+<li>Are half of the points above and below the line?
+<ul>
+<li>If so, then <span class="math inline">\(\bar{\epsilon} \sim
+0\)</span> and residuals above the line are positive errors, and vice
+versa.</li>
+</ul></li>
+</ul>
+<p>What if we have the same data, but we fit a horizontal line?</p>
+<ul>
+<li>This creates <span class="math inline">\(\bar{\epsilon} \sim
+0\)</span> here also!</li>
+<li>We also want to <strong>minimize</strong> the <strong>sum of squared
+error</strong>.</li>
+</ul>
+<p><strong>Sum of Squared Error (SSE) = <span
+class="math inline">\(\sum_{i=1}^n (y_i - \hat{y})^2\)</span></strong>
+is the sum of squared error across all points! Or, the sum of squared
+residuals.</p>
+<p><img src="lecture_4_files/figure-html/simulate-plot-3-1.png" width="672" /></p>
+<p><strong>Linear regression seeks to minimize SSE</strong>, and the
+above regression line has the smallest sum of all of the blue residual
+lines possible.</p>
+</div>
+</div>
+<div id="significance-testing" class="section level2">
+<h2>Significance testing</h2>
+<p>The goal of regression is to estimate <span
+class="math inline">\(\beta0\)</span> and <span
+class="math inline">\(\beta1\)</span>, so we can infer how changes in X
+influence changes in Y. But we also want to know if this is ‘real’
+relationship – if it is statistically significant.</p>
+<ul>
+<li>Or, if we assume there is no relationship between X and Y (<span
+class="math inline">\(H_0\)</span> is true), what is the chance of
+getting the observed relationship, given that assumption and the data we
+have? This is what the p-value captures.</li>
+</ul>
+<div id="scenarios" class="section level3">
+<h3>Scenarios</h3>
+<p>Let’s consider the following null hypothesis, <span
+class="math inline">\(H_0\)</span>: there is no relationship between two
+continuous variables, X and Y.</p>
+<p><strong><span class="math inline">\(H_0\)</span>: no slope, or slope
+= 0.</strong></p>
+<div id="scenario-1" class="section level4">
+<h4>Scenario 1</h4>
+<p>In which of these two cases would you be more likely to reject the
+null?</p>
+<p><img src="lecture_4_files/figure-html/simulate-plot-4-1.png" width="864" /></p>
+<p><strong>Q:</strong> In which dataset would you be more likely to
+conclude that you would reject the null that slope = 0?</p>
+<p>The right graph, because the slope is a lot steeper. The effect of X
+on Y is larger.</p>
+<p><strong>As slope increases, p-value decreases</strong>.</p>
+</div>
+<div id="scenario-2" class="section level4">
+<h4>Scenario 2</h4>
+<p>In which of these two cases would you be more likely to reject the
+null?</p>
+<p><img src="lecture_4_files/figure-html/simulate-plot-5-1.png" width="864" /></p>
+<p><strong>Q:</strong> In which dataset would you be more likely to
+conclude that you would reject the null that slope = 0?</p>
+<p><strong>Q:</strong> Why are we less likely to reject the null in the
+case of the left graph? Small sample size!</p>
+<p><strong>As sample sizes increase, p-values decrease.</strong></p>
+<p>We have already talked about the p-value of all statistical tests are
+a function of (1) effect size and (2) sample size. But there is actually
+one more important feature influencing p-values in regression.</p>
+</div>
+<div id="scenario-3" class="section level4">
+<h4>Scenario 3</h4>
+<p>In which of these two cases would you be more likely to reject the
+null?</p>
+<p><img src="lecture_4_files/figure-html/simulate-plot-6-1.png" width="864" /></p>
+<p><strong>Q:</strong> These graphs have the same slope. For which one
+would you be more likely to say the slope ‘definitely is not zero’?</p>
+<ul>
+<li>Left! The error on the left graph is quite small, which makes it
+very <em>clear</em> what the relationship is. The right graph is also
+statistically significant, but it has much more noise and is not not as
+‘clear’.</li>
+<li><strong>As error increases, p-values increase.</strong></li>
+</ul>
+<p>So we have learned three rules of thumb about our ability to detect
+statistically significant effects using linear regression:</p>
+<ul>
+<li><strong>As slope increases, p-value decreases</strong></li>
+<li><strong>As n increases, p-value decreases</strong></li>
+<li><strong>As error increases, p-value increases</strong></li>
+</ul>
+</div>
+</div>
+<div id="how-do-we-calculate-p-values" class="section level3">
+<h3>How do we calculate p-values…?</h3>
+<p>I am not going to teach you how to do that. Computers do this for us
+nowadays. But I will briefly mention it because this is a graduate
+student class so we are aware of fundamentals.</p>
+<p>The error in the data is partitioned into a few categories.</p>
+<p><strong>Total Sum of Squares</strong> = <span
+class="math inline">\(\sum_{i=1}^{n} (y_i - \bar{y})^2\)</span> = the
+total variability in the response (Y) variable.</p>
+<p>This can be partitioned into two other variables…</p>
+<p>We already discussed <strong>Sum of Squared Error (SSE)</strong> =
+<span class="math inline">\(\sum_{i=1}^n (y_i - \hat{y})^2\)</span> =
+the distance from each point to the regression line.</p>
+<p><strong>Sum of squares due to regression</strong> = <span
+class="math inline">\(\sum_{i=1}^n (\hat{y_i} - \bar{y})^2\)</span> =
+the sum of the distance from each predicted y value for the regression
+line to the average y value.</p>
+<p><strong>SSE + SSR = TSS</strong></p>
+<p>P-values are calculated by partitioning the <strong>Total Sum of
+Squares</strong> into the constituent <strong>Sum of Squared
+Errors</strong> and <strong>Sum of Squared Errors due to
+Regression</strong>. A ratio of SSR and SSE gives you mean squared
+error, which gives us an ‘F-statistic’, we then check a table in a book,
+which gives us a p-value. But computers calculate this for us now, which
+is a vast improvement. Onward!</p>
+<p><strong>We have just covered the theory of linear regression in ~45
+minutes! Quick review:</strong></p>
+<ul>
+<li>The goal of regression is to estimate the slope, intercept, and
+<span class="math inline">\(\sigma\)</span> (standard deviation).</li>
+<li>We can use regression to test the null hypothesis that the slope =
+0.</li>
+<li>It does that by partitioning the TSS into the SSE and the SSR.</li>
+<li>The regression line is fit by minimizing the SSE and making it as
+small as possible.</li>
+<li>We should be aware of three patterns in regression:</li>
+<li>Slope goes up, p-value goes down</li>
+<li>As error goes up, p-value goes up -As sample size goes up, p-value
+goes down</li>
+<li>Cover assumptions next time.</li>
+</ul>
+</div>
+</div>
+<div id="regression-in-r" class="section level2">
+<h2>Regression in R</h2>
+<p>Let’s see what this looks like in Program R.</p>
+<p>Let’s consider two continuous variables, precipitation and biomass.
+Our hypothesis is that precipitation influences biomass.</p>
+<p><strong>Q:</strong> Which is the predictor variable, and which is the
+response variable?</p>
+<p>Let’s now simulate data, so that we know what ‘Truth’ is.</p>
+<pre class="r"><code># Set the seed for reproducibility
+set.seed(123)
+
+# Simulate a continuous predictor variable, precipitation
+n &lt;- 30
+precip &lt;- runif(n, min = 0, max = 10)
+
+# Simulate the true, predicted response of biomass to precip (y-hat)
+y_hat &lt;- 2 + 3 * precip
+
+# What does this look like?
+plot(y_hat ~ precip)</code></pre>
+<p><img src="lecture_4_files/figure-html/regression_example-1.png" width="672" /></p>
+<pre class="r"><code># Simulate error for the response variable
+error &lt;- rnorm(n, mean = 0, sd = 2)
+
+# Create the response variable, biomass
+# biomass = beta0 + beta1 * precip + epsilon
+biomass &lt;- y_hat + error
+
+# Create a data frame
+datum &lt;- data.frame(precip = precip, y_hat = y_hat, error = error, biomass = biomass)
+
+# Observe the first few rows of our data
+# head(datum)
+
+# First thing we should do when starting an analysis is.. look at our data!
+plot(biomass ~ precip, data = datum)</code></pre>
+<p><img src="lecture_4_files/figure-html/regression_example-2.png" width="672" /></p>
+<p>The function we will be using for the rest of the semester to fit
+linear regression and many other statistical tests is… the linear model,
+‘lm()’!</p>
+<p>You can learn more about ‘lm()’ in R by reviewing the help files:</p>
+<pre class="r"><code># Ask R for information about how &#39;lm()&#39; works
+help(lm)
+?lm()</code></pre>
+<p>Let’s examine the ‘lm()’ documentation in R. Take a look at that.</p>
+<p>‘lm()’ usually a formula, where the response variable comes and the
+predictor variable second: <strong>Y ~ X</strong>.</p>
+<p>R will automatically put an intercept into your model, so you don’t
+have to specify this as an extra variable in your formula.</p>
+<ul>
+<li>Note: you can take the intercept out with Y ~ X - 1, or you can ask
+for the intercept specifically with Y~1.</li>
+</ul>
+<p>Since we have defined all of our variables in R using code, we can
+fit the model just by calling those variable objects:</p>
+<pre class="r"><code># Fit the linear model
+results &lt;- lm(biomass ~ precip, data = datum)
+
+# Examine the results
+summary(results)</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = biomass ~ precip, data = datum)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -4.2859 -1.4406  0.0391  1.4113  3.7624 
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)   3.1133     0.8057   3.864 0.000605 ***
+## precip        2.8140     0.1259  22.355  &lt; 2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 1.975 on 28 degrees of freedom
+## Multiple R-squared:  0.9469, Adjusted R-squared:  0.945 
+## F-statistic: 499.7 on 1 and 28 DF,  p-value: &lt; 2.2e-16</code></pre>
+<p>In this class, I will refer to analysis outputs as ‘results’ and
+analysis data as ‘datum’. I do this to be consistent, avoid confusion
+with code in our analysis, and avoid confusion with other functions in R
+(e.g., the ‘data()’ function).</p>
+<div id="the-intercept" class="section level3">
+<h3>The intercept</h3>
+<p><strong>Q:</strong> What parameter from our statistical model does
+the ‘intercept’ represent, and how does it compare to ‘Truth’?</p>
+<ul>
+<li><strong>Rule of thumb:</strong> truth should be within 2 standard
+errors of the estimate. 95% of all data is within two standard errors.
+Confidence intervals is basically two standard errors in either
+direction from the mean.</li>
+<li>We are given a ‘t-statistic’ and ‘p-value’ for the intercept. We
+don’t really care about these; they don’t tell us anything ecologically
+relevant about our system. We leave it in the model because it makes the
+line fit better, which we use to estimate slope.</li>
+</ul>
+</div>
+<div id="the-effect" class="section level3">
+<h3>The effect</h3>
+<p><strong>Q:</strong> How does the estimate of the effect of
+precipitation on biomass compare to truth?</p>
+<ul>
+<li>For each 1 unit increase in precipitation, we get a […] unit
+increase in biomass.</li>
+<li>Again, the estimate is within two Standard Errors of truth (!)</li>
+<li>We also get a t-statistic and a p-value for this parameter. The
+p-value is 2x10^-16… Which is very small and suggests a very clear
+results.
+<ul>
+<li>This is the probability of getting our data or data more extreme,
+given the null hypothesis is true.</li>
+<li>Because this is very small, we can reject the idea that the null
+hypothesis is truth, and infer that there is a real relationship between
+precipitation driving biomass.</li>
+</ul></li>
+</ul>
+</div>
+<div id="other-information" class="section level3">
+<h3>Other information</h3>
+<p>There is other information below that people often don’t pay
+attention to, but there is good stuff down here too.</p>
+<ul>
+<li>Residual standard error: this is our estimate of <span
+class="math inline">\(\sigma\)</span>, or the standard deviation in the
+error around the line!</li>
+<li><span class="math inline">\(R^2\)</span> and confidence intervals;
+we will discuss these more in future classes.</li>
+<li>P-value for the whole-model. Since there is only one parameter in
+the statistical model, the p-value for the entire model is the same as
+the p-value for the precipitation parameter.</li>
+</ul>
+<pre class="r"><code># Plot the data with the line of best fit
+plot(biomass ~ precip)
+abline(results)</code></pre>
+<p><img src="lecture_4_files/figure-html/examine-results-1.png" width="672" /></p>
+<pre class="r"><code># Maybe you are used to seeing ANOVA tables...
+anova(results)</code></pre>
+<pre><code>## Analysis of Variance Table
+## 
+## Response: biomass
+##           Df  Sum Sq Mean Sq F value    Pr(&gt;F)    
+## precip     1 1949.47  1949.5  499.73 &lt; 2.2e-16 ***
+## Residuals 28  109.23     3.9                      
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<pre class="r"><code># This should look similar to the bottom line from our regression output</code></pre>
+<p><a href="lecture_5.html">–go to next lecture–</a></p>
+</div>
+</div>
+
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+<script>
+$(document).ready(function ()  {
+
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

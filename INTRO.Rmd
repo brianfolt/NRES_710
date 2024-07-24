@@ -57,7 +57,7 @@ We will discuss the course organization and expectations. Please see [course syl
 
 ## What is statistics?
 
-“Statistics is like grout –- the word feels decidedly unpleasant in the mouth, but it describes something essential for holding a mosaic in place. Statistics is a common bond supporting all other science.” --Ramsey and Schafer (2013), *The Statistical Sleuth*, 3rd Edition. 
+“Statistics is like grout -- the word feels decidedly unpleasant in the mouth, but it describes something essential for holding a mosaic in place. Statistics is a common bond supporting all other science.” --Ramsey and Schafer (2013), *The Statistical Sleuth*, 3rd Edition. 
 
 ![](statistics1.png){width=75%}
 

@@ -424,7 +424,7 @@ div.tocify {
 
 <h1 class="title toc-ignore">t-tests and z-tests</h1>
 <h4 class="author">NRES 710</h4>
-<h4 class="date">Last compiled: 2024-07-09</h4>
+<h4 class="date">Last compiled: 2024-07-22</h4>
 
 </div>
 
@@ -434,11 +434,11 @@ div.tocify {
 <p>To follow along with the R-based lessons and demos, <a
 href="LECTURE4.R">right (or command) click on this link and save the
 script to your working directory</a></p>
-<p>Considering the “field guide” from the last lecture, we are talking
-about the t-test, which is appropriate when we have a quantitative
-response variable and either (1) no predictor variable (one sample
-t-test) or (2) a binary categorical predictor variable (two sample
-t-test).</p>
+<p>Today we will discuss the <strong>t-test</strong>. Considering the
+“field guide” from the last lecture, the t-test is an appropriate choice
+when we have a quantitative response variable and either (1) no
+predictor variable (one sample t-test) or (2) a binary categorical
+predictor variable (two-sample t-test).</p>
 </div>
 <div id="the-t-statistic-signal-to-noise-ratio-for-the-sample-mean"
 class="section level2">
@@ -450,21 +450,25 @@ for the t-statistic under the null hypothesis. It describes the
 distribution of “false signals” that can arise from random sampling
 error.</p>
 <p>Mathematically, <em>t</em> is the ratio of the difference between the
-sample mean and the hypothesized population mean (<span
-class="math inline">\(\mu_0\)</span>), in units of standard error:</p>
+sample mean (<span class="math inline">\(\bar{x}\)</span>) and the
+hypothesized population mean (<span
+class="math inline">\(\mu_0\)</span>) in units of standard error
+(SE):</p>
 <p><span class="math inline">\(t =
-\frac{(\bar{x}-\mu_0)}{s.e.}\)</span></p>
-<p><strong>Q</strong> what part of the above fraction (numerator or
+\frac{(\bar{x}-\mu_0)}{SE}\)</span></p>
+<p><strong>Q:</strong> what part of the above fraction (numerator or
 denominator) represents the signal? Which represents the “noise”?</p>
-<p>Let’s assume that the null hypothesis is true (as we often do), and
-that our null hypothesis is that the sample mean is equal to zero.</p>
+<p>Let’s assume that the null hypothesis (<span
+class="math inline">\(H_0\)</span>) is true (as we often do), and that
+our null hypothesis is that the sample mean is equal to zero.</p>
 <p>This is almost easier to conceptualize if we imagine a
 <em>paired</em> design in which, say, a set of individuals are monitored
-at two points in time: before a treatment and after.</p>
+at two points in time: before and after a treatment.</p>
 <p>Let’s imagine we are researching the effectiveness of a weight loss
-drug. We sample 25 patients and weigh them before they start taking the
-drug and then weigh all of them 1 month after they start taking the
-drug. Never mind for now that this isn’t the best drug trial design!</p>
+drug (e.g., Ozempic). We sample 25 patients and weigh them before they
+start taking the drug and then weigh all of them 1 month after they
+start taking the drug. Never mind for now that this isn’t the best drug
+trial design!</p>
 <p>So for each patient we compute the change in weight between the first
 and second measurements. In the null universe, the drug is not effective
 and we would expect the change to be no greater than expected by random
@@ -486,31 +490,33 @@ t-statistic.</li>
 <pre class="r"><code>## Paired t-test example -----------------
 
 weightloss.data &lt;- c(-10.4,-11.6,3.9,1.5,-0.3,-3.5 -10.0,-6.7,-6.1,-2.4,-6.0,2.3,0.1,-4.1,-3.2, -11.3,-3.2,-9.3,-7.5,-5.7,-0.1,0.0,-9.8,1.0,-11.9)
-hist(weightloss.data,breaks=7)</code></pre>
+hist(weightloss.data, breaks = 7)</code></pre>
 <p><img src="LECTURE4_files/figure-html/unnamed-chunk-2-1.png" width="672" /></p>
 <pre class="r"><code>mean.weightloss &lt;- mean(weightloss.data)
 null.weightloss &lt;- 0
 stdev.weightloss &lt;- sd(weightloss.data)
 sample.size &lt;- length(weightloss.data)
-std.error &lt;- stdev.weightloss/sqrt(sample.size)
+std.error &lt;- stdev.weightloss / sqrt(sample.size)
 
-t.statistic &lt;- (mean.weightloss-null.weightloss)/std.error
+t.statistic &lt;- (mean.weightloss - null.weightloss) / std.error
 t.statistic</code></pre>
 <pre><code>## [1] -4.544623</code></pre>
-<pre class="r"><code>curve(dt(x,sample.size-1),-5.5,2)
-abline(v=t.statistic,col=&quot;green&quot;,lwd=3)</code></pre>
+<pre class="r"><code>curve(dt(x, sample.size - 1), -5.5, 2)
+abline(v = t.statistic, col = &quot;green&quot;, lwd = 3)</code></pre>
 <p><img src="LECTURE4_files/figure-html/unnamed-chunk-2-2.png" width="672" /></p>
-<pre class="r"><code>t.crit &lt;- qt(0.05,sample.size-1)    # &#39;critical value&#39; of the t statistic- you can reject the null if your value is more extreme than this!
+<pre class="r"><code>t.crit &lt;- qt(0.05, sample.size - 1)
+# &#39;critical value&#39; of the t statistic\
+# you can reject the null if your value is more extreme than this!
 
-p=pt(t.statistic,sample.size-1)    # p value
+p &lt;- pt(t.statistic, sample.size - 1) # p value
 p    # this is the p value</code></pre>
 <pre><code>## [1] 7.241049e-05</code></pre>
-<pre class="r"><code>options(scipen=100)   # if you don&#39;t like scientific notation!
+<pre class="r"><code>options(scipen = 100)   # if you don&#39;t like scientific notation!
 p     </code></pre>
 <pre><code>## [1] 0.00007241049</code></pre>
 <pre class="r"><code># Alternative: use R&#39;s built in t test
 
-t.test(weightloss.data,alternative = &quot;less&quot;)   # should get the same p-value!</code></pre>
+t.test(weightloss.data, alternative = &quot;less&quot;)   # should get the same p-value!</code></pre>
 <pre><code>## 
 ##  One Sample t-test
 ## 
@@ -522,8 +528,9 @@ t.test(weightloss.data,alternative = &quot;less&quot;)   # should get the same p
 ## sample estimates:
 ## mean of x 
 ##   -4.7625</code></pre>
-<p><strong>Q</strong> Does a significant p-value here mean that everyone
-who takes the drug will lose weight? If not, what does it mean?</p>
+<p><strong>Q:</strong> Does a significant p-value here mean that
+everyone who takes the drug will lose weight? If not, what does it
+mean?</p>
 <p>NOTE: as the df gets large, the t distribution approximates a
 <em>standard normal</em> distribution.</p>
 <p>Fun fact: William Sealy Gosset – a student of Pearson, worked at
@@ -537,12 +544,15 @@ class="section level4">
 <p>You can use this code to explore the difference between the
 t-distribution and the standard normal distribution:</p>
 <pre class="r"><code># difference between t and standard normal
-
 library(ggplot2)
-base = ggplot() + xlim(-5,5) + geom_function(aes(col=&quot;normal (z)&quot;), fun=dnorm, lwd=2) + labs(y=&quot;density&quot;,x=&quot;potential fake signal&quot;)
+base &lt;- ggplot() +
+  xlim(-5, 5) +
+  geom_function(aes(col = &quot;Normal (z)&quot;), fun = dnorm, lwd = 2) +
+  labs(y = &quot;Density&quot;, x = &quot;Potential fake signal&quot;)
 
 deg_free &lt;- 1
-base + geom_function(aes(col=sprintf(&quot;t, df = %s&quot;,deg_free)), fun=dt, args=list(df=deg_free), lwd=2,alpha=0.5)</code></pre>
+base +
+  geom_function(aes(col = sprintf(&quot;t, df = %s&quot;, deg_free)), fun = dt, args = list(df=deg_free), lwd = 2, alpha = 0.5)</code></pre>
 <p><img src="LECTURE4_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
 <pre class="r"><code># base r plotting alternative!:
 
@@ -624,10 +634,10 @@ p       </code></pre>
 <pre><code>## [1] 0.2593025</code></pre>
 <pre class="r"><code>pnorm(z.statistic)</code></pre>
 <pre><code>## [1] 0.7406975</code></pre>
-<p><strong>Q</strong> That means that 74% of NBA players are shorter
+<p><strong>Q:</strong> That means that 74% of NBA players are shorter
 than the GSW average height, right?</p>
-<p>Wrong- but why??</p>
-<p><strong>Q</strong> Would you reject the null hypothesis and say that
+<p>Wrong – but why??</p>
+<p><strong>Q:</strong> Would you reject the null hypothesis and say that
 the GSW team is taller than expected by random chance?</p>
 </div>
 <div id="in-class-questions-not-to-be-turned-in" class="section level4">
@@ -747,8 +757,8 @@ assumption) but we have unequal sample size is:</p>
 (N_2-1)*\sigma_2^2)/(N_{pooled}-2)}\)</span></p>
 <p>For the 2-sample t-test, the degrees of freedom is equal to the total
 sample size across both samples minus 2.</p>
-<p><em>Q</em>: Can you think of why the df is two less than the pooled
-sample size?</p>
+<p><strong>Q:</strong> Can you think of why the df is two less than the
+pooled sample size?</p>
 <pre class="r"><code># two sample t-test -----------------
 
 sample.data.1 &lt;- rnorm(15,55,10)
@@ -1288,7 +1298,6 @@ true.mean.B &lt;- 13.9
 true.sd &lt;- 3.4
 
 # Assume a two-tailed test- alternative hypothesis is that the mean of A is different from the mean of B
-
 
 # now we will simulate LOTS of  &#39;experiments&#39; under different sample sizes
 

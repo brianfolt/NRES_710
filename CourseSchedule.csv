@@ -1,17 +1,19 @@
 Week,Dates,Tuesday class meeting,Thursday class meeting,Exercises/deadlines
-1,"Aug. 27, 29",Syllabus and the Purpose of Statistics,[Intro to R and Statistics](INTRO.html),
-2,"Sep. 3, 5","[P-values, statistical tests](LECTURE1.html)",[Exercise 1: functions and summary stats](EXERCISE1.html),
-3,"Sep. 10, 12",[Central limit theorem (CLT) and sampling distributions](LECTURE2.html),[Central limit theorem (CLT) and sampling distributions](LECTURE2.html),Exercise 1 due 9/13
-4,"Sep. 17, 19",[Taxonomy of statistics](LECTURE3.html),[t-tests and z tests](LECTURE4.html),Project proposals due 9/20
-5,"Sep. 24, 26",[t-tests and z-tests](LECTURE4.html),[Exercise 2: t-tests](EXERCISE2.html),Exercise 2 due 10/2
-6,"Sep. 31, Oct. 2",[Chi-squared tests](LECTURE5.html),TBD,
+1,"Aug. 27, 29",[Syllabus and the Purpose of Statistics](lecture_1.html),[Paper Discussion and Intro to R](lecture_2.html),"[Johnson (1999)](papers/Johnson1999.pdf), [Dushoff et al. (2019)](papers/Dushoff_etal_2019.pdf)"
+2,"Sep. 3, 5",[Basic concepts](lecture_3.html),[Exercise 1: functions and summary stats](EXERCISE1.html),Quiz 1 due 9/5
+3,"Sep. 10, 12",[Linear Regression](lecture_4.html),[Linear Regression](lecture_4.html),Exercise 1 due 9/12
+4,"Sep. 17, 19",[Taxonomy of statistics](LECTURE3.html),[t-tests and z tests](LECTURE4.html),
+5,"Sep. 24, 26",[t-tests and z-tests](LECTURE4.html),[Exercise 2: t-tests](EXERCISE2.html),
+6,"Sep. 31, Oct. 2",[Chi-squared tests](LECTURE5.html),TBD,Exercise 2 due 10/2
 7,"Oct. 8, 10",[Linear regression](LECTURE6.html),[Exercise 3: linear regression](EXERCISE3.html),Exercise 3 due 10/16
 8,"Oct. 15, 17",[Linear regression](LECTURE6.html),Discussion: p-values,p-value readings (see WebCampus)
 9,"Oct. 22, 24",*No class (Brian at conference)*,*No class (Brian at conference)*,
 10,"Oct. 29, 31",[Linear regression](LECTURE6.html),[Exercise 4: Multiple linear regression](EXERCISE4.html),Exercise 4 due 11/1
 11,"Nov. 5, 7",[ANOVA](LECTURE7.html),[ANOVA](LECTURE7.html),
-12,"Nov. 13, 15",[GLM](LECTURE8.html),[GLM](LECTURE8.html),Draft project ms due 11/15
+12,"Nov. 13, 15",[GLM](LECTURE8.html),[GLM](LECTURE8.html),
 13,"Nov. 19, 21",[GLMM](LECTURE9.html),OPTIONAL: review roadrunner assignment (multiple linear regression),
 14,"Nov. 26, 28",[GLMM](LECTURE9.html),*No class (Thanksgiving)*,Peer reviews due 11/27
 15,"Dec. 3, 5",[Machine Learning](LECTURE10.html),[Discussion: code and data sharing](Git_tutorial.html),
-Finals,"Dec. 10, 12","[Next steps- multivariate, Bayesian, etc.](LECTURE11.html)",*No class*,Final projects due 12/13
+Finals,"Dec. 10, 12","[Next steps- multivariate, Bayesian, etc.](LECTURE11.html)",*No class*,
+Other,TBD,"[P-values, statistical tests](LECTURE1.html)",,
+Other,TBD,[Central limit theorem (CLT) and sampling distributions](LECTURE2.html),[Central limit theorem (CLT) and sampling distributions](LECTURE2.html),Exercise 1 due 9/13

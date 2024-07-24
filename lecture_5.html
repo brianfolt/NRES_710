@@ -1,0 +1,931 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+<meta name="author" content="NRES 710" />
+
+
+<title>Linear Regression</title>
+
+<script src="site_libs/header-attrs-2.27/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/yeti.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/jqueryui-1.13.2/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+<link rel="stylesheet" href="styles.css" type="text/css" />
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "\e258";
+  font-family: 'Glyphicons Halflings';
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">NRES 710</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Syllabus</a>
+</li>
+<li>
+  <a href="schedule.html">Schedule</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    Lectures
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="lecture_1.html">Syllabus and the Purpose of Statistics</a>
+    </li>
+    <li>
+      <a href="lecture_2.html">P-value discussion and Intro to R</a>
+    </li>
+    <li>
+      <a href="lecture_3.html">Sampling uncertainty</a>
+    </li>
+    <li>
+      <a href="lecture_4.html">Linear regression</a>
+    </li>
+    <li>
+      <a href="LECTURE3.html">Taxonomy of common statistics</a>
+    </li>
+    <li>
+      <a href="LECTURE4.html">t-test and z-test</a>
+    </li>
+    <li>
+      <a href="LECTURE5.html">chi-squared tests</a>
+    </li>
+    <li>
+      <a href="LECTURE6.html">Linear Regression</a>
+    </li>
+    <li>
+      <a href="LECTURE7.html">ANOVA</a>
+    </li>
+    <li>
+      <a href="LECTURE8.html">GLM</a>
+    </li>
+    <li>
+      <a href="LECTURE9.html">GLMM</a>
+    </li>
+    <li>
+      <a href="LECTURE10.html">Machine Learning</a>
+    </li>
+    <li>
+      <a href="GIT_tutorial.html">Intro to GIT</a>
+    </li>
+    <li>
+      <a href="LECTURE11.html">Next steps</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    Exercises
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="EXERCISE1.html">Exercise 1 - Data Summary Functions</a>
+    </li>
+    <li>
+      <a href="EXERCISE2.html">Exercise 2 - t-tests</a>
+    </li>
+    <li>
+      <a href="EXERCISE3.html">Exercise 3 - Simple Linear Regression</a>
+    </li>
+    <li>
+      <a href="EXERCISE4.html">Exercise 4 - Multiple Linear Regression</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    More Resources
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="Links.html">Links</a>
+    </li>
+    <li>
+      <a href="FINALPROJ.html">Final Projects</a>
+    </li>
+  </ul>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+
+
+<h1 class="title toc-ignore">Linear Regression</h1>
+<h4 class="author">NRES 710</h4>
+<h4 class="date">Last compiled: 2024-07-24</h4>
+
+</div>
+
+
+<div id="review" class="section level2">
+<h2>Review</h2>
+<p>Today we will discuss how to present results from linear regression.
+I am going to describe an approach that uses a few concise sentences to
+distill down all of the relevant information from the analysis you ran.
+But first, a brief review from last class.</p>
+<p><strong>The equation for the general linear model: <span
+class="math inline">\(Y = \beta0 + \beta1X + \epsilon \sim N(0,
+\sigma)\)</span></strong></p>
+<ul>
+<li>We will use this throughout the class!</li>
+<li>Y is equal to beta0 (intercept) plus beta1 (slope) times X plus
+error, which is normally distributed with a mean of zero and a standard
+deviation (sigma).</li>
+<li>The error term indicates that we have a bunch of noise that is
+centered on the line (mean of zero), standard deviation has to be
+estimated and determines how close to the line the points are.</li>
+<li>We determine this lining by ensuring the average error is zero and
+minimize the sum of squares error (the distance from every point to that
+line).</li>
+<li>To calculate p-values, we partition the total variation in Y (Total
+Sum of Squares; TSS) into Sum of Squared Error (SSE) and the Sum of
+Squares due to Regression (SSR). <strong>TSS = SSE + SSR.</strong></li>
+<li>Three things that influence p-values in regression: sample size,
+effect size, and noise.</li>
+</ul>
+</div>
+<div id="presenting-results-from-regression" class="section level2">
+<h2>Presenting results from regression</h2>
+<p>Today we will discuss how to report results when you run regression.
+By spending time discussing how to report the results, I am hoping this
+will help all of the material in this class make more sense.</p>
+<p>In class exercise, I will expect you to report your results using
+this format, which is the format that you would be expected to report
+results in your thesis, dissertation, and scientific papers that you
+publish. This approach has <strong>four elements</strong>:</p>
+<ol style="list-style-type: decimal">
+<li><strong>Slope</strong></li>
+<li><strong>P-value</strong> (And you should report a slope whether or
+not the p-value is significant or not!)</li>
+<li><strong>Confidence interval</strong></li>
+<li><strong><span class="math inline">\(r^2\)</span></strong></li>
+</ol>
+<p>We have discussed slopes and p-values in the previous few classes,
+but today we will introduce confidence intervals and <span
+class="math inline">\(r^2\)</span> values at greater detail.</p>
+</div>
+<div id="confidence-intervals" class="section level2">
+<h2>Confidence intervals</h2>
+<p><strong>95% confidence intervals (95% CI) – a measure of
+uncertainty</strong> around our estimate</p>
+<ul>
+<li><p>Often, <strong>95% CI ~ 2 * SE</strong>, although the exact
+formula depends on the sample size.</p></li>
+<li><p>We have given our reader an estimate of the p-value, but it is
+unlikely to be a perfect estimate of truth.</p></li>
+<li><p>On average, it is unbiased. If we collect some data 1,000
+different times and fit a regression each time, the average slope from
+among each of those regressions will approximate truth. But any one
+regression on a single dataset may not be very close to truth… due to
+the nature of data, noise, process error, and sampling error.</p></li>
+<li><p>Thus, we need to give our readers some measure of how certain we
+think our slope really is.</p></li>
+</ul>
+<p>Definition of 95% confidence interval: <strong>95% of all such
+intervals contain truth.</strong></p>
+<ul>
+<li>It might be tempting to think about CI by saying that: there’s a 95%
+chance that truth is within the interval.</li>
+<li>However, this is <strong>wrong</strong>, because of the idea of the
+coinflip from the first day of class. Truth is either inside the
+interval, or it isn’t. Just because we don’t know that does not mean
+there is an underlying probability.</li>
+<li>This is a nice way of thinking about confidence intervals, but it’s
+not technically correct.</li>
+<li>Does this make sense? I personally find this topic confusing.</li>
+</ul>
+<p>Here’s how we might visualize this. I simulated 100 random datasets,
+each with a mean <span class="math inline">\(\mu\)</span> = 5, and then
+I measured the mean and 95% confidence intervals for each of the 100
+datasets. I then plotted each individual datasets on the y-axis (1 to
+100) and the 95% confidence intervals around the mean on the x-axis.</p>
+<p><img src="lecture_5_files/figure-html/simulate-ci-plot-1.png" width="960" /></p>
+<p>The red intervals are situations where the 95% confidence intervals
+do not include the true known mean!</p>
+<p>Unfortunately, we have no idea if our particular confidence interval
+is one that includes ‘truth’ for the parameter!</p>
+<p>Don’t worry if you find this difficult – I think most people do! And
+practically speaking, just about everyone interprets a 95% confidence
+interval as having a 95% probability of including the true parameter –
+and it doesn’t really matter that much!</p>
+<div id="ci-and-significance-testing" class="section level3">
+<h3>95% CI and significance testing</h3>
+<p>Here’s another useful way to think about this
+<em>graphically</em>.</p>
+<p>Let’s create a frequency distribution (y-axis) of our slope (x-axis).
+We run 1000 regressions, and get 1000 estimates of slope. The mean of
+all these estimates is ‘truth’ – the true slope. The distribution of
+estimates would be a normally-distributed bell curve. A noisy system has
+a wide bell curve and a wide confidence interval; a less noisy system
+(or a large sample sizes) would have a more narrow confidence interval.
+See below:</p>
+<p><img src="lecture_5_files/figure-html/normal-curve-plot-base-r-1.png" width="720" /></p>
+<p>The confidence interval in our regression takes this distribution and
+instead of centering it on ‘truth’, it centers it on our estimated slope
+(<span class="math inline">\(\beta_1\)</span>). If we assume this is the
+true slope, this bell curve represents the range of <span
+class="math inline">\(\beta_1\)</span> estimates we would get when we
+run regression.</p>
+<p>95% of the time we will get a slope estimate that is within the
+central area under the curve that contains 95% of this distribution.
+This is the 95% confidence interval. We can add two lines to the above
+graph to indicate this range of values around the true slope:</p>
+<p><img src="lecture_5_files/figure-html/normal-curve-2-1.png" width="720" /></p>
+<p>This same bell curve is also used in the calculation of
+<strong>p-values</strong>. Instead of centering on slope of mean =
+‘truth’, it centers the distribution on a slope = 0, and it says: if we
+assume that slope = 0 (the null hypothesis; <span
+class="math inline">\(H_0\)</span>), what is the probability of getting
+our observed data that produced <span
+class="math inline">\(\beta_1\)</span>?</p>
+<p><img src="lecture_5_files/figure-html/normal-curve-3-1.png" width="720" /></p>
+<p>If our <span class="math inline">\(\beta_1\)</span> is out in the
+tail of this distribution (or, outside of the 95% confidence interval),
+then we would get a small p-value, and then <strong>reject</strong>
+<span class="math inline">\(H_0\)</span>.</p>
+<p><strong>What this means is that we technically don’t need a
+p-value!</strong> Our confidence interval can tell us whether our slope
+estimate is statistically significant or not.</p>
+<p>All we need to know is whether 0 (zero) is within the 95% confidence
+interval of <span class="math inline">\(\beta\)</span> or not.</p>
+<p><img src="lecture_5_files/figure-html/normal-curve-4-1.png" width="720" /></p>
+<ul>
+<li>If 0 is <strong>outside</strong> the 95% CI for <span
+class="math inline">\(\beta\)</span>, then <span
+class="math inline">\(\beta\)</span> <strong>is</strong> a real,
+statistically significant effect!</li>
+<li>If 0 is <strong>inside</strong> the 95% CI for <span
+class="math inline">\(\beta\)</span>, then <span
+class="math inline">\(\beta\)</span> <strong>is not</strong> a real,
+statistically significant effect.</li>
+</ul>
+<p>Confidence interval terms:</p>
+<ul>
+<li><strong>Confidence limits:</strong> the values for the upper and
+lower edges of 95% CI.</li>
+<li><strong>Confidence interval:</strong> the distance between the <span
+class="math inline">\(\beta\)</span> and each confidence limit.</li>
+</ul>
+<p>If we get a p-value = 0.05, that means zero will be at one of our
+confidence limits (i.e., significant).</p>
+<p>If we zero is outside of our confidence limits, the p-value will be
+&lt; 0.05 (i.e., significant).</p>
+<p>If zero is within one of our confidence limits, the p-value will be
+&gt; 0.5 (i.e., not significant).</p>
+</div>
+<div id="reporting-confidence-intervals" class="section level3">
+<h3>Reporting confidence intervals</h3>
+<p><strong><span class="math inline">\(\beta_1\)</span> +/- 95%
+CI</strong></p>
+<p>Since the CI are symmetric, we can use plus/minus to report the
+CI.</p>
+<ul>
+<li>Note: why use +/i? Journals made this rule up to save space…</li>
+</ul>
+</div>
+<div id="what-you-need-to-know" class="section level3">
+<h3>What you need to know:</h3>
+<ol style="list-style-type: decimal">
+<li>The technical definition of a 95% confidence interval: 95% of all
+such intervals contain ‘truth’.</li>
+<li>The relationship between confidence intervals and p-values. They are
+the flip-side of the same coin.</li>
+</ol>
+<p>Easy red flag: something is significant, but the 95% CI include
+zero.</p>
+</div>
+</div>
+<div id="r2" class="section level2">
+<h2><span class="math inline">\(r^2\)</span></h2>
+<div id="what-is-r2" class="section level3">
+<h3>What is <span class="math inline">\(r^2\)</span></h3>
+<p>The technical definition of <strong><span
+class="math inline">\(r^2\)</span> is the <em>proportion</em> of
+variation in Y that is explained by X.</strong> This definition will be
+on quizes, etc. Keyword: <em>proportion</em>.</p>
+<ul>
+<li>This is <strong>not</strong> the absolute amount of variation in Y
+explained by X – which is the Sum of Squares due to Regression
+(SSR).</li>
+<li>How do you estimate the <em>proportion</em>…? Divide by the TOTAL..
+the Total Sum of Squares (TSS).</li>
+<li>Also known as: coefficient of determination.</li>
+</ul>
+<p><strong>Thus: <span class="math inline">\(r^2 =
+\frac{SSR}{TSS}\)</span></strong></p>
+<p>Since it is a proportion, 0 &lt; <span
+class="math inline">\(r^2\)</span> &lt; 1.</p>
+<p>If <span class="math inline">\(r^2\)</span> = 0, then no variation in
+Y is explained by X, and the slope is zero. Points at random, with no
+slope.</p>
+<p>If <span class="math inline">\(r^2\)</span> = 1, then all variation
+in Y is explained by X – and no variation in Y is due to error. All your
+points are right on the line!</p>
+<p>This doesn’t really ever happen in environmental sciences… There is
+so much noise and other processes driving relationpships that <span
+class="math inline">\(r^2\)</span> values never approach 1! Some have
+said that an <span class="math inline">\(r^2\)</span> of 0.1 is a good
+results in ecology (!).</p>
+<p><strong>r</strong> is the <strong>correlation
+coefficient</strong></p>
+<ul>
+<li><span class="math inline">\(r = \sqrt{r^2}\)</span></li>
+<li>This can be positive or negative and anywhere from -1 to 1; it can
+describe negative relationships or positive relationships.</li>
+</ul>
+</div>
+<div id="why-report-r2" class="section level3">
+<h3>Why report <span class="math inline">\(r^2\)</span>?</h3>
+<p>Why report <span class="math inline">\(r^2\)</span>, when I have
+previously said the main goal of regression was to measure the
+slope…?</p>
+<p>Let’s assume you graduate and get a job as a habitat manager. Your
+new supervisor wants you to increase Greater Sage-grouse density in
+central Nevada, and they want you to do it by manipulating some variable
+(e.g, native grass density). You go out and collect data to estimate the
+relationship between grouse and grasses. Which of the following two
+scenarios would you rather have?</p>
+<p><img src="lecture_5_files/figure-html/simulate-plot-4-1.png" width="864" /></p>
+<p>Left graph has a steeper slope, but right graph has less error.</p>
+<p><strong>Q:</strong> Anybody want to make an argument for the left
+situation being better?</p>
+<ul>
+<li>Left graph: a small change in X makes a larger increase in Y,
+because the effect size is big.</li>
+</ul>
+<p><strong>Q:</strong> Anybody want to make an argument for the right
+situation being better?</p>
+<ul>
+<li><p>Right graph: we may have to make a bigger change in X to make the
+same change in Y, but we <strong>know</strong> that we will achieve that
+change in Y.</p></li>
+<li><p>Left graph: There is a lot of uncertainty, and an increase in X
+could actually cause a decreased outcome in Y.</p></li>
+</ul>
+<p>It’s not enough to report the slope… we can also benefit from
+reporting <span class="math inline">\(r^2\)</span> because it
+<strong>describes the strength of the relationship and how closely X and
+Y are related.</strong></p>
+</div>
+</div>
+<div id="reporting-results" class="section level2">
+<h2>Reporting results</h2>
+<p><strong>For each 1 [X-units] increase in [X], we observed a [slope /
+<span class="math inline">\(\beta_1\)</span>] [Y-units] (+/- [95% CI];
++/- 95% CI) [increase/decrease] in [Y] (p = [p-value]; <a
+href="#r2"><span class="math inline">\(r^2\)</span></a>).</strong></p>
+<p><strong>If p &gt; 0.05, then add: “; however, our results are not
+statistically significant.”</strong></p>
+<p>Let’s try this with our results from last class.</p>
+<pre class="r"><code># Set the seed for reproducibility
+set.seed(123)
+
+# Simulate a continuous predictor variable, precipitation
+n &lt;- 30
+precip &lt;- runif(n, min = 0, max = 10)
+
+# Simulate the true, predicted response of biomass to precip (y-hat)
+y_hat &lt;- 2 + 3 * precip
+
+# Simulate error for the response variable
+error &lt;- rnorm(n, mean = 0, sd = 2)
+
+# Create the response variable, biomass
+# biomass = beta0 + beta1 * precip + epsilon
+biomass &lt;- y_hat + error
+
+# Create a data frame
+datum &lt;- data.frame(precip = precip, y_hat = y_hat, error = error, biomass = biomass)
+
+# Fit the linear model
+results &lt;- lm(biomass ~ precip, data = datum)
+
+# Examine the results
+summary(results)</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = biomass ~ precip, data = datum)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -4.2859 -1.4406  0.0391  1.4113  3.7624 
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)   3.1133     0.8057   3.864 0.000605 ***
+## precip        2.8140     0.1259  22.355  &lt; 2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 1.975 on 28 degrees of freedom
+## Multiple R-squared:  0.9469, Adjusted R-squared:  0.945 
+## F-statistic: 499.7 on 1 and 28 DF,  p-value: &lt; 2.2e-16</code></pre>
+<pre class="r"><code># Print the confidence intervals
+confint(results)</code></pre>
+<pre><code>##                2.5 %   97.5 %
+## (Intercept) 1.462793 4.763761
+## precip      2.556159 3.071870</code></pre>
+<pre class="r"><code># These are actually the confidence limits! Annoying
+# How do we calculate the confidence intervals</code></pre>
+<p><strong>For each 1 cm increase in precipitation, we observed a 2.81
+kg/ha …</strong> – but where are the confidence intervals??</p>
+<p><strong>Note:</strong> I recommend simply using two significant
+digits after the decimal. In the above case, you would avoid saying “a 3
+unit increase” or “a 2.8 unit increase”.</p>
+<ul>
+<li>(Sidenote: technically, usual scientific convention involved
+reporting significant digits according to precision in the sampling…
+Maybe you remember this from chemistry class? But we often don’t know
+that in ecology, so we can be more relaxed about this here.)</li>
+</ul>
+<pre class="r"><code># Print the confidence intervals
+confint(results)</code></pre>
+<pre><code>##                2.5 %   97.5 %
+## (Intercept) 1.462793 4.763761
+## precip      2.556159 3.071870</code></pre>
+<pre class="r"><code># These are actually the confidence limits! Annoying</code></pre>
+<p>These are actually the confidence limits! This is annoying.</p>
+<p><strong>Q:</strong> How would we calculate the 95% CI? There are a
+few ways…</p>
+<ul>
+<li><ol style="list-style-type: decimal">
+<li>Upper limit minus estimate</li>
+</ol></li>
+<li><ol start="2" style="list-style-type: decimal">
+<li>Estimate minus lower limit</li>
+</ol></li>
+<li><ol start="3" style="list-style-type: decimal">
+<li>Upper limit minus lower limit divided by two</li>
+</ol></li>
+<li>Use whichever one makes most sense to you. I frequently use (3), but
+don’t forget to divide by two! Also, be careful with negative
+values…</li>
+</ul>
+<pre class="r"><code>(3.071 - 2.556) / 2</code></pre>
+<pre><code>## [1] 0.2575</code></pre>
+<pre class="r"><code>3.071 - 2.814</code></pre>
+<pre><code>## [1] 0.257</code></pre>
+<p><strong>For each 1 cm increase in precipitation, we observed a 2.81
+kg/ha (+/-0.25; 95% CI) increase in biomass, which was statistically
+significant (p &lt; 2x10^-16; <span class="math inline">\(r^2\)</span> =
+0.95).</strong></p>
+<p>95% of the variation is explained by precipitation, while 5% is
+driven by noise!</p>
+<p>Notes:</p>
+<ul>
+<li>When p &lt; 2x10^-16, the p-value is so small that Program R won’t
+even give you the exact value.</li>
+<li>Report the exact p-value with scientific notation in this
+class.</li>
+<li>Two <span class="math inline">\(r^2\)</span> values! Generally, we
+want to always use the multiple <span class="math inline">\(r^2\)</span>
+– ignore the adjusted. <span class="math inline">\(r^2\)</span> values
+often go up when we add more variables, and the adjusted <span
+class="math inline">\(r^2\)</span> tries to account for that. We may
+talk about this later, but just use the ‘Multiple r-sqared’ value.</li>
+</ul>
+<div id="minor-adjustments" class="section level3">
+<h3>Minor adjustments</h3>
+<p><strong>Q:</strong> What if the effect (slope) is negative? Don’t
+include the negative in the sentence, just change <strong>increase to
+decrease</strong>.</p>
+<p>Sometimes when the way we measure things makes our <span
+class="math inline">\(\beta\)</span> values a little… strange. For
+example, elevational gradients influence species richness in strong
+ways. However, the unit change for elevation is meters (meter), and a 1
+unit increase in meters will only have a tiny effect on species richness
+– although highly significant. We can <strong>re-scale</strong> the
+metrics at ecologically relevant scales to make the effects make more
+sense. For elevation, we might multiple the X value, the effect, and the
+95% CI times 1000, so that everything is expressed in terms of
+kilometers, rather than meters. You can do this with your raw data or
+with your results.</p>
+<p>When you are trying to compare two different effects and trying to
+infer which has a stronger biological effect, you cannot compare one
+beta to another.</p>
+<ul>
+<li>Which is more important in driving biomass: precipitation or
+fertilizer?</li>
+<li>We can’t make that comparison.</li>
+<li>If you want to compare betas directly, you have to standardize your
+variables first, before fitting the model.
+<ul>
+<li>‘Mean transformation’: subtract each value by the mean and divide by
+the standard deviation.</li>
+</ul></li>
+</ul>
+</div>
+</div>
+<div id="concluding-thoughts" class="section level2">
+<h2>Concluding thoughts</h2>
+<p>I really like this sentence structure for reporting results. This was
+what I was taught in graduate school, and I have taught this to many
+peers and students since then. I find that it makes clear sense to
+readers about cause and effect in ecology. You could read this to your
+dad and they will understand it. They may not care – but they would
+understand it. That’s powerful!</p>
+<p><strong>We want to communicate our science clearly to our scientific
+peers, natural resource managers, and policy makers, and the
+public.</strong> This sentence structure is useful to do this. It is
+clear and it emphasizes biological effects, which helps us better
+understand and communicate cause and effect in nature.</p>
+<p>This sentences are what you will report for the results of your
+exercise on linear regression! That’s it – report these sentences. I
+will not check your exact grammar, but it should follow this general
+pattern and be mindful of some of the details I mentioned above.</p>
+<p><a href="lecture_6.html">–go to next lecture–</a></p>
+</div>
+
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+<script>
+$(document).ready(function ()  {
+
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

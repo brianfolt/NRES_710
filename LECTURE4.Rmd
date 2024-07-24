@@ -23,15 +23,13 @@ knitr::opts_chunk$set(echo = TRUE, cache = TRUE)
 #
 #      t-tests and z-tests
 
-
 ```
 
 ## Download the R code for this lecture!
 
 To follow along with the R-based lessons and demos, [right (or command) click on this link and save the script to your working directory](LECTURE4.R)
 
-Considering the "field guide" from the last lecture, we are talking about the t-test, which is appropriate when we have a quantitative response variable and either (1) no predictor variable (one sample t-test) or (2) a binary categorical predictor variable (two sample t-test).
-
+Today we will discuss the **t-test**. Considering the "field guide" from the last lecture, the t-test is an appropriate choice when we have a quantitative response variable and either (1) no predictor variable (one sample t-test) or (2) a binary categorical predictor variable (two-sample t-test).
 
 ## The t statistic: signal to noise ratio for the sample mean
 
@@ -39,17 +37,17 @@ The *t statistic* is a useful summary statistic that we can calculate from a sam
 
 The *t distribution* is the theoretical sampling distribution for the t-statistic under the null hypothesis. It describes the distribution of "false signals" that can arise from random sampling error. 
 
-Mathematically, *t* is the ratio of the difference between the sample mean and the hypothesized population mean ($\mu_0$), in units of standard error:
+Mathematically, *t* is the ratio of the difference between the sample mean ($\bar{x}$) and the hypothesized population mean ($\mu_0$) in units of standard error (SE):
 
-$t = \frac{(\bar{x}-\mu_0)}{s.e.}$
+$t = \frac{(\bar{x}-\mu_0)}{SE}$
 
-**Q** what part of the above fraction (numerator or denominator) represents the signal? Which represents the "noise"?
+**Q:** what part of the above fraction (numerator or denominator) represents the signal? Which represents the "noise"?
 
-Let's assume that the null hypothesis is true (as we often do), and that our null hypothesis is that the sample mean is equal to zero. 
+Let's assume that the null hypothesis ($H_0$) is true (as we often do), and that our null hypothesis is that the sample mean is equal to zero.
 
-This is almost easier to conceptualize if we imagine a *paired* design in which, say, a set of individuals are monitored at two points in time: before a treatment and after. 
+This is almost easier to conceptualize if we imagine a *paired* design in which, say, a set of individuals are monitored at two points in time: before and after a treatment.
 
-Let's imagine we are researching the effectiveness of a weight loss drug. We sample 25 patients and weigh them before they start taking the drug and then weigh all of them 1 month after they start taking the drug. Never mind for now that this isn't the best drug trial design! 
+Let's imagine we are researching the effectiveness of a weight loss drug (e.g., Ozempic). We sample 25 patients and weigh them before they start taking the drug and then weigh all of them 1 month after they start taking the drug. Never mind for now that this isn't the best drug trial design! 
 
 So for each patient we compute the change in weight between the first and second measurements. In the null universe, the drug is not effective and we would expect the change to be no greater than expected by random chance. Our task is to convince ourselves that the results (mean observed weight loss across all patients) are meaningful.
 
@@ -66,34 +64,36 @@ Here is a worked example, in R:
 ## Paired t-test example -----------------
 
 weightloss.data <- c(-10.4,-11.6,3.9,1.5,-0.3,-3.5 -10.0,-6.7,-6.1,-2.4,-6.0,2.3,0.1,-4.1,-3.2, -11.3,-3.2,-9.3,-7.5,-5.7,-0.1,0.0,-9.8,1.0,-11.9)
-hist(weightloss.data,breaks=7)
+hist(weightloss.data, breaks = 7)
 mean.weightloss <- mean(weightloss.data)
 null.weightloss <- 0
 stdev.weightloss <- sd(weightloss.data)
 sample.size <- length(weightloss.data)
-std.error <- stdev.weightloss/sqrt(sample.size)
+std.error <- stdev.weightloss / sqrt(sample.size)
 
-t.statistic <- (mean.weightloss-null.weightloss)/std.error
+t.statistic <- (mean.weightloss - null.weightloss) / std.error
 t.statistic
 
-curve(dt(x,sample.size-1),-5.5,2)
-abline(v=t.statistic,col="green",lwd=3)
+curve(dt(x, sample.size - 1), -5.5, 2)
+abline(v = t.statistic, col = "green", lwd = 3)
 
-t.crit <- qt(0.05,sample.size-1)    # 'critical value' of the t statistic- you can reject the null if your value is more extreme than this!
+t.crit <- qt(0.05, sample.size - 1)
+# 'critical value' of the t statistic\
+# you can reject the null if your value is more extreme than this!
 
-p=pt(t.statistic,sample.size-1)    # p value
+p <- pt(t.statistic, sample.size - 1) # p value
 p    # this is the p value
 
-options(scipen=100)   # if you don't like scientific notation!
+options(scipen = 100)   # if you don't like scientific notation!
 p     
 
 # Alternative: use R's built in t test
 
-t.test(weightloss.data,alternative = "less")   # should get the same p-value!
+t.test(weightloss.data, alternative = "less")   # should get the same p-value!
 
 ```
 
-**Q** Does a significant p-value here mean that everyone who takes the drug will lose weight? If not, what does it mean?
+**Q:** Does a significant p-value here mean that everyone who takes the drug will lose weight? If not, what does it mean?
 
 NOTE: as the df gets large, the t distribution approximates a *standard normal* distribution.
 
@@ -106,13 +106,15 @@ You can use this code to explore the difference between the t-distribution and t
 ```{r}
 
 # difference between t and standard normal
-
 library(ggplot2)
-base = ggplot() + xlim(-5,5) + geom_function(aes(col="normal (z)"), fun=dnorm, lwd=2) + labs(y="density",x="potential fake signal")
+base <- ggplot() +
+  xlim(-5, 5) +
+  geom_function(aes(col = "Normal (z)"), fun = dnorm, lwd = 2) +
+  labs(y = "Density", x = "Potential fake signal")
 
 deg_free <- 1
-base + geom_function(aes(col=sprintf("t, df = %s",deg_free)), fun=dt, args=list(df=deg_free), lwd=2,alpha=0.5)
-
+base +
+  geom_function(aes(col = sprintf("t, df = %s", deg_free)), fun = dt, args = list(df=deg_free), lwd = 2, alpha = 0.5)
 
 # base r plotting alternative!:
 
@@ -190,18 +192,16 @@ pnorm(z.statistic)
 
 ```
 
-**Q** That means that 74% of NBA players are shorter than the GSW average height, right?
+**Q:** That means that 74% of NBA players are shorter than the GSW average height, right?
 
-Wrong- but why?? 
+Wrong -- but why?? 
 
-**Q** Would you reject the null hypothesis and say that the GSW team is taller than expected by random chance?
-
+**Q:** Would you reject the null hypothesis and say that the GSW team is taller than expected by random chance?
 
 #### In-class questions (not to be turned in)
 1. For any normal distribution (e.g., the standard normal or z distribution) what is the probability of obtaining a random number within 1 standard deviation of the mean?  
 2. For any normal distribution (e.g., the standard normal or z distribution) what is the probability of obtaining a random number within 2 standard deviations of the mean?  
 3. What is the 95% quantile of the standard normal distribution (z distribution)?
-
 
 ## t-tests
 
@@ -271,7 +271,7 @@ $\sqrt{((N_1-1)*\sigma_1^2 + (N_2-1)*\sigma_2^2)/(N_{pooled}-2)}$
 
 For the 2-sample t-test, the degrees of freedom is equal to the total sample size across both samples minus 2. 
 
-*Q*: Can you think of why the df is two less than the pooled sample size?
+**Q:** Can you think of why the df is two less than the pooled sample size?
 
 
 ```{r}
@@ -365,9 +365,7 @@ p.onesided <- pt(-abs(t.statistic),samp.n-1)     # one-tailed p-value
 
 text(-2,0.3,paste("p =",round(p.onesided,4)))
 
-
 ```
-
 
 In the same way, the critical value for a t-statistic is different for a two-tailed vs a one-tailed test:
 
@@ -400,8 +398,6 @@ legend("topleft",lwd=c(2,2,2),col=c("red","green","blue"),bty="n",legend=c("two-
 ```
 
 All of these critical values have the same percentage of the sampling distribution that are more extreme than them (the percentage is alpha, which is set at 0.1 in this example)-- but the definition of 'extremeness' differs for the one-tailed and two-tailed cases! 
-
-
 
 #### Welch's t-test (default t-test in R)
 
@@ -458,7 +454,6 @@ Like we have mentioned before, the t-test is quite robust to non-normality of th
 
 However, if the data are strongly skewed or otherwise clearly non-normal you may want to go with a non-parametric alternative (see below)!
 
-
 #### Testing for normality!
 
 Before 'accepting' the results of a statistical test, we often want to run 'goodness-of-fit' tests to see if there is any reason to think we may be violating key assumptions of our statistical analyses. For the t-test and many other parametric tests, one 'goodness-of-fit' test we might want to run is a test for normality. For linear regression analyses, we test for normality of the residuals. 
@@ -487,7 +482,6 @@ qqnorm(my.data.nonnorm,main="non-normal")   # visual test for normality
 
 qqnorm(my.data.norm,main="normal")
 
-
 # run shapiro-wilk test
 
 shapiro.test(my.data.nonnorm)
@@ -502,7 +496,6 @@ shapiro.test(my.data.norm)
 The t-test can be highly affected by outliers. If you suspect your data contain highly influential outliers, you might want to run a non-parametric alternative, as non-parametric tests are much less influenced by outliers.
 
 To look for outliers, the first step is to simply visualize a histogram of the raw data and look for any observations that fall far from the others. 
-
 
 ### Equal variance
 
@@ -521,7 +514,6 @@ bartlett.test(list(group1,group2))   # Bartlett's test has stong assumption of n
 car::leveneTest(c(group1,group2),rep(c("group1","group2"),each=10))    # Levene's test is less reliant on normality
 
 ```
-
 
 ## Non-parametric alternatives
 
@@ -542,7 +534,6 @@ hist(my.data)
 wilcox.test(my.data)
 
 t.test(my.data)   # t-test for comparison
-  
   
 ```
 
@@ -565,7 +556,6 @@ wilcox.test(my.data1,my.data2)
 
 t.test(my.data1,my.data2)   # t-test for comparison
 
-
 #### perform rank test from scratch!
 
 allobs <- c(my.data1,my.data2)
@@ -577,7 +567,6 @@ rank2 <- inorder[21:40]
 t.test(rank1,rank2,var.equal = T)    # perform t-test on the ranks (usually similar to Mann-Whitney test)
   
 ```
-
 
 ## Power analysis for t-test
 
@@ -613,8 +602,6 @@ this.test <- t.test(samp.A,samp.B,var.equal = T)
 # and determine if we rejected our null hypothesis (which we know is not true!)
 
 this.test$p.value < 0.05
-
-
 
 ```
 
@@ -663,7 +650,6 @@ length(which(pvals<0.05))/1000
 
 Of course, if your power is not adequate, you may want to increase sample size. But what is the minimum sample size that gives you sufficient power? We can use simulation to answer this question!
 
-
 ```{r}
 
 # full power analysis WITH SAMPLE SIZE DETERMINATION:   --------
@@ -676,7 +662,6 @@ true.mean.B <- 13.9
 true.sd <- 3.4
 
 # Assume a two-tailed test- alternative hypothesis is that the mean of A is different from the mean of B
-
 
 # now we will simulate LOTS of  'experiments' under different sample sizes
 
@@ -709,29 +694,8 @@ names(power) <- sampsize
 
 plot(power~sampsize)
 
-
 ```
-
 
 So what sample size would you need (in each of the two groups) to detect a signal in this case? 
 
-
-
 [--go to next lecture--](LECTURE5.html) 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
