@@ -1,0 +1,47 @@
+---
+title: "Linear Regression (cont.)"
+author: "NRES 710"
+date: "Last compiled: `r Sys.Date()`"
+output: 
+  html_document: 
+    theme: yeti
+    toc: yes
+    toc_float: yes
+    css: styles.css
+---
+
+```{r setup, include=FALSE}
+
+knitr::opts_chunk$set(
+	echo = TRUE,
+	message = FALSE,
+	warning = FALSE,
+	cache = TRUE
+)
+```
+
+```{r echo=FALSE}
+
+#  NRES 710, Linear Regression (3)
+#     University of Nevada, Reno
+#     Assumptions of linear regression   
+
+```
+
+## Review
+
+## Assumptions of Linear Regression
+
+### 1)
+
+### 2)
+
+### 3)
+
+### 4)
+
+### 5) 
+
+## Summary
+
+[--go to next lecture--](lecture_7.html)

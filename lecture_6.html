@@ -9,10 +9,10 @@
 <meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
 
-<meta name="author" content="Welcome!" />
+<meta name="author" content="NRES 710" />
 
 
-<title>Intro to NRES 710</title>
+<title>Linear Regression (cont.)</title>
 
 <script src="site_libs/header-attrs-2.27/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
@@ -425,215 +425,37 @@ div.tocify {
 
 
 
-<h1 class="title toc-ignore">Intro to NRES 710</h1>
-<h4 class="author">Welcome!</h4>
+<h1 class="title toc-ignore">Linear Regression (cont.)</h1>
+<h4 class="author">NRES 710</h4>
 <h4 class="date">Last compiled: 2024-07-26</h4>
 
 </div>
 
 
-<div id="introduction-among-faculty-and-students"
-class="section level2">
-<h2>Introduction among faculty and students</h2>
-<p>Introductions among faculty (<a
-href="https://www.unr.edu/nvcfwru/folt-brian">Brian Folt</a>) and
-students</p>
+<div id="review" class="section level2">
+<h2>Review</h2>
 </div>
-<div id="class-structure" class="section level2">
-<h2>Class structure</h2>
-<p>We will discuss the course organization and expectations. Please see
-<a href="syllabus.pdf">course syllabus</a> and <a
-href="schedule.pdf">schedule</a> documents, provided separately.</p>
-<p>Office hours: no office hours, best thing to do is send me an email
-and find a time to meet; I am happy to meet with you; my office is in
-KRC 100, enter from the north side of the building.</p>
-<p>Prerequisites: Students are expected to have a basic understanding of
-standard statistical concepts and methods, obtained through other
-coursework. They should be familiar with what a p-value is, an ANOVA, a
-t-test, these sorts of basic things. But, we are going to cover all of
-these topics in class – with a practical emphasis.</p>
-<p>Attendance: This is a graduate student class and attendance is not
-mandatory; you are all adults and make your own decisions. Life happens
-&amp; you will be busy with field work, other obligations, whatever.
-It’s okay.</p>
-<p>Schedule: Tuesdays we will have a lecture, Thursdays we will have a
-lecture and a mini-lab. Lab assignments will be often due before the
-Thursday lab. Sometimes these will be readings that we will discuss on
-Thursdays, other times they will be homework assignments.</p>
-<p>Exercises: These will be due periodically throughout the semester. I
-encourage you to work on these with your peers! The best way to learn
-something, is if you can communicate it to someone else. However, the
-goal of the class is to learn how to analyze data. So I encourage you
-not to lean too heavily on your peers and instead make sure that you are
-learning the material yourselves.</p>
-<p>In this class, we will be learning how to analyze data in R. Why in
-R? Because it’s free, open-source statistical and it is accessible to
-anyone with a computer and internet connection.</p>
-<p>Course website! A central location for class materials.</p>
-<p>No text books. Free resources from the internet. See the ‘Links’ page
-on the course website.</p>
+<div id="assumptions-of-linear-regression" class="section level2">
+<h2>Assumptions of Linear Regression</h2>
+<div id="section" class="section level3">
+<h3>1)</h3>
 </div>
-<div id="general-overview" class="section level2">
-<h2>General overview</h2>
-<p>NRES 710 is designed to be an introductory, graduate-level statistics
-class. “Introductory” because you are not assumed to have much in the
-way of prior statistical knowledge (although an undergrad course under
-your belt will be helpful) or prior experience in R programming
-(although some prior exposure will make the learning curve less steep).
-“Graduate-level” because once we get rolling, it’ll be full steam ahead!
-However, another dimension of a graduate-level course is an emphasis on
-collaborative knowledge development through group discussion and
-collective learning, and NRES 710 will provide opportunities for
-this.</p>
-<p>This course provides an introduction to both statistics and computer
-programming. With a solid grounding in basic rules of probability and
-statistics, and armed with some basic computer programming abilities
-(and some human creativity and ingenuity), you can go extremely far in
-making sense of data and communicating that understanding with
-others!!</p>
+<div id="section-1" class="section level3">
+<h3>2)</h3>
 </div>
-<div id="what-is-science" class="section level2">
-<h2>What is science?</h2>
-<p><strong>Science is the search for <em>truth</em> through the
-accumulation of <em>facts</em>. It is a method of answering
-questions.</strong></p>
-<ul>
-<li><strong>Truth</strong> is the way things really are, what’s really
-happening, what we want to know about how the world works.
-<ul>
-<li>The problem is that we can never really know truth. We can seek to
-understand it and try to know it, but we can never know truth.</li>
-</ul></li>
-<li><strong>Sampling error</strong> – there are always errors in
-measurements.</li>
-<li>How tall is Dr. Brian Folt? If everyone in the class tried to
-measure me to the mm, we would get many different measurements.</li>
-<li>We can decrease error by standardizing measurers and measurement
-methods.</li>
-<li><strong>Process error</strong> – things that contribute to variation
-in whatever is being measured. This is harder to understand.</li>
-<li><strong>Q:</strong> How much taller are UNR Students than UNR
-Faculty? Students are maybe a little taller on average…? But there is
-overlap. What causes this overlap?</li>
-<li>Other things contribute to the outcome on an individual by
-individual basis What things might cause height to vary among students
-and faculty? Age diet, genetics, behavior, etc.</li>
-<li>‘Noise’ in the system can be due to process error or random
-variation.</li>
-<li>Why does process error make it difficult for us to understand truth?
-<ul>
-<li>How would we test for height differences between Students and
-Faculty?</li>
-<li>Sample!!</li>
-<li>If our sample is representative, then we might be able to
-approximate ‘truth’.</li>
-<li>But, if our sample may not be representative, due to random chance
-and process error</li>
-</ul></li>
-</ul>
-<p><strong>Q:</strong> How could we ensure TRUTH?</p>
-<p>If we sample the entire population, we can approximate truth! But
-it’s often impractical to get the whole population.</p>
-<p><strong>Facts</strong> are estimates of truth about our sample</p>
-<ul>
-<li>Measurements. Facts might be accurate, inaccurate; they might be
-reliable and repeatable, or they might not be reliable and
-repeatable.</li>
-<li>We go out and we collect data, and these data are facts.</li>
-</ul>
-<p>How does ‘statistics’ come into this? <strong>Statistics is the
-method by which we use facts (data) to estimate truth.</strong></p>
-<ul>
-<li>We collect data (facts) and use statistics to calculate an average
-(a statistic), which is an estimate of truth, based on facts.</li>
-<li>You can’t do science without statistics.</li>
-</ul>
-<p>We can use statistics as a process to make inference about a property
-of a <em>population</em> (a parameter) from a representative
-<em>sample</em>. In the figure below, the vertical line separates the
-stuff we can observe and measure directly (<em>facts</em>; right side)
-and the stuff we can’t observe but want to make inference about
-(<em>truth</em>; left side).</p>
-<p><img src="statistics2.png" style="width:75.0%" /></p>
-<p>Do you see the ‘p-value’ anywhere in here?</p>
-<ul>
-<li>P-values are not statistics. They are not estimates of truth.</li>
-<li>Most statistic classes emphasize P-values way too much, in my
-opinion. That’s why we are going to read papers about on this topic
-before class on Thursday.</li>
-</ul>
-<p>In we are going to learn how to use statistics to estimate truth. We
-will learn about what a p-value is and how it is used, but try to
-de-emphasize p-values and place more emphasis on measure effects and
-uncertainty around those effects. I also mentioned that truth is
-impossible to know, so how can we know if we are doing a good job of
-estimating it? We will SIMULATE DATA to know truth, so that we can then
-fit statistical analyses and ensure that we are correctly estimating
-truth.</p>
+<div id="section-2" class="section level3">
+<h3>3)</h3>
 </div>
-<div id="the-statistical-program-r" class="section level2">
-<h2>The Statistical Program R</h2>
-<p>R is an open-source project, and new packages are being added all the
-time.</p>
-<p>R is incredibly powerful and feature rich. You are NOT expected to
-memorize syntax right away, but rather just know that the answer is
-always a few clicks away! ‘help’ files in R are extremely useful, as is
-information about how to use R that is found in books or on the
-internet.</p>
-<p>‘Base R’ is the default software built into R that does not including
-loading any additional packages. Here is a <a href="base-r.pdf">‘base R’
-cheat sheet</a>; this is a great reference for most of the basic tasks
-you will need to perform in R.</p>
-<p>Learn to use R scripts, and save your scripts frequently! This is the
-primary record of what you’ve done and allows you and others to
-reproduce your workflows.</p>
-<p>If you have a problem, Google it! Someone has likely had the same
-problem as you in the past and asked for solutions online. Or, ask
-ChatGPT for help on how to solve your coding problem in R. When either
-Googling or prompting ChatGPT for help, be mindful that potential
-solutions presented to you may not be ideal for your problem.</p>
-<div id="install-r-and-rstudio" class="section level3">
-<h3>Install R and RStudio</h3>
-<p><a href="https://cran.r-project.org/">CRAN website for downloading
-R</a><br />
-<a href="https://www.rstudio.com/">RStudio main site</a></p>
-<p>Make sure you have the most recent versions!</p>
+<div id="section-3" class="section level3">
+<h3>4)</h3>
 </div>
-<div id="make-a-new-rstudio-project-for-this-class"
-class="section level3">
-<h3>Make a new RStudio “project” for this class</h3>
-<p><a
-href="https://support.rstudio.com/hc/en-us/articles/200526207-Using-Projects">R
-projects are an <strong>extremely useful</strong> feature of
-RStudio</a>. Just store all the code and data for this course in your
-project folder and it will make your life much, much easier!</p>
+<div id="section-4" class="section level3">
+<h3>5)</h3>
 </div>
 </div>
-<div id="statschats" class="section level2">
-<h2><a
-href="https://guides.library.unr.edu/StatsChats">“StatsChats”</a></h2>
-<p>Faculty from various departments – Paul Hurtado (math/stats dept),
-Ken Nussear (geography), Perry Williams (NRES), Kevin Shoemaker (NRES)
-and others – have hosted informal sessions for grad students in EECB,
-NRES, Geography etc (and faculty) to discuss data analysis questions.
-This can be a good opportunity to ask questions about statistics, find
-out more about what types of data and questions your peers are working
-with, and help others (thereby reinforcing concepts for yourself!). Keep
-an eye on that website linked above and if the group identifies a
-regular meeting time, I will relay that information to you all in
-class.</p>
-</div>
-<div id="feedback" class="section level2">
-<h2>Feedback</h2>
-<p>This is my first time teaching this class. It was originally
-developed by Dr. Kevin Shoemaker, but I am making adjustments to cater
-it to my understanding of statistics and the best ways that I can teach
-you all about it.</p>
-<p>Given this is my first time teaching this specific material in this
-format, I welcome frequent and honest feedback on course topics to
-understand whether course topics are appropriate and/or useful. So, any
-feedback is welcomed – thank you!</p>
-<p><a href="lecture_2.html">–go to next lecture–</a></p>
+<div id="summary" class="section level2">
+<h2>Summary</h2>
+<p><a href="lecture_7.html">–go to next lecture–</a></p>
 </div>
 
 

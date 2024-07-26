@@ -13,7 +13,7 @@ output:
 ### Instructor
 
 [Brian Folt](https://www.unr.edu/nvcfwru/folt-brian)<br>
-Office: Knudsten Resource Center, Room 100, Office A<br>
+Office: Knudsten Resource Center, Room 100A<br>
 Phone: TBD<br>
 Email: [bfolt@unr.edu](bfolt@unr.edu)
 
