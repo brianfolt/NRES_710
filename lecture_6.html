@@ -36,6 +36,8 @@
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
 <link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<script src="site_libs/kePrint-0.0.1/kePrint.js"></script>
+<link href="site_libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
 
 <style type="text/css">
   code{white-space: pre-wrap;}
@@ -434,27 +436,309 @@ div.tocify {
 
 <div id="review" class="section level2">
 <h2>Review</h2>
+<p>This week we will continue to explore linear regression by talking
+about <strong>assumptions of regression</strong> – and in fact these are
+important assumptions of many other statistical tests. And then we will
+discuss how to use linear regression models to make
+<strong>predictions</strong>.</p>
+<p><strong>Most important thing we have learned so far</strong>:</p>
+<ul>
+<li><span class="math inline">\(Y_i = \beta_0 + \beta_1x_i + \epsilon
+\sim N(0, \sigma)\)</span></li>
+</ul>
+<p>There are many assumptions that this regression test makes! But we
+will focus on what are considered the five most important of these
+assumptions.</p>
 </div>
-<div id="assumptions-of-linear-regression" class="section level2">
-<h2>Assumptions of Linear Regression</h2>
-<div id="section" class="section level3">
-<h3>1)</h3>
+<div id="assumptions" class="section level2">
+<h2>Assumptions</h2>
+<p>What are the assumptions of statistical test and how do they
+influence your results?</p>
+<p>The first thing you need to know about assumptions of statistical
+tests (regression, t-test, ANOVA, other tests we will cover…) is that
+the tests are <strong>robust to violations of assumptions</strong>.</p>
+<ul>
+<li>Robust means that: if an assumption is violated, it very rarely
+influences the results we get from the analysis (e.g., slope).</li>
+<li>We’ll talk about which of the assumptions influence different
+parameters…</li>
+<li>But for most parameters, if the assumptions are violated it does not
+influence the slope.</li>
+<li>Assumption violation may influence the standard deviation, but this
+is not often reported.</li>
+<li><strong>Violations cause the p-value to increase.</strong> This
+means that violations are likely to be conservative. Since we want to
+avoid committing Type I error (rejecting the null when in fact it is
+true), then if assumption violation causes p-values to increase then we
+are less likely to commit Type I error.</li>
+</ul>
+<p>A general rule (<em>axiom</em>) in statistics is that: <strong>the
+more assumptions a test makes, the more powerful it is (power =
+p-values).</strong></p>
+<p>We often use statistical tests that make assumptions. Often, these
+assumptions are true. And since we make more assumptions, we are more
+likely to detect a significant effect. <strong>If these assumptions are
+valid.</strong></p>
+<p>I often don’t care too much about assumptions – because they are
+often met due to our <strong>study design</strong>, the specific
+analysis we chose, and <strong>most analyses are robust to violations of
+assumptions</strong>. But, <strong>reviewers do</strong>. Reviewers will
+try to find something wrong with your paper. They will try to find
+something wrong and jam up the process. So it can be useful to carefully
+document how you examined for violations of assumptions in your
+analysis. This gets tedious, but is part of the ‘statistical ritual’ of
+our field… (Or maybe it shouldn’t be. Johnson [1999] made suggestions
+that our statistical ritual leads to bad practices, and we will read
+another paper to this effect at the end of the semester.)</p>
+<p>But as for me, again, I don’t care too much about these assumptions,
+because <strong>most analyses are robust to violations of
+assumptions</strong>.</p>
 </div>
-<div id="section-1" class="section level3">
-<h3>2)</h3>
+<div id="five-regression-assumptions" class="section level2">
+<h2>Five regression assumptions</h2>
+<p>There are <strong>5 assumptions</strong> to linear regression. I put
+the equation up on the board again because most of these assumptions are
+indicated in the equation, either explicitly or implicitly.</p>
+<div id="continuous-y" class="section level3">
+<h3>Continuous Y</h3>
+<ul>
+<li><p>Should be continuous; not a count, like a number. But… if it is a
+count, that’s potentially okay, because regression/ANOVA are robust to
+violations of assumptions. We don’t really need a test for this – if you
+collected the data, you should know whether it is continuous or
+not!</p></li>
+<li><p>Note: linear regression also assumes that your X-variable is
+continuous… but we can relax this assumption, and we will do so next
+week when we explore t-tests! More on this soon.</p></li>
+<li><p>If you Y is not continuous, it will not influence your slope, but
+it might increase your p-value.</p></li>
+</ul>
 </div>
-<div id="section-2" class="section level3">
-<h3>3)</h3>
+<div id="error-is-normally-distributed" class="section level3">
+<h3>Error is normally distributed</h3>
+<ul>
+<li>Very clearly indicated in the equation! Important and something that
+a lot of people get wrong. Some folks say that X-variable has to be
+normally distributed, continuous, etc. – but nope. Others assume that
+your Y-variable has to be normally distributed. Nope! This assumption
+relates to the <strong>error</strong> around the Y-variable.</li>
+</ul>
+<p>For example: consider the data in the left graph. There is a gap in
+values for the middle-range of X-values. If we examine this as a
+frequency histogram (middle graph), this is not a normally-distributed
+y-variable; it is bimodally distributed! This is okay. When we run this
+regression, we have not violated any assumptions, because the error is
+normally distributed around the line.</p>
+<p><img src="lecture_6_files/figure-html/example-1-1.png" width="576" /><img src="lecture_6_files/figure-html/example-1-2.png" width="576" /></p>
+<p>Then why are people always asking if the Y-variable is normally
+distributed…? This is because if you look at the distribution of the
+y-data and it appears normal, the residuals will almost always be normal
+when you run the analysis.</p>
+<p>But, if you run a histogram and your y-data are not normal, this does
+not necessarily mean that your error will also not be normal. To really
+know if the assumption is violated, you need to run the regression and
+examine whether the residuals are normal (third graph).</p>
+<p>If your error is not normally distributed, it’s not going to
+influence your slope – but it might increase your p-values a little
+bit.</p>
 </div>
-<div id="section-3" class="section level3">
-<h3>4)</h3>
+<div id="linear-relationship-between-x-and-y" class="section level3">
+<h3>Linear relationship between X and Y</h3>
+<p>This one is important. This is implicit in our linear model
+equation.</p>
+<p>It assumes that there is a single parameter – the slope – describing
+the relationship between X and Y.</p>
+<p>The reason why I think this is important is because so often in
+ecology/natural resource management I see people obtaining two
+continuous variables and immediately running a regression model –
+without ever considering whether their data have a linear relationship.
+They don’t even think about it.</p>
+<p>This is a problem, because in ecology… many processes of interest are
+non-linear!</p>
+<p>Example: mesocosm experiment. We want to understand the effect of
+crayfish predators on prey fish. Does fish abundance decrease and
+predatory crayfish increases?</p>
+<p><img src="lecture_6_files/figure-html/predator-prey-simulation-1.png" width="768" /></p>
+<p>This very clearly violates the assumption of linearity! We can fit a
+better statistical model – one that does not assume linearity – which
+can better help us measure this relationship and explain it to the
+scientific community!</p>
+<p>So, don’t assume there is a linear relationship between X and Y –
+examine this, verify, and adjust your model as needed.</p>
+<p>If the relationship is not linear, <strong>this will alter your
+slope</strong>! We are measuring something that is not linear an</p>
 </div>
-<div id="section-4" class="section level3">
-<h3>5)</h3>
+<div id="homoscedasticity" class="section level3">
+<h3>Homoscedasticity</h3>
+<p><em>homo</em> = same; <em>scedasticity</em> = variance, noise, error,
+etc.</p>
+<p>Implicit in our equation: - <span class="math inline">\(\epsilon \sim
+N(0, \sigma)\)</span></p>
+<p>Constant variance: <em>error does not change not matter what the X
+and Y values are.</em></p>
+<p><img src="lecture_6_files/figure-html/example-3-1.png" width="576" /></p>
+<p>We can visualize homoscedasticity by imagining/drawing normally
+distributed bell curves amidst our data along the regression line…</p>
+<p>An example of <strong>heteroscedasticity</strong> is any case where
+your variance changes. This commonly occurs in ecology when we count
+animals. For example, when we are electofishing for fish in a river,
+areas with no fish have little variance; areas with many fish have high
+variance! It creates this cone-shaped data.</p>
+<p><img src="lecture_6_files/figure-html/example-4-1.png" width="576" /></p>
+<p>We can visualize <em>heteroscedasticity</em> by imagining/drawing
+normally distributed bell curves amidst our data along the regression
+line, and the bell curves get wider as we increase along X.</p>
+<p><em>Heteroscedasticity</em> could also happen in a non-linear
+way.</p>
+<p><strong>Q:</strong> Will heteroscedasticity influence your slope?
+No.</p>
+<p>We can account for <em>heteroscedasticity</em> in our model by adding
+a weighting paramter to the error component: <span
+class="math inline">\(\epsilon \sim N(0, \sigma * y)\)</span> would
+allow for error to increase with <span
+class="math inline">\(y\)</span>!</p>
+</div>
+<div id="independent-samples" class="section level3">
+<h3>Independent samples</h3>
+<p>When people say that the x-variable is the ‘independent variable’,
+this is what they really mean! Your samples should be independent of
+eachother and there should be <strong>no autocorrelation</strong>.</p>
+<p>Example: measuring pollution in water samples every 10 m down the
+middle of a river from a chemical plant. These data will have
+autocorrelation, because pollution can’t change that much from sample to
+sample.</p>
+<p><strong>Q:</strong> How might you eliminate or minimize
+autocorrelation? Maybe by increasing distance between samples – measure
+every kilometer. This decreases autocorrelation, but also decreases
+sample size. Tradeoff…</p>
+<p>I personally don’t worry too much about autocorrelation, because
+often when you fix it/account for it, nothing changes. If you had a
+strong slope and p-value with one test, you will likely get a strong
+slope and p-value with another test.</p>
+<p>Consider these autocorrelated data:</p>
+<p><img src="lecture_6_files/figure-html/example-5-1.png" width="576" /></p>
+<p>Instead of our points bouncing around the line, they tend to follow
+eachother.</p>
+<p>This will not affect our slope, and it probably won’t affect the
+p-value too much (would only increase). So again, linear regression is
+robust to violation of this assumption.</p>
+<p>Two types of autocorrelation issues: spatial and temporal
+autocorrelation. We will discuss how to deal with this down the road.
+But again, it’s not too big of a concern.</p>
+<p>Many things are autocorrelated in nature. Animal movements, for
+example! Is this a problem?</p>
+<p>Nah. This is what animasl do – they move! Try to get big sample
+sizes.</p>
 </div>
 </div>
-<div id="summary" class="section level2">
-<h2>Summary</h2>
+<div id="evaluating-whether-assumptions-are-met" class="section level2">
+<h2>Evaluating whether Assumptions are Met</h2>
+<p>Statistical tests exist to statistically test for these assumptions.
+These are p-value generating tests. There are some consequences of
+this.</p>
+<ul>
+<li>If you have a small sample size, the assumption will never be
+violated! Because of the relationship between sample size and p-values
+that we have identified in previous classes.</li>
+<li>Conversely, if you have a really large sample, the assumption will
+always be violated!</li>
+</ul>
+<p>So, for these reasons, I don’t like these test and I don’t recommend
+using these tests.</p>
+<p>Instead, I look at my data graphically! And I will teach you to do
+this also. We will visually examine our data to identify whether our
+data meet these assumptions or not. If it has been violated, we will see
+this.</p>
+<table class="table" style="width: auto !important; margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+Assumption
+</th>
+<th style="text-align:left;">
+X-Y Scatterplot
+</th>
+<th style="text-align:left;">
+Residuals Scatterplot
+</th>
+<th style="text-align:left;">
+Histogram of Residuals
+</th>
+<th style="text-align:left;">
+Autocorrelation Function (ACF)
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Normality
+</td>
+<td style="text-align:left;">
+X
+</td>
+<td style="text-align:left;">
+X
+</td>
+<td style="text-align:left;">
+X
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Linearity
+</td>
+<td style="text-align:left;">
+X
+</td>
+<td style="text-align:left;">
+X
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+X
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Homoscedasticity
+</td>
+<td style="text-align:left;">
+X
+</td>
+<td style="text-align:left;">
+X
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+No autocorrelation
+</td>
+<td style="text-align:left;">
+X
+</td>
+<td style="text-align:left;">
+X
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+X
+</td>
+</tr>
+</tbody>
+</table>
+<p>Residuals scatterplot: X-variable –&gt; X data; Y-variable –&gt;
+residual</p>
+<p><strong>Add more details here about different graphing approaches to
+examining assumptions</strong></p>
 <p><a href="lecture_7.html">–go to next lecture–</a></p>
 </div>
 
