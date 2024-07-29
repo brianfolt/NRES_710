@@ -128,4 +128,8 @@ datum <- data.frame(Predators = Predators, Time = Time)
 write.csv(datum, "exercise2_dataset3.csv")
 ```
 
---- End of Exercise 2 ---
+### Truth
+
+If you would like to know the values used to create these datasets (i.e., 'truth'), download and examine this [R script](exercise_2_code.R).
+
+[--go to next exercise--](exercise_3.html)
