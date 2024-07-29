@@ -1,4 +1,3 @@
-
 ### Exercise 2: code to simulate datasets 
 
 # Set the seed for reproducibility

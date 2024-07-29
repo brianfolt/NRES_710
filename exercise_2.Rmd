@@ -67,10 +67,9 @@ Picture: Jason M Crockwell (iNaturalist)
 
 ### Truth
 
-If you would like to know the values used to create these datasets (i.e., 'truth'), download and examine this [R script](exercise_2_code.R).
+If you would like to know the values used to create these datasets (i.e., 'truth'), download and examine this [R script](exercise_2.R).
 
 ```{r datasets, echo=FALSE, message=FALSE, warning=FALSE}
-
 ### Exercise 2: code to simulate datasets 
 
 # Set the seed for reproducibility
