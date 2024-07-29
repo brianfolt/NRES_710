@@ -41,9 +41,42 @@ Picture: Witold Lapinski
 
 <br>
 
-```{r dataset_1, echo=FALSE, message=FALSE, warning=FALSE}
+### Dataset 2
+
+[Dataset](exercise2_dataset2.csv)
+
+In this dataset, you are testing the relationship between the size of a particular orchid flower (y-variable; diameter in cm) as a function of the elevation it is growing in the Andes Mountains in Peru (x-variable; meters). You've hiked from the lowland Amazon rainforest (50 m asl) and scaled up the treeline (3000 m), and along the way you collected almost 500 flowers. Note: in this dataset, the slope is very small. For reporting purposes, it is entirely acceptable to *scale* the slope that you report. Just multiply the change in X (in the standard sentence, it's just 1), the slope, and the confidence intervals all by the scaling factor that you choose to use.
+
+![](pic_orchid.png){width=50%}
+
+Picture: Chen Shu (iNaturalist)
+
+<br>
+
+### Dataset 3
+
+[Dataset](exercise2_dataset3.csv)
+
+Palmer's chipmunks (*Neotamias palmeria*) is an endemic species of chipmunk that occurs in sky-island habitats in southern Nevada. In this dataset, you are interested in the relationship between the amount of time spent foraging by *N. palmeria* (y-variable; minutes/day) as a function of number of predatory birds observed in the area on the preceding day (x-variable; predators/day). You recorded the amount of time spent outside the burrow by each of ten squirrels over the course of two weeks, as well as the number of birds of prey that flew over that colony. Note: be careful with which variable is X and which is Y.
+
+![](pic_chipmunk.png){width=50%}
+
+Picture: Jason M Crockwell (iNaturalist)
+
+<br>
+
+### Truth
+
+If you would like to know the values used to create these datasets (i.e., 'truth'), download and examine this [R script](exercise_2_code.R).
+
+```{r datasets, echo=FALSE, message=FALSE, warning=FALSE}
+
+### Exercise 2: code to simulate datasets 
+
 # Set the seed for reproducibility
 set.seed(123)
+
+## Dataset 1
 
 # Simulate X-variable
 n <- 40
@@ -60,23 +93,8 @@ datum <- data.frame(PreyFrogs = x, Spiders = y)
 
 # Save the CSV file
 write.csv(datum, "exercise2_dataset1.csv")
-```
 
-### Dataset 2
-
-[Dataset](exercise2_dataset2.csv)
-
-In this dataset, you are testing the relationship between the size of a particular orchid flower (y-variable; diameter in cm) as a function of the elevation it is growing in the Andes Mountains in Peru (x-variable; meters). You've hiked from the lowland Amazon rainforest (50 m asl) and scaled up the treeline (3000 m), and along the way you collected almost 500 flowers. Note: in this dataset, the slope is very small. For reporting purposes, it is entirely acceptable to *scale* the slope that you report. Just multiply the change in X (in the standard sentence, it's just 1), the slope, and the confidence intervals all by the scaling factor that you choose to use.
-
-![](pic_orchid.png){width=50%}
-
-Picture: Chen Shu (iNaturalist)
-
-<br>
-
-```{r dataset_2, echo=FALSE, message=FALSE, warning=FALSE}
-# Set the seed for reproducibility
-set.seed(123)
+## Dataset 2
 
 # Simulate X-variable
 n <- 480
@@ -93,23 +111,8 @@ datum <- data.frame(Elevation = x, Size = y)
 
 # Save the CSV file
 write.csv(datum, "exercise2_dataset2.csv")
-```
 
-### Dataset 3
-
-[Dataset](exercise2_dataset3.csv)
-
-Palmer's chipmunks (*Neotamias palmeria*) is an endemic species of chipmunk that occurs in sky-island habitats in southern Nevada. In this dataset, you are interested in the relationship between the amount of time spent foraging by *N. palmeria* (y-variable; minutes/day) as a function of number of predatory birds observed in the area on the preceding day (x-variable; predators/day). You recorded the amount of time spent outside the burrow by each of ten squirrels over the course of two weeks, as well as the number of birds of prey that flew over that colony. Note: be careful with which variable is X and which is Y.
-
-![](pic_chipmunk.png){width=50%}
-
-Picture: Jason M Crockwell (iNaturalist)
-
-<br>
-
-```{r dataset_3, echo=FALSE, message=FALSE, warning=FALSE}
-# Set the seed for reproducibility
-set.seed(123)
+## Dataset 3
 
 # Simulate the X-variable
 n <- 140
@@ -127,9 +130,5 @@ datum <- data.frame(Predators = Predators, Time = Time)
 # Save the CSV file
 write.csv(datum, "exercise2_dataset3.csv")
 ```
-
-### Truth
-
-If you would like to know the values used to create these datasets (i.e., 'truth'), download and examine this [R script](exercise_2_code.R).
 
 [--go to next exercise--](exercise_3.html)

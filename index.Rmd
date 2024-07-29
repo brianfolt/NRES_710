@@ -227,7 +227,6 @@ rmd2rscript <- function(infile="LECTURE2.Rmd"){    # function for converting mar
 }
 ```
 
-
 ```{r echo=FALSE, eval=FALSE}
 ## Manually run these lines through console to turn the RMD to R scripts
 rmd2rscript("lecture_1.Rmd")
