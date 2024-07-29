@@ -429,7 +429,7 @@ div.tocify {
 
 <h1 class="title toc-ignore">Linear Regression (cont.)</h1>
 <h4 class="author">NRES 710</h4>
-<h4 class="date">Last compiled: 2024-07-26</h4>
+<h4 class="date">Last compiled: 2024-07-29</h4>
 
 </div>
 
@@ -627,12 +627,12 @@ autocorrelation. We will discuss how to deal with this down the road.
 But again, it’s not too big of a concern.</p>
 <p>Many things are autocorrelated in nature. Animal movements, for
 example! Is this a problem?</p>
-<p>Nah. This is what animasl do – they move! Try to get big sample
+<p>Maybe not. This is what animals do – they move! Try to get big sample
 sizes.</p>
 </div>
 </div>
-<div id="evaluating-whether-assumptions-are-met" class="section level2">
-<h2>Evaluating whether Assumptions are Met</h2>
+<div id="evaluating-assumptions-w-graphs" class="section level2">
+<h2>Evaluating assumptions w/ graphs</h2>
 <p>Statistical tests exist to statistically test for these assumptions.
 These are p-value generating tests. There are some consequences of
 this.</p>
@@ -643,12 +643,239 @@ that we have identified in previous classes.</li>
 <li>Conversely, if you have a really large sample, the assumption will
 always be violated!</li>
 </ul>
-<p>So, for these reasons, I don’t like these test and I don’t recommend
-using these tests.</p>
-<p>Instead, I look at my data graphically! And I will teach you to do
-this also. We will visually examine our data to identify whether our
-data meet these assumptions or not. If it has been violated, we will see
-this.</p>
+<p>So, for these reasons, I don’t like these tests, and I don’t
+recommend using these tests.</p>
+<p>Instead, what I do I look at my data graphically! And I will teach
+you to do this also. We will visually examine our data to identify
+whether our data meet these assumptions or not. If it has been violated,
+we will see this. If we can see the assumption has been violated, then
+we now know this.</p>
+<p>Useful rule of thumb:</p>
+<ul>
+<li>If you can’t see it, it doesn’t exist, and you assume there isn’t
+one.</li>
+<li>If you can see it, then an assumption may be violated, and then it’s
+our decision to do something about it or not.</li>
+</ul>
+<p>We have four main assumptions, and we will use four graphical
+approaches to examine whether these assumptions are met.</p>
+<table class="table" style="width: auto !important; margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+Assumption
+</th>
+<th style="text-align:left;">
+X-Y Scatterplot
+</th>
+<th style="text-align:left;">
+Residuals Scatterplot
+</th>
+<th style="text-align:left;">
+Histogram of Residuals
+</th>
+<th style="text-align:left;">
+Autocorrelation Function (ACF)
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Normality
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Linearity
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Homoscedasticity
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+No autocorrelation
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+</tbody>
+</table>
+<div id="x-y-scatterplots" class="section level3">
+<h3>X-Y Scatterplots</h3>
+<p>This first graph shows data where <strong>none of the assumptions are
+violated</strong>.</p>
+<p><img src="lecture_6_files/figure-html/no-violations-1.png" width="432" /></p>
+<ul>
+<li>Data are very clearly linear.</li>
+<li>Data appear to be normally distributed around the line. Most are
+close to the line, but some are out in the tails.</li>
+<li>Does not appear to be any autocorrelation.</li>
+<li>Does not appear to be any heteroscedasticity.</li>
+</ul>
+<p><strong>This is how your data should look!</strong></p>
+<p>This second graph shows data were the assumption of error normality
+is violated.</p>
+<p><img src="lecture_6_files/figure-html/error-violated-1.png" width="432" /></p>
+<p>We can see that normality is violated because there are no tails
+below the line!</p>
+<p><strong>Q:</strong> Has this influenced the slope? No. It would
+influence the intercept (but nobody reports that ever, so no big
+deal).</p>
+<p>This third graph shows data where the assumption of
+<strong>linearity</strong> is violated.</p>
+<p><img src="lecture_6_files/figure-html/nonlinear-1.png" width="432" /></p>
+<ul>
+<li>A linear regression model would not fit these data well, so we would
+want to seek an alternative approach.</li>
+<li>Note: Some might say that these data are not normally distributed,
+but it is. Most points are centered on the line, with some out on the
+tails.</li>
+</ul>
+<p>This fourth graph shows data where the assumption of
+<strong>homoscedasticity</strong> is violated.</p>
+<p><img src="lecture_6_files/figure-html/heteroscedasticity-1.png" width="432" /></p>
+<p>These data are <strong>heteroscedastic</strong>; as X increases,
+error increases.</p>
+<p>We don’t need a statistical test to know that these data are
+heteroscedastic.</p>
+<p>This last graph shows when the data are not independent and
+autocorrelation is present in the data.</p>
+<p><img src="lecture_6_files/figure-html/autocorrelation-1.png" width="432" /></p>
+<pre><code>##           x       error         y
+## 10 1.111354  2.21685996  7.439568
+## 11 1.218993  2.59649944  8.034485
+## 12 1.275317  2.09417599  7.644809
+## 13 1.306957  1.76096861  7.374882
+## 14 1.388061  0.74239323  6.518514
+## 15 1.428000 -0.32939800  5.526602
+## 16 1.471136 -0.02586936  5.916404
+## 17 1.524447  0.42234042  6.471235
+## 18 1.750527  0.47534465  6.976398
+## 19 1.876911  1.39761211  8.151434
+## 20 2.065314  3.44769680 10.578325</code></pre>
+<p>What do we see here…?</p>
+<ul>
+<li>The errors are similar to each other; i.e., they are correlated to
+one another.</li>
+<li>The error is not centered on the line, but rather <em>follows
+itself</em>.</li>
+<li>Two types of autocorrelation; we’ll discuss this in a future lecture
+when discuss how to fix or model autocorrelation (which requires more
+complicated models, no ready for this just yet).</li>
+</ul>
+</div>
+<div id="residuals-scatterplot" class="section level3">
+<h3>Residuals Scatterplot</h3>
+<p>Residuals scatterplot involve making a graph of:</p>
+<ul>
+<li><strong>X-variable –&gt; X data</strong></li>
+<li><strong>Y-variable –&gt; residual (error)</strong></li>
+</ul>
+<p><img src="lecture_6_files/figure-html/residual_plot-1.png" width="864" /></p>
+<p>Assuming we had a pretty usual data with X and Y and we fit a
+regression line (above), we can revisualize that graph with the same
+X-variable but now with the residuals of Y on the y-axis. We sort of
+flip that graph, make the regression line be at 0, and then residuals
+above and below that line are visualized with the Y-variable. This is a
+‘residuals plot’.</p>
+<p>For example, the residuals plot can be useful when you have a large
+range of X and Y, and your error is very small:</p>
+<p><img src="lecture_6_files/figure-html/residual_plot_2-1.png" width="864" /></p>
+<p>The data look pretty tight around the line in the X-Y scatterplot,
+but when we look at the residual plot, we see something else. This is
+common when we have low error – small noise.</p>
+<p><strong>Q:</strong> What is happening here – what assumption has been
+violated?</p>
+<p><strong>Residuals scatterplots</strong> are useful for all four of
+these assumptions. Here are the four simulated datasets we used for X-Y
+scatterplots but not visualized using residual scatterplots:</p>
+<p><img src="lecture_6_files/figure-html/residual_plot_examples-1.png" width="864" /></p>
+</div>
+<div id="histogram-of-residuals" class="section level3">
+<h3>Histogram of Residuals</h3>
+<p>This is a way to look at the residuals from a global perspective, so
+it is most useful for looking at normality. Not useful for the others.
+You can see heteroscedasticity with it (kirtosis), but most useful for
+checking for normality.</p>
+<p><img src="lecture_6_files/figure-html/histogram_of_residuals-1.png" width="864" /></p>
+</div>
+<div id="autocorrelation-function-acf" class="section level3">
+<h3>Autocorrelation Function (ACF)</h3>
+<p>The autocorrelation function (<strong>ACF</strong>) shows us the
+correlation for the residuals. It teaches us about the probability
+that:</p>
+<ul>
+<li>If one point is above the line, what is the chance that the next
+point will also be above the line?</li>
+<li>Alternatively, if another point is below the line, what is the
+chance that the next point will also be below the line?</li>
+</ul>
+<p>As you might expect, it is best for teaching us whether our data are
+<strong>autocorrelated</strong>.</p>
+<p>The autocorrelation function, specifically, measures how similar each
+datapoint is to the other datapoints that are behind it in the
+dataframe. It compares residuals at different lags in the dataframe. At
+a lag of zero, we expect high correlation, because we compare each point
+to itself. At lags of 1 or more, if there is autocorrelation, then the
+ACF metric will be high and positive (&gt; 0.2) when comparing each a
+datapoint to points lagged behind it (i.e., high correlation to nearby
+data in the dataset). If there is no autocorrelation, then the ACF
+metric will randomly be positive and negative and usually within 0.2 of
+0.</p>
+<p>Here’s an example using (1) our simulated data that meet all of the
+assumptions, and (2) the autocorrelated data from above:</p>
+<p><img src="lecture_6_files/figure-html/autocorrelation_function-1.png" width="864" /></p>
+<p>The autocorrelation function can also be useful for
+<strong>non-linearity</strong>. For example:</p>
+<p><img src="lecture_6_files/figure-html/nonlinear_2-1.png" width="864" /></p>
+<p>These data are non-linear – and were simulated with no
+autocorrelation. Data on the left and right regions of the graph are
+below the line, whereas the middle-most X-data are above the line.</p>
+<p>These data are not autocorrelated, but the <em>residuals</em> show
+evidence of autocorrelation. When we create an ACF plot, it suggests
+autocorrelation, but this isn’t the case. It is due to the
+non-linearity. (If we fixed the non-linearity issue, the residual
+autocorrelation would go away.)</p>
+<p>So, if we use an ACF and it shows autocorrelation, we should make
+sure we don’t have a non-linearity issue.</p>
+</div>
+</div>
+<div id="summary" class="section level2">
+<h2>Summary</h2>
 <table class="table" style="width: auto !important; margin-left: auto; margin-right: auto;">
 <thead>
 <tr>
@@ -681,7 +908,6 @@ X
 X
 </td>
 <td style="text-align:left;">
-X
 </td>
 <td style="text-align:left;">
 </td>
@@ -699,7 +925,7 @@ X
 <td style="text-align:left;">
 </td>
 <td style="text-align:left;">
-X
+**
 </td>
 </tr>
 <tr>
@@ -730,15 +956,11 @@ X
 <td style="text-align:left;">
 </td>
 <td style="text-align:left;">
-X
+!!
 </td>
 </tr>
 </tbody>
 </table>
-<p>Residuals scatterplot: X-variable –&gt; X data; Y-variable –&gt;
-residual</p>
-<p><strong>Add more details here about different graphing approaches to
-examining assumptions</strong></p>
 <p><a href="lecture_7.html">–go to next lecture–</a></p>
 </div>
 

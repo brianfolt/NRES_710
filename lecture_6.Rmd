@@ -235,25 +235,45 @@ Consider these autocorrelated data:
 # Set the seed for reproducibility
 set.seed(100)
 
-# Simulate data with autocorrelation
-n <- 100
-x <- seq(1, n)
-phi <- 0.99  # Autoregressive parameter
-epsilon <- rnorm(n, mean = 0, sd = 5)  # Reduced noise term to make the autocorrelation more prominent
-y <- numeric(n)
-y[1] <- 5 + 2 * x[1] + epsilon[1]
-for (i in 2:n) {
-  y[i] <- 5 + 2 * x[i] + phi * (y[i-1] - (5 + 2 * x[i-1])) + epsilon[i]
+# # Simulate data with autocorrelation
+# n <- 100
+# x <- seq(1, n)
+# phi <- 0.99  # Autoregressive parameter
+# epsilon <- rnorm(n, mean = 0, sd = 5)  # Reduced noise term to make the autocorrelation more prominent
+# y <- numeric(n)
+# y[1] <- 5 + 2 * x[1] + epsilon[1]
+# for (i in 2:n) {
+#   y[i] <- 5 + 2 * x[i] + phi * (y[i-1] - (5 + 2 * x[i-1])) + epsilon[i]
+# }
+# 
+# # Create a data frame
+# data <- data.frame(x = x, y = y)
+
+# Simulate data that are autocorrelated
+n <- 500
+x1 <- runif(n, 0, 100)
+
+# Sort x1 from low to high
+x1 <- sort(x1)
+
+# Simulate error for each value using the mean of the previous value
+error <- matrix(NA, length(x1), 1)
+error[1,1] <- rnorm(1, mean = 0, sd = 1)
+for (i in 2:length(x1)){
+  error[i,1] <- rnorm(1, mean = error[i-1, 1], sd = 1)
 }
 
-# Create a data frame
-data <- data.frame(x = x, y = y)
+# Create y values
+y1 <- 3 + 2 * x1 + error
+
+# Create dataframe
+datum <- data.frame(x = x1, error = error, y = y1)
 
 # Plot the data
-plot(data$x, data$y, xlab = "Predictor variable", ylab = "Response variable", pch = 16, col = "blue")
+plot(datum$x, datum$y, xlab = "Predictor variable", ylab = "Response variable", pch = 16, col = "blue")
 
 # Fit a linear model
-model <- lm(y ~ x, data = data)
+model <- lm(y ~ x, data = datum)
 
 # Add the regression line to the graph
 abline(model, col = "red")
@@ -267,18 +287,532 @@ Two types of autocorrelation issues: spatial and temporal autocorrelation. We wi
 
 Many things are autocorrelated in nature. Animal movements, for example! Is this a problem?
 
-Nah. This is what animasl do -- they move! Try to get big sample sizes.
+Maybe not. This is what animals do -- they move! Try to get big sample sizes.
 
-## Evaluating whether Assumptions are Met
+## Evaluating assumptions w/ graphs
 
 Statistical tests exist to statistically test for these assumptions. These are p-value generating tests. There are some consequences of this.
 
 - If you have a small sample size, the assumption will never be violated! Because of the relationship between sample size and p-values that we have identified in previous classes.
 - Conversely, if you have a really large sample, the assumption will always be violated!
 
-So, for these reasons, I don't like these test and I don't recommend using these tests.
+So, for these reasons, I don't like these tests, and I don't recommend using these tests.
 
-Instead, I look at my data graphically! And I will teach you to do this also. We will visually examine our data to identify whether our data meet these assumptions or not. If it has been violated, we will see this.
+Instead, what I do I look at my data graphically! And I will teach you to do this also. We will visually examine our data to identify whether our data meet these assumptions or not. If it has been violated, we will see this. If we can see the assumption has been violated, then we now know this.
+
+Useful rule of thumb:
+
+- If you can't see it, it doesn't exist, and you assume there isn't one.
+- If you can see it, then an assumption may be violated, and then it's our decision to do something about it or not.
+
+We have four main assumptions, and we will use four graphical approaches to examine whether these assumptions are met.
+
+```{r, echo=FALSE, message=FALSE}
+# Load necessary libraries
+library(knitr)
+library(kableExtra)
+
+# Create the data frame
+data <- data.frame(
+  Group = c("Normality", "Linearity", "Homoscedasticity", "No autocorrelation"),
+  `X-Y Scatterplot` = c("", "", "", ""),
+  `Residuals Scatterplot` = c("", "", "", ""),
+  `Histogram of Residuals` = c("", "", "", ""),
+  `Autocorrelation Function (ACF)` = c("", "", "", "")
+)
+
+# Create the table
+kable(data, col.names = c("Assumption", "X-Y Scatterplot", "Residuals Scatterplot", "Histogram of Residuals", "Autocorrelation Function (ACF)")) %>%
+  kable_styling(full_width = FALSE)
+
+```
+
+### X-Y Scatterplots
+
+This first graph shows data where **none of the assumptions are violated**.
+
+```{r no-violations, echo=FALSE, message=FALSE, warning=FALSE, fig.width=4.5, fig.height=4.5}
+# Set the seed for reproducibility
+set.seed(123)
+
+# Adjust margins: bottom, left, top, right
+par(mar = c(4, 4, 2, 1))
+
+# First, simulate data with no assumption violations
+n <- 100
+x1 <- rnorm(n, mean = 20, sd = 10)
+y1 <- 5 + 4 * x1 + rnorm(n, mean = 0, sd = 8)
+
+# Create dataframe
+datum <- data.frame(x = x1, y = y1)
+
+# Plot the data
+plot(y ~ x, data = datum,
+     ylim=c(0, max(datum$y)), xlab = "", ylab = "",
+     main = "No violations")
+```
+
+- Data are very clearly linear.
+- Data appear to be normally distributed around the line. Most are close to the line, but some are out in the tails.
+- Does not appear to be any autocorrelation.
+- Does not appear to be any heteroscedasticity.
+
+**This is how your data should look!**
+
+This second graph shows data were the assumption of error normality is violated.
+
+```{r error-violated, echo=FALSE, message=FALSE, warning=FALSE, fig.width=4.5, fig.height=4.5}
+# Set the seed for reproducibility
+set.seed(123)
+
+# Adjust graph margins: bottom, left, top, right
+par(mar = c(4, 4, 2, 1))
+
+# Second, simulate data with a violation of normality
+n <- 100
+x <- rnorm(n, mean = 20, sd = 3)
+y <- 10 + 25 * x + rnorm(n, mean = 0, sd = 8)^2
+
+# Create dataframe
+datum <- data.frame(x = x, y = y)
+
+# Plot the data
+plot(y ~ x, data = datum,
+     ylim=c(0, max(datum$y)), xlab = "", ylab = "",
+     main = "Not normal")
+```
+
+We can see that normality is violated because there are no tails below the line!
+
+**Q:** Has this influenced the slope? No. It would influence the intercept (but nobody reports that ever, so no big deal).
+
+This third graph shows data where the assumption of **linearity** is violated.
+
+```{r nonlinear, echo=FALSE, message=FALSE, warning=FALSE, fig.width=4.5, fig.height=4.5}
+# Set the seed for reproducibility
+set.seed(123)
+
+# Adjust graph margins: bottom, left, top, right
+par(mar = c(4, 4, 2, 1))
+
+# Simulate data with a violation of linearity
+n <- 100
+x <- runif(n, 0, 10)
+y <- 3 + 2 * x - 0.18 * x^2 + rnorm(n, mean = 0, sd = 1)
+
+# Create dataframe
+datum <- data.frame(x = x, y = y)
+
+# Plot the data
+plot(y ~ x, data = datum,
+     ylim=c(0, max(datum$y)), xlab = "", ylab = "",
+     main = "Non-linear")
+```
+
+- A linear regression model would not fit these data well, so we would want to seek an alternative approach.
+- Note: Some might say that these data are not normally distributed, but it is. Most points are centered on the line, with some out on the tails.
+
+This fourth graph shows data where the assumption of **homoscedasticity** is violated.
+
+```{r heteroscedasticity, echo=FALSE, message=FALSE, warning=FALSE, fig.width=4.5, fig.height=4.5}
+# Set the seed for reproducibility
+set.seed(123)
+
+# Adjust graph margins: bottom, left, top, right
+par(mar = c(4, 4, 2, 1))
+
+# Simulate data that are heteroscedastic
+n <- 100
+x1 <- runif(n, 0, 10)
+y1 <- 5 + 4 * x1 + rnorm(n, mean = 0, sd = 1 * x1)
+
+# Create dataframe
+datum <- data.frame(x = x1, y = y1)
+
+# Plot the data
+plot(y ~ x, data = datum,
+     ylim=c(0, max(datum$y)), xlab = "", ylab = "",
+     main = "Heteroscedasticity")
+```
+
+These data are **heteroscedastic**; as X increases, error increases.
+
+We don't need a statistical test to know that these data are heteroscedastic.
+
+This last graph shows when the data are not independent and autocorrelation is present in the data.
+
+```{r autocorrelation, echo=FALSE, message=FALSE, warning=FALSE, fig.width=4.5, fig.height=4.5}
+# Set the seed for reproducibility
+set.seed(123)
+
+# Adjust graph margins: bottom, left, top, right
+par(mar = c(4, 4, 2, 1))
+
+# Simulate data that are autocorrelated
+n <- 100
+x1 <- runif(n, 0, 10)
+
+# Sort x1 from low to high
+x1 <- sort(x1)
+
+# Simulate error for each value using the mean of the previous value
+error <- matrix(NA, length(x1), 1)
+error[1,1] <- rnorm(1, mean = 0, sd = 1)
+for (i in 2:length(x1)){
+  error[i,1] <- rnorm(1, mean = error[i-1, 1], sd = 1)
+}
+
+# Create y values
+y1 <- 3 + 2 * x1 + error
+
+# Create dataframe
+datum <- data.frame(x = x1, error = error, y = y1)
+
+# Plot the data
+plot(y ~ x, data = datum,
+     ylim=c(0, max(datum$y)), xlab = "", ylab = "",
+     main = "Autocorrelation")
+
+# Examine autocorrelation in the error term
+print(datum[10:20,])
+```
+
+What do we see here...?
+
+- The errors are similar to each other; i.e., they are correlated to one another.
+- The error is not centered on the line, but rather *follows itself*.
+- Two types of autocorrelation; we'll discuss this in a future lecture when discuss how to fix or model autocorrelation (which requires more complicated models, no ready for this just yet).
+
+### Residuals Scatterplot
+
+Residuals scatterplot involve making a graph of:
+
+- **X-variable --> X data**
+- **Y-variable --> residual (error)**
+
+```{r residual_plot, echo=FALSE, message=FALSE, warning=FALSE, fig.width=9, fig.height=4.5}
+# Set the seed for reproducibility
+set.seed(123)
+
+# Set up the plotting area to display two plots side by side
+par(mfrow = c(1, 2))
+
+# Simulate data for the shallow slope
+n <- 50
+x1 <- rnorm(n, mean = 20, sd = 10)
+y1 <- 5 + 4 * x1 + rnorm(n, mean = 0, sd = 8)
+
+# Create dataframe
+datum1 <- data.frame(x = x1, y = y1)
+
+# Plot the data
+plot(y ~ x, data = datum1,
+     ylim=c(0, max(datum1$y)), xlab = "Predictor variable", ylab = "Response variable")
+
+# Add a line to the plot for the shallow slope
+results1 <- lm(y ~ x, data = datum1)
+abline(results1)
+
+# Calculate residuals
+residuals1 <- residuals(results1)
+
+# Plot the residuals
+plot(datum1$x, residuals1, xlab = "Predictor variable", ylab = "Residuals")
+abline(h = 0, col = "red", lty = 2)
+```
+
+Assuming we had a pretty usual data with X and Y and we fit a regression line (above), we can revisualize that graph with the same X-variable but now with the residuals of Y on the y-axis. We sort of flip that graph, make the regression line be at 0, and then residuals above and below that line are visualized with the Y-variable. This is a 'residuals plot'.
+
+For example, the residuals plot can be useful when you have a large range of X and Y, and your error is very small:
+
+```{r residual_plot_2, echo=FALSE, message=FALSE, warning=FALSE, fig.width=9, fig.height=4.5}
+# Set the seed for reproducibility
+set.seed(111)
+
+# Set up the plotting area to display two plots side by side
+par(mfrow = c(1, 2))
+
+# Simulate data for the shallow slope
+n <- 100
+x1 <- runif(n, 0, 50)
+y1 <- 5 + 4 * x1 + rnorm(n, mean = 0, sd = 0.15 * x1)
+
+# Create dataframe
+datum1 <- data.frame(x = x1, y = y1)
+
+# Plot the data
+plot(y ~ x, data = datum1,
+     ylim=c(0, max(datum1$y)), xlab = "Predictor variable", ylab = "Response variable")
+
+# Add a line to the plot for the shallow slope
+results1 <- lm(y ~ x, data = datum1)
+abline(results1)
+
+# Calculate residuals
+residuals1 <- residuals(results1)
+
+# Plot the residuals
+plot(datum1$x, residuals1, xlab = "Predictor variable", ylab = "Residuals")
+abline(h = 0, col = "red", lty = 2)
+```
+
+The data look pretty tight around the line in the X-Y scatterplot, but when we look at the residual plot, we see something else. This is common when we have low error -- small noise.
+
+**Q:** What is happening here -- what assumption has been violated?
+
+**Residuals scatterplots** are useful for all four of these assumptions. Here are the four simulated datasets we used for X-Y scatterplots but not visualized using residual scatterplots:
+
+```{r residual_plot_examples, echo=FALSE, message=FALSE, warning=FALSE, fig.width=9, fig.height=9}
+# Set the seed for reproducibility
+set.seed(111)
+
+# Set up the plotting area to display two plots side by side
+par(mfrow = c(2, 2))
+
+# Simulate data with non-normally distributed error
+n <- 100
+x <- rnorm(n, mean = 20, sd = 3)
+y <- 10 + 25 * x + rnorm(n, mean = 0, sd = 8)^2
+
+# Create dataframe
+datum <- data.frame(x = x, y = y)
+
+# Simple linear model
+results1 <- lm(y ~ x, data = datum)
+
+# Calculate residuals
+residuals1 <- residuals(results1)
+
+# Plot the residuals
+plot(datum$x, residuals1, xlab = "", ylab = "", main = "Non-normal error")
+abline(h = 0, col = "red", lty = 2)
+
+
+### Simulate nonlinear data
+n <- 100
+x <- runif(n, 0, 10)
+y <- 3 + 2 * x - 0.18 * x^2 + rnorm(n, mean = 0, sd = 1)
+
+# Create dataframe
+datum <- data.frame(x = x, y = y)
+
+# Simple linear model
+results1 <- lm(y ~ x, data = datum)
+
+# Calculate residuals
+residuals1 <- residuals(results1)
+
+# Plot the residuals
+plot(datum$x, residuals1, xlab = "", ylab = "", main = "Nonlinearity")
+abline(h = 0, col = "red", lty = 2)
+
+
+### Simulate data that are autocorrelated
+n <- 100
+x1 <- runif(n, 0, 10)
+
+# Sort x1 from low to high
+x1 <- sort(x1)
+
+# Simulate error for each value using the mean of the previous value
+error <- matrix(NA, length(x1), 1)
+error[1,1] <- rnorm(1, mean = 0, sd = 1)
+for (i in 2:length(x1)){
+  error[i,1] <- rnorm(1, mean = error[i-1, 1], sd = 1)
+}
+
+# Create y values
+y1 <- 3 + 2 * x1 + error
+
+# Create dataframe
+datum <- data.frame(x = x1, error = error, y = y1)
+
+# Simple linear model
+results1 <- lm(y ~ x, data = datum)
+
+# Calculate residuals
+residuals1 <- residuals(results1)
+
+# Plot the residuals
+plot(datum$x, residuals1, xlab = "", ylab = "", main = "Autocorrelation")
+abline(h = 0, col = "red", lty = 2)
+
+
+### Simulate heteroscedastic data
+n <- 100
+x1 <- runif(n, 0, 50)
+y1 <- 5 + 4 * x1 + rnorm(n, mean = 0, sd = 0.15 * x1)
+
+# Create dataframe
+datum1 <- data.frame(x = x1, y = y1)
+
+# Simple linear model
+results1 <- lm(y ~ x, data = datum1)
+
+# Calculate residuals
+residuals1 <- residuals(results1)
+
+# Plot the residuals
+plot(datum1$x, residuals1, xlab = "", ylab = "", main = "Heteroscedasticity")
+abline(h = 0, col = "red", lty = 2)
+```
+
+### Histogram of Residuals
+
+This is a way to look at the residuals from a global perspective, so it is most useful for looking at normality. Not useful for the others. You can see heteroscedasticity with it (kirtosis), but most useful for checking for normality.
+
+```{r histogram_of_residuals, echo=FALSE, message=FALSE, warning=FALSE, fig.width=9, fig.height=4.5}
+# Set the seed for reproducibility
+set.seed(123)
+
+# Set up the plotting area to display two plots side by side
+par(mfrow = c(1, 2))
+
+### Simulate data with normally distributed error
+n <- 100
+x1 <- rnorm(n, mean = 20, sd = 10)
+y1 <- 5 + 4 * x1 + rnorm(n, mean = 0, sd = 8)
+
+# Create dataframe
+datum <- data.frame(x = x1, y = y1)
+
+# Simple linear model
+results1 <- lm(y ~ x, data = datum)
+
+# Calculate residuals
+residuals1 <- residuals(results1)
+
+# Plot the residuals
+hist(residuals1, xlab = "", ylab = "Frequency", main = "Normal error")
+
+### Simulate data with non-normally distributed error
+n <- 100
+x <- rnorm(n, mean = 20, sd = 3)
+y <- 10 + 25 * x + rnorm(n, mean = 0, sd = 8)^2
+
+# Create dataframe
+datum <- data.frame(x = x, y = y)
+
+# Simple linear model
+results1 <- lm(y ~ x, data = datum)
+
+# Calculate residuals
+residuals1 <- residuals(results1)
+
+# Plot the residuals
+hist(residuals1, xlab = "", ylab = "Frequency", main = "Non-normal error")
+```
+
+### Autocorrelation Function (ACF)
+
+The autocorrelation function (**ACF**) shows us the correlation for the residuals. It teaches us about the probability that:
+
+- If one point is above the line, what is the chance that the next point will also be above the line?
+- Alternatively, if another point is below the line, what is the chance that the next point will also be below the line?
+
+As you might expect, it is best for teaching us whether our data are **autocorrelated**.
+
+The autocorrelation function, specifically, measures how similar each datapoint is to the other datapoints that are behind it in the dataframe. It compares residuals at different lags in the dataframe. At a lag of zero, we expect high correlation, because we compare each point to itself. At lags of 1 or more, if there is autocorrelation, then the ACF metric will be high and positive (> 0.2) when comparing each a datapoint to points lagged behind it (i.e., high correlation to nearby data in the dataset). If there is no autocorrelation, then the ACF metric will randomly be positive and negative and usually within 0.2 of 0.
+
+Here's an example using (1) our simulated data that meet all of the assumptions, and (2) the autocorrelated data from above:
+
+```{r autocorrelation_function, echo=FALSE, message=FALSE, warning=FALSE, fig.width=9, fig.height=9}
+# Set the seed for reproducibility
+set.seed(123)
+
+# Adjust graph margins: bottom, left, top, right
+par(mar = c(4, 4, 2, 1))
+par(mfrow = c(2, 2))
+
+# Simulate data that have no autocorrelatation
+n <- 100
+x1 <- runif(n, 0, 10)
+error <- rnorm(n, 0, 1)
+
+# Create y values
+y1 <- 3 + 2 * x1 + error
+
+# Create dataframe
+datum <- data.frame(x = x1, error = error, y = y1)
+
+# Plot the data
+plot(y ~ x, data = datum,
+     ylim=c(0, max(datum$y)), xlab = "", ylab = "",
+     main = "No autocorrelation")
+
+# Plot the ACF of the time series data
+acf(y1, ylab = "Autocorrelation function", main = "")
+
+### Simulate data with autocorrelation
+n <- 100
+x1 <- runif(n, 0, 10)
+
+# Sort x1 from low to high
+x1 <- sort(x1)
+
+# Simulate error for each value using the mean of the previous value
+error <- matrix(NA, length(x1), 1)
+error[1,1] <- rnorm(1, mean = 0, sd = 1)
+for (i in 2:length(x1)){
+  error[i,1] <- rnorm(1, mean = error[i-1, 1], sd = 1)
+}
+
+# Create y values
+y1 <- 3 + 2 * x1 + error
+
+# Create dataframe
+datum <- data.frame(x = x1, error = error, y = y1)
+
+# Plot the data
+plot(y ~ x, data = datum,
+     ylim=c(0, max(datum$y)), xlab = "", ylab = "",
+     main = "Autocorrelation")
+
+# Plot the ACF of the time series data
+acf(y1, ylab = "Autocorrelation function", main = "")
+```
+
+The autocorrelation function can also be useful for **non-linearity**. For example:
+
+```{r nonlinear_2, echo=FALSE, message=FALSE, warning=FALSE, fig.width=9, fig.height=4.5}
+# Set the seed for reproducibility
+set.seed(123)
+
+# Adjust graph margins: bottom, left, top, right
+par(mar = c(4, 4, 2, 1))
+par(mfrow = c(1, 2))
+
+# Simulate data with a violation of linearity
+n <- 100
+x <- runif(n, 0, 10)
+x <- sort(x)
+y <- 3 + 2 * x - 0.18 * x^2 + rnorm(n, mean = 0, sd = 1)
+
+# Create dataframe
+datum <- data.frame(x = x, y = y)
+
+# Plot the data
+plot(y ~ x, data = datum,
+     ylim=c(0, max(datum$y)), xlab = "", ylab = "",
+     main = "Non-linear")
+
+# Linear regression
+results <- lm(y ~ x, data = datum)
+
+# Plot the line
+abline(results)
+
+# ACF
+acf(y, ylab = "Autocorrelation function (ACF)", main = "")
+```
+
+These data are non-linear -- and were simulated with no autocorrelation. Data on the left and right regions of the graph are below the line, whereas the middle-most X-data are above the line.
+
+These data are not autocorrelated, but the *residuals* show evidence of autocorrelation. When we create an ACF plot, it suggests autocorrelation, but this isn't the case. It is due to the non-linearity. (If we fixed the non-linearity issue, the residual autocorrelation would go away.)
+
+So, if we use an ACF and it shows autocorrelation, we should make sure we don't have a non-linearity issue. 
+
+## Summary
 
 ```{r, echo=FALSE, message=FALSE}
 # Load necessary libraries
@@ -290,18 +824,13 @@ data <- data.frame(
   Group = c("Normality", "Linearity", "Homoscedasticity", "No autocorrelation"),
   `X-Y Scatterplot` = c("X", "X", "X", "X"),
   `Residuals Scatterplot` = c("X", "X", "X", "X"),
-  `Histogram of Residuals` = c("X", "", "", ""),
-  `Autocorrelation Function (ACF)` = c("", "X", "", "X")
+  `Histogram of Residuals` = c("", "", "", ""),
+  `Autocorrelation Function (ACF)` = c("", "**", "", "!!")
 )
 
 # Create the table
 kable(data, col.names = c("Assumption", "X-Y Scatterplot", "Residuals Scatterplot", "Histogram of Residuals", "Autocorrelation Function (ACF)")) %>%
   kable_styling(full_width = FALSE)
-
 ```
-
-Residuals scatterplot: X-variable --> X data; Y-variable --> residual
-
-**Add more details here about different graphing approaches to examining assumptions**
 
 [--go to next lecture--](lecture_7.html)
