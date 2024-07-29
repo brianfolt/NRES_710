@@ -824,7 +824,7 @@ data <- data.frame(
   Group = c("Normality", "Linearity", "Homoscedasticity", "No autocorrelation"),
   `X-Y Scatterplot` = c("X", "X", "X", "X"),
   `Residuals Scatterplot` = c("X", "X", "X", "X"),
-  `Histogram of Residuals` = c("", "", "", ""),
+  `Histogram of Residuals` = c("!!", "", "", ""),
   `Autocorrelation Function (ACF)` = c("", "**", "", "!!")
 )
 
