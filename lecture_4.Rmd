@@ -484,6 +484,4 @@ anova(results)
 # This should look similar to the bottom line from our regression output
 ```
 
-
-
 [--go to next lecture--](lecture_5.html)

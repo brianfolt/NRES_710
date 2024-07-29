@@ -222,4 +222,4 @@ Power is influenced by sample size (amount of information at your disposal) and 
 
 ![](clt1.jpg)
 
-[--go to next lecture--](lecture_4.html) 
+[--go to next lecture--](lecture_4.html)
