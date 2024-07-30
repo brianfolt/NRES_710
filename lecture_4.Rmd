@@ -206,14 +206,15 @@ par(mfrow = c(1, 2))
 # Simulate data for the shallow slope
 n <- 40
 x1 <- rnorm(n, mean = 20, sd = 10)
-y1 <- 20 + 0.5 * x1 + rnorm(n, mean = 0, sd = 8)
+y1 <- 20 + 2 * x1 + rnorm(n, mean = 0, sd = 8)
 
 # Create a data frame for the shallow slope
 datum1 <- data.frame(x = x1, y = y1)
 
 # Plot the data with the shallow slope
 plot(y ~ x, data = datum1,
-     ylim=c(0, max(datum1$y)), xlab = "Predictor variable", ylab = "Response variable")
+     xlim=c(0, 30), ylim = c(0, 150),
+     xlab = "Predictor variable", ylab = "Response variable")
 
 # Add a line to the plot for the shallow slope
 results1 <- lm(y ~ x, data = datum1)
@@ -228,7 +229,8 @@ datum2 <- data.frame(x = x2, y = y2)
 
 # Plot the data with the steep slope
 plot(y ~ x, data = datum2,
-     ylim=c(0, max(datum2$y)), xlab = "Predictor variable", ylab = "Response variable")
+     xlim=c(0, 30), ylim = c(0, 150),
+     xlab = "Predictor variable", ylab = "Response variable")
 
 # Add a line to the plot for the steep slope
 results2 <- lm(y ~ x, data = datum2)
@@ -252,15 +254,15 @@ set.seed(123)
 # Set up the plotting area to display two plots side by side
 par(mfrow = c(1, 2))
 
-# Simulate data for the shallow slope
-n <- 40
+# Simulate data with small sample size
+n <- 10
 x1 <- rnorm(n, mean = 20, sd = 10)
-y1 <- 20 + 0.5 * x1 + rnorm(n, mean = 0, sd = 8)
+y1 <- 10 + 0.5 * x1 + rnorm(n, mean = 0, sd = 8)
 
-# Create a data frame for the shallow slope
+# Create a data frame
 datum1 <- data.frame(x = x1, y = y1)
 
-# Plot the data with the shallow slope
+# Plot the data
 plot(y ~ x, data = datum1,
      ylim=c(0, max(datum1$y)), xlab = "Predictor variable", ylab = "Response variable")
 
@@ -268,19 +270,19 @@ plot(y ~ x, data = datum1,
 results1 <- lm(y ~ x, data = datum1)
 abline(results1)
 
-# Simulate data for the shallow slope
-n <- 5
+# Simulate data with large sample size
+n <- 50
 x1 <- rnorm(n, mean = 20, sd = 10)
-y1 <- 20 + 0.5 * x1 + rnorm(n, mean = 0, sd = 8)
+y1 <- 10 + 0.5 * x1 + rnorm(n, mean = 0, sd = 8)
 
-# Create a data frame for the steep slope
+# Create a data frame 
 datum2 <- data.frame(x = x2, y = y2)
 
-# Plot the data with the steep slope
+# Plot the data
 plot(y ~ x, data = datum2,
      ylim=c(0, max(datum2$y)), xlab = "Predictor variable", ylab = "Response variable")
 
-# Add a line to the plot for the steep slope
+# Add a line to the plot
 results2 <- lm(y ~ x, data = datum2)
 abline(results2)
 ```
@@ -344,7 +346,7 @@ abline(results2)
 So we have learned three rules of thumb about our ability to detect statistically significant effects using linear regression:
 
 - **As slope increases, p-value decreases**
-- **As n increases, p-value decreases**
+- **As *n* increases, p-value decreases**
 - **As error increases, p-value increases**
 
 ### How do we calculate p-values...?
