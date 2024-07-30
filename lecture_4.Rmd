@@ -249,42 +249,44 @@ In which of these two cases would you be more likely to reject the null?
 
 ```{r simulate-plot-5, echo=FALSE, message=FALSE, warning=FALSE, fig.width=9, fig.height=4}
 # Set the seed for reproducibility
-set.seed(123)
+set.seed(100)
 
 # Set up the plotting area to display two plots side by side
 par(mfrow = c(1, 2))
 
 # Simulate data with small sample size
 n <- 10
-x1 <- rnorm(n, mean = 20, sd = 10)
-y1 <- 10 + 0.5 * x1 + rnorm(n, mean = 0, sd = 8)
+x3 <- rnorm(n, mean = 20, sd = 10)
+y3 <- 10 + 0.5 * x3 + rnorm(n, mean = 0, sd = 8)
 
 # Create a data frame
-datum1 <- data.frame(x = x1, y = y1)
+datum3 <- data.frame(x = x3, y = y3)
 
 # Plot the data
-plot(y ~ x, data = datum1,
-     ylim=c(0, max(datum1$y)), xlab = "Predictor variable", ylab = "Response variable")
+plot(y ~ x, data = datum3,
+     ylim=c(0, 40), xlim = c(0, 40),
+     xlab = "Predictor variable", ylab = "Response variable")
 
 # Add a line to the plot for the shallow slope
-results1 <- lm(y ~ x, data = datum1)
-abline(results1)
+results3 <- lm(y ~ x, data = datum3)
+abline(results3)
 
 # Simulate data with large sample size
 n <- 50
-x1 <- rnorm(n, mean = 20, sd = 10)
-y1 <- 10 + 0.5 * x1 + rnorm(n, mean = 0, sd = 8)
+x4 <- rnorm(n, mean = 20, sd = 10)
+y4 <- 10 + 0.5 * x4 + rnorm(n, mean = 0, sd = 8)
 
 # Create a data frame 
-datum2 <- data.frame(x = x2, y = y2)
+datum4 <- data.frame(x = x4, y = y4)
 
 # Plot the data
-plot(y ~ x, data = datum2,
-     ylim=c(0, max(datum2$y)), xlab = "Predictor variable", ylab = "Response variable")
+plot(y ~ x, data = datum4,
+     ylim=c(0, 40), xlim = c(0, 40),
+     xlab = "Predictor variable", ylab = "Response variable")
 
 # Add a line to the plot
-results2 <- lm(y ~ x, data = datum2)
-abline(results2)
+results4 <- lm(y ~ x, data = datum4)
+abline(results4)
 ```
 
 **Q:** In which dataset would you be more likely to conclude that you would reject the null that slope = 0?
