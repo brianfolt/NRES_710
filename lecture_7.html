@@ -12,7 +12,7 @@
 <meta name="author" content="NRES 710" />
 
 
-<title>Linear Regression - assumptions (cont.)</title>
+<title>Linear Regression - predictions</title>
 
 <script src="site_libs/header-attrs-2.27/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
@@ -36,8 +36,6 @@
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
 <link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
-<script src="site_libs/kePrint-0.0.1/kePrint.js"></script>
-<link href="site_libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
 
 <style type="text/css">
   code{white-space: pre-wrap;}
@@ -436,518 +434,13 @@ div.tocify {
 
 
 
-<h1 class="title toc-ignore">Linear Regression - assumptions
-(cont.)</h1>
+<h1 class="title toc-ignore">Linear Regression - predictions</h1>
 <h4 class="author">NRES 710</h4>
 <h4 class="date">Last compiled: 2024-07-30</h4>
 
 </div>
 
 
-<div id="graphical-assumption-tests" class="section level2">
-<h2>Graphical Assumption Tests</h2>
-<p>Last class we explored graphical approaches to evaluating whether
-your data meet assumptions of linear regression. We discussed five
-assumptions:</p>
-<ul>
-<li><strong>Continuous Y</strong> – your Y-variable is continuous; only
-an eye-ball test is needed for this</li>
-<li><strong>Linearity</strong> – a linear relationship between X and
-Y</li>
-<li><strong>Normality residuals</strong> – residuals (error) are
-normally distributed</li>
-<li><strong>Homoscedasticity</strong> – constant variance; noise around
-regression is constant across all values of X</li>
-<li><strong>No autocorrelation</strong> – your data are independent of
-eachother</li>
-</ul>
-<p>We can use different graphs to test these assumptions:</p>
-<table class="table" style="width: auto !important; margin-left: auto; margin-right: auto;">
-<thead>
-<tr>
-<th style="text-align:left;">
-Assumption
-</th>
-<th style="text-align:left;">
-X-Y Scatterplot
-</th>
-<th style="text-align:left;">
-Residuals Scatterplot
-</th>
-<th style="text-align:left;">
-Histogram of Residuals
-</th>
-<th style="text-align:left;">
-Autocorrelation Function (ACF)
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:left;">
-Normality
-</td>
-<td style="text-align:left;">
-X
-</td>
-<td style="text-align:left;">
-X
-</td>
-<td style="text-align:left;">
-!!
-</td>
-<td style="text-align:left;">
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Linearity
-</td>
-<td style="text-align:left;">
-X
-</td>
-<td style="text-align:left;">
-X
-</td>
-<td style="text-align:left;">
-</td>
-<td style="text-align:left;">
-**
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-Homoscedasticity
-</td>
-<td style="text-align:left;">
-X
-</td>
-<td style="text-align:left;">
-X
-</td>
-<td style="text-align:left;">
-</td>
-<td style="text-align:left;">
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-No autocorrelation
-</td>
-<td style="text-align:left;">
-X
-</td>
-<td style="text-align:left;">
-X
-</td>
-<td style="text-align:left;">
-</td>
-<td style="text-align:left;">
-!!
-</td>
-</tr>
-</tbody>
-</table>
-<p>Today we are going to learn how to easily make these plots in R!</p>
-<p>Save code and data for this lecture in your working directory:</p>
-<ul>
-<li><p>Click <a href="lecture_7_code.R">here</a> to download
-code.</p></li>
-<li><p>Click on these links to download and save the data: <a
-href="lecture_7_good_data.csv">good data</a>, <a
-href="lecture_7_nonlinear_data.csv">nonlinear data</a>, <a
-href="lecture_7_nonnormal_data.csv">nonnormal data</a>, <a
-href="lecture_7_heteroscedastic_data.csv">heteroscedastic data</a>, and
-<a href="lecture_7_autocorrelated_data.csv">autocorrelated data</a>.</p>
-<ul>
-<li>Note: all of these datafiles were simulated using code at the end of
-this lecture; see that code if you are interested in understanding
-‘truth’.</li>
-</ul></li>
-</ul>
-<div id="x-y-scatterplots" class="section level3">
-<h3>X-Y Scatterplots</h3>
-<p>Let’s start by examining a dataset that has no issues with it!</p>
-<pre class="r"><code># Load the data
-datum &lt;- read.csv(&quot;lecture_7_good_data.csv&quot;)
-
-# Plot the data
-plot(y ~ x, data = datum)</code></pre>
-<p><img src="lecture_7_files/figure-html/no-violations-1.png" width="432" /></p>
-<p>Y is continuous, definitely linear, the residuals appear normally
-distributed (most close to the line), variance seems constant, does not
-appear to have any autocorrelation (but it’s possible).</p>
-<pre class="r"><code># Load the data
-nonlinear &lt;- read.csv(&quot;lecture_7_nonlinear_data.csv&quot;)
-
-# Plot the data
-plot(y ~ x, data = nonlinear)</code></pre>
-<p><img src="lecture_7_files/figure-html/nonlinearity-1.png" width="432" /></p>
-<p>Very clearly nonlinear!</p>
-<pre class="r"><code># Load the data
-norm &lt;- read.csv(&quot;lecture_7_nonnormal_data.csv&quot;)
-
-# Plot the data
-plot(y ~ x, data = norm)</code></pre>
-<p><img src="lecture_7_files/figure-html/normality-1.png" width="432" /></p>
-<p>These data have a heavy tail about the line, but don’t really have
-any tail below the line. The residuals are likely not normally
-distributed.</p>
-<pre class="r"><code># Load the data
-hetero &lt;- read.csv(&quot;lecture_7_heteroscedastic_data.csv&quot;)
-
-# Plot the data
-plot(y ~ x, data = hetero)</code></pre>
-<p><img src="lecture_7_files/figure-html/hetero-1.png" width="432" /></p>
-<p>As the X-variable increases, noise/error in Y increases. This is
-clearly heteroscedastic.</p>
-<pre class="r"><code># Load the data
-auto &lt;- read.csv(&quot;lecture_7_autocorrelated_data.csv&quot;)
-
-# Plot the data
-plot(y ~ x, data = auto)</code></pre>
-<p><img src="lecture_7_files/figure-html/auto-1.png" width="432" /></p>
-<p>Pretty easy to see the autocorrelation in these data. Most
-observations of Y at X are similar to the observation of Y at X-1.
-<strong>The data follow eachother!</strong> But, if autocorrelation
-isn’t strong, it can be difficult to see.</p>
-</div>
-<div id="residual-plots" class="section level3">
-<h3>Residual Plots</h3>
-<p>Before we can run a residual plots, we have to generate the
-residuals! Which means we have to first fit a regression. X-Y
-Scatterplots use the raw data, but the other three graphs we use require
-a regression to be run for us to then make these plots. Let’s run a few
-analyses:</p>
-<pre class="r"><code># Fit linear regression models to the five datasets
-results &lt;- lm(y ~ x, data = datum)
-resultsNonlinear &lt;- lm(y ~ x, data = nonlinear)
-resultsNorm &lt;- lm(y ~ x, data = norm)
-resultsHetero &lt;- lm(y ~ x, data = hetero)
-resultsAuto &lt;- lm(y ~ x, data = auto)</code></pre>
-<p>I’m not going to look up the summaries for each of the models. We
-could use these to look at summaries and maybe infer how much violations
-influence slopes, p-values, etc. It’s tricky to compare these different
-datasets because I simulated them all using different slopes,
-intercepts, etc. So we can’t quite compare them directly. However, we
-have already talked about those ‘rules of thumb’ and instead we should
-just keep them in mind.</p>
-<p>The code to extract residuals is called ‘residuals()’. This tells us
-the distance from each point in our dataset to the line of best fit
-identified by the regression analysis. E.g.,</p>
-<pre class="r"><code># Examine the residuals (just the first ~20)
-residuals(results)[1:20]</code></pre>
-<pre><code>##           1           2           3           4           5           6 
-##  -5.0961006   2.7808718  -0.4968071  -1.9283188  -6.7362526   1.1821405 
-##           7           8           9          10          11          12 
-##  -5.2633312 -13.0521495  -2.5077100   7.9873205  -3.2665149   5.8371791 
-##          13          14          15          16          17          18 
-## -11.9524042   0.4243903   4.7443550   3.9817491   1.8768181  -5.1287563 
-##          19          20 
-##  -5.6808001  -7.5690709</code></pre>
-<p>These data are used to calculate the <strong>standard deviation of
-the error</strong> around our line – simply by calculating the standard
-deviation of these data. The mean of these data should be ~ 0.</p>
-<p>But we want to examine these residuals graphically. It may be
-tempting to plot these residuals very simply using:</p>
-<pre class="r"><code># Simple way
-plot(residuals(results))</code></pre>
-<p><img src="lecture_7_files/figure-html/residuals_plot-1.png" width="432" /></p>
-<p>However, note that the X-axis title is “Index”. This means that the
-X-values here are in the order of the data, from 1 to <em>n</em> – the
-sample size. We actually want to make sure that the X-axis in this plot
-is our actual X-variable, so we can look at how residuals change along
-the continuous nature of our X-variable.</p>
-<p>We are drawing the residuals from the ‘results’ object, so we can’t
-reference the ‘datum’ object like we usually do. Instead we have to
-explicitly call the raw X-variable data. We can call an individual
-variable from an object in R using the money sign command: ‘datum$x’‘.
-We can call’. E.g.,</p>
-<pre class="r"><code># Correct way to examine residuals plot
-plot(residuals(results) ~ datum$x)
-
-# Add a horizontal line at y = 0
-abline(a = 0, b = 0)</code></pre>
-<p><img src="lecture_7_files/figure-html/residuals_plot_2-1.png" width="432" /></p>
-<p>So what have we done…? We have taken our scatterplot of data and:</p>
-<ul>
-<li>flattened it out so that it now fills the whole plot,</li>
-<li>the regression line is now also flattened and at y = 0,</li>
-<li>visualized the degree to which each point is above or below that
-line.</li>
-</ul>
-<p>We can see that (1) most of our residual points are close to the
-line, few are far away, (2) there’s no heteroscedasticity, (3) doesn’t
-appear to be any autocorrelation, and things appear linear.</p>
-<p>Let’s examine this for nonlinear data:</p>
-<pre class="r"><code># Correct way to examine residuals plot
-plot(residuals(resultsNonlinear) ~ nonlinear$x)
-
-# Add a horizontal line at y = 0
-abline(a = 0, b = 0)</code></pre>
-<p><img src="lecture_7_files/figure-html/residuals_plot_nonlinear-1.png" width="432" /></p>
-<p>Clearly this is nonlinear: bunch of points below the line, then a
-bunch above, and then more below. This would be much better fit with a
-curvilinear line, which we will discuss in a couple weeks.</p>
-<p>Non-normal data:</p>
-<pre class="r"><code># Correct way to examine residuals plot
-plot(residuals(resultsNorm) ~ norm$x)
-
-# Add a horizontal line at y = 0
-abline(a = 0, b = 0)</code></pre>
-<p><img src="lecture_7_files/figure-html/residuals_plot_norm-1.png" width="432" /></p>
-<p>Notice where the regression line is! It’s way down at the bottom of
-the graph, rather than being in the middle. This is a red flag. And then
-most of the noise is above the line. This suggests non-normality.</p>
-<pre class="r"><code># Correct way to examine residuals plot
-plot(residuals(resultsHetero) ~ hetero$x)
-
-# Add a horizontal line at y = 0
-abline(a = 0, b = 0)</code></pre>
-<p><img src="lecture_7_files/figure-html/residuals_plot_hetero-1.png" width="432" /></p>
-<p>Pretty easy to see the heteroscedasticity: small variance with small
-X-values, and then larger variance with larger X-values.</p>
-<pre class="r"><code># Correct way to examine residuals plot
-plot(residuals(resultsAuto) ~ auto$x)
-
-# Add a horizontal line at y = 0
-abline(a = 0, b = 0)</code></pre>
-<p><img src="lecture_7_files/figure-html/residuals_plot_auto-1.png" width="432" /></p>
-<p>The points (residual error) are following each other! This path is a
-good indication of autocorrelation. The data are not independent of one
-another.</p>
-</div>
-<div id="histogram-of-residuals" class="section level3">
-<h3>Histogram of residuals</h3>
-<p>The histogram of residuals will make a simple bar chart that examines
-‘<em>global</em>’ normality across all of your data. What I mean by
-‘global’ is that it does examine normality as the X-variable increases,
-but lumps all the error across all X-values into a single chart.</p>
-<pre class="r"><code># Correct way to examine residuals plot
-hist(residuals(results))</code></pre>
-<p><img src="lecture_7_files/figure-html/resid_hist-1.png" width="432" /></p>
-<p>We have taken all of the residuals and examined the distribution of
-residuals across all the X-values.</p>
-<p><strong>Q:</strong> Can anyone think of a negative consequence of
-lumping in this histogram? Can you think of another assumption that we
-can we no longer test for with this graph?</p>
-<p><strong>Q:</strong> Does this look perfectly normal?</p>
-<p>Nah, not really. It never will. But what we are looking for is
-obvious, egregious violations of the assumption of normal error. For
-example, let’s make this graph for the non-normal data:</p>
-<pre class="r"><code># Correct way to examine residuals plot
-hist(residuals(resultsNorm))</code></pre>
-<p><img src="lecture_7_files/figure-html/resid_hist_nonnorm-1.png" width="432" /></p>
-<p>This is pretty bad! This is a case where we would say “Our data are
-not normal!”</p>
-<p>This might be a time where you would use a ‘log transformation’ to
-fix this issue. I don’t really like log-transformations because it
-screws with how we interpret our results – makes the story less clear –
-but that would be an option here.</p>
-<p>Let’s examine the heteroscedastic data:</p>
-<pre class="r"><code># Correct way to examine residuals plot
-hist(residuals(resultsHetero))</code></pre>
-<p><img src="lecture_7_files/figure-html/resid_hist_hetero-1.png" width="432" /></p>
-<p><strong>Q:</strong> Does anything seem off about these data? (Kind of
-hard to say.)</p>
-<p>If you don’t like the appearance of your histogram and want to adjust
-it, you can change the appearance of it using the ‘breaks’ command:</p>
-<pre class="r"><code># Make two graphs side-by-side
-par(mfrow = c(1, 2))
-
-# Default setting
-hist(residuals(resultsHetero))
-
-# Revisualizing with more breaks
-hist(residuals(resultsHetero), breaks = 10)</code></pre>
-<p><img src="lecture_7_files/figure-html/resid_hist_hetero_breaks-1.png" width="864" /></p>
-<p>This second graph suggests that the bell curve might be a bit
-‘skinny’ – which is called <strong>kurtosis</strong>. Kurosis is when
-the shape of your distribution is not-normal. It may have <em>skew</em>
-in one direction (a tail), more observations in the middle (bulge), or
-be ‘skinny’ and have longer tails on both sides. This is a rare problem
-for you to have to deal with, but you can do ‘weighted regression’ in
-‘lm()’ to account for uneven variance in the model itself.</p>
-</div>
-<div id="autocorrelation-functions-acf" class="section level3">
-<h3>Autocorrelation functions (ACF)</h3>
-<p>The <strong>autocorrelation function</strong> measures how similar
-each datapoint is to the other datapoints that are behind it in the
-dataframe. It compares residuals at different <em>lags</em> in the
-dataframe.</p>
-<ul>
-<li>At a lag of zero, we expect high correlation, because we compare
-each point to itself.</li>
-<li>At lags of 1 or more, if there is autocorrelation, then the ACF
-metric will be high and positive (&gt; 0.2) when comparing each a
-datapoint to points lagged behind it (i.e., high correlation to nearby
-data in the dataset).</li>
-<li>If there is no autocorrelation, then the ACF metric will randomly be
-positive and negative and usually within 0.2 of 0.</li>
-</ul>
-<pre class="r"><code># Autocorrelation function for normal data
-acf(residuals(results)[order(datum$x)])</code></pre>
-<p><img src="lecture_7_files/figure-html/acf_2-1.png" width="432" /></p>
-<p>When we run this, we have to make sure our ACF function operates
-using the order of the X-variable. This might reflect the biological
-mechanism with which we might expect autocorrelation to happen. For
-example, if we were measuring how a powerplant causes pollution in a
-river, we would order our data using the X-variable ‘distance from
-plant’. So we will index the ACF using the ‘order’ of the
-X-variable.</p>
-<p>Let’s examine the ACF graph a bit more. On the X-axis, we have a
-‘lag’ in comparing the residuals in our data.</p>
-<ul>
-<li>At a lag of 0, we are comparing each point to itself. At a lag of 1,
-we are comparing each point to the point next to it. At a lag of 2, we
-compare each point to the point two points away. Etc.</li>
-<li>The vertical bar at each lag is the mean estimate of the ACF
-function. The length of the bar indicates how correlated each value is
-to it’s lagged comparison. This estimates how correlated they are to
-eachother (i.e., an <span class="math inline">\(r^2\)</span> value). At
-a lag of 0, we are comparing each point to itself, so the correlation is
-1 (perfect correlation). This is meaningless to us but provides
-contextual reference.</li>
-<li>The <strong>dotted blue line</strong> is basically a p-value line.
-If any of your vertical bars cross this blue line, it indicates that you
-have significant autocorrelation at that lag.</li>
-<li>For example, note the ACF estimate at a lag = 7 was above the line!
-But, be careful here. If you randomly have autocorrelation at one lag,
-think about whether this makes biological sense. Instead, we are looking
-for <strong>obvious and egregious</strong> evidence of
-autocorrelation.</li>
-</ul>
-<p>What does obvious autocorrelation look like…?</p>
-<pre class="r"><code># Autocorrelation function for normal data
-acf(residuals(resultsAuto)[order(auto$x)])</code></pre>
-<p><img src="lecture_7_files/figure-html/acf_3-1.png" width="432" /></p>
-<p>This is obvious autocorrelation. We see that each point is highly
-correlated with the value next to it! E.g., <span
-class="math inline">\(r^2\)</span> values are high: greater than 0.8! It
-isn’t until a lag of ~8 that we see the ACF values dip below the blue
-line. And then eventually the have negative autocorrelation at a lag of
-15 and beyond.</p>
-<ul>
-<li>In ecology, this behavior in data is pretty uncommon. However, one
-notable example where it might appear involves predator-prey population
-cycles, like the famous population dynamics between snowshoe hare-lynx
-in boreal forests of North America.</li>
-</ul>
-<p>This chart is best for testing for autocorrelation. But, I mentioned
-last class, that sometimes these charts can indicate autocorrelation
-<em>when data are nonlinear</em>:</p>
-<pre class="r"><code># Two graphs
-par(mfrow=c(1,2))
-
-# Recall the scatterplot for the nonlinear data
-plot(y ~ x, data = nonlinear)
-
-# Autocorrelation function with correct order
-acf(residuals(resultsNonlinear)[order(nonlinear$x)])</code></pre>
-<p><img src="lecture_7_files/figure-html/acf_4-1.png" width="864" /></p>
-<p>Remember, the autocorrelation function is comparing residuals. Is one
-residual similar to the residuals next to it?</p>
-<p>Since a linear model was fit through these data, we have clusters of
-negative and positive residuals, and the ACF will pick up on this
-autocorrelation. However, this observed autocorrelation is not due to
-true autocorrelation in the system, but rather our use of linear model
-being fit to nonlinear data. Our line doesn’t fit well! And here, the
-ACF is telling us that we should double-check whether our data are
-linear.</p>
-<p>If a nonlinear line was fit through these data, the residuals would
-be normal and the ACF would not detect autocorrelation. We may learn how
-to do this in a few weeks.</p>
-</div>
-<div id="concluding-thoughts" class="section level3">
-<h3>Concluding thoughts</h3>
-<p>I use these graphs to test the assumptions of linear regression
-model. You do have to run the regression first! It’s part of your
-exploratory process. You should think about whether your data are linear
-or not before starting an analysis. I may make a ‘field guide’ for
-considerations when running an analysis, and/or maybe we will work on
-that together during the last class.</p>
-</div>
-</div>
-<div id="simulating-data-for-this-lecture" class="section level2">
-<h2>Simulating data for this lecture</h2>
-<p>Code to simulate the above datasets is included here:</p>
-<pre class="r"><code>### Code for simulating data to be analyzed in this lecture
-
-# Set the seed for reproducibility
-set.seed(123)
-
-## Simulate data with no assumption violations
-n &lt;- 100
-x1 &lt;- rnorm(n, mean = 20, sd = 10)
-y1 &lt;- 5 + 4 * x1 + rnorm(n, mean = 0, sd = 8)
-
-# Create dataframe
-datum &lt;- data.frame(x = x1, y = y1)
-
-# Save the CSV file
-write.csv(datum, &quot;lecture_7_good_data.csv&quot;)
-
-
-## Simulate data with a violation of normality
-n &lt;- 100
-x &lt;- rnorm(n, mean = 20, sd = 3)
-y &lt;- 10 + 25 * x + rnorm(n, mean = 0, sd = 8)^2
-
-# Create dataframe
-datum &lt;- data.frame(x = x, y = y)
-
-# Save the CSV file
-write.csv(datum, &quot;lecture_7_nonnormal_data.csv&quot;)
-
-
-## Simulate data with a violation of linearity
-n &lt;- 100
-x &lt;- runif(n, 0, 10)
-#x &lt;- sort(x)
-y &lt;- 3 + 2 * x - 0.18 * x^2 + rnorm(n, mean = 0, sd = 1)
-
-# Create dataframe
-datum &lt;- data.frame(x = x, y = y)
-
-# Save the CSV file
-write.csv(datum, &quot;lecture_7_nonlinear_data.csv&quot;)
-
-
-## Simulate data that are heteroscedastic
-n &lt;- 100
-x1 &lt;- runif(n, 0, 10)
-y1 &lt;- 5 + 4 * x1 + rnorm(n, mean = 0, sd = 1 * x1)
-
-# Create dataframe
-datum &lt;- data.frame(x = x1, y = y1)
-
-# Save the CSV file
-write.csv(datum, &quot;lecture_7_heteroscedastic_data.csv&quot;)
-
-
-## Simulate data that are autocorrelated
-n &lt;- 100
-x1 &lt;- runif(n, 0, 10)
-
-# Sort x1 from low to high
-x1 &lt;- sort(x1)
-
-# Simulate error for each value using the mean of the previous value
-error &lt;- matrix(NA, length(x1), 1)
-error[1,1] &lt;- rnorm(1, mean = 0, sd = 1)
-for (i in 2:length(x1)){
-  error[i,1] &lt;- rnorm(1, mean = error[i-1, 1], sd = 1)
-}
-
-# Create y values
-y1 &lt;- 3 + 2 * x1 + error
-
-# Create dataframe
-datum &lt;- data.frame(x = x1, error = error, y = y1)
-
-# Save the CSV file
-write.csv(datum, &quot;lecture_7_autocorrelated_data.csv&quot;)</code></pre>
-</div>
 <div id="predictions" class="section level2">
 <h2>Predictions</h2>
 <p>Using our statistical models (i.e., our statistical analyses) to make
@@ -1084,6 +577,8 @@ plot(biomass ~ rainfall, data = datum, xlab = &quot;Rainfall (cm)&quot;, ylab = 
 results &lt;- lm(biomass ~ rainfall, data = datum)
 abline(results)</code></pre>
 <p><img src="lecture_7_files/figure-html/predict_1-1.png" width="432" /></p>
+<div id="single-value-predictions" class="section level3">
+<h3>Single-value predictions</h3>
 <p>Let’s say we want to know what the biomass is predicted to be when
 rainfall = 5 cm. We would simply do this using the linear model
 results:</p>
@@ -1115,7 +610,135 @@ summary(results)</code></pre>
 ‘predict()’ function. We will use ‘predict.lm()’.</p>
 <pre class="r"><code># Examine the help file
 help(predict.lm)</code></pre>
+<p>Things that ‘predict.lm()’ needs:</p>
+<ul>
+<li>Your regression! Results from your regression.</li>
+<li>‘newdata’ – these X-values that you want to make predictions for;
+interpolation, or extrapolation. This ‘newdata’ has to have an X-column
+that matches the X-column from your original data.</li>
+<li>Interval – whether or not you want ‘confidence’ or ‘prediction’
+intervals; you need to include <em>interval = “prediction”</em>.</li>
+<li>Other stuff you can ignore.</li>
+</ul>
+<p>Let’s try to validate my prediction for biomass when rainfall = 5
+cm.</p>
+<pre class="r"><code># Create predict data
+datumPredict &lt;- data.frame(rainfall = 5)
+datumPredict</code></pre>
+<pre><code>##   rainfall
+## 1        5</code></pre>
+<pre class="r"><code># Create a new object called predictions
+predictions &lt;- predict(results, datumPredict, interval = &quot;prediction&quot;)
+predictions</code></pre>
+<pre><code>##        fit      lwr      upr
+## 1 18.19322 7.684521 28.70192</code></pre>
+<p>Three outputs: fit, lwr, and upr.</p>
+<ul>
+<li>fit – this is our prediction! And it matches pretty closely to what
+we calculated by ‘hand’ with our linear model.</li>
+<li>instead of intervals, we get limits:
+<ul>
+<li>lower prediction limit (lwr) –</li>
+<li>upper prediction limit (upr) –</li>
+</ul></li>
+<li>if we want the prediction interval, we need to do some math:</li>
+</ul>
+<pre class="r"><code>predictions[1,&quot;upr&quot;] - predictions[1,&quot;fit&quot;]</code></pre>
+<pre><code>## [1] 10.5087</code></pre>
+<p>The 95% prediction interval is +/-10.51.</p>
+</div>
+<div id="predictions-for-data" class="section level3">
+<h3>Predictions for data</h3>
+<p>Normally we will want to make predictions over a good interval range
+that encompasses our X-data. This might help us fill in some holes.</p>
+<pre class="r"><code># Examine summary
+summary(datum)</code></pre>
+<pre><code>##        X           rainfall         biomass      
+##  Min.   : 1.0   Min.   :0.4556   Min.   : 3.748  
+##  1st Qu.: 4.5   1st Qu.:4.3116   1st Qu.:17.033  
+##  Median : 8.0   Median :5.5144   Median :19.001  
+##  Mean   : 8.0   Mean   :5.6972   Mean   :20.161  
+##  3rd Qu.:11.5   3rd Qu.:8.3566   3rd Qu.:24.150  
+##  Max.   :15.0   Max.   :9.5683   Max.   :40.327</code></pre>
+<pre class="r"><code># Let&#39;s make predictions between 0 -- 10 cm of rainfall
+# And let&#39;s try to make 20 predictions across this interval: 10cm/20predictions = a prediction every 0.5 cm
+datumPredict &lt;- data.frame(rainfall = seq(from = 0, to = 10, by = 0.5))
+
+# Make the predictions
+predictions &lt;- predict(results, datumPredict, interval = &quot;prediction&quot;)
+
+# Examine predictions
+head(predictions)</code></pre>
+<pre><code>##         fit        lwr      upr
+## 1  4.081750 -7.6861117 15.84961
+## 2  5.492897 -6.0701302 17.05592
+## 3  6.904044 -4.4697545 18.27784
+## 4  8.315192 -2.8857754 19.51616
+## 5  9.726339 -1.3189629 20.77164
+## 6 11.137486  0.2299483 22.04502</code></pre>
+<p>We now have a whole sequence of predictions, as well as lower and
+upper ‘prediction intervals’!</p>
+<p>An annoying feature here is that we don’t really have X-value data in
+here; the ‘rainfall’ data.</p>
+<pre class="r"><code># Make it a dataframe to make it easier to add data to it.
+predictions &lt;- as.data.frame(predictions)
+
+# Add a new column
+predictions$rainfall &lt;- seq(from = 0, to = 10, by = 0.5)
+
+# Examine
+predictions</code></pre>
+<pre><code>##          fit        lwr      upr rainfall
+## 1   4.081750 -7.6861117 15.84961      0.0
+## 2   5.492897 -6.0701302 17.05592      0.5
+## 3   6.904044 -4.4697545 18.27784      1.0
+## 4   8.315192 -2.8857754 19.51616      1.5
+## 5   9.726339 -1.3189629 20.77164      2.0
+## 6  11.137486  0.2299483 22.04502      2.5
+## 7  12.548634  1.7602722 23.33699      3.0
+## 8  13.959781  3.2713872 24.64817      3.5
+## 9  15.370928  4.7627500 25.97911      4.0
+## 10 16.782075  6.2339102 27.33024      4.5
+## 11 18.193223  7.6845215 28.70192      5.0
+## 12 19.604370  9.1143520 30.09439      5.5
+## 13 21.015517 10.5232908 31.50774      6.0
+## 14 22.426665 11.9113510 32.94198      6.5
+## 15 23.837812 13.2786696 34.39695      7.0
+## 16 25.248959 14.6255032 35.87242      7.5
+## 17 26.660107 15.9522210 37.36799      8.0
+## 18 28.071254 17.2592942 38.88321      8.5
+## 19 29.482401 18.5472837 40.41752      9.0
+## 20 30.893549 19.8168260 41.97027      9.5
+## 21 32.304696 21.0686186 43.54077     10.0</code></pre>
+<p>Pretty cool!?</p>
+<p>Last thing I want to show you: plotting the prediction intervals over
+the range of X-values.</p>
+<pre class="r"><code># Very simple way to plot the prediction intervals
+matplot(predictions$rainfall, predictions[,1:3], type = &quot;l&quot;)</code></pre>
+<p><img src="lecture_7_files/figure-html/predict_8-1.png" width="432" /></p>
+<p>This graph ain’t too pretty.</p>
+<p><strong>Q:</strong> What’s this graph missing? The original data.</p>
+<pre class="r"><code># Plot the data, but this time specify what the x- and y-limits are.
+# This is important to make sure everything will fit on here.
+plot(biomass ~ rainfall, data = datum, xlim = c(0, 10), ylim = c(0, 40), xlab = &quot;Rainfall (cm)&quot;, ylab = &quot;Biomass (kg/ha)&quot;)
+
+# But now we have to add other data onto here, without erasing the original data.
+# Specify the parameter: new = TRUE
+par(new = TRUE)
+plot(fit ~ rainfall, data = predictions, type = &quot;l&quot;, xlim = c(0, 10), ylim = c(0, 40), ylab = &quot;&quot;, xlab = &quot;&quot;)
+par(new = TRUE)
+plot(lwr ~ rainfall, data = predictions, type = &quot;l&quot;, xlim = c(0, 10), ylim = c(0, 40), ylab = &quot;&quot;, xlab = &quot;&quot;)
+par(new = TRUE)
+plot(upr ~ rainfall, data = predictions, type = &quot;l&quot;, xlim = c(0, 10), ylim = c(0, 40), ylab = &quot;&quot;, xlab = &quot;&quot;)</code></pre>
+<p><img src="lecture_7_files/figure-html/predict_9-1.png" width="432" /></p>
+<p>This is more useful, I would say!</p>
+<p>That being said, there are definitely better approaches to graphing
+predictions out there, likely using ‘ggplot2’ package.</p>
+<p><strong>Final thought</strong>: This approach to prediction will be
+one that we can use for the rest of the semester with all of the more
+complicated analytical models we will learn!</p>
 <p><a href="lecture_8.html">–go to next lecture–</a></p>
+</div>
 </div>
 
 

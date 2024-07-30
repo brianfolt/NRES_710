@@ -459,8 +459,8 @@ discuss how to use linear regression models to make
 will focus on what are considered the five most important of these
 assumptions.</p>
 </div>
-<div id="assumptions" class="section level2">
-<h2>Assumptions</h2>
+<div id="five-regression-assumptions" class="section level2">
+<h2>Five Regression Assumptions</h2>
 <p>What are the assumptions of statistical test and how do they
 influence your results?</p>
 <p>The first thing you need to know about assumptions of statistical
@@ -502,9 +502,6 @@ another paper to this effect at the end of the semester.)</p>
 <p>But as for me, again, I don’t care too much about these assumptions,
 because <strong>most analyses are robust to violations of
 assumptions</strong>.</p>
-</div>
-<div id="five-regression-assumptions" class="section level2">
-<h2>Five regression assumptions</h2>
 <p>There are <strong>5 assumptions</strong> to linear regression. I put
 the equation up on the board again because most of these assumptions are
 indicated in the equation, either explicitly or implicitly.</p>
@@ -747,7 +744,7 @@ No autocorrelation
 <h3>X-Y Scatterplots</h3>
 <p>This first graph shows data where <strong>none of the assumptions are
 violated</strong>.</p>
-<p><img src="lecture_6_files/figure-html/no-violations-1.png" width="432" /></p>
+<p><img src="lecture_6_files/figure-html/no-violations-1-1.png" width="432" /></p>
 <ul>
 <li>Data are very clearly linear.</li>
 <li>Data appear to be normally distributed around the line. Most are
@@ -860,12 +857,9 @@ be <strong>nonlinear</strong>. A quick example:</p>
 <p><img src="lecture_6_files/figure-html/nonlinear_2-1.png" width="864" /></p>
 <p>So, if we use an ACF and it shows autocorrelation, we should make
 sure we don’t have a non-linearity issue.</p>
-<p>We will examine autocorrelation functions in more detail next
-class.</p>
 </div>
-</div>
-<div id="summary" class="section level2">
-<h2>Summary</h2>
+<div id="summary" class="section level3">
+<h3>Summary</h3>
 <table class="table" style="width: auto !important; margin-left: auto; margin-right: auto;">
 <thead>
 <tr>
@@ -952,6 +946,427 @@ X
 </tr>
 </tbody>
 </table>
+</div>
+</div>
+<div id="graphical-assumption-tests" class="section level2">
+<h2>Graphical Assumption Tests</h2>
+<p>We described graphical approaches to evaluating whether your data
+meet assumptions of linear regression. We discussed five
+assumptions:</p>
+<ul>
+<li><strong>Continuous Y</strong> – your Y-variable is continuous; only
+an eye-ball test is needed for this</li>
+<li><strong>Linearity</strong> – a linear relationship between X and
+Y</li>
+<li><strong>Normality residuals</strong> – residuals (error) are
+normally distributed</li>
+<li><strong>Homoscedasticity</strong> – constant variance; noise around
+regression is constant across all values of X</li>
+<li><strong>No autocorrelation</strong> – your data are independent of
+eachother</li>
+</ul>
+<p>We can use different graphs to test these assumptions (<strong>see
+above table</strong>).</p>
+<p><strong>I am going to move to R</strong> and we will learn how to
+easily make these plots in R!</p>
+<p>Save code and data for this lecture in your working directory:</p>
+<ul>
+<li><p>Click <a href="lecture_6_code.R">here</a> to download code. This
+is general code to help make these graphs.</p></li>
+<li><p>Click on these links to download and save the data: <a
+href="lecture_6_good_data.csv">good data</a>, <a
+href="lecture_6_nonlinear_data.csv">nonlinear data</a>, <a
+href="lecture_6_nonnormal_data.csv">nonnormal data</a>, <a
+href="lecture_6_heteroscedastic_data.csv">heteroscedastic data</a>, and
+<a href="lecture_6_autocorrelated_data.csv">autocorrelated data</a>.</p>
+<ul>
+<li>Note: all of these datafiles were simulated using code at the end of
+this lecture; see that code if you are interested in understanding
+‘truth’.</li>
+</ul></li>
+</ul>
+<div id="x-y-scatterplots-1" class="section level3">
+<h3>X-Y Scatterplots</h3>
+<p>Let’s start by examining a dataset that has no issues with it!</p>
+<pre class="r"><code># Load the data
+datum &lt;- read.csv(&quot;lecture_6_good_data.csv&quot;)
+
+# Plot the data
+plot(y ~ x, data = datum)</code></pre>
+<p><img src="lecture_6_files/figure-html/no-violations_1-1.png" width="432" /></p>
+<p>Y is continuous, definitely linear, the residuals appear normally
+distributed (most close to the line), variance seems constant, does not
+appear to have any autocorrelation (but it’s possible).</p>
+<pre class="r"><code># Load the data
+nonlinear &lt;- read.csv(&quot;lecture_6_nonlinear_data.csv&quot;)
+
+# Plot the data
+plot(y ~ x, data = nonlinear)</code></pre>
+<p><img src="lecture_6_files/figure-html/nonlinearity-1.png" width="432" /></p>
+<p>Very clearly nonlinear!</p>
+<pre class="r"><code># Load the data
+norm &lt;- read.csv(&quot;lecture_6_nonnormal_data.csv&quot;)
+
+# Plot the data
+plot(y ~ x, data = norm)</code></pre>
+<p><img src="lecture_6_files/figure-html/normality-1.png" width="432" /></p>
+<p>These data have a heavy tail about the line, but don’t really have
+any tail below the line. The residuals are likely not normally
+distributed.</p>
+<pre class="r"><code># Load the data
+hetero &lt;- read.csv(&quot;lecture_6_heteroscedastic_data.csv&quot;)
+
+# Plot the data
+plot(y ~ x, data = hetero)</code></pre>
+<p><img src="lecture_6_files/figure-html/hetero-1.png" width="432" /></p>
+<p>As the X-variable increases, noise/error in Y increases. This is
+clearly heteroscedastic.</p>
+<pre class="r"><code># Load the data
+auto &lt;- read.csv(&quot;lecture_6_autocorrelated_data.csv&quot;)
+
+# Plot the data
+plot(y ~ x, data = auto)</code></pre>
+<p><img src="lecture_6_files/figure-html/auto-1.png" width="432" /></p>
+<p>Pretty easy to see the autocorrelation in these data. Most
+observations of Y at X are similar to the observation of Y at X-1.
+<strong>The data follow eachother!</strong> But, if autocorrelation
+isn’t strong, it can be difficult to see.</p>
+</div>
+<div id="residual-plots" class="section level3">
+<h3>Residual Plots</h3>
+<p>Before we can run a residual plots, we have to generate the
+residuals! Which means we have to first fit a regression. X-Y
+Scatterplots use the raw data, but the other three graphs we use require
+a regression to be run for us to then make these plots. Let’s run a few
+analyses:</p>
+<pre class="r"><code># Fit linear regression models to the five datasets
+results &lt;- lm(y ~ x, data = datum)
+resultsNonlinear &lt;- lm(y ~ x, data = nonlinear)
+resultsNorm &lt;- lm(y ~ x, data = norm)
+resultsHetero &lt;- lm(y ~ x, data = hetero)
+resultsAuto &lt;- lm(y ~ x, data = auto)</code></pre>
+<p>I’m not going to look up the summaries for each of the models. We
+could use these to look at summaries and maybe infer how much violations
+influence slopes, p-values, etc. It’s tricky to compare these different
+datasets because I simulated them all using different slopes,
+intercepts, etc. So we can’t quite compare them directly. However, we
+have already talked about those ‘rules of thumb’ and instead we should
+just keep them in mind.</p>
+<p>The code to extract residuals is called ‘residuals()’. This tells us
+the distance from each point in our dataset to the line of best fit
+identified by the regression analysis. E.g.,</p>
+<pre class="r"><code># Examine the residuals (just the first ~20)
+residuals(results)[1:20]</code></pre>
+<pre><code>##           1           2           3           4           5           6 
+##  -5.0961006   2.7808718  -0.4968071  -1.9283188  -6.7362526   1.1821405 
+##           7           8           9          10          11          12 
+##  -5.2633312 -13.0521495  -2.5077100   7.9873205  -3.2665149   5.8371791 
+##          13          14          15          16          17          18 
+## -11.9524042   0.4243903   4.7443550   3.9817491   1.8768181  -5.1287563 
+##          19          20 
+##  -5.6808001  -7.5690709</code></pre>
+<p>These data are used to calculate the <strong>standard deviation of
+the error</strong> around our line – simply by calculating the standard
+deviation of these data. The mean of these data should be ~ 0.</p>
+<p>But we want to examine these residuals graphically. It may be
+tempting to plot these residuals very simply using:</p>
+<pre class="r"><code># Simple way
+plot(residuals(results))</code></pre>
+<p><img src="lecture_6_files/figure-html/residuals_plot-1.png" width="432" /></p>
+<p>However, note that the X-axis title is “Index”. This means that the
+X-values here are in the order of the data, from 1 to <em>n</em> – the
+sample size. We actually want to make sure that the X-axis in this plot
+is our actual X-variable, so we can look at how residuals change along
+the continuous nature of our X-variable.</p>
+<p>We are drawing the residuals from the ‘results’ object, so we can’t
+reference the ‘datum’ object like we usually do. Instead we have to
+explicitly call the raw X-variable data. We can call an individual
+variable from an object in R using the money sign command: ‘datum$x’‘.
+We can call’. E.g.,</p>
+<pre class="r"><code># Correct way to examine residuals plot
+plot(residuals(results) ~ datum$x)
+
+# Add a horizontal line at y = 0
+abline(a = 0, b = 0)</code></pre>
+<p><img src="lecture_6_files/figure-html/residuals_plot_2-1.png" width="432" /></p>
+<p>So what have we done…? We have taken our scatterplot of data and:</p>
+<ul>
+<li>flattened it out so that it now fills the whole plot,</li>
+<li>the regression line is now also flattened and at y = 0,</li>
+<li>visualized the degree to which each point is above or below that
+line.</li>
+</ul>
+<p>We can see that (1) most of our residual points are close to the
+line, few are far away, (2) there’s no heteroscedasticity, (3) doesn’t
+appear to be any autocorrelation, and things appear linear.</p>
+<p>Let’s examine this for nonlinear data:</p>
+<pre class="r"><code># Correct way to examine residuals plot
+plot(residuals(resultsNonlinear) ~ nonlinear$x)
+
+# Add a horizontal line at y = 0
+abline(a = 0, b = 0)</code></pre>
+<p><img src="lecture_6_files/figure-html/residuals_plot_nonlinear-1.png" width="432" /></p>
+<p>Clearly this is nonlinear: bunch of points below the line, then a
+bunch above, and then more below. This would be much better fit with a
+curvilinear line, which we will discuss in a couple weeks.</p>
+<p>Non-normal data:</p>
+<pre class="r"><code># Correct way to examine residuals plot
+plot(residuals(resultsNorm) ~ norm$x)
+
+# Add a horizontal line at y = 0
+abline(a = 0, b = 0)</code></pre>
+<p><img src="lecture_6_files/figure-html/residuals_plot_norm-1.png" width="432" /></p>
+<p>Notice where the regression line is! It’s way down at the bottom of
+the graph, rather than being in the middle. This is a red flag. And then
+most of the noise is above the line. This suggests non-normality.</p>
+<pre class="r"><code># Correct way to examine residuals plot
+plot(residuals(resultsHetero) ~ hetero$x)
+
+# Add a horizontal line at y = 0
+abline(a = 0, b = 0)</code></pre>
+<p><img src="lecture_6_files/figure-html/residuals_plot_hetero-1.png" width="432" /></p>
+<p>Pretty easy to see the heteroscedasticity: small variance with small
+X-values, and then larger variance with larger X-values.</p>
+<pre class="r"><code># Correct way to examine residuals plot
+plot(residuals(resultsAuto) ~ auto$x)
+
+# Add a horizontal line at y = 0
+abline(a = 0, b = 0)</code></pre>
+<p><img src="lecture_6_files/figure-html/residuals_plot_auto-1.png" width="432" /></p>
+<p>The points (residual error) are following each other! This path is a
+good indication of autocorrelation. The data are not independent of one
+another.</p>
+</div>
+<div id="histogram-of-residuals-1" class="section level3">
+<h3>Histogram of residuals</h3>
+<p>The histogram of residuals will make a simple bar chart that examines
+‘<em>global</em>’ normality across all of your data. What I mean by
+‘global’ is that it does examine normality as the X-variable increases,
+but lumps all the error across all X-values into a single chart.</p>
+<pre class="r"><code># Correct way to examine residuals plot
+hist(residuals(results))</code></pre>
+<p><img src="lecture_6_files/figure-html/resid_hist-1.png" width="432" /></p>
+<p>We have taken all of the residuals and examined the distribution of
+residuals across all the X-values.</p>
+<p><strong>Q:</strong> Can anyone think of a negative consequence of
+lumping in this histogram? Can you think of another assumption that we
+can we no longer test for with this graph?</p>
+<p><strong>Q:</strong> Does this look perfectly normal?</p>
+<p>Nah, not really. It never will. But what we are looking for is
+obvious, egregious violations of the assumption of normal error. For
+example, let’s make this graph for the non-normal data:</p>
+<pre class="r"><code># Correct way to examine residuals plot
+hist(residuals(resultsNorm))</code></pre>
+<p><img src="lecture_6_files/figure-html/resid_hist_nonnorm-1.png" width="432" /></p>
+<p>This is pretty bad! This is a case where we would say “Our data are
+not normal!”</p>
+<p>This might be a time where you would use a ‘log transformation’ to
+fix this issue. I don’t really like log-transformations because it
+screws with how we interpret our results – makes the story less clear –
+but that would be an option here.</p>
+<p>Let’s examine the heteroscedastic data:</p>
+<pre class="r"><code># Correct way to examine residuals plot
+hist(residuals(resultsHetero))</code></pre>
+<p><img src="lecture_6_files/figure-html/resid_hist_hetero-1.png" width="432" /></p>
+<p><strong>Q:</strong> Does anything seem off about these data? (Kind of
+hard to say.)</p>
+<p>If you don’t like the appearance of your histogram and want to adjust
+it, you can change the appearance of it using the ‘breaks’ command:</p>
+<pre class="r"><code># Make two graphs side-by-side
+par(mfrow = c(1, 2))
+
+# Default setting
+hist(residuals(resultsHetero))
+
+# Revisualizing with more breaks
+hist(residuals(resultsHetero), breaks = 10)</code></pre>
+<p><img src="lecture_6_files/figure-html/resid_hist_hetero_breaks-1.png" width="864" /></p>
+<p>This second graph suggests that the bell curve might be a bit
+‘skinny’ – which is called <strong>kurtosis</strong>. Kurosis is when
+the shape of your distribution is not-normal. It may have <em>skew</em>
+in one direction (a tail), more observations in the middle (bulge), or
+be ‘skinny’ and have longer tails on both sides. This is a rare problem
+for you to have to deal with, but you can do ‘weighted regression’ in
+‘lm()’ to account for uneven variance in the model itself.</p>
+</div>
+<div id="autocorrelation-functions-acf" class="section level3">
+<h3>Autocorrelation functions (ACF)</h3>
+<p>The <strong>autocorrelation function</strong> measures how similar
+each datapoint is to the other datapoints that are behind it in the
+dataframe. It compares residuals at different <em>lags</em> in the
+dataframe.</p>
+<ul>
+<li>At a lag of zero, we expect high correlation, because we compare
+each point to itself.</li>
+<li>At lags of 1 or more, if there is autocorrelation, then the ACF
+metric will be high and positive (&gt; 0.2) when comparing each a
+datapoint to points lagged behind it (i.e., high correlation to nearby
+data in the dataset).</li>
+<li>If there is no autocorrelation, then the ACF metric will randomly be
+positive and negative and usually within 0.2 of 0.</li>
+</ul>
+<pre class="r"><code># Autocorrelation function for normal data
+acf(residuals(results)[order(datum$x)])</code></pre>
+<p><img src="lecture_6_files/figure-html/acf_2-1.png" width="432" /></p>
+<p>When we run this, we have to make sure our ACF function operates
+using the order of the X-variable. This might reflect the biological
+mechanism with which we might expect autocorrelation to happen. For
+example, if we were measuring how a powerplant causes pollution in a
+river, we would order our data using the X-variable ‘distance from
+plant’. So we will index the ACF using the ‘order’ of the
+X-variable.</p>
+<p>Let’s examine the ACF graph a bit more. On the X-axis, we have a
+‘lag’ in comparing the residuals in our data.</p>
+<ul>
+<li>At a lag of 0, we are comparing each point to itself. At a lag of 1,
+we are comparing each point to the point next to it. At a lag of 2, we
+compare each point to the point two points away. Etc.</li>
+<li>The vertical bar at each lag is the mean estimate of the ACF
+function. The length of the bar indicates how correlated each value is
+to it’s lagged comparison. This estimates how correlated they are to
+eachother (i.e., an <span class="math inline">\(r^2\)</span> value). At
+a lag of 0, we are comparing each point to itself, so the correlation is
+1 (perfect correlation). This is meaningless to us but provides
+contextual reference.</li>
+<li>The <strong>dotted blue line</strong> is basically a p-value line.
+If any of your vertical bars cross this blue line, it indicates that you
+have significant autocorrelation at that lag.</li>
+<li>For example, note the ACF estimate at a lag = 7 was above the line!
+But, be careful here. If you randomly have autocorrelation at one lag,
+think about whether this makes biological sense. Instead, we are looking
+for <strong>obvious and egregious</strong> evidence of
+autocorrelation.</li>
+</ul>
+<p>What does obvious autocorrelation look like…?</p>
+<pre class="r"><code># Autocorrelation function for normal data
+acf(residuals(resultsAuto)[order(auto$x)])</code></pre>
+<p><img src="lecture_6_files/figure-html/acf_3-1.png" width="432" /></p>
+<p>This is obvious autocorrelation. We see that each point is highly
+correlated with the value next to it! E.g., <span
+class="math inline">\(r^2\)</span> values are high: greater than 0.8! It
+isn’t until a lag of ~8 that we see the ACF values dip below the blue
+line. And then eventually the have negative autocorrelation at a lag of
+15 and beyond.</p>
+<ul>
+<li>In ecology, this behavior in data is pretty uncommon. However, one
+notable example where it might appear involves predator-prey population
+cycles, like the famous population dynamics between snowshoe hare-lynx
+in boreal forests of North America.</li>
+</ul>
+<p>This chart is best for testing for autocorrelation. But, I mentioned
+last class, that sometimes these charts can indicate autocorrelation
+<em>when data are nonlinear</em>:</p>
+<pre class="r"><code># Two graphs
+par(mfrow=c(1,2))
+
+# Recall the scatterplot for the nonlinear data
+plot(y ~ x, data = nonlinear)
+
+# Autocorrelation function with correct order
+acf(residuals(resultsNonlinear)[order(nonlinear$x)])</code></pre>
+<p><img src="lecture_6_files/figure-html/acf_4-1.png" width="864" /></p>
+<p>Remember, the autocorrelation function is comparing residuals. Is one
+residual similar to the residuals next to it?</p>
+<p>Since a linear model was fit through these data, we have clusters of
+negative and positive residuals, and the ACF will pick up on this
+autocorrelation. However, this observed autocorrelation is not due to
+true autocorrelation in the system, but rather our use of linear model
+being fit to nonlinear data. Our line doesn’t fit well! And here, the
+ACF is telling us that we should double-check whether our data are
+linear.</p>
+<p>If a nonlinear line was fit through these data, the residuals would
+be normal and the ACF would not detect autocorrelation. We may learn how
+to do this in a few weeks.</p>
+</div>
+</div>
+<div id="concluding-thoughts" class="section level2">
+<h2>Concluding thoughts</h2>
+<p>I use these graphs to test the assumptions of linear regression
+model. You do have to run the regression first! It’s part of your
+exploratory process. You should think about whether your data are linear
+or not before starting an analysis. I may make a ‘field guide’ for
+considerations when running an analysis, and/or maybe we will work on
+that together during the last class.</p>
+</div>
+<div id="simulating-data-for-this-lecture" class="section level2">
+<h2>Simulating data for this lecture</h2>
+<p>Code to simulate the above datasets is included here:</p>
+<pre class="r"><code>### Code for simulating data to be analyzed in this lecture
+
+# Set the seed for reproducibility
+set.seed(123)
+
+## Simulate data with no assumption violations
+n &lt;- 100
+x1 &lt;- rnorm(n, mean = 20, sd = 10)
+y1 &lt;- 5 + 4 * x1 + rnorm(n, mean = 0, sd = 8)
+
+# Create dataframe
+datum &lt;- data.frame(x = x1, y = y1)
+
+# Save the CSV file
+write.csv(datum, &quot;lecture_6_good_data.csv&quot;)
+
+
+## Simulate data with a violation of normality
+n &lt;- 100
+x &lt;- rnorm(n, mean = 20, sd = 3)
+y &lt;- 10 + 25 * x + rnorm(n, mean = 0, sd = 8)^2
+
+# Create dataframe
+datum &lt;- data.frame(x = x, y = y)
+
+# Save the CSV file
+write.csv(datum, &quot;lecture_6_nonnormal_data.csv&quot;)
+
+
+## Simulate data with a violation of linearity
+n &lt;- 100
+x &lt;- runif(n, 0, 10)
+#x &lt;- sort(x)
+y &lt;- 3 + 2 * x - 0.18 * x^2 + rnorm(n, mean = 0, sd = 1)
+
+# Create dataframe
+datum &lt;- data.frame(x = x, y = y)
+
+# Save the CSV file
+write.csv(datum, &quot;lecture_6_nonlinear_data.csv&quot;)
+
+
+## Simulate data that are heteroscedastic
+n &lt;- 100
+x1 &lt;- runif(n, 0, 10)
+y1 &lt;- 5 + 4 * x1 + rnorm(n, mean = 0, sd = 1 * x1)
+
+# Create dataframe
+datum &lt;- data.frame(x = x1, y = y1)
+
+# Save the CSV file
+write.csv(datum, &quot;lecture_6_heteroscedastic_data.csv&quot;)
+
+
+## Simulate data that are autocorrelated
+n &lt;- 100
+x1 &lt;- runif(n, 0, 10)
+
+# Sort x1 from low to high
+x1 &lt;- sort(x1)
+
+# Simulate error for each value using the mean of the previous value
+error &lt;- matrix(NA, length(x1), 1)
+error[1,1] &lt;- rnorm(1, mean = 0, sd = 1)
+for (i in 2:length(x1)){
+  error[i,1] &lt;- rnorm(1, mean = error[i-1, 1], sd = 1)
+}
+
+# Create y values
+y1 &lt;- 3 + 2 * x1 + error
+
+# Create dataframe
+datum &lt;- data.frame(x = x1, error = error, y = y1)
+
+# Save the CSV file
+write.csv(datum, &quot;lecture_6_autocorrelated_data.csv&quot;)</code></pre>
 <p><a href="lecture_7.html">–go to next lecture–</a></p>
 </div>
 
