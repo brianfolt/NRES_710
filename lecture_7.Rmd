@@ -441,7 +441,6 @@ For example, let's say we have results from a regression model explaining how bi
 
 We would predict to observe 11.80 kg/ha biomass when an area gets 5 cm of rain.
 
-
 ### When can we make predictions?
 
 Let's examine the biomass example with a scatterplot:
@@ -461,10 +460,13 @@ x1 <- abs(runif(n, 0, 10))
 y1 <- 2 + 3 * x1 + rnorm(n, mean = 0, sd = 4)
 
 # Create dataframe
-biomass <- data.frame(x = x1, y = y1)
+datum <- data.frame(rainfall = x1, biomass = y1)
+
+# Save these data
+write.csv(datum, 'lecture_7_biomass_data.csv')
 
 # Plot
-plot(y ~ x, data = biomass, xlab = "Rainfall (cm)", ylab = "Biomass (kg/ha)")
+plot(biomass ~ rainfall, data = datum, xlab = "Rainfall (cm)", ylab = "Biomass (kg/ha)")
 
 # Vertical line
 abline(v = 2, lty = 2)
@@ -498,20 +500,20 @@ In the rainfall prediction example above, we aren't going to provide confidence 
 par(mar = c(4, 4, 1, 0))
 
 # Fit the linear regression model
-model <- lm(y ~ x, data = biomass)
+model <- lm(biomass ~ rainfall, data = datum)
 
 # Predict values and confidence intervals
-predictions <- predict(model, newdata = data.frame(x = sort(x1)), interval = "confidence")
+predictions <- predict(model, newdata = data.frame(rainfall = sort(datum$rainfall)), interval = "confidence")
 
 # Plot the data
-plot(y ~ x, data = biomass, xlab = "Rainfall (cm)", ylab = "Biomass (kg/ha)")
+plot(biomass ~ rainfall, data = datum, xlab = "Rainfall (cm)", ylab = "Biomass (kg/ha)")
 
 # Add the regression line
 abline(model, col = "blue")
 
 # Add the confidence intervals
-lines(sort(x1), predictions[, "lwr"], col = "red", lty = 2)
-lines(sort(x1), predictions[, "upr"], col = "red", lty = 2)
+lines(sort(datum$rainfall), predictions[, "lwr"], col = "red", lty = 2)
+lines(sort(datum$rainfall), predictions[, "upr"], col = "red", lty = 2)
 ```
 
 **Prediction intervals -- a measure of uncertainty in the individual outcomes**
@@ -524,20 +526,20 @@ lines(sort(x1), predictions[, "upr"], col = "red", lty = 2)
 par(mar = c(4, 4, 1, 0))
 
 # Fit the linear regression model
-model <- lm(y ~ x, data = biomass)
+model <- lm(biomass ~ rainfall, data = datum)
 
 # Predict values and confidence intervals
-predictions <- predict(model, newdata = data.frame(x = sort(x1)), interval = "prediction")
+predictions <- predict(model, newdata = data.frame(rainfall = sort(datum$rainfall)), interval = "prediction")
 
 # Plot the data
-plot(y ~ x, data = biomass, xlab = "Rainfall (cm)", ylab = "Biomass (kg/ha)")
+plot(biomass ~ rainfall, data = datum, xlab = "Rainfall (cm)", ylab = "Biomass (kg/ha)")
 
 # Add the regression line
 abline(model, col = "blue")
 
 # Add the confidence intervals
-lines(sort(x1), predictions[, "lwr"], col = "red", lty = 2)
-lines(sort(x1), predictions[, "upr"], col = "red", lty = 2)
+lines(sort(datum$rainfall), predictions[, "lwr"], col = "red", lty = 2)
+lines(sort(datum$rainfall), predictions[, "upr"], col = "red", lty = 2)
 ```
 
 A prediction interval will capture most (95%) of the data.
@@ -548,12 +550,51 @@ They are somewhat pinched in the middle. This is because we have more data in th
 
 However, at the tails we have less data, and thus we have less certainty about the estimate and individual outcomes. And if we **extrapolate**, the uncertainty will be larger.
 
-We will work on how to make predictions and predictions intervals in R during the next class.
-
 ### Prediction summary
 
 1) Predictions are basic math
 2) Difference between interpolation and extrapolation, and differences in your confidence of these estimates
 3) Difference between prediction and confidence intervals
+
+## Making predictions
+
+Let's show you how to make predictions in R, including with **prediction intervals**. We will have R do this for us!
+
+Before we make predictions, we first have to run our analysis. Let's use the results from the biomass x rainfall data regression analysis.
+
+```{r predict_1, echo=TRUE, message=FALSE, warning=FALSE, fig.width=4.5, fig.height=4.5}
+# Read in the biomass data again, if necessary
+datum <- read.csv("lecture_7_biomass_data.csv")
+
+# Plot
+plot(biomass ~ rainfall, data = datum, xlab = "Rainfall (cm)", ylab = "Biomass (kg/ha)")
+
+# Regression
+results <- lm(biomass ~ rainfall, data = datum)
+abline(results)
+```
+
+Let's say we want to know what the biomass is predicted to be when rainfall = 5 cm. We would simply do this using the linear model results:
+
+```{r predict_2, echo=TRUE, message=FALSE, warning=FALSE, fig.width=4.5, fig.height=3.5}
+# Examine the results 
+summary(results)
+
+# Make a prediction for when rainfall = 5 cm
+4.08 + 2.82 * 5
+```
+
+18.18 kg/ha biomass when rainfall is 5 cm!
+
+The most common (and easy) way to make predictions in R is using the 'predict()' function. We will use 'predict.lm()'.
+
+```{r predict_3, echo=TRUE, message=FALSE, warning=FALSE, fig.width=4.5, fig.height=3.5}
+# Examine the help file
+help(predict.lm)
+```
+
+
+
+
 
 [--go to next lecture--](lecture_8.html)

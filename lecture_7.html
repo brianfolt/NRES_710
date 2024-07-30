@@ -1055,8 +1055,6 @@ estimate is and individual outcomes are.</p>
 <p>However, at the tails we have less data, and thus we have less
 certainty about the estimate and individual outcomes. And if we
 <strong>extrapolate</strong>, the uncertainty will be larger.</p>
-<p>We will work on how to make predictions and predictions intervals in
-R during the next class.</p>
 </div>
 <div id="prediction-summary" class="section level3">
 <h3>Prediction summary</h3>
@@ -1066,8 +1064,58 @@ R during the next class.</p>
 in your confidence of these estimates</li>
 <li>Difference between prediction and confidence intervals</li>
 </ol>
-<p><a href="lecture_8.html">–go to next lecture–</a></p>
 </div>
+</div>
+<div id="making-predictions" class="section level2">
+<h2>Making predictions</h2>
+<p>Let’s show you how to make predictions in R, including with
+<strong>prediction intervals</strong>. We will have R do this for
+us!</p>
+<p>Before we make predictions, we first have to run our analysis. Let’s
+use the results from the biomass x rainfall data regression
+analysis.</p>
+<pre class="r"><code># Read in the biomass data again, if necessary
+datum &lt;- read.csv(&quot;lecture_7_biomass_data.csv&quot;)
+
+# Plot
+plot(biomass ~ rainfall, data = datum, xlab = &quot;Rainfall (cm)&quot;, ylab = &quot;Biomass (kg/ha)&quot;)
+
+# Regression
+results &lt;- lm(biomass ~ rainfall, data = datum)
+abline(results)</code></pre>
+<p><img src="lecture_7_files/figure-html/predict_1-1.png" width="432" /></p>
+<p>Let’s say we want to know what the biomass is predicted to be when
+rainfall = 5 cm. We would simply do this using the linear model
+results:</p>
+<pre class="r"><code># Examine the results 
+summary(results)</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = biomass ~ rainfall, data = datum)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -7.5900 -3.5251 -0.1904  2.7917  9.7029 
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)   4.0817     2.7522   1.483    0.162    
+## rainfall      2.8223     0.4336   6.510 1.97e-05 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 4.701 on 13 degrees of freedom
+## Multiple R-squared:  0.7652, Adjusted R-squared:  0.7472 
+## F-statistic: 42.37 on 1 and 13 DF,  p-value: 1.974e-05</code></pre>
+<pre class="r"><code># Make a prediction for when rainfall = 5 cm
+4.08 + 2.82 * 5</code></pre>
+<pre><code>## [1] 18.18</code></pre>
+<p>18.18 kg/ha biomass when rainfall is 5 cm!</p>
+<p>The most common (and easy) way to make predictions in R is using the
+‘predict()’ function. We will use ‘predict.lm()’.</p>
+<pre class="r"><code># Examine the help file
+help(predict.lm)</code></pre>
+<p><a href="lecture_8.html">–go to next lecture–</a></p>
 </div>
 
 
