@@ -17,6 +17,12 @@ navbar:
       href: lecture_3.html
     - text: Linear regression
       href: lecture_4.html
+    - text: Linear regression - results
+      href: lecture_5.html
+    - text: Linear regression - assumptions
+      href: lecture_6.html
+    - text: Linear regression - predictions
+      href: lecture_7.html
     - text: Taxonomy of common statistics
       href: LECTURE3.html
     - text: t-test and z-test
@@ -40,11 +46,11 @@ navbar:
   - text: Exercises
     menu:
     - text: Exercise 1 - Data Summary Functions
-      href: EXERCISE1.html
-    - text: Exercise 2 - t-tests
+      href: exercise_1.html
+    - text: Exercise 2 - Linear regression
+      href: exercise_2.html
+    - text: Exercise 3 - t-tests
       href: EXERCISE2.html
-    - text: Exercise 3 - Simple Linear Regression
-      href: EXERCISE3.html
     - text: Exercise 4 - Multiple Linear Regression
       href: EXERCISE4.html
   - text: More Resources

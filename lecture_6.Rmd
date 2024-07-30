@@ -1,5 +1,5 @@
 ---
-title: "Linear Regression (cont.)"
+title: "Linear Regression - assumptions"
 author: "NRES 710"
 date: "Last compiled: `r Sys.Date()`"
 output: 
@@ -710,69 +710,9 @@ The autocorrelation function (**ACF**) shows us the correlation for the residual
 - If one point is above the line, what is the chance that the next point will also be above the line?
 - Alternatively, if another point is below the line, what is the chance that the next point will also be below the line?
 
-As you might expect, it is best for teaching us whether our data are **autocorrelated**.
+As you might expect, it is best for teaching us whether our data are **autocorrelated**. But it can also tell us if our data may be **nonlinear**. A quick example:
 
-The autocorrelation function, specifically, measures how similar each datapoint is to the other datapoints that are behind it in the dataframe. It compares residuals at different lags in the dataframe. At a lag of zero, we expect high correlation, because we compare each point to itself. At lags of 1 or more, if there is autocorrelation, then the ACF metric will be high and positive (> 0.2) when comparing each a datapoint to points lagged behind it (i.e., high correlation to nearby data in the dataset). If there is no autocorrelation, then the ACF metric will randomly be positive and negative and usually within 0.2 of 0.
-
-Here's an example using (1) our simulated data that meet all of the assumptions, and (2) the autocorrelated data from above:
-
-```{r autocorrelation_function, echo=FALSE, message=FALSE, warning=FALSE, fig.width=9, fig.height=9}
-# Set the seed for reproducibility
-set.seed(123)
-
-# Adjust graph margins: bottom, left, top, right
-par(mar = c(4, 4, 2, 1))
-par(mfrow = c(2, 2))
-
-# Simulate data that have no autocorrelatation
-n <- 100
-x1 <- runif(n, 0, 10)
-error <- rnorm(n, 0, 1)
-
-# Create y values
-y1 <- 3 + 2 * x1 + error
-
-# Create dataframe
-datum <- data.frame(x = x1, error = error, y = y1)
-
-# Plot the data
-plot(y ~ x, data = datum,
-     ylim=c(0, max(datum$y)), xlab = "", ylab = "",
-     main = "No autocorrelation")
-
-# Plot the ACF of the time series data
-acf(y1, ylab = "Autocorrelation function", main = "")
-
-### Simulate data with autocorrelation
-n <- 100
-x1 <- runif(n, 0, 10)
-
-# Sort x1 from low to high
-x1 <- sort(x1)
-
-# Simulate error for each value using the mean of the previous value
-error <- matrix(NA, length(x1), 1)
-error[1,1] <- rnorm(1, mean = 0, sd = 1)
-for (i in 2:length(x1)){
-  error[i,1] <- rnorm(1, mean = error[i-1, 1], sd = 1)
-}
-
-# Create y values
-y1 <- 3 + 2 * x1 + error
-
-# Create dataframe
-datum <- data.frame(x = x1, error = error, y = y1)
-
-# Plot the data
-plot(y ~ x, data = datum,
-     ylim=c(0, max(datum$y)), xlab = "", ylab = "",
-     main = "Autocorrelation")
-
-# Plot the ACF of the time series data
-acf(y1, ylab = "Autocorrelation function", main = "")
-```
-
-The autocorrelation function can also be useful for **non-linearity**. For example:
+For example:
 
 ```{r nonlinear_2, echo=FALSE, message=FALSE, warning=FALSE, fig.width=9, fig.height=4.5}
 # Set the seed for reproducibility
@@ -806,11 +746,9 @@ abline(results)
 acf(y, ylab = "Autocorrelation function (ACF)", main = "")
 ```
 
-These data are non-linear -- and were simulated with no autocorrelation. Data on the left and right regions of the graph are below the line, whereas the middle-most X-data are above the line.
+So, if we use an ACF and it shows autocorrelation, we should make sure we don't have a non-linearity issue.
 
-These data are not autocorrelated, but the *residuals* show evidence of autocorrelation. When we create an ACF plot, it suggests autocorrelation, but this isn't the case. It is due to the non-linearity. (If we fixed the non-linearity issue, the residual autocorrelation would go away.)
-
-So, if we use an ACF and it shows autocorrelation, we should make sure we don't have a non-linearity issue. 
+We will examine autocorrelation functions in more detail next class.
 
 ## Summary
 

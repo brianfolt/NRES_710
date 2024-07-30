@@ -1,5 +1,5 @@
 ---
-title: "Linear Regression (cont.)"
+title: "Linear Regression - presenting results"
 author: "NRES 710"
 date: "Last compiled: `r Sys.Date()`"
 output: 

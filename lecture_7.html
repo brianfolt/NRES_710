@@ -1,0 +1,1150 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+<meta name="author" content="NRES 710" />
+
+
+<title>Linear Regression - assumptions (cont.)</title>
+
+<script src="site_libs/header-attrs-2.27/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/yeti.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/jqueryui-1.13.2/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<script src="site_libs/kePrint-0.0.1/kePrint.js"></script>
+<link href="site_libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+<link rel="stylesheet" href="styles.css" type="text/css" />
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "\e258";
+  font-family: 'Glyphicons Halflings';
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">NRES 710</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Syllabus</a>
+</li>
+<li>
+  <a href="schedule.html">Schedule</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    Lectures
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="lecture_1.html">Syllabus and the Purpose of Statistics</a>
+    </li>
+    <li>
+      <a href="lecture_2.html">P-value discussion and Intro to R</a>
+    </li>
+    <li>
+      <a href="lecture_3.html">Sampling uncertainty</a>
+    </li>
+    <li>
+      <a href="lecture_4.html">Linear regression</a>
+    </li>
+    <li>
+      <a href="lecture_5.html">Linear regression - results</a>
+    </li>
+    <li>
+      <a href="lecture_6.html">Linear regression - assumptions</a>
+    </li>
+    <li>
+      <a href="lecture_7.html">Linear regression - predictions</a>
+    </li>
+    <li>
+      <a href="LECTURE3.html">Taxonomy of common statistics</a>
+    </li>
+    <li>
+      <a href="LECTURE4.html">t-test and z-test</a>
+    </li>
+    <li>
+      <a href="LECTURE5.html">chi-squared tests</a>
+    </li>
+    <li>
+      <a href="LECTURE6.html">Linear Regression</a>
+    </li>
+    <li>
+      <a href="LECTURE7.html">ANOVA</a>
+    </li>
+    <li>
+      <a href="LECTURE8.html">GLM</a>
+    </li>
+    <li>
+      <a href="LECTURE9.html">GLMM</a>
+    </li>
+    <li>
+      <a href="LECTURE10.html">Machine Learning</a>
+    </li>
+    <li>
+      <a href="GIT_tutorial.html">Intro to GIT</a>
+    </li>
+    <li>
+      <a href="LECTURE11.html">Next steps</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    Exercises
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="exercise_1.html">Exercise 1 - Data Summary Functions</a>
+    </li>
+    <li>
+      <a href="exercise_2.html">Exercise 2 - Linear regression</a>
+    </li>
+    <li>
+      <a href="EXERCISE2.html">Exercise 3 - t-tests</a>
+    </li>
+    <li>
+      <a href="EXERCISE4.html">Exercise 4 - Multiple Linear Regression</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    More Resources
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="Links.html">Links</a>
+    </li>
+    <li>
+      <a href="FINALPROJ.html">Final Projects</a>
+    </li>
+  </ul>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+
+
+<h1 class="title toc-ignore">Linear Regression - assumptions
+(cont.)</h1>
+<h4 class="author">NRES 710</h4>
+<h4 class="date">Last compiled: 2024-07-30</h4>
+
+</div>
+
+
+<div id="graphical-assumption-tests" class="section level2">
+<h2>Graphical Assumption Tests</h2>
+<p>Last class we explored graphical approaches to evaluating whether
+your data meet assumptions of linear regression. We discussed five
+assumptions:</p>
+<ul>
+<li><strong>Continuous Y</strong> – your Y-variable is continuous; only
+an eye-ball test is needed for this</li>
+<li><strong>Linearity</strong> – a linear relationship between X and
+Y</li>
+<li><strong>Normality residuals</strong> – residuals (error) are
+normally distributed</li>
+<li><strong>Homoscedasticity</strong> – constant variance; noise around
+regression is constant across all values of X</li>
+<li><strong>No autocorrelation</strong> – your data are independent of
+eachother</li>
+</ul>
+<p>We can use different graphs to test these assumptions:</p>
+<table class="table" style="width: auto !important; margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+Assumption
+</th>
+<th style="text-align:left;">
+X-Y Scatterplot
+</th>
+<th style="text-align:left;">
+Residuals Scatterplot
+</th>
+<th style="text-align:left;">
+Histogram of Residuals
+</th>
+<th style="text-align:left;">
+Autocorrelation Function (ACF)
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Normality
+</td>
+<td style="text-align:left;">
+X
+</td>
+<td style="text-align:left;">
+X
+</td>
+<td style="text-align:left;">
+!!
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Linearity
+</td>
+<td style="text-align:left;">
+X
+</td>
+<td style="text-align:left;">
+X
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+**
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Homoscedasticity
+</td>
+<td style="text-align:left;">
+X
+</td>
+<td style="text-align:left;">
+X
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+No autocorrelation
+</td>
+<td style="text-align:left;">
+X
+</td>
+<td style="text-align:left;">
+X
+</td>
+<td style="text-align:left;">
+</td>
+<td style="text-align:left;">
+!!
+</td>
+</tr>
+</tbody>
+</table>
+<p>Today we are going to learn how to easily make these plots in R!</p>
+<p>Save code and data for this lecture in your working directory:</p>
+<ul>
+<li><p>Click <a href="lecture_7_code.R">here</a> to download
+code.</p></li>
+<li><p>Click on these links to download and save the data: <a
+href="lecture_7_good_data.csv">good data</a>, <a
+href="lecture_7_nonlinear_data.csv">nonlinear data</a>, <a
+href="lecture_7_nonnormal_data.csv">nonnormal data</a>, <a
+href="lecture_7_heteroscedastic_data.csv">heteroscedastic data</a>, and
+<a href="lecture_7_autocorrelated_data.csv">autocorrelated data</a>.</p>
+<ul>
+<li>Note: all of these datafiles were simulated using code at the end of
+this lecture; see that code if you are interested in understanding
+‘truth’.</li>
+</ul></li>
+</ul>
+<div id="x-y-scatterplots" class="section level3">
+<h3>X-Y Scatterplots</h3>
+<p>Let’s start by examining a dataset that has no issues with it!</p>
+<pre class="r"><code># Load the data
+datum &lt;- read.csv(&quot;lecture_7_good_data.csv&quot;)
+
+# Plot the data
+plot(y ~ x, data = datum)</code></pre>
+<p><img src="lecture_7_files/figure-html/no-violations-1.png" width="432" /></p>
+<p>Y is continuous, definitely linear, the residuals appear normally
+distributed (most close to the line), variance seems constant, does not
+appear to have any autocorrelation (but it’s possible).</p>
+<pre class="r"><code># Load the data
+nonlinear &lt;- read.csv(&quot;lecture_7_nonlinear_data.csv&quot;)
+
+# Plot the data
+plot(y ~ x, data = nonlinear)</code></pre>
+<p><img src="lecture_7_files/figure-html/nonlinearity-1.png" width="432" /></p>
+<p>Very clearly nonlinear!</p>
+<pre class="r"><code># Load the data
+norm &lt;- read.csv(&quot;lecture_7_nonnormal_data.csv&quot;)
+
+# Plot the data
+plot(y ~ x, data = norm)</code></pre>
+<p><img src="lecture_7_files/figure-html/normality-1.png" width="432" /></p>
+<p>These data have a heavy tail about the line, but don’t really have
+any tail below the line. The residuals are likely not normally
+distributed.</p>
+<pre class="r"><code># Load the data
+hetero &lt;- read.csv(&quot;lecture_7_heteroscedastic_data.csv&quot;)
+
+# Plot the data
+plot(y ~ x, data = hetero)</code></pre>
+<p><img src="lecture_7_files/figure-html/hetero-1.png" width="432" /></p>
+<p>As the X-variable increases, noise/error in Y increases. This is
+clearly heteroscedastic.</p>
+<pre class="r"><code># Load the data
+auto &lt;- read.csv(&quot;lecture_7_autocorrelated_data.csv&quot;)
+
+# Plot the data
+plot(y ~ x, data = auto)</code></pre>
+<p><img src="lecture_7_files/figure-html/auto-1.png" width="432" /></p>
+<p>Pretty easy to see the autocorrelation in these data. Most
+observations of Y at X are similar to the observation of Y at X-1.
+<strong>The data follow eachother!</strong> But, if autocorrelation
+isn’t strong, it can be difficult to see.</p>
+</div>
+<div id="residual-plots" class="section level3">
+<h3>Residual Plots</h3>
+<p>Before we can run a residual plots, we have to generate the
+residuals! Which means we have to first fit a regression. X-Y
+Scatterplots use the raw data, but the other three graphs we use require
+a regression to be run for us to then make these plots. Let’s run a few
+analyses:</p>
+<pre class="r"><code># Fit linear regression models to the five datasets
+results &lt;- lm(y ~ x, data = datum)
+resultsNonlinear &lt;- lm(y ~ x, data = nonlinear)
+resultsNorm &lt;- lm(y ~ x, data = norm)
+resultsHetero &lt;- lm(y ~ x, data = hetero)
+resultsAuto &lt;- lm(y ~ x, data = auto)</code></pre>
+<p>I’m not going to look up the summaries for each of the models. We
+could use these to look at summaries and maybe infer how much violations
+influence slopes, p-values, etc. It’s tricky to compare these different
+datasets because I simulated them all using different slopes,
+intercepts, etc. So we can’t quite compare them directly. However, we
+have already talked about those ‘rules of thumb’ and instead we should
+just keep them in mind.</p>
+<p>The code to extract residuals is called ‘residuals()’. This tells us
+the distance from each point in our dataset to the line of best fit
+identified by the regression analysis. E.g.,</p>
+<pre class="r"><code># Examine the residuals (just the first ~20)
+residuals(results)[1:20]</code></pre>
+<pre><code>##           1           2           3           4           5           6 
+##  -5.0961006   2.7808718  -0.4968071  -1.9283188  -6.7362526   1.1821405 
+##           7           8           9          10          11          12 
+##  -5.2633312 -13.0521495  -2.5077100   7.9873205  -3.2665149   5.8371791 
+##          13          14          15          16          17          18 
+## -11.9524042   0.4243903   4.7443550   3.9817491   1.8768181  -5.1287563 
+##          19          20 
+##  -5.6808001  -7.5690709</code></pre>
+<p>These data are used to calculate the <strong>standard deviation of
+the error</strong> around our line – simply by calculating the standard
+deviation of these data. The mean of these data should be ~ 0.</p>
+<p>But we want to examine these residuals graphically. It may be
+tempting to plot these residuals very simply using:</p>
+<pre class="r"><code># Simple way
+plot(residuals(results))</code></pre>
+<p><img src="lecture_7_files/figure-html/residuals_plot-1.png" width="432" /></p>
+<p>However, note that the X-axis title is “Index”. This means that the
+X-values here are in the order of the data, from 1 to <em>n</em> – the
+sample size. We actually want to make sure that the X-axis in this plot
+is our actual X-variable, so we can look at how residuals change along
+the continuous nature of our X-variable.</p>
+<p>We are drawing the residuals from the ‘results’ object, so we can’t
+reference the ‘datum’ object like we usually do. Instead we have to
+explicitly call the raw X-variable data. We can call an individual
+variable from an object in R using the money sign command: ‘datum$x’‘.
+We can call’. E.g.,</p>
+<pre class="r"><code># Correct way to examine residuals plot
+plot(residuals(results) ~ datum$x)
+
+# Add a horizontal line at y = 0
+abline(a = 0, b = 0)</code></pre>
+<p><img src="lecture_7_files/figure-html/residuals_plot_2-1.png" width="432" /></p>
+<p>So what have we done…? We have taken our scatterplot of data and:</p>
+<ul>
+<li>flattened it out so that it now fills the whole plot,</li>
+<li>the regression line is now also flattened and at y = 0,</li>
+<li>visualized the degree to which each point is above or below that
+line.</li>
+</ul>
+<p>We can see that (1) most of our residual points are close to the
+line, few are far away, (2) there’s no heteroscedasticity, (3) doesn’t
+appear to be any autocorrelation, and things appear linear.</p>
+<p>Let’s examine this for nonlinear data:</p>
+<pre class="r"><code># Correct way to examine residuals plot
+plot(residuals(resultsNonlinear) ~ nonlinear$x)
+
+# Add a horizontal line at y = 0
+abline(a = 0, b = 0)</code></pre>
+<p><img src="lecture_7_files/figure-html/residuals_plot_nonlinear-1.png" width="432" /></p>
+<p>Clearly this is nonlinear: bunch of points below the line, then a
+bunch above, and then more below. This would be much better fit with a
+curvilinear line, which we will discuss in a couple weeks.</p>
+<p>Non-normal data:</p>
+<pre class="r"><code># Correct way to examine residuals plot
+plot(residuals(resultsNorm) ~ norm$x)
+
+# Add a horizontal line at y = 0
+abline(a = 0, b = 0)</code></pre>
+<p><img src="lecture_7_files/figure-html/residuals_plot_norm-1.png" width="432" /></p>
+<p>Notice where the regression line is! It’s way down at the bottom of
+the graph, rather than being in the middle. This is a red flag. And then
+most of the noise is above the line. This suggests non-normality.</p>
+<pre class="r"><code># Correct way to examine residuals plot
+plot(residuals(resultsHetero) ~ hetero$x)
+
+# Add a horizontal line at y = 0
+abline(a = 0, b = 0)</code></pre>
+<p><img src="lecture_7_files/figure-html/residuals_plot_hetero-1.png" width="432" /></p>
+<p>Pretty easy to see the heteroscedasticity: small variance with small
+X-values, and then larger variance with larger X-values.</p>
+<pre class="r"><code># Correct way to examine residuals plot
+plot(residuals(resultsAuto) ~ auto$x)
+
+# Add a horizontal line at y = 0
+abline(a = 0, b = 0)</code></pre>
+<p><img src="lecture_7_files/figure-html/residuals_plot_auto-1.png" width="432" /></p>
+<p>The points (residual error) are following each other! This path is a
+good indication of autocorrelation. The data are not independent of one
+another.</p>
+</div>
+<div id="histogram-of-residuals" class="section level3">
+<h3>Histogram of residuals</h3>
+<p>The histogram of residuals will make a simple bar chart that examines
+‘<em>global</em>’ normality across all of your data. What I mean by
+‘global’ is that it does examine normality as the X-variable increases,
+but lumps all the error across all X-values into a single chart.</p>
+<pre class="r"><code># Correct way to examine residuals plot
+hist(residuals(results))</code></pre>
+<p><img src="lecture_7_files/figure-html/resid_hist-1.png" width="432" /></p>
+<p>We have taken all of the residuals and examined the distribution of
+residuals across all the X-values.</p>
+<p><strong>Q:</strong> Can anyone think of a negative consequence of
+lumping in this histogram? Can you think of another assumption that we
+can we no longer test for with this graph?</p>
+<p><strong>Q:</strong> Does this look perfectly normal?</p>
+<p>Nah, not really. It never will. But what we are looking for is
+obvious, egregious violations of the assumption of normal error. For
+example, let’s make this graph for the non-normal data:</p>
+<pre class="r"><code># Correct way to examine residuals plot
+hist(residuals(resultsNorm))</code></pre>
+<p><img src="lecture_7_files/figure-html/resid_hist_nonnorm-1.png" width="432" /></p>
+<p>This is pretty bad! This is a case where we would say “Our data are
+not normal!”</p>
+<p>This might be a time where you would use a ‘log transformation’ to
+fix this issue. I don’t really like log-transformations because it
+screws with how we interpret our results – makes the story less clear –
+but that would be an option here.</p>
+<p>Let’s examine the heteroscedastic data:</p>
+<pre class="r"><code># Correct way to examine residuals plot
+hist(residuals(resultsHetero))</code></pre>
+<p><img src="lecture_7_files/figure-html/resid_hist_hetero-1.png" width="432" /></p>
+<p><strong>Q:</strong> Does anything seem off about these data? (Kind of
+hard to say.)</p>
+<p>If you don’t like the appearance of your histogram and want to adjust
+it, you can change the appearance of it using the ‘breaks’ command:</p>
+<pre class="r"><code># Make two graphs side-by-side
+par(mfrow = c(1, 2))
+
+# Default setting
+hist(residuals(resultsHetero))
+
+# Revisualizing with more breaks
+hist(residuals(resultsHetero), breaks = 10)</code></pre>
+<p><img src="lecture_7_files/figure-html/resid_hist_hetero_breaks-1.png" width="864" /></p>
+<p>This second graph suggests that the bell curve might be a bit
+‘skinny’ – which is called <strong>kurtosis</strong>. Kurosis is when
+the shape of your distribution is not-normal. It may have <em>skew</em>
+in one direction (a tail), more observations in the middle (bulge), or
+be ‘skinny’ and have longer tails on both sides. This is a rare problem
+for you to have to deal with, but you can do ‘weighted regression’ in
+‘lm()’ to account for uneven variance in the model itself.</p>
+</div>
+<div id="autocorrelation-functions-acf" class="section level3">
+<h3>Autocorrelation functions (ACF)</h3>
+<p>The <strong>autocorrelation function</strong> measures how similar
+each datapoint is to the other datapoints that are behind it in the
+dataframe. It compares residuals at different <em>lags</em> in the
+dataframe.</p>
+<ul>
+<li>At a lag of zero, we expect high correlation, because we compare
+each point to itself.</li>
+<li>At lags of 1 or more, if there is autocorrelation, then the ACF
+metric will be high and positive (&gt; 0.2) when comparing each a
+datapoint to points lagged behind it (i.e., high correlation to nearby
+data in the dataset).</li>
+<li>If there is no autocorrelation, then the ACF metric will randomly be
+positive and negative and usually within 0.2 of 0.</li>
+</ul>
+<pre class="r"><code># Autocorrelation function for normal data
+acf(residuals(results)[order(datum$x)])</code></pre>
+<p><img src="lecture_7_files/figure-html/acf_2-1.png" width="432" /></p>
+<p>When we run this, we have to make sure our ACF function operates
+using the order of the X-variable. This might reflect the biological
+mechanism with which we might expect autocorrelation to happen. For
+example, if we were measuring how a powerplant causes pollution in a
+river, we would order our data using the X-variable ‘distance from
+plant’. So we will index the ACF using the ‘order’ of the
+X-variable.</p>
+<p>Let’s examine the ACF graph a bit more. On the X-axis, we have a
+‘lag’ in comparing the residuals in our data.</p>
+<ul>
+<li>At a lag of 0, we are comparing each point to itself. At a lag of 1,
+we are comparing each point to the point next to it. At a lag of 2, we
+compare each point to the point two points away. Etc.</li>
+<li>The vertical bar at each lag is the mean estimate of the ACF
+function. The length of the bar indicates how correlated each value is
+to it’s lagged comparison. This estimates how correlated they are to
+eachother (i.e., an <span class="math inline">\(r^2\)</span> value). At
+a lag of 0, we are comparing each point to itself, so the correlation is
+1 (perfect correlation). This is meaningless to us but provides
+contextual reference.</li>
+<li>The <strong>dotted blue line</strong> is basically a p-value line.
+If any of your vertical bars cross this blue line, it indicates that you
+have significant autocorrelation at that lag.</li>
+<li>For example, note the ACF estimate at a lag = 7 was above the line!
+But, be careful here. If you randomly have autocorrelation at one lag,
+think about whether this makes biological sense. Instead, we are looking
+for <strong>obvious and egregious</strong> evidence of
+autocorrelation.</li>
+</ul>
+<p>What does obvious autocorrelation look like…?</p>
+<pre class="r"><code># Autocorrelation function for normal data
+acf(residuals(resultsAuto)[order(auto$x)])</code></pre>
+<p><img src="lecture_7_files/figure-html/acf_3-1.png" width="432" /></p>
+<p>This is obvious autocorrelation. We see that each point is highly
+correlated with the value next to it! E.g., <span
+class="math inline">\(r^2\)</span> values are high: greater than 0.8! It
+isn’t until a lag of ~8 that we see the ACF values dip below the blue
+line. And then eventually the have negative autocorrelation at a lag of
+15 and beyond.</p>
+<ul>
+<li>In ecology, this behavior in data is pretty uncommon. However, one
+notable example where it might appear involves predator-prey population
+cycles, like the famous population dynamics between snowshoe hare-lynx
+in boreal forests of North America.</li>
+</ul>
+<p>This chart is best for testing for autocorrelation. But, I mentioned
+last class, that sometimes these charts can indicate autocorrelation
+<em>when data are nonlinear</em>:</p>
+<pre class="r"><code># Two graphs
+par(mfrow=c(1,2))
+
+# Recall the scatterplot for the nonlinear data
+plot(y ~ x, data = nonlinear)
+
+# Autocorrelation function with correct order
+acf(residuals(resultsNonlinear)[order(nonlinear$x)])</code></pre>
+<p><img src="lecture_7_files/figure-html/acf_4-1.png" width="864" /></p>
+<p>Remember, the autocorrelation function is comparing residuals. Is one
+residual similar to the residuals next to it?</p>
+<p>Since a linear model was fit through these data, we have clusters of
+negative and positive residuals, and the ACF will pick up on this
+autocorrelation. However, this observed autocorrelation is not due to
+true autocorrelation in the system, but rather our use of linear model
+being fit to nonlinear data. Our line doesn’t fit well! And here, the
+ACF is telling us that we should double-check whether our data are
+linear.</p>
+<p>If a nonlinear line was fit through these data, the residuals would
+be normal and the ACF would not detect autocorrelation. We may learn how
+to do this in a few weeks.</p>
+</div>
+<div id="concluding-thoughts" class="section level3">
+<h3>Concluding thoughts</h3>
+<p>I use these graphs to test the assumptions of linear regression
+model. You do have to run the regression first! It’s part of your
+exploratory process. You should think about whether your data are linear
+or not before starting an analysis. I may make a ‘field guide’ for
+considerations when running an analysis, and/or maybe we will work on
+that together during the last class.</p>
+</div>
+</div>
+<div id="simulating-data-for-this-lecture" class="section level2">
+<h2>Simulating data for this lecture</h2>
+<p>Code to simulate the above datasets is included here:</p>
+<pre class="r"><code>### Code for simulating data to be analyzed in this lecture
+
+# Set the seed for reproducibility
+set.seed(123)
+
+## Simulate data with no assumption violations
+n &lt;- 100
+x1 &lt;- rnorm(n, mean = 20, sd = 10)
+y1 &lt;- 5 + 4 * x1 + rnorm(n, mean = 0, sd = 8)
+
+# Create dataframe
+datum &lt;- data.frame(x = x1, y = y1)
+
+# Save the CSV file
+write.csv(datum, &quot;lecture_7_good_data.csv&quot;)
+
+
+## Simulate data with a violation of normality
+n &lt;- 100
+x &lt;- rnorm(n, mean = 20, sd = 3)
+y &lt;- 10 + 25 * x + rnorm(n, mean = 0, sd = 8)^2
+
+# Create dataframe
+datum &lt;- data.frame(x = x, y = y)
+
+# Save the CSV file
+write.csv(datum, &quot;lecture_7_nonnormal_data.csv&quot;)
+
+
+## Simulate data with a violation of linearity
+n &lt;- 100
+x &lt;- runif(n, 0, 10)
+#x &lt;- sort(x)
+y &lt;- 3 + 2 * x - 0.18 * x^2 + rnorm(n, mean = 0, sd = 1)
+
+# Create dataframe
+datum &lt;- data.frame(x = x, y = y)
+
+# Save the CSV file
+write.csv(datum, &quot;lecture_7_nonlinear_data.csv&quot;)
+
+
+## Simulate data that are heteroscedastic
+n &lt;- 100
+x1 &lt;- runif(n, 0, 10)
+y1 &lt;- 5 + 4 * x1 + rnorm(n, mean = 0, sd = 1 * x1)
+
+# Create dataframe
+datum &lt;- data.frame(x = x1, y = y1)
+
+# Save the CSV file
+write.csv(datum, &quot;lecture_7_heteroscedastic_data.csv&quot;)
+
+
+## Simulate data that are autocorrelated
+n &lt;- 100
+x1 &lt;- runif(n, 0, 10)
+
+# Sort x1 from low to high
+x1 &lt;- sort(x1)
+
+# Simulate error for each value using the mean of the previous value
+error &lt;- matrix(NA, length(x1), 1)
+error[1,1] &lt;- rnorm(1, mean = 0, sd = 1)
+for (i in 2:length(x1)){
+  error[i,1] &lt;- rnorm(1, mean = error[i-1, 1], sd = 1)
+}
+
+# Create y values
+y1 &lt;- 3 + 2 * x1 + error
+
+# Create dataframe
+datum &lt;- data.frame(x = x1, error = error, y = y1)
+
+# Save the CSV file
+write.csv(datum, &quot;lecture_7_autocorrelated_data.csv&quot;)</code></pre>
+</div>
+<div id="predictions" class="section level2">
+<h2>Predictions</h2>
+<p>Using our statistical models (i.e., our statistical analyses) to make
+predictions is a really important component of science. Perhaps the
+ultimate goal. We are seeking to understand nature and make predictive
+models for how it works! If you can’t make predictions from your
+statistical model, then we might argue that your model needs some
+work.</p>
+<p><strong>Quality of science</strong></p>
+<ul>
+<li>Level 1: is there a difference between groups? P-values. Bare
+minimum.</li>
+<li>Level 2: what is the difference between groups? Effect sizes. Next
+step up.</li>
+<li>Level 3: measure effects and make predictions from them.</li>
+</ul>
+<p>For me personally, I am a conservation biologist who studies wildlife
+populations. I try to measure the demographic rates of populations: what
+are the survival and reproductive rate of turtles in a population each
+year, and how does survival and reproduction vary by age? I then try to
+use those models for age-structured demographic rates to make
+predictions about how populations will grow or decline in size. This is
+often called ‘population viability analysis’. My ultimate goal is to
+generate models for whether populations will persist or not.</p>
+<div id="simple-predictions" class="section level3">
+<h3>Simple predictions</h3>
+<p>Ultimately, prediction comes back to our linear model:</p>
+<p><strong><span class="math inline">\(Y = \beta_0 + \beta_1 X_1 +
+\epsilon \sim N(0, \sigma)\)</span></strong></p>
+<p>To make predictions, we can:</p>
+<ul>
+<li>Fit our regression model</li>
+<li>Measure betas</li>
+<li>Get some new X-variable data</li>
+<li>Solve for Y! This is making predictions.</li>
+</ul>
+<p>For example, let’s say we have results from a regression model
+explaining how biomass (kg/ha) changes as a consequence of rainfall
+(cm). Our results are:</p>
+<ul>
+<li><strong>beta0 = 3.87 and beta1 = 6.55</strong></li>
+<li>We want to use the model to predict what biomass might be when
+rainfall = 5 cm.</li>
+<li><strong>Y = 1.55 + 2.05 * 5</strong></li>
+<li><strong>= 1.55 + 10.25</strong></li>
+<li><strong>= 11.80 kg/ha –&gt; 5 cm</strong></li>
+</ul>
+<p>We would predict to observe 11.80 kg/ha biomass when an area gets 5
+cm of rain.</p>
+</div>
+<div id="when-can-we-make-predictions" class="section level3">
+<h3>When can we make predictions?</h3>
+<p>Let’s examine the biomass example with a scatterplot:</p>
+<p><img src="lecture_7_files/figure-html/biomass-1.png" width="432" /></p>
+<p>We don’t have any data around when rainfall ~ 2 cm. Let’s say you
+want to know how much biomass you might expect at the vertical dashed
+line – 2 cm rainfall. Can we do that? <strong>Yes!</strong></p>
+<p><strong>Interpolation (good) – making predictions within the range of
+observed data.</strong></p>
+<p>Let’s say you want to know how much biomass you might expect when
+there is 15 cm of rainfall. Can we do that? <strong>Yes.</strong></p>
+<p><strong>Extrapolation (be careful) – making predictions outside the
+range of observed data.</strong></p>
+<ul>
+<li>It’s not a bad practice, but we need to be <strong>very clear to
+ourselves and our readers</strong> that we are extrapolating. We don’t
+know if the relationship we observed <em>changes</em> outside of the
+observed data. Maybe it becomes nonlinear! We need to be honest about
+potential limitations.</li>
+</ul>
+</div>
+<div id="uncertainty" class="section level3">
+<h3>Uncertainty</h3>
+<p>Anytime we provide an estimate of truth with out statistical model,
+we provide a measure of uncertainty. If we estimate a slope, difference
+between groups, whatever – we always provide estimates of confidence
+intervals. We always convey how certain we are of those estimates.</p>
+<p>We must do the same for predictions.</p>
+<p>In the rainfall prediction example above, we aren’t going to provide
+confidence intervals, but will instead provide <strong>prediction
+intervals</strong>.</p>
+<p><strong>Confidence intervals</strong> – 95% of all such intervals
+contain the true value; <strong>a measure of uncertainty in the
+<em>estimate</em></strong>.</p>
+<ul>
+<li>When we generate an estimate of biomass at 5 cm rainfall, we are
+making an average estimate and uncertainty.</li>
+<li>Confidence intervals usually fall inside the individual data.</li>
+</ul>
+<p><img src="lecture_7_files/figure-html/biomass-2-1.png" width="432" /></p>
+<p><strong>Prediction intervals – a measure of uncertainty in the
+individual outcomes</strong></p>
+<ul>
+<li>When we make predictions, we make making predictions about
+individual outcomes, and there will be more uncertainty.</li>
+<li>Prediction intervals are outside of most data. For example:</li>
+</ul>
+<p><img src="lecture_7_files/figure-html/biomass-3-1.png" width="432" /></p>
+<p>A prediction interval will capture most (95%) of the data.</p>
+<p><strong>Q:</strong> What do you notice about the shape of how I drew
+the confidence intervals and aprediction intervals?</p>
+<p>They are somewhat pinched in the middle. This is because we have more
+data in the middle, we gives us more certainty about in what the true
+estimate is and individual outcomes are.</p>
+<p>However, at the tails we have less data, and thus we have less
+certainty about the estimate and individual outcomes. And if we
+<strong>extrapolate</strong>, the uncertainty will be larger.</p>
+<p>We will work on how to make predictions and predictions intervals in
+R during the next class.</p>
+</div>
+<div id="prediction-summary" class="section level3">
+<h3>Prediction summary</h3>
+<ol style="list-style-type: decimal">
+<li>Predictions are basic math</li>
+<li>Difference between interpolation and extrapolation, and differences
+in your confidence of these estimates</li>
+<li>Difference between prediction and confidence intervals</li>
+</ol>
+<p><a href="lecture_8.html">–go to next lecture–</a></p>
+</div>
+</div>
+
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+<script>
+$(document).ready(function ()  {
+
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

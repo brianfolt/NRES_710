@@ -12,7 +12,7 @@
 <meta name="author" content="NRES 710" />
 
 
-<title>Linear Regression (cont.)</title>
+<title>Linear Regression - assumptions</title>
 
 <script src="site_libs/header-attrs-2.27/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
@@ -348,6 +348,15 @@ div.tocify {
       <a href="lecture_4.html">Linear regression</a>
     </li>
     <li>
+      <a href="lecture_5.html">Linear regression - results</a>
+    </li>
+    <li>
+      <a href="lecture_6.html">Linear regression - assumptions</a>
+    </li>
+    <li>
+      <a href="lecture_7.html">Linear regression - predictions</a>
+    </li>
+    <li>
       <a href="LECTURE3.html">Taxonomy of common statistics</a>
     </li>
     <li>
@@ -387,13 +396,13 @@ div.tocify {
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="EXERCISE1.html">Exercise 1 - Data Summary Functions</a>
+      <a href="exercise_1.html">Exercise 1 - Data Summary Functions</a>
     </li>
     <li>
-      <a href="EXERCISE2.html">Exercise 2 - t-tests</a>
+      <a href="exercise_2.html">Exercise 2 - Linear regression</a>
     </li>
     <li>
-      <a href="EXERCISE3.html">Exercise 3 - Simple Linear Regression</a>
+      <a href="EXERCISE2.html">Exercise 3 - t-tests</a>
     </li>
     <li>
       <a href="EXERCISE4.html">Exercise 4 - Multiple Linear Regression</a>
@@ -427,9 +436,9 @@ div.tocify {
 
 
 
-<h1 class="title toc-ignore">Linear Regression (cont.)</h1>
+<h1 class="title toc-ignore">Linear Regression - assumptions</h1>
 <h4 class="author">NRES 710</h4>
-<h4 class="date">Last compiled: 2024-07-29</h4>
+<h4 class="date">Last compiled: 2024-07-30</h4>
 
 </div>
 
@@ -845,33 +854,14 @@ point will also be above the line?</li>
 chance that the next point will also be below the line?</li>
 </ul>
 <p>As you might expect, it is best for teaching us whether our data are
-<strong>autocorrelated</strong>.</p>
-<p>The autocorrelation function, specifically, measures how similar each
-datapoint is to the other datapoints that are behind it in the
-dataframe. It compares residuals at different lags in the dataframe. At
-a lag of zero, we expect high correlation, because we compare each point
-to itself. At lags of 1 or more, if there is autocorrelation, then the
-ACF metric will be high and positive (&gt; 0.2) when comparing each a
-datapoint to points lagged behind it (i.e., high correlation to nearby
-data in the dataset). If there is no autocorrelation, then the ACF
-metric will randomly be positive and negative and usually within 0.2 of
-0.</p>
-<p>Here’s an example using (1) our simulated data that meet all of the
-assumptions, and (2) the autocorrelated data from above:</p>
-<p><img src="lecture_6_files/figure-html/autocorrelation_function-1.png" width="864" /></p>
-<p>The autocorrelation function can also be useful for
-<strong>non-linearity</strong>. For example:</p>
+<strong>autocorrelated</strong>. But it can also tell us if our data may
+be <strong>nonlinear</strong>. A quick example:</p>
+<p>For example:</p>
 <p><img src="lecture_6_files/figure-html/nonlinear_2-1.png" width="864" /></p>
-<p>These data are non-linear – and were simulated with no
-autocorrelation. Data on the left and right regions of the graph are
-below the line, whereas the middle-most X-data are above the line.</p>
-<p>These data are not autocorrelated, but the <em>residuals</em> show
-evidence of autocorrelation. When we create an ACF plot, it suggests
-autocorrelation, but this isn’t the case. It is due to the
-non-linearity. (If we fixed the non-linearity issue, the residual
-autocorrelation would go away.)</p>
 <p>So, if we use an ACF and it shows autocorrelation, we should make
 sure we don’t have a non-linearity issue.</p>
+<p>We will examine autocorrelation functions in more detail next
+class.</p>
 </div>
 </div>
 <div id="summary" class="section level2">

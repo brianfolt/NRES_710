@@ -39,6 +39,9 @@ Linear regression is a common statistical analysis when you have both a **contin
 # Set the seed for reproducibility
 set.seed(123)
 
+# Adjust margins
+par(mar = c(4, 4, 1, 0))
+
 # Simulate two continuous variables
 n <- 40
 x <- rnorm(n, mean = 20, sd = 10)
@@ -71,6 +74,9 @@ In statistics class, we change this equation a bit:
 ```{r simulate-plot-2, echo=FALSE, message=FALSE, warning=FALSE}
 # Set the seed for reproducibility
 set.seed(123)
+
+# Adjust margins
+par(mar = c(4, 4, 1, 0))
 
 # Simulate two continuous variables
 n <- 40
@@ -148,6 +154,9 @@ What if we have the same data, but we fit a horizontal line?
 # Set the seed for reproducibility
 set.seed(123)
 
+# Adjust margins
+par(mar = c(4, 4, 1, 0))
+
 # Simulate two continuous variables
 n <- 40
 x <- rnorm(n, mean = 20, sd = 10)
@@ -200,6 +209,9 @@ In which of these two cases would you be more likely to reject the null?
 # Set the seed for reproducibility
 set.seed(123)
 
+# Adjust margins
+par(mar = c(4, 4, 1, 1))
+
 # Set up the plotting area to display two plots side by side
 par(mfrow = c(1, 2))
 
@@ -250,6 +262,9 @@ In which of these two cases would you be more likely to reject the null?
 ```{r simulate-plot-5, echo=FALSE, message=FALSE, warning=FALSE, fig.width=9, fig.height=4}
 # Set the seed for reproducibility
 set.seed(100)
+
+# Adjust margins
+par(mar = c(4, 4, 1, 1))
 
 # Set up the plotting area to display two plots side by side
 par(mfrow = c(1, 2))
@@ -304,6 +319,9 @@ In which of these two cases would you be more likely to reject the null?
 ```{r simulate-plot-6, echo=FALSE, message=FALSE, warning=FALSE, fig.width=9, fig.height=4}
 # Set the seed for reproducibility
 set.seed(123)
+
+# Adjust margins
+par(mar = c(4, 4, 1, 1))
 
 # Set up the plotting area to display two plots side by side
 par(mfrow = c(1, 2))
@@ -394,6 +412,9 @@ Let's now simulate data, so that we know what 'Truth' is.
 ```{r regression_example, echo=TRUE, message=FALSE, warning=FALSE}
 # Set the seed for reproducibility
 set.seed(123)
+
+# Adjust margins
+par(mar = c(4, 4, 1, 1))
 
 # Simulate a continuous predictor variable, precipitation
 n <- 30
