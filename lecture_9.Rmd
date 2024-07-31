@@ -40,7 +40,26 @@ The good news is that our X-variable data can only be continuous or categorical.
 
 ## Presenting Results
 
-We 
+With continuous X data, we start out by saying: "For each 1 unit increase in X, we observed a unit change in Y." There is no such thing as a unit change in X when we have a categorical X variable, so we will drop that. Instead, we will say something like:
+
+**"We found that [group 1] was [$\beta_1$] [Y-units] ([+/-CI]; 95% CI) [descriptor word to indicate direction] than [group 2] (p = [p-value])."
+
+- *if p > 0.05, then add: "; however, our results were not statistically significant."
+
+### Example
+
+Let's take a peak in R at the elephant [seal body size data](lecture_8_seal_data.csv) from last class:
+
+```{r seals, echo=TRUE, message=FALSE, warning=FALSE, fig.width=4.5, fig.height=3.5}
+# Load the data
+datum <- read.csv("lecture_8_seal_data.csv")
+
+# Examine it
+head(datum)
+tail(datum)
+```
+
+
 
 
 

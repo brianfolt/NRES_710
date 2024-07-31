@@ -463,8 +463,45 @@ modifications.</p>
 </div>
 <div id="presenting-results" class="section level2">
 <h2>Presenting Results</h2>
-<p>We</p>
+<p>With continuous X data, we start out by saying: “For each 1 unit
+increase in X, we observed a unit change in Y.” There is no such thing
+as a unit change in X when we have a categorical X variable, so we will
+drop that. Instead, we will say something like:</p>
+<p>**“We found that [group 1] was [<span
+class="math inline">\(\beta_1\)</span>] [Y-units] ([+/-CI]; 95% CI)
+[descriptor word to indicate direction] than [group 2] (p =
+[p-value]).”</p>
+<ul>
+<li>*if p &gt; 0.05, then add: “; however, our results were not
+statistically significant.”</li>
+</ul>
+<div id="example" class="section level3">
+<h3>Example</h3>
+<p>Let’s take a peak in R at the elephant <a
+href="lecture_8_seal_data.csv">seal body size data</a> from last
+class:</p>
+<pre class="r"><code># Load the data
+datum &lt;- read.csv(&quot;lecture_8_seal_data.csv&quot;)
+
+# Examine it
+head(datum)</code></pre>
+<pre><code>##   X    Sex     Size Male
+## 1 1 Female 188.7905    0
+## 2 2 Female 195.3965    0
+## 3 3 Female 231.1742    0
+## 4 4 Female 201.4102    0
+## 5 5 Female 202.5858    0
+## 6 6 Female 234.3013    0</code></pre>
+<pre class="r"><code>tail(datum)</code></pre>
+<pre><code>##     X  Sex     Size Male
+## 35 35 Male 266.4316    1
+## 36 36 Male 263.7728    1
+## 37 37 Male 261.0784    1
+## 38 38 Male 248.7618    1
+## 39 39 Male 243.8807    1
+## 40 40 Male 242.3906    1</code></pre>
 <p><a href="lecture_10.html">–go to next lecture–</a></p>
+</div>
 </div>
 
 
