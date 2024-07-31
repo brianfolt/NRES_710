@@ -673,7 +673,7 @@ function didn’t even measure for us… (what a shame!)</li>
 </ul>
 <p>Let’s go back to our original graph.</p>
 <pre class="r"><code># Plot
-stripchart(body_size ~ sex, data = datum, vertical = TRUE, method = &quot;jitter&quot;, 
+stripchart(Size ~ Sex, data = datum, vertical = TRUE, method = &quot;jitter&quot;, 
            pch = 19, xlab = &quot;Sex&quot;, ylab = &quot;Body size (cm)&quot;)</code></pre>
 <p><img src="lecture_8_files/figure-html/size-5-1.png" width="432" /></p>
 <p><strong>Q:</strong> how might we visualize <span
@@ -843,7 +843,10 @@ reporting results like we used for linear regression. Next class we will
 learn how to report our results when X-variable is categorical. And then
 we will extend the formula to accommodate situations for when we have
 more than two groups. And then we will keep moving on from there!</p>
-<pre class="r"><code># Save the data for future lectures, if needed
+<pre class="r"><code># Make sure Sex is a factor
+datum$Sex &lt;- factor(datum$Sex)
+
+# Save the data for future lectures, if needed
 write.csv(datum, &quot;lecture_8_seal_data.csv&quot;)</code></pre>
 <p><a href="lecture_9.html">–go to next lecture–</a></p>
 </div>
