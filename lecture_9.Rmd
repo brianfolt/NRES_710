@@ -1,0 +1,48 @@
+---
+title: "Analysis of Categorical Data (cont.)"
+author: "NRES 710"
+date: "Last compiled: `r Sys.Date()`"
+output: 
+  html_document: 
+    theme: yeti
+    toc: yes
+    toc_float: yes
+    css: styles.css
+---
+
+```{r setup, include=FALSE}
+
+knitr::opts_chunk$set(
+	echo = TRUE,
+	message = FALSE,
+	warning = FALSE,
+	cache = TRUE
+)
+```
+
+```{r echo=FALSE}
+
+#  NRES 710, Analysis of Categorical Data (cont.)
+#     University of Nevada, Reno
+#     Presenting results and multiple groups
+
+```
+
+## Summary
+
+Last class we discussed how to analyze data when we have a categorical X-variable data. 
+
+Traditionally, this is called a *t-test* -- but I am going to avoid calling it that going forward. Instead, we are always going to be using the **linear model** in this class, which is more *parsimonious* (simple) and will create continuity with the approach we are going to take toward understanding statistics in this class 
+
+Today we will discuss how to **present results** from analysis of categorical data. We have a 'canned' sentence for presenting results when we have two continuous variables, but we need a slightly different approach for when we have categorical X-data.
+
+The good news is that our X-variable data can only be continuous or categorical. So once we learn this second approach, we will only have to know these **two approaches**. We can use them repeatedly during our various analytical activities, perhaps with slight modifications.
+
+## Presenting Results
+
+We 
+
+
+
+
+[--go to next lecture--](lecture_10.html)
