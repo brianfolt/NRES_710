@@ -23,6 +23,7 @@ datum <- data.frame(PreyDens = x, PredRate = y)
 # Save the CSV file
 write.csv(datum, "exercise3_dataset1.csv")
 
+
 ## Dataset 2
 # Simulate x-variable
 n <- 70
@@ -63,7 +64,7 @@ datum <- data.frame(PreyDensity = x, LitterSize = y)
 write.csv(datum, "exercise3_dataset3.csv")
 
 
-### Dataset 4
+## Dataset 4
 # Simulate x-variable
 n <- 100
 x <- runif(n, 0, 10)
@@ -81,7 +82,7 @@ datum <- data.frame(RoadDensity = x, ProbUse = y)
 write.csv(datum, "exercise3_dataset4.csv")
 
 
-# Dataset 5
+## Dataset 5
 # Simulate x-variable
 n <- 50
 
@@ -99,6 +100,3 @@ datum <- data.frame(DeerDensity = x, CowsKilled = y)
 
 # Save the CSV file
 write.csv(datum, "exercise3_dataset5.csv")
-
-
-
