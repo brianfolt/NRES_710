@@ -340,7 +340,7 @@ We will learn how to tweak this formula to analyze our data as the data become m
 
 **Note:** We can't use our same canned statement for reporting results like we used for linear regression. Next class we will learn how to report our results when X-variable is categorical. And then we will extend the formula to accommodate situations for when we have more than two groups. And then we will keep moving on from there!
 
-```{r size-10, echo=TRUE, message=FALSE, warning=FALSE, fig.width=4.5, fig.height=3.5}
+```{r size-10, echo=FALSE, message=FALSE, warning=FALSE, fig.width=4.5, fig.height=3.5}
 # Make sure Sex is a factor
 datum$Sex <- factor(datum$Sex)
 
