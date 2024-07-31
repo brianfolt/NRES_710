@@ -58,6 +58,7 @@ datum <- read.csv("lecture_8_seal_data.csv")
 head(datum)
 tail(datum)
 str(datum)
+
 # Scatterplot
 #plot(Size ~ Sex, data = datum)
 ```
