@@ -1,5 +1,5 @@
 ---
-title: "t Tests"
+title: "Analysis of Categorical Data"
 author: "NRES 710"
 date: "Last compiled: `r Sys.Date()`"
 output: 
@@ -22,7 +22,7 @@ knitr::opts_chunk$set(
 
 ```{r echo=FALSE}
 
-#  NRES 710, t Tests
+#  NRES 710, Analysis of Categorical Data
 #     University of Nevada, Reno
 #     Testing between groups
 
@@ -30,9 +30,9 @@ knitr::opts_chunk$set(
 
 ## Summary
 
-Up to this point, we have been operating under the idea that we have been examing the relationship between a continuous Y variable and a continuous X variable.
+Up to this point, we have been operating under the idea that we have been examing the relationship between a **continuous Y variable** and a **continuous X variable**.
 
-What if we no longer have a continuous X-variable, but instead have a categorical variable?
+What if we no longer have a continuous X-variable, but instead have a **categorical X-variable**?
 
 Let's assume that X-variable is binomial (two categories):
 
@@ -255,7 +255,7 @@ So: why think about this as a t-test? Perhaps it would be easier to use the line
 
 Let's see what this looks like by trying this again in R.
 
-## lm() for groups in R
+## Analysis of categorical data w/ lm()
 
 ```{r size-6, echo=TRUE, message=FALSE, warning=FALSE, fig.width=4.5, fig.height=3.5}
 ### Code for simulating data to be analyzed body size data for two sexes

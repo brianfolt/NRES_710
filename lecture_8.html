@@ -12,7 +12,7 @@
 <meta name="author" content="NRES 710" />
 
 
-<title>t Tests</title>
+<title>Analysis of Categorical Data</title>
 
 <script src="site_libs/header-attrs-2.27/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
@@ -434,7 +434,7 @@ div.tocify {
 
 
 
-<h1 class="title toc-ignore">t Tests</h1>
+<h1 class="title toc-ignore">Analysis of Categorical Data</h1>
 <h4 class="author">NRES 710</h4>
 <h4 class="date">Last compiled: 2024-07-31</h4>
 
@@ -444,10 +444,10 @@ div.tocify {
 <div id="summary" class="section level2">
 <h2>Summary</h2>
 <p>Up to this point, we have been operating under the idea that we have
-been examing the relationship between a continuous Y variable and a
-continuous X variable.</p>
+been examing the relationship between a <strong>continuous Y
+variable</strong> and a <strong>continuous X variable</strong>.</p>
 <p>What if we no longer have a continuous X-variable, but instead have a
-categorical variable?</p>
+<strong>categorical X-variable</strong>?</p>
 <p>Let’s assume that X-variable is binomial (two categories):</p>
 <p><strong>Continuous Y, Categorical X (binomial)</strong></p>
 <p><strong>Q:</strong> How would we typically analyze data with a
@@ -695,8 +695,8 @@ know pretty well – and instead say that our X-variable is categorical,
 rather than continuous.</p>
 <p>Let’s see what this looks like by trying this again in R.</p>
 </div>
-<div id="lm-for-groups-in-r" class="section level2">
-<h2>lm() for groups in R</h2>
+<div id="analysis-of-categorical-data-w-lm" class="section level2">
+<h2>Analysis of categorical data w/ lm()</h2>
 <pre class="r"><code>### Code for simulating data to be analyzed body size data for two sexes
 
 # Recall our &#39;datum&#39; object
