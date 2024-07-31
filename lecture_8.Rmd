@@ -28,294 +28,312 @@ knitr::opts_chunk$set(
 
 ```
 
-## Predictions
+## Summary
 
-Using our statistical models (i.e., our statistical analyses) to make predictions is a really important component of science. Perhaps the ultimate goal. We are seeking to understand nature and make predictive models for how it works! If you can't make predictions from your statistical model, then we might argue that your model needs some work.
+Up to this point, we have been operating under the idea that we have been examing the relationship between a continuous Y variable and a continuous X variable.
 
-**Quality of science**
+What if we no longer have a continuous X-variable, but instead have a categorical variable?
 
-- Level 1: is there a difference between groups? P-values. Bare minimum.
-- Level 2: what is the difference between groups? Effect sizes. Next step up.
-- Level 3: measure effects and make predictions from them.
+Let's assume that X-variable is binomial (two categories):
 
-For me personally, I am a conservation biologist who studies wildlife populations. I try to measure the demographic rates of populations: what are the survival and reproductive rate of turtles in a population each year, and how does survival and reproduction vary by age? I then try to use those models for age-structured demographic rates to make predictions about how populations will grow or decline in size. This is often called 'population viability analysis'. My ultimate goal is to generate models for whether populations will persist or not.
+**Continuous Y, Categorical X (binomial)**
 
-### Simple predictions
+**Q:** How would we typically analyze data with a categorical X and a continuous, normally-distributed Y?
 
-Ultimately, prediction comes back to our linear model:
+**t-Test!** Named after the 'Student t distribution'. 
 
-**$Y = \beta_0 + \beta_1 X_1 + \epsilon \sim N(0, \sigma)$**
+<br>
 
-To make predictions, we can:
+## t-Tests
 
-- Fit our regression model
-- Measure betas
-- Get some new X-variable data
-- Solve for Y! This is making predictions.
+For example, let's say we are interested in testing for body size differences between two sexes of **elephant seal** (*Mirounga angustirostris*).
 
-For example, let's say we have results from a regression model explaining how biomass (kg/ha) changes as a consequence of rainfall (cm). Our results are:
+**$X_1$ = male, $X_2$ = female, $Y$ = length**
 
-- **beta0 = 3.87 and beta1 = 6.55**
-- We want to use the model to predict what biomass might be when rainfall = 5 cm.
-- **Y = 1.55 + 2.05 * 5**
-- **= 1.55 + 10.25**
-- **= 11.80 kg/ha --> 5 cm**
+Our data might look like this:
 
-We would predict to observe 11.80 kg/ha biomass when an area gets 5 cm of rain.
+```{r size, echo=FALSE, message=FALSE, warning=FALSE, fig.width=4.5, fig.height=3.5}
+### Code for simulating data to be analyzed body size data for two sexes
 
-### When can we make predictions?
-
-Let's examine the biomass example with a scatterplot:
-
-```{r biomass, echo=FALSE, message=FALSE, warning=FALSE, fig.width=4.5, fig.height=3.5}
-### Code for simulating data to be analyzed in this lecture
+# Adjust some parameters
+par(mar = c(4,4,0,0))
 
 # Set the seed for reproducibility
 set.seed(123)
 
-# Adjust margins
-par(mar = c(4, 4, 0, 0))
+# Simulate the binomial X-variable (sex)
+n <- 40
+x <- c(rep("Female", n/2), rep("Male", n/2))
 
-## Simulate data with no assumption violations
-n <- 15
-x1 <- abs(runif(n, 0, 10))
-y1 <- 2 + 3 * x1 + rnorm(n, mean = 0, sd = 4)
+# Simulate continuous y-variable data
+y <- ifelse(x == "Female",
+            rnorm(n/2, mean = 200, sd = 20), #females
+            rnorm(n/2, mean = 250, sd = 20)) #males
 
 # Create dataframe
-datum <- data.frame(rainfall = x1, biomass = y1)
-
-# Save these data
-write.csv(datum, 'lecture_7_biomass_data.csv')
+datum <- data.frame(Sex = x, Size = y)
 
 # Plot
-plot(biomass ~ rainfall, data = datum, xlab = "Rainfall (cm)", ylab = "Biomass (kg/ha)")
-
-# Vertical line
-abline(v = 2, lty = 2)
+stripchart(Size ~ Sex, data = datum, vertical = TRUE, method = "jitter",
+           pch = 19, xlab = "Sex", ylab = "Body size (cm)")
 ```
 
-We don't have any data around when rainfall ~ 2 cm. Let's say you want to know how much biomass you might expect at the vertical dashed line -- 2 cm rainfall. Can we do that? **Yes!**
+Both the female and male data are normally distributed. I'm putting a slight 'jitter' on these points, so they can be visualized easier by the naked eye.
 
-**Interpolation (good) -- making predictions within the range of observed data.**
+We want to know: how much larger are males than females? Or, what is the difference between the mean of females and males? We can visualize this with a horizontal line in the middle of each point cloud, and an arrow between the two means.
 
-Let's say you want to know how much biomass you might expect when there is 15 cm of rainfall. Can we do that? **Yes.**
+Our scientific effort might focus on testing the null hypothesis:
 
-**Extrapolation (be careful) -- making predictions outside the range of observed data.**
+**$H_0$: no difference between groups**
 
-- It's not a bad practice, but we need to be **very clear to ourselves and our readers** that we are extrapolating. We don't know if the relationship we observed *changes* outside of the observed data. Maybe it becomes nonlinear! We need to be honest about potential limitations.
+- Or, **$\mu_{females} = \mu_{males}$**
+- Or, **$\mu_{females} - \mu_{males}$ = 0**
 
-### Uncertainty
+These are all the same, and are core to our science-drive hypothesis that we want to test.
 
-Anytime we provide an estimate of truth with out statistical model, we provide a measure of uncertainty. If we estimate a slope, difference between groups, whatever -- we always provide estimates of confidence intervals. We always convey how certain we are of those estimates.
+From a statistical perspective, we are interested in knowing whether males are significantly larger than females, and measuring that effect (if any).
 
-We must do the same for predictions.
+Let's assume that we know truth for this graph:
 
-In the rainfall prediction example above, we aren't going to provide confidence intervals, but will instead provide **prediction intervals**.
+- Average mass of males is 250 kg
+- Average mass of females is 200 kg
+- $\sigma$ = 20 kg
 
-**Confidence intervals** -- 95% of all such intervals contain the true value; **a measure of uncertainty in the *estimate***.
+The truth is that males are larger than females.
 
-- When we generate an estimate of biomass at 5 cm rainfall, we are making an average estimate and uncertainty.
-- Confidence intervals usually fall inside the individual data.
+### Simple t-test in R
 
-```{r biomass-2, echo=FALSE, message=FALSE, warning=FALSE, fig.width=4.5, fig.height=4}
-# Adjust margins
-par(mar = c(4, 4, 1, 0))
+Let's make these data in R, and run a t-test:
 
-# Fit the linear regression model
-model <- lm(biomass ~ rainfall, data = datum)
+```{r size-2, echo=TRUE, message=FALSE, warning=FALSE, fig.width=4.5, fig.height=3.5}
+### Code for simulating data to be analyzed body size data for two sexes
 
-# Predict values and confidence intervals
-predictions <- predict(model, newdata = data.frame(rainfall = sort(datum$rainfall)), interval = "confidence")
+# Set the seed for reproducibility
+set.seed(123)
 
-# Plot the data
-plot(biomass ~ rainfall, data = datum, xlab = "Rainfall (cm)", ylab = "Biomass (kg/ha)")
+# Simulate the binomial X-variable (sex)
+n <- 40
+x <- c(rep("Female", n/2), rep("Male", n/2))
+x <- factor(x)
 
-# Add the regression line
-abline(model, col = "blue")
+# Simulate continuous y-variable data
+y <- ifelse(x == "Female",
+            rnorm(n/2, mean = 200, sd = 20), #females
+            rnorm(n/2, mean = 250, sd = 20)) #males
 
-# Add the confidence intervals
-lines(sort(datum$rainfall), predictions[, "lwr"], col = "red", lty = 2)
-lines(sort(datum$rainfall), predictions[, "upr"], col = "red", lty = 2)
-```
+# Create dataframe
+datum <- data.frame(Sex = x, Size = y)
 
-**Prediction intervals -- a measure of uncertainty in the individual outcomes**
+# Examine the data
+head(datum)
+tail(datum)
 
-- When we make predictions, we make making predictions about individual outcomes, and there will be more uncertainty.
-- Prediction intervals are outside of most data. For example:
+# Plot the data to examine it!
+plot(Size ~ Sex, data=datum)
+# Box and whiskers plot!
+# Bold black line = median
+# Edges of box: 75% and 25% quartiles
+# Bars: 95% limits
+# Points: outliers, or 5% of data outside of the 95% intervals
 
-```{r biomass-3, echo=FALSE, message=FALSE, warning=FALSE, fig.width=4.5, fig.height=4}
-# Adjust margins
-par(mar = c(4, 4, 1, 0))
+# Analyze this using the 't.test()' function in R:
+help(t.test)
+results <- t.test(Size ~ Sex, data = datum)
 
-# Fit the linear regression model
-model <- lm(biomass ~ rainfall, data = datum)
-
-# Predict values and confidence intervals
-predictions <- predict(model, newdata = data.frame(rainfall = sort(datum$rainfall)), interval = "prediction")
-
-# Plot the data
-plot(biomass ~ rainfall, data = datum, xlab = "Rainfall (cm)", ylab = "Biomass (kg/ha)")
-
-# Add the regression line
-abline(model, col = "blue")
-
-# Add the confidence intervals
-lines(sort(datum$rainfall), predictions[, "lwr"], col = "red", lty = 2)
-lines(sort(datum$rainfall), predictions[, "upr"], col = "red", lty = 2)
-```
-
-A prediction interval will capture most (95%) of the data.
-
-**Q:** What do you notice about the shape of how I drew the confidence intervals and aprediction intervals?
-
-They are somewhat pinched in the middle. This is because we have more data in the middle, we gives us more certainty about in what the true estimate is and individual outcomes are.
-
-However, at the tails we have less data, and thus we have less certainty about the estimate and individual outcomes. And if we **extrapolate**, the uncertainty will be larger.
-
-### Prediction summary
-
-1) Predictions are basic math
-2) Difference between interpolation and extrapolation, and differences in your confidence of these estimates
-3) Difference between prediction and confidence intervals
-
-## Making predictions
-
-Let's show you how to make predictions in R, including with **prediction intervals**. We will have R do this for us!
-
-Before we make predictions, we first have to run our analysis. Let's use the results from the biomass x rainfall data regression analysis.
-
-```{r predict_1, echo=TRUE, message=FALSE, warning=FALSE, fig.width=4.5, fig.height=4.5}
-# Read in the biomass data again, if necessary
-datum <- read.csv("lecture_7_biomass_data.csv")
-
-# Plot
-plot(biomass ~ rainfall, data = datum, xlab = "Rainfall (cm)", ylab = "Biomass (kg/ha)")
-
-# Regression
-results <- lm(biomass ~ rainfall, data = datum)
-abline(results)
-```
-
-### Single-value predictions
-
-Let's say we want to know what the biomass is predicted to be when rainfall = 5 cm. We would simply do this using the linear model results:
-
-```{r predict_2, echo=TRUE, message=FALSE, warning=FALSE, fig.width=4.5, fig.height=3.5}
-# Examine the results 
+# Examine the summary
 summary(results)
+# Some functions in R don't have summary functions for them because they are so simple!
 
-# Make a prediction for when rainfall = 5 cm
-4.08 + 2.82 * 5
+# Just ask for the object
+results
 ```
 
-18.18 kg/ha biomass when rainfall is 5 cm!
+All the results come from the object itself!
 
-The most common (and easy) way to make predictions in R is using the 'predict()' function. We will use 'predict.lm()'.
+- t-statistic
+- degrees of freedom
+- p-value -- testing the null hypothesis that there is no difference in the means between the two groups
+- 95% confidence intervals -- on the difference between the two groups
+- average size of female group
+- average size of male group
 
-```{r predict_3, echo=TRUE, message=FALSE, warning=FALSE, fig.width=4.5, fig.height=3.5}
-# Examine the help file
-help(predict.lm)
+**Q:** What is the one thing it doesn't give us that we might want to see??
+
+It does not provide an **estimate** of the size difference between two groups!! This is not helpful (and somewhat silly)!
+
+We can calculate it by doing some math... subtract the smaller group from the larger group:
+
+```{r size-3, echo=TRUE, message=FALSE, warning=FALSE, fig.width=4.5, fig.height=3.5}
+251.2 - 198.9
 ```
 
-Things that 'predict.lm()' needs:
+This is how much larger the males are than females.
 
-- Your regression! Results from your regression.
-- 'newdata' -- these X-values that you want to make predictions for; interpolation, or extrapolation. This 'newdata' has to have an X-column that matches the X-column from your original data.
-- Interval -- whether or not you want 'confidence' or 'prediction' intervals; you need to include *interval = "prediction"*.
-- Other stuff you can ignore.
+The confidence interval would be:
 
-Let's try to validate my prediction for biomass when rainfall = 5 cm.
-
-```{r predict_4, echo=TRUE, message=FALSE, warning=FALSE, fig.width=4.5, fig.height=3.5}
-# Create predict data
-datumPredict <- data.frame(rainfall = 5)
-datumPredict
-
-# Create a new object called predictions
-predictions <- predict(results, datumPredict, interval = "prediction")
-predictions
+```{r size-4, echo=TRUE, message=FALSE, warning=FALSE, fig.width=4.5, fig.height=3.5}
+(64.44 - 40.14)/2
 ```
 
-Three outputs: fit, lwr, and upr.
+**Q:** Why is the 95% confidence interval that R provided negative?
 
-- fit -- this is our prediction! And it matches pretty closely to what we calculated by 'hand' with our linear model.
-- instead of intervals, we get limits:
-  - lower prediction limit (lwr) -- 
-  - upper prediction limit (upr) -- 
-- if we want the prediction interval, we need to do some math:
+R calculated this effect as doing females minus males, whereas I calculated it as males minus females. We just need to be savvy to make sure we think about the outputs and ensure that everything makes sense. Use common sense.
 
-```{r predict_5, echo=TRUE, message=FALSE, warning=FALSE, fig.width=4.5, fig.height=3.5}
-predictions[1,"upr"] - predictions[1,"fit"]
+**Questions?**
+
+## t-tests are just a regression
+
+One thing that always confused me about learning statistics as an undergraduate and graduate student was that all of the usual analyses (regression, t-test, ANOVA, ANCOVA, etc.) are all taught as 'different tests'. It creates many more boxes and relationships that you have to memorize -- different things to categorize in your brain as different and thus requires more effect to memorize.
+
+Here's a little secret... t-tests are just a **regression**! And can be analyzed as such with 'lm()'!
+
+**Q:** What's our linear model again??
+
+**$Y = \beta_0 + \beta_1 X_1 + \epsilon \sim N(0, \sigma)$**
+
+We can use the **linear model** to analyze the elephant seal size data!
+
+**$Size = \beta_0 + \beta_1 Sex + \epsilon \sim N(0, \sigma)$**
+
+Questions you might ask yourself:
+
+- Why teach this as a whole-new test, when it's the same mathematical formula we have looked at all along?
+- And, since sex is not a number, how would this work?
+
+It works through the magical process of **'dummy-coding'**!
+
+**Dummy-coding -- a process to convert categories to 1s and 0s.** For example:
+
+**Sex:**    **Male:**        
+
+Male        1       
+Male        1       
+Female      0       
+Female      0       
+
+Now, we can replace our **sex** variable with **male**:
+
+**$Size = \beta_0 + \beta_1 Male + \epsilon \sim N(0, \sigma)$**
+
+Let's examine how this works mathematically. Anytime a sample is a male, it gives us a 1 here. Anytime a sample is female, it gives us a 0. Using this information, we can simplify this formula and see how it gives us the answer for both sexes.
+
+- $Size_{females} = \beta_0 + \epsilon \sim N(0, \sigma)$
+- $Size_{males} = \beta_0 + \beta_1 + \epsilon \sim N(0, \sigma)$
+
+**Q:** Everyone follow what we just did here?
+
+**Q:** Looking at these equations, what is the meaning of $\beta_0$?
+
+- **Average size of females**
+- **Or, more generically, the average Y of the reference group** -- samples that were assigned 0.
+
+**Q:** Looking at these equations, what is the meaning of $\beta_1$?
+
+- **Difference between groups** -- this is what we want to know! The thing that the null hypothesis is testing -- whether this effect is different than zero or not. This is the thing the 't.test()' function didn't even measure for us... (what a shame!)
+
+Let's go back to our original graph.
+
+```{r size-5, echo=TRUE, message=FALSE, warning=FALSE, fig.width=4.5, fig.height=3.5}
+# Plot
+stripchart(body_size ~ sex, data = datum, vertical = TRUE, method = "jitter", 
+           pch = 19, xlab = "Sex", ylab = "Body size (cm)")
 ```
 
-The 95% prediction interval is +/-10.51.
+**Q:** how might we visualize $\beta_0$ and $\beta_1$ on this graph?
 
-### Predictions for data
+If we remember that female is 0, then $\beta_0$ is the y-intercept, or the body size when y=0.
 
-Normally we will want to make predictions over a good interval range that encompasses our X-data. This might help us fill in some holes.
+And then $\beta_1$ is the difference between these two groups.
 
-```{r predict_6, echo=TRUE, message=FALSE, warning=FALSE, fig.width=4.5, fig.height=3.5}
-# Examine summary
-summary(datum)
+**Q:** How do we calculate slope again? Rise over run.
 
-# Let's make predictions between 0 -- 10 cm of rainfall
-# And let's try to make 20 predictions across this interval: 10cm/20predictions = a prediction every 0.5 cm
-datumPredict <- data.frame(rainfall = seq(from = 0, to = 10, by = 0.5))
+Since males are 1, then the 'run' is from 0 to 1 -- which equals 1. The rise is $\beta_1$ divided by 1, which equals $\beta_1$.
 
-# Make the predictions
-predictions <- predict(results, datumPredict, interval = "prediction")
+So $\beta_1$ is still the slope, but it's also more simply just the difference between the groups.
 
-# Examine predictions
-head(predictions)
+So: why think about this as a t-test? Perhaps it would be easier to use the linear model that we have studied for three weeks, and gotten to know pretty well -- and instead say that our X-variable is categorical, rather than continuous.
+
+Let's see what this looks like by trying this again in R.
+
+## lm() for groups in R
+
+```{r size-6, echo=TRUE, message=FALSE, warning=FALSE, fig.width=4.5, fig.height=3.5}
+### Code for simulating data to be analyzed body size data for two sexes
+
+# Recall our 'datum' object
+head(datum)
+tail(datum)
+
+# We need to 'dummy-code' our Sex variable, e.g., as 'Male'
+Male <- c(rep(0, n/2), rep(1, n/2))
+
+# Add 'Male' to the dataframe
+datum <- cbind(datum, Male)
+
+# Plot the data!
+plot(Size ~ Male, data = datum)
 ```
 
-We now have a whole sequence of predictions, as well as lower and upper 'prediction intervals'!
+Note: previously R made the X-axis as a categorical (female vs. male), but now it's continuous... R automatically makes graphs depending on it's default interpretation of the data. It reads characters/letters as 'categorical' and numbers and continuous variables. Since we swapped this to be dummy-coded with 1s and 0s, it automatically scaled the X-axis as continuous!
 
-An annoying feature here is that we don't really have X-value data in here; the 'rainfall' data.
+Let's now try to run our t-test using 'lm()':
 
-```{r predict_7, echo=TRUE, message=FALSE, warning=FALSE, fig.width=4.5, fig.height=3.5}
-# Make it a dataframe to make it easier to add data to it.
-predictions <- as.data.frame(predictions)
+```{r size-7, echo=TRUE, message=FALSE, warning=FALSE, fig.width=4.5, fig.height=3.5}
+# Examine the old t-test results
+results
+248.9749 - 202.8325 # effect of being male
 
-# Add a new column
-predictions$rainfall <- seq(from = 0, to = 10, by = 0.5)
-
-# Examine
-predictions
+# Use lm() to run regression with dummy-coded X-data
+results2 <- lm(Size ~ Male, data = datum)
+summary(results2)
 ```
 
-Pretty cool!?
+**Q:** What do we see?? 
 
-Last thing I want to show you: plotting the prediction intervals over the range of X-values.
+- Average size of females: 202.8 from t-test, compared to intercept 202.8 from regression
+- Effect of being male: 46.1 from t-test, 46.1 from regression
 
-```{r predict_8, echo=TRUE, message=FALSE, warning=FALSE, fig.width=4.5, fig.height=4.5}
-# Very simple way to plot the prediction intervals
-matplot(predictions$rainfall, predictions[,1:3], type = "l")
+The numbers are the same!
+
+Turns out that when you run 't.test()', it does dummy-coded behind the scenes, and then just runs a 'lm()'. 
+
+```{r size-8, echo=TRUE, message=FALSE, warning=FALSE, fig.width=4.5, fig.height=3.5}
+# Confidence intervals
+confint(results2)
 ```
 
-This graph ain't too pretty.
+Confidence intervals also ~match up between t-test and lm results.
 
-**Q:** What's this graph missing? The original data.
+What if we run a regression but with a categorical X-variable...?
 
-```{r predict_9, echo=TRUE, message=FALSE, warning=FALSE, fig.width=4.5, fig.height=4.5}
-# Plot the data, but this time specify what the x- and y-limits are.
-# This is important to make sure everything will fit on here.
-plot(biomass ~ rainfall, data = datum, xlim = c(0, 10), ylim = c(0, 40), xlab = "Rainfall (cm)", ylab = "Biomass (kg/ha)")
-
-# But now we have to add other data onto here, without erasing the original data.
-# Specify the parameter: new = TRUE
-par(new = TRUE)
-plot(fit ~ rainfall, data = predictions, type = "l", xlim = c(0, 10), ylim = c(0, 40), ylab = "", xlab = "")
-par(new = TRUE)
-plot(lwr ~ rainfall, data = predictions, type = "l", xlim = c(0, 10), ylim = c(0, 40), ylab = "", xlab = "")
-par(new = TRUE)
-plot(upr ~ rainfall, data = predictions, type = "l", xlim = c(0, 10), ylim = c(0, 40), ylab = "", xlab = "")
+```{r size-9, echo=TRUE, message=FALSE, warning=FALSE, fig.width=4.5, fig.height=3.5}
+# Regression with a categorical variable
+results3 <- lm(Size ~ Sex, data = datum)
+summary(results3)
 ```
 
-This is more useful, I would say!
+This works also! Because R will automatically turn that categorical X-variable into a dummy-coded continuous variable. In this case, it became 1 for 'SexMale' and 0 for 'SexFemale'. It chose 'Female' as the reference group, and male becomes the group females are being compared to.
 
-That being said, there are definitely better approaches to graphing predictions out there, likely using 'ggplot2' package.
+**Q:** Why did it choose 'Female' as the reference? Alphabetical order.
 
-**Final thought**: This approach to prediction will be one that we can use for the rest of the semester with all of the more complicated analytical models we will learn!
+So, you don't even have to do the dummy-coding -- R can do that for you! (Although I still like to, to be sure I know what's going on.)
+
+## Conclusions
+
+What this means is: we don't actually have to memorize "Do I do a t-test here, or a regression here, for these data...?" It doesn't matter!
+
+The lightbulb turned on for me with statistics when I realized that we don't have to remember all the different situations for which you would run a t-test, ANOVA, regression, ANCOVA, etc...
+
+Instead, ***every analysis can be done with some form of a linear model***.
+
+For the rest of the semester, we will continue to revisit our tried-and-true formula for the linear model:
+
+**$Y = \beta_0 + \beta_1 X_1 + \epsilon \sim N(0, \sigma)$**
+
+And then we will tweak it just a little bit, week by week, until we use this basic formula for the entire class. It will be a little more complicated each week, but it will be easier to understand because we will build on it slowly, carefully, and hopefully in a logical way!
+
+We will learn how to tweak this formula to analyze our data as the data become more complicated.
+
+**Note:** We can't use our same canned statement for reporting results like we used for linear regression. Next class we will learn how to report our results when X-variable is categorical. And then we will extend the formula to accommodate situations for when we have more than two groups. And then we will keep moving on from there!
 
 [--go to next lecture--](lecture_9.html)
