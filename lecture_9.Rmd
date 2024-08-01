@@ -57,10 +57,15 @@ datum <- read.csv("lecture_8_seal_data.csv")
 # Examine it
 head(datum)
 tail(datum)
+
+# Examine structure of data
 str(datum)
 
+# Force 'Sex' to be a factor
+datum$Sex <- factor(datum$Sex)
+
 # Scatterplot
-#plot(Size ~ Sex, data = datum)
+plot(Size ~ Sex, data = datum)
 ```
 
 
