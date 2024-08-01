@@ -57,14 +57,10 @@ navbar:
       href: exercise_3.html
     - text: Exercise 4 - Analysis of Categorical Data
       href: exercise_4.html
-    - text: Exercise 4 - Multiple Linear Regression
-      href: EXERCISE4.html
   - text: More Resources
     menu:
     - text: Links 
       href: Links.html
-    - text: Final Projects 
-      href: FINALPROJ.html
 output:
   html_document:
     lib_dir: site_libs
