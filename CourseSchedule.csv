@@ -1,11 +1,11 @@
 Week,Dates,Tuesday class meeting,Thursday class meeting,Exercises/deadlines
 1,"Aug. 27, 29",[Syllabus and the Purpose of Statistics](lecture_1.html),[Paper Discussion and Intro to R](lecture_2.html),"[Johnson (1999)](papers/Johnson1999.pdf), [Dushoff et al. (2019)](papers/Dushoff_etal_2019.pdf)"
-2,"Sep. 3, 5",[Basic Concepts](lecture_3.html),[Exercise 1: Functions and Summary Stats](exercise_1.html),Quiz - 9/5
-3,"Sep. 10, 12",[Linear Regression](lecture_4.html),[Linear Regression - results](lecture_5.html),Exercise 1 - 9/12
-4,"Sep. 17, 19","[Exercise 2: Linear Regression, pt. 1](exercise_2.html)",[Linear Regression - assumptions](lecture_6.html),Quiz - 9/19
-5,"Sep. 24, 26",[Linear Regression - predictions](lecture_7.html),"[Exercise 3: Linear Regression, pt. 2](exercise_3.html)","Exercise 2, Quiz - 9/26"
-6,"Sep. 31, Oct. 2",[Analysis of Categorical Data](lecture_8.html),[Analysis of Categorical Data - cont.](lecture_9.html),Exercise 3 - 10/2
-7,"Oct. 8, 10",TBD,[Exercise 4: Analysis of Categorical Data](exercise_4.html),Quiz - 10/10
+2,"Sep. 3, 5",[Basic Concepts](lecture_3.html),[Exercise 1: Functions and Summary Stats](exercise_1.html),Quiz 1 - due 9/5
+3,"Sep. 10, 12",[Linear Regression](lecture_4.html),[Linear Regression - results](lecture_5.html),Exercise 1 - due 9/12
+4,"Sep. 17, 19","[Exercise 2: Linear Regression, pt. 1](exercise_2.html)",[Linear Regression - assumptions](lecture_6.html),Quiz 1 - due 9/19
+5,"Sep. 24, 26",[Linear Regression - predictions](lecture_7.html),"[Exercise 3: Linear Regression, pt. 2](exercise_3.html)",Exercise 2 and Quiz 3 - due 9/26
+6,"Sep. 31, Oct. 2",[Analysis of Categorical Data](lecture_8.html),[Analysis of Categorical Data - cont.](lecture_9.html),Exercise 3 - due 10/2
+7,"Oct. 8, 10",TBD,[Exercise 4: Analysis of Categorical Data](exercise_4.html),Quiz 4 - 10/10
 8,"Oct. 15, 17",TBD,TBD,TBD
 9,"Oct. 22, 24",*No class (Brian at conference)*,*No class (Brian at conference)*,
 10,"Oct. 29, 31",[Linear regression](LECTURE6.html),[Exercise 4: Multiple linear regression](EXERCISE4.html),Exercise 4 - 11/1

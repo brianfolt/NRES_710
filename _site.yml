@@ -11,18 +11,22 @@ navbar:
     menu:
     - text: Syllabus and the Purpose of Statistics
       href: lecture_1.html
-    - text: P-value discussion and Intro to R
+    - text: P-value Discussion and Intro to R
       href: lecture_2.html
-    - text: Sampling uncertainty
+    - text: Sampling Uncertainty
       href: lecture_3.html
-    - text: Linear regression
+    - text: Linear Regression
       href: lecture_4.html
-    - text: Linear regression - results
+    - text: Linear Regression - results
       href: lecture_5.html
-    - text: Linear regression - assumptions
+    - text: Linear Regression - assumptions
       href: lecture_6.html
-    - text: Linear regression - predictions
+    - text: Linear Regression - predictions
       href: lecture_7.html
+    - text: Analysis of Categorical Data
+      href: lecture_8.html
+    - text: Analysis of Categorical Data (cont.)
+      href: lecture_9.html
     - text: Taxonomy of common statistics
       href: LECTURE3.html
     - text: t-test and z-test
@@ -47,10 +51,12 @@ navbar:
     menu:
     - text: Exercise 1 - Data Summary Functions
       href: exercise_1.html
-    - text: Exercise 2 - Linear regression
+    - text: Exercise 2 - Linear Regression
       href: exercise_2.html
-    - text: Exercise 3 - t-tests
-      href: EXERCISE2.html
+    - text: Exercise 3 - Linear Regression (cont.)
+      href: exercise_3.html
+    - text: Exercise 4 - Analysis of Categorical Data
+      href: exercise_4.html
     - text: Exercise 4 - Multiple Linear Regression
       href: EXERCISE4.html
   - text: More Resources
