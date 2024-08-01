@@ -48,7 +48,7 @@ With continuous X data, we start out by saying: "For each 1 unit increase in X, 
 
 ### Example
 
-Let's take a peak in R at the elephant [seal body size data](lecture_8_seal_data.csv) from last class:
+Let's take a peak in R at the elephant [seal body size data](lecture_8_seal_data.csv) from last class. We will analyze it using 'lm()' with a categorical X-variable:
 
 ```{r seals, echo=TRUE, message=FALSE, warning=FALSE, fig.width=4.5, fig.height=3.5}
 # Load the data
@@ -66,7 +66,263 @@ datum$Sex <- factor(datum$Sex)
 
 # Scatterplot
 plot(Size ~ Sex, data = datum)
+
+# Fit a linear model
+results <- lm(Size ~ Sex, data = datum)
+summary(results)
 ```
+
+Let's talk about this a bit to make sure we are all on the same page.
+
+The analysis output from linear regression with **categorical X-data** is the same output that we got when we ran linear regression using **two continuous variables**.
+
+- $\beta_0$ -- the Y-intercept; previously this was the value when Y = 0; now it is slightly different, it is still the Y-value when X = 0, but we can more technically define this as the average Y-value for the 'reference group'.
+  - We get to choose what the reference group is. By default, R chose 'female' as the reference group, and we can see that because 'SexMale' was the $\beta_1$ effect.
+- $\beta_1$ -- the difference in size between males and females. The **p-value** is testing the null hypothesis that there is no difference in size between males and females.
+- Residual standard error -- noise around the average
+- Everything else is still the same
+
+We can now use this output to populate the our 'presenting resultings' sentence. We will need the +/- 95% CI:
+
+```{r seals-2, echo=TRUE, message=FALSE, warning=FALSE, fig.width=4.5, fig.height=3.5}
+# Confidence intervals
+confint(results)
+
+# Calculate confidence intervals
+57.7 - 46.1
+# simple way: upper limit minus mean
+confint(results)["SexMale", 2] - results$coefficients["SexMale"]
+# extracting estimates from objects to do math
+```
+
+**"We found that males were 46.1 kg (+/-11.6; +/-95% CI) heavier than females (p = 9.24e-10)."**
+
+You could also be more descriptive and perhaps say: "had 46.1 kg (...) greater mass than females". It's nice to be descriptive -- but also good to keep things concise.
+
+What if you wanted to put females first? That's fine -- just swap things around, word smith it a bit, and put females first: "We found that females had 46.1 kg (...) less mass than males".
+
+If you give R categorical data, R will automatically create the 'reference' group using the alphabetical order of the groups. For example, if you gave R data with two experimental treatments in the X-variable, "control" and "burned", it will automatically make "burned" the reference group -- but you might want to change that to visualize the 'effect' of burn treatment compared to control, untreated areas.
+
+**Takehome message:** Running a t-test is the same as running a regression, but with a categorical X-variable -- but it doesn't matter with coding in R. The only difference is you have to understand that you have a categorical X-variable, and write a slightly different sentence.
+
+### Changing the reference group
+
+We can change what the reference group is in R using the 'factor()' function. For example, using our seal data:
+
+```{r seals-3, echo=TRUE, message=FALSE, warning=FALSE, fig.width=4.5, fig.height=3.5}
+# Examine the categorical data
+str(datum$Sex)
+# The 'levels' are the groups in the variable, and they are ordered alphabetically by default.
+
+# Re-order the levels
+datum$Sex <- factor(datum$Sex, levels = c("Male", "Female")) # switch the order
+
+# Re-run model
+results2 <- lm(Size ~ Sex, data = datum)
+summary(results2)
+```
+
+Now 'SexFemale' is the $\beta_1$ effect.
+
+## Multiple groups
+
+Let's extend this model a little bit. Previously we had considered a situation where we had a 'binomial' X-variable (*bi-* and *nomial* = *two* *names* = a categorical variable with two categories). Let's now consider a situation where we have a multinomial (*multi-* = more than two) X-variable with more than two categories within it.
+
+**Continuous Y; Multinomial X**
+
+- **X-variable: Group 1 - Juveniles, Group 2 - Subadults, Group 3 - Adults**
+- **Y-variable: body size (mass)**
+
+The first thing I want to show you is how this works in the general linear modeling framework. Up to this point, we have used our trusty equation for the linear model as:
+
+**$Y = \beta_0 + \beta_1 X_1 + \epsilon \sim N(0, \sigma)$**
+
+We previously introduced the concept of 'dummy coding', which will be particularly useful for us to explain how to extend our simple linear model to accommodate multiple groups.
+
+We will take our categorical X-variable and 'dummy code' it by creating a **column for each category** that describes whether each observation in our data is **within that category (1) or not (0)**. For example:
+
+```{r create-table, echo=FALSE, message=FALSE, warning=FALSE}
+# Create the data
+Age <- c("Juvenile", "Juvenile", "Juvenile", "Subadult", "Subadult", "Subadult", "Adult", "Adult", "Adult")
+Juvenile <- c(1, 1, 1, 0, 0, 0, 0, 0, 0)
+Subadult <- c(0, 0, 0, 1, 1, 1, 0, 0, 0)
+Adult <- c(0, 0, 0, 0, 0, 0, 1, 1, 1)
+
+# Create a data frame
+table_data <- data.frame(Age = Age, Juvenile = Juvenile, Subadult = Subadult, Adult = Adult)
+
+# Display the table
+print(table_data)
+```
+
+When we create our general linear model to accommodate these multiple groups, we now need to have an X for every one of these dummy-coded columns. But, we are going to leave one out.
+
+**$Y = \beta_0 + \beta_1 Subadult + \beta_2 Adult + \epsilon \sim N(0, \sigma)$**
+
+You might be scratching your head why 'Juvenile' wasn't included. We don't need to include it because it will be automatically be captured by the $\beta_0$ intercept!
+
+- Subadults will be captured by the $\beta_1 Subadult$ term.
+- Adults will be captured by the $\beta_2 Adult$ term.
+- So then Juveniles will be all the individuals that weren't in Subadult or Adults categories and thus will captured by the intercept as the 'reference' group.
+
+The reference group is the group by which all others are compared.
+
+Another way to look at this is to examine our dummy-coded columns. If we look at the 'Subadult' and 'Adult' columns, we actually don't need the 'Juvenile' column to know which observations are of juveniles:
+
+```{r create-table-2, echo=FALSE, message=FALSE, warning=FALSE}
+# Create the data
+Age <- c("Juvenile", "Juvenile", "Juvenile", "Subadult", "Subadult", "Subadult", "Adult", "Adult", "Adult")
+Subadult <- c(0, 0, 0, 1, 1, 1, 0, 0, 0)
+Adult <- c(0, 0, 0, 0, 0, 0, 1, 1, 1)
+
+# Create a data frame
+table_data <- data.frame(Age = Age, Subadult = Subadult, Adult = Adult)
+
+# Display the table
+print(table_data)
+```
+
+The individuals that were 0 for both Subadults and Adults must be Juveniles, by the process of elimination.
+
+**Let's see how this works mathematically:**
+
+**$Y = \beta_0 + \beta_1 Subadult + \beta_2 Adult + \epsilon$**
+
+**$Y(juv) = \beta_0 + \beta_1 * 0 + \beta_2 * 0 + \epsilon = \beta_0 + \epsilon$**
+
+The meaning of $\beta_0$ has not changed -- the average Y (size) of our reference group.
+
+**$Y(sub) = \beta_0 + \beta_1 * 1 + \beta_2 * 0 + \epsilon = \beta_0 + \beta_1 + \epsilon$**
+
+The meaning of $\beta_1$ has not changed either -- the difference between juveniles and subadults.
+
+**$Y(adult) = \beta_0 + \beta_1 * 0 + \beta_2 * 1 + \epsilon = \beta_0 + \beta_2 + \epsilon$**
+
+Our new variable, $\beta_2$, has a similar meaning to $\beta_1$ -- the difference between adults and juveniles.
+
+I like to visualize these things **graphically**. This might look like:
+
+```{r stripplot, echo=FALSE, message=FALSE, warning=FALSE}
+### Code for simulating data to be analyzed body size data for two sexes
+
+# Set the seed for reproducibility
+set.seed(123)
+
+# Graph
+par(mar = c(4,4,1,0))
+
+# Simulate the binomial X-variable (sex)
+n <- 60
+x <- c(rep("Juvenile", n/3), rep("Subadult", n/3), rep("Adult", n/3))
+x <- factor(x, levels = c("Juvenile", "Subadult", "Adult"))
+
+# Simulate continuous y-variable data
+y <- ifelse(x == "Juvenile", rnorm(n/3, mean = 75, sd = 20), #juv
+            ifelse(x == "Subadult", rnorm(n/3, mean = 200, sd = 20), #subad
+              rnorm(n/2, mean = 250, sd = 20))) #ad
+
+# Create dataframe
+datum <- data.frame(Age = x, Size = y)
+
+# Plot
+stripchart(Size ~ Age, data = datum, vertical = TRUE, method = "jitter",
+           pch = 19, xlab = "Age", ylab = "Body size (cm)")
+
+# Calculate the mean and standard deviation for each group
+mean_juvenile <- mean(datum$Size[datum$Age == "Juvenile"])
+sd_juvenile <- sd(datum$Size[datum$Age == "Juvenile"])
+
+mean_subadult <- mean(datum$Size[datum$Age == "Subadult"])
+sd_subadult <- sd(datum$Size[datum$Age == "Subadult"])
+
+mean_adult <- mean(datum$Size[datum$Age == "Adult"])
+sd_adult <- sd(datum$Size[datum$Age == "Adult"])
+
+# Add horizontal lines for the means of each group
+segments(0.8, mean_juvenile, 1.2, mean_juvenile, col = "black", lwd = 2)
+segments(1.8, mean_subadult, 2.2, mean_subadult, col = "black", lwd = 2)
+segments(2.8, mean_adult, 3.2, mean_adult, col = "black", lwd = 2)
+
+# Add a vertical line from 0 to the mean of the Juvenile group
+mean_juvenile <- mean(datum$Size[datum$Age == "Juvenile"])
+segments(1, 0, 1, mean_juvenile, col = "orange", lwd = 4)
+text(1.02, mean_juvenile / 1.5, expression(beta[0]), col = "darkorange", pos = 4, cex = 2)
+
+# Add vertical lines to indicate the effect of being subadult compared to juvenile
+segments(1, mean_juvenile, 2, mean_subadult, col = "blue", lwd = 2, lty = 2)
+text(1.5, (mean_juvenile + mean_subadult) / 2.2, expression(beta[1]), col = "blue", pos = 4, cex = 2)
+
+# Add vertical lines to indicate the effect of being adult compared to juvenile
+segments(1, mean_juvenile, 3, mean_adult, col = "darkgreen", lwd = 2, lty = 2)
+text(2, (mean_juvenile + mean_adult) / 2, expression(beta[2]), col = "darkgreen", pos = 4, cex = 2)
+```
+
+Note: our **error** is normally distributed with a mean = 0, centered on the average, with a standard deviation of $\sigma$.
+
+Or:
+
+```{r stripplot-2, echo=FALSE, message=FALSE, warning=FALSE}
+### Code for simulating data to be analyzed body size data for two sexes
+
+# Set the seed for reproducibility
+set.seed(123)
+
+# Graph
+par(mar = c(4,4,1,0))
+
+# Simulate the binomial X-variable (sex)
+n <- 60
+x <- c(rep("Juvenile", n/3), rep("Subadult", n/3), rep("Adult", n/3))
+x <- factor(x, levels = c("Juvenile", "Subadult", "Adult"))
+
+# Simulate continuous y-variable data
+y <- ifelse(x == "Juvenile", rnorm(n/3, mean = 75, sd = 20), #juv
+            ifelse(x == "Subadult", rnorm(n/3, mean = 200, sd = 20), #subad
+              rnorm(n/2, mean = 250, sd = 20))) #ad
+
+# Create dataframe
+datum <- data.frame(Age = x, Size = y)
+
+# Plot
+stripchart(Size ~ Age, data = datum, vertical = TRUE, method = "jitter",
+           pch = 19, xlab = "Age", ylab = "Body size (cm)")
+
+# Calculate the mean and standard deviation for each group
+mean_juvenile <- mean(datum$Size[datum$Age == "Juvenile"])
+sd_juvenile <- sd(datum$Size[datum$Age == "Juvenile"])
+
+mean_subadult <- mean(datum$Size[datum$Age == "Subadult"])
+sd_subadult <- sd(datum$Size[datum$Age == "Subadult"])
+
+mean_adult <- mean(datum$Size[datum$Age == "Adult"])
+sd_adult <- sd(datum$Size[datum$Age == "Adult"])
+
+# Add horizontal lines for the means of each group
+abline(h = mean_juvenile, col = "black", lty = 2, lwd = 2)
+segments(0.8, mean_juvenile, 1.2, mean_juvenile, col = "black", lwd = 2)
+segments(1.8, mean_subadult, 2.2, mean_subadult, col = "black", lwd = 2)
+segments(2.8, mean_adult, 3.2, mean_adult, col = "black", lwd = 2)
+
+# Add a vertical line from 0 to the mean of the Juvenile group
+mean_juvenile <- mean(datum$Size[datum$Age == "Juvenile"])
+segments(1, 0, 1, mean_juvenile, col = "orange", lwd = 4)
+text(1.02, mean_juvenile / 1.5, expression(beta[0]), col = "darkorange", pos = 4, cex = 2)
+
+# Add vertical lines to indicate the effect of being subadult compared to juvenile
+segments(2, mean_juvenile, 2, mean_subadult, col = "blue", lwd = 2, lty = 2)
+text(2, (mean_juvenile + mean_subadult) / 2.2, expression(beta[1]), col = "blue", pos = 4, cex = 2)
+
+# Add vertical lines to indicate the effect of being adult compared to juvenile
+segments(3, mean_juvenile, 3, mean_adult, col = "darkgreen", lwd = 2, lty = 2)
+text(3, (mean_juvenile + mean_adult) / 2, expression(beta[2]), col = "darkgreen", pos = 4, cex = 2)
+```
+
+
+
+
+
+
+
 
 
 

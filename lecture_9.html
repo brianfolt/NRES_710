@@ -436,7 +436,7 @@ div.tocify {
 
 <h1 class="title toc-ignore">Analysis of Categorical Data (cont.)</h1>
 <h4 class="author">NRES 710</h4>
-<h4 class="date">Last compiled: 2024-07-31</h4>
+<h4 class="date">Last compiled: 2024-08-01</h4>
 
 </div>
 
@@ -478,8 +478,8 @@ statistically significant.”</li>
 <div id="example" class="section level3">
 <h3>Example</h3>
 <p>Let’s take a peak in R at the elephant <a
-href="lecture_8_seal_data.csv">seal body size data</a> from last
-class:</p>
+href="lecture_8_seal_data.csv">seal body size data</a> from last class.
+We will analyze it using ‘lm()’ with a categorical X-variable:</p>
 <pre class="r"><code># Load the data
 datum &lt;- read.csv(&quot;lecture_8_seal_data.csv&quot;)
 
@@ -513,8 +513,218 @@ datum$Sex &lt;- factor(datum$Sex)
 # Scatterplot
 plot(Size ~ Sex, data = datum)</code></pre>
 <p><img src="lecture_9_files/figure-html/seals-1.png" width="432" /></p>
-<p><a href="lecture_10.html">–go to next lecture–</a></p>
+<pre class="r"><code># Fit a linear model
+results &lt;- lm(Size ~ Sex, data = datum)
+summary(results)</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = Size ~ Sex, data = datum)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -42.165 -12.604  -0.433  12.777  32.906 
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)  202.832      4.043  50.164  &lt; 2e-16 ***
+## SexMale       46.142      5.718   8.069 9.24e-10 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 18.08 on 38 degrees of freedom
+## Multiple R-squared:  0.6315, Adjusted R-squared:  0.6218 
+## F-statistic: 65.12 on 1 and 38 DF,  p-value: 9.239e-10</code></pre>
+<p>Let’s talk about this a bit to make sure we are all on the same
+page.</p>
+<p>The analysis output from linear regression with <strong>categorical
+X-data</strong> is the same output that we got when we ran linear
+regression using <strong>two continuous variables</strong>.</p>
+<ul>
+<li><span class="math inline">\(\beta_0\)</span> – the Y-intercept;
+previously this was the value when Y = 0; now it is slightly different,
+it is still the Y-value when X = 0, but we can more technically define
+this as the average Y-value for the ‘reference group’.
+<ul>
+<li>We get to choose what the reference group is. By default, R chose
+‘female’ as the reference group, and we can see that because ‘SexMale’
+was the <span class="math inline">\(\beta_1\)</span> effect.</li>
+</ul></li>
+<li><span class="math inline">\(\beta_1\)</span> – the difference in
+size between males and females. The <strong>p-value</strong> is testing
+the null hypothesis that there is no difference in size between males
+and females.</li>
+<li>Residual standard error – noise around the average</li>
+<li>Everything else is still the same</li>
+</ul>
+<p>We can now use this output to populate the our ‘presenting
+resultings’ sentence. We will need the +/- 95% CI:</p>
+<pre class="r"><code># Confidence intervals
+confint(results)</code></pre>
+<pre><code>##                 2.5 %    97.5 %
+## (Intercept) 194.64712 211.01783
+## SexMale      34.56654  57.71822</code></pre>
+<pre class="r"><code># Calculate confidence intervals
+57.7 - 46.1</code></pre>
+<pre><code>## [1] 11.6</code></pre>
+<pre class="r"><code># simple way: upper limit minus mean
+confint(results)[&quot;SexMale&quot;, 2] - results$coefficients[&quot;SexMale&quot;]</code></pre>
+<pre><code>##  SexMale 
+## 11.57584</code></pre>
+<pre class="r"><code># extracting estimates from objects to do math</code></pre>
+<p><strong>“We found that males were 46.1 kg (+/-11.6; +/-95% CI)
+heavier than females (p = 9.24e-10).”</strong></p>
+<p>You could also be more descriptive and perhaps say: “had 46.1 kg (…)
+greater mass than females”. It’s nice to be descriptive – but also good
+to keep things concise.</p>
+<p>What if you wanted to put females first? That’s fine – just swap
+things around, word smith it a bit, and put females first: “We found
+that females had 46.1 kg (…) less mass than males”.</p>
+<p>If you give R categorical data, R will automatically create the
+‘reference’ group using the alphabetical order of the groups. For
+example, if you gave R data with two experimental treatments in the
+X-variable, “control” and “burned”, it will automatically make “burned”
+the reference group – but you might want to change that to visualize the
+‘effect’ of burn treatment compared to control, untreated areas.</p>
+<p><strong>Takehome message:</strong> Running a t-test is the same as
+running a regression, but with a categorical X-variable – but it doesn’t
+matter with coding in R. The only difference is you have to understand
+that you have a categorical X-variable, and write a slightly different
+sentence.</p>
 </div>
+<div id="changing-the-reference-group" class="section level3">
+<h3>Changing the reference group</h3>
+<p>We can change what the reference group is in R using the ‘factor()’
+function. For example, using our seal data:</p>
+<pre class="r"><code># Examine the categorical data
+str(datum$Sex)</code></pre>
+<pre><code>##  Factor w/ 2 levels &quot;Female&quot;,&quot;Male&quot;: 1 1 1 1 1 1 1 1 1 1 ...</code></pre>
+<pre class="r"><code># The &#39;levels&#39; are the groups in the variable, and they are ordered alphabetically by default.
+
+# Re-order the levels
+datum$Sex &lt;- factor(datum$Sex, levels = c(&quot;Male&quot;, &quot;Female&quot;)) # switch the order
+
+# Re-run model
+results2 &lt;- lm(Size ~ Sex, data = datum)
+summary(results2)</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = Size ~ Sex, data = datum)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -42.165 -12.604  -0.433  12.777  32.906 
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)  248.975      4.043  61.576  &lt; 2e-16 ***
+## SexFemale    -46.142      5.718  -8.069 9.24e-10 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 18.08 on 38 degrees of freedom
+## Multiple R-squared:  0.6315, Adjusted R-squared:  0.6218 
+## F-statistic: 65.12 on 1 and 38 DF,  p-value: 9.239e-10</code></pre>
+<p>Now ‘SexFemale’ is the <span class="math inline">\(\beta_1\)</span>
+effect.</p>
+</div>
+</div>
+<div id="multiple-groups" class="section level2">
+<h2>Multiple groups</h2>
+<p>Let’s extend this model a little bit. Previously we had considered a
+situation where we had a ‘binomial’ X-variable (<em>bi-</em> and
+<em>nomial</em> = <em>two</em> <em>names</em> = a categorical variable
+with two categories). Let’s now consider a situation where we have a
+multinomial (<em>multi-</em> = more than two) X-variable with more than
+two categories within it.</p>
+<p><strong>Continuous Y; Multinomial X</strong></p>
+<ul>
+<li><strong>X-variable: Group 1 - Juveniles, Group 2 - Subadults, Group
+3 - Adults</strong></li>
+<li><strong>Y-variable: body size (mass)</strong></li>
+</ul>
+<p>The first thing I want to show you is how this works in the general
+linear modeling framework. Up to this point, we have used our trusty
+equation for the linear model as:</p>
+<p><strong><span class="math inline">\(Y = \beta_0 + \beta_1 X_1 +
+\epsilon \sim N(0, \sigma)\)</span></strong></p>
+<p>We previously introduced the concept of ‘dummy coding’, which will be
+particularly useful for us to explain how to extend our simple linear
+model to accommodate multiple groups.</p>
+<p>We will take our categorical X-variable and ‘dummy code’ it by
+creating a <strong>column for each category</strong> that describes
+whether each observation in our data is <strong>within that category (1)
+or not (0)</strong>. For example:</p>
+<pre><code>##        Age Juvenile Subadult Adult
+## 1 Juvenile        1        0     0
+## 2 Juvenile        1        0     0
+## 3 Juvenile        1        0     0
+## 4 Subadult        0        1     0
+## 5 Subadult        0        1     0
+## 6 Subadult        0        1     0
+## 7    Adult        0        0     1
+## 8    Adult        0        0     1
+## 9    Adult        0        0     1</code></pre>
+<p>When we create our general linear model to accommodate these multiple
+groups, we now need to have an X for every one of these dummy-coded
+columns. But, we are going to leave one out.</p>
+<p><strong><span class="math inline">\(Y = \beta_0 + \beta_1 Subadult +
+\beta_2 Adult + \epsilon \sim N(0, \sigma)\)</span></strong></p>
+<p>You might be scratching your head why ‘Juvenile’ wasn’t included. We
+don’t need to include it because it will be automatically be captured by
+the <span class="math inline">\(\beta_0\)</span> intercept!</p>
+<ul>
+<li>Subadults will be captured by the <span
+class="math inline">\(\beta_1 Subadult\)</span> term.</li>
+<li>Adults will be captured by the <span class="math inline">\(\beta_2
+Adult\)</span> term.</li>
+<li>So then Juveniles will be all the individuals that weren’t in
+Subadult or Adults categories and thus will captured by the intercept as
+the ‘reference’ group.</li>
+</ul>
+<p>The reference group is the group by which all others are
+compared.</p>
+<p>Another way to look at this is to examine our dummy-coded columns. If
+we look at the ‘Subadult’ and ‘Adult’ columns, we actually don’t need
+the ‘Juvenile’ column to know which observations are of juveniles:</p>
+<pre><code>##        Age Subadult Adult
+## 1 Juvenile        0     0
+## 2 Juvenile        0     0
+## 3 Juvenile        0     0
+## 4 Subadult        1     0
+## 5 Subadult        1     0
+## 6 Subadult        1     0
+## 7    Adult        0     1
+## 8    Adult        0     1
+## 9    Adult        0     1</code></pre>
+<p>The individuals that were 0 for both Subadults and Adults must be
+Juveniles, by the process of elimination.</p>
+<p><strong>Let’s see how this works mathematically:</strong></p>
+<p><strong><span class="math inline">\(Y = \beta_0 + \beta_1 Subadult +
+\beta_2 Adult + \epsilon\)</span></strong></p>
+<p><strong><span class="math inline">\(Y(juv) = \beta_0 + \beta_1 * 0 +
+\beta_2 * 0 + \epsilon = \beta_0 + \epsilon\)</span></strong></p>
+<p>The meaning of <span class="math inline">\(\beta_0\)</span> has not
+changed – the average Y (size) of our reference group.</p>
+<p><strong><span class="math inline">\(Y(sub) = \beta_0 + \beta_1 * 1 +
+\beta_2 * 0 + \epsilon = \beta_0 + \beta_1 +
+\epsilon\)</span></strong></p>
+<p>The meaning of <span class="math inline">\(\beta_1\)</span> has not
+changed either – the difference between juveniles and subadults.</p>
+<p><strong><span class="math inline">\(Y(adult) = \beta_0 + \beta_1 * 0
++ \beta_2 * 1 + \epsilon = \beta_0 + \beta_2 +
+\epsilon\)</span></strong></p>
+<p>Our new variable, <span class="math inline">\(\beta_2\)</span>, has a
+similar meaning to <span class="math inline">\(\beta_1\)</span> – the
+difference between adults and juveniles.</p>
+<p>I like to visualize these things <strong>graphically</strong>. This
+might look like:</p>
+<p><img src="lecture_9_files/figure-html/stripplot-1.png" width="672" /></p>
+<p>Note: our <strong>error</strong> is normally distributed with a mean
+= 0, centered on the average, with a standard deviation of <span
+class="math inline">\(\sigma\)</span>.</p>
+<p>Or:</p>
+<p><img src="lecture_9_files/figure-html/stripplot-2-1.png" width="672" /></p>
+<p><a href="lecture_10.html">–go to next lecture–</a></p>
 </div>
 
 
