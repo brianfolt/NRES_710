@@ -9,10 +9,10 @@
 <meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
 
-<meta name="author" content="NRES 710 – Fall 2024" />
+<meta name="author" content="NRES 710" />
 
 
-<title>Schedule</title>
+<title>Analysis of Categorical Data (cont.)</title>
 
 <script src="site_libs/header-attrs-2.27/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
@@ -30,6 +30,9 @@
        h6 {font-size: 12px;}
        code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
        pre:not([class]) { background-color: white }</style>
+<script src="site_libs/jqueryui-1.13.2/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
 <link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
@@ -221,6 +224,69 @@ $(document).ready(function () {
 
 
 
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
 
 </head>
 
@@ -228,6 +294,16 @@ $(document).ready(function () {
 
 
 <div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
 
 
 
@@ -367,207 +443,23 @@ $(document).ready(function () {
 
 
 
-<h1 class="title toc-ignore">Schedule</h1>
-<h4 class="author">NRES 710 – Fall 2024</h4>
+<h1 class="title toc-ignore">Analysis of Categorical Data (cont.)</h1>
+<h4 class="author">NRES 710</h4>
 <h4 class="date">Last compiled: 2024-08-01</h4>
 
 </div>
 
 
-<div id="schedule" class="section level2">
-<h2>Schedule</h2>
-<p>Note: this schedule is subject to change. Please check for updates
-frequently. Also, if a due date listed here differs from that on
-WebCampus, please use the date listed on WebCampus! Thank you.</p>
-<table>
-<colgroup>
-<col width="3%" />
-<col width="8%" />
-<col width="29%" />
-<col width="36%" />
-<col width="20%" />
-</colgroup>
-<thead>
-<tr class="header">
-<th align="left">Week</th>
-<th align="left">Dates</th>
-<th align="left">Tuesday</th>
-<th align="left">Thursday (R mini-lab)</th>
-<th align="left">Assignments</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td align="left">1</td>
-<td align="left">Aug. 27, 29</td>
-<td align="left"><a href="lecture_1.html">Syllabus and the Purpose of
-Statistics</a></td>
-<td align="left"><a href="lecture_2.html">Paper Discussion and Intro to
-R</a></td>
-<td align="left"><a href="papers/Johnson1999.pdf">Johnson (1999)</a>, <a
-href="papers/Dushoff_etal_2019.pdf">Dushoff et al. (2019)</a></td>
-</tr>
-<tr class="even">
-<td align="left">2</td>
-<td align="left">Sep. 3, 5</td>
-<td align="left"><a href="lecture_3.html">Basic Concepts</a></td>
-<td align="left"><a href="exercise_1.html">Exercise 1: Functions and
-Summary Stats</a></td>
-<td align="left">Quiz 1 - due 9/5</td>
-</tr>
-<tr class="odd">
-<td align="left">3</td>
-<td align="left">Sep. 10, 12</td>
-<td align="left"><a href="lecture_4.html">Linear Regression</a></td>
-<td align="left"><a href="lecture_5.html">Linear Regression -
-results</a></td>
-<td align="left">Exercise 1 - due 9/12</td>
-</tr>
-<tr class="even">
-<td align="left">4</td>
-<td align="left">Sep. 17, 19</td>
-<td align="left"><a href="exercise_2.html">Exercise 2: Linear
-Regression, pt. 1</a></td>
-<td align="left"><a href="lecture_6.html">Linear Regression -
-assumptions</a></td>
-<td align="left">Quiz 1 - due 9/19</td>
-</tr>
-<tr class="odd">
-<td align="left">5</td>
-<td align="left">Sep. 24, 26</td>
-<td align="left"><a href="lecture_7.html">Linear Regression -
-predictions</a></td>
-<td align="left"><a href="exercise_3.html">Exercise 3: Linear
-Regression, pt. 2</a></td>
-<td align="left">Exercise 2 and Quiz 3 - due 9/26</td>
-</tr>
-<tr class="even">
-<td align="left">6</td>
-<td align="left">Sep. 31, Oct. 2</td>
-<td align="left"><a href="lecture_8.html">Analysis of Categorical
-Data</a></td>
-<td align="left"><a href="lecture_9.html">Analysis of Categorical Data -
-cont.</a></td>
-<td align="left">Exercise 3 - due 10/2</td>
-</tr>
-<tr class="odd">
-<td align="left">7</td>
-<td align="left">Oct. 8, 10</td>
-<td align="left">TBD</td>
-<td align="left"><a href="exercise_4.html">Exercise 4: Analysis of
-Categorical Data</a></td>
-<td align="left">Quiz 4 - 10/10</td>
-</tr>
-<tr class="even">
-<td align="left">8</td>
-<td align="left">Oct. 15, 17</td>
-<td align="left">TBD</td>
-<td align="left">TBD</td>
-<td align="left">TBD</td>
-</tr>
-<tr class="odd">
-<td align="left">9</td>
-<td align="left">Oct. 22, 24</td>
-<td align="left"><em>No class</em></td>
-<td align="left"><em>No class</em></td>
-<td align="left">Brian at conference</td>
-</tr>
-<tr class="even">
-<td align="left">10</td>
-<td align="left">Oct. 29, 31</td>
-<td align="left">TBD</td>
-<td align="left">TBD</td>
-<td align="left">Exercise 4 - 11/1</td>
-</tr>
-<tr class="odd">
-<td align="left">11</td>
-<td align="left">Nov. 5, 7</td>
-<td align="left"><a href="LECTURE8.html">GLM</a></td>
-<td align="left"><a href="LECTURE8.html">GLM</a></td>
-<td align="left"></td>
-</tr>
-<tr class="even">
-<td align="left">12</td>
-<td align="left">Nov. 13, 15</td>
-<td align="left"><a href="LECTURE9.html">GLMM</a></td>
-<td align="left">OPTIONAL: review roadrunner assignment (multiple linear
-regression)</td>
-<td align="left"></td>
-</tr>
-<tr class="odd">
-<td align="left">13</td>
-<td align="left">Nov. 19, 21</td>
-<td align="left"><a href="LECTURE9.html">GLMM</a></td>
-<td align="left"><em>No class (Thanksgiving)</em></td>
-<td align="left"></td>
-</tr>
-<tr class="even">
-<td align="left">14</td>
-<td align="left">Nov. 26, 28</td>
-<td align="left"><a href="LECTURE10.html">Machine Learning</a></td>
-<td align="left">TBD</td>
-<td align="left">Peer reviews due 11/27</td>
-</tr>
-<tr class="odd">
-<td align="left">15</td>
-<td align="left">Dec. 3, 5</td>
-<td align="left"><a href="Git_tutorial.html">Discussion: code and data
-sharing</a></td>
-<td align="left"><a href="LECTURE11.html">Next steps: multivariate,
-Bayesian, etc.</a></td>
-<td align="left"></td>
-</tr>
-<tr class="even">
-<td align="left">Finals</td>
-<td align="left">Dec. 10, 12</td>
-<td align="left"><em>No class</em></td>
-<td align="left"><em>No class</em></td>
-<td align="left">Good luck on your exams.</td>
-</tr>
-<tr class="odd">
-<td align="left">Other</td>
-<td align="left">TBD</td>
-<td align="left"><a href="LECTURE1.html">P-values, statistical
-tests</a></td>
-<td align="left"></td>
-<td align="left"></td>
-</tr>
-<tr class="even">
-<td align="left">Other</td>
-<td align="left">TBD</td>
-<td align="left"><a href="LECTURE2.html">Central limit theorem (CLT) and
-sampling distributions</a></td>
-<td align="left"><a href="LECTURE2.html">Central limit theorem (CLT) and
-sampling distributions</a></td>
-<td align="left">Exercise 1 due 9/13</td>
-</tr>
-<tr class="odd">
-<td align="left">Other</td>
-<td align="left">TBD</td>
-<td align="left"><a href="LECTURE3.html">Taxonomy of statistics</a></td>
-<td align="left"><a href="LECTURE4.html">t-tests and z tests</a></td>
-<td align="left"></td>
-</tr>
-<tr class="even">
-<td align="left">Other</td>
-<td align="left">TBD</td>
-<td align="left"><a href="LECTURE4.html">t-tests and z-tests</a></td>
-<td align="left"><a href="EXERCISE2.html">Exercise 2: t-tests</a></td>
-<td align="left"></td>
-</tr>
-<tr class="odd">
-<td align="left">Other</td>
-<td align="left">TBD</td>
-<td align="left"><a href="LECTURE5.html">Chi-squared tests</a></td>
-<td align="left">TBD</td>
-<td align="left"></td>
-</tr>
-</tbody>
-</table>
+<div id="summary" class="section level2">
+<h2>Summary</h2>
+<p>adfadfad</p>
+<p><a href="lecture_11.html">–go to next lecture–</a></p>
 </div>
 
 
 
+</div>
+</div>
 
 </div>
 
@@ -600,6 +492,35 @@ $(document).ready(function () {
 
 <!-- code folding -->
 
+<script>
+$(document).ready(function ()  {
+
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
 
 <!-- dynamically load mathjax for compatibility with self-contained -->
 <script>

@@ -1,0 +1,35 @@
+---
+title: "Analysis of Categorical Data (cont.)"
+author: "NRES 710"
+date: "Last compiled: `r Sys.Date()`"
+output: 
+  html_document: 
+    theme: yeti
+    toc: yes
+    toc_float: yes
+    css: styles.css
+---
+
+```{r setup, include=FALSE}
+
+knitr::opts_chunk$set(
+	echo = TRUE,
+	message = FALSE,
+	warning = FALSE,
+	cache = TRUE
+)
+```
+
+```{r echo=FALSE}
+
+#  NRES 710, Analysis of Categorical Data (cont.)
+#     University of Nevada, Reno
+#     post-hoc tests, etc.
+
+```
+
+## Summary
+
+adfadfad
+
+[--go to next lecture--](lecture_11.html)

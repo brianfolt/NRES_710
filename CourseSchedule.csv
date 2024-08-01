@@ -7,14 +7,14 @@ Week,Dates,Tuesday class meeting,Thursday class meeting,Exercises/deadlines
 6,"Sep. 31, Oct. 2",[Analysis of Categorical Data](lecture_8.html),[Analysis of Categorical Data - cont.](lecture_9.html),Exercise 3 - due 10/2
 7,"Oct. 8, 10",TBD,[Exercise 4: Analysis of Categorical Data](exercise_4.html),Quiz 4 - 10/10
 8,"Oct. 15, 17",TBD,TBD,TBD
-9,"Oct. 22, 24",*No class (Brian at conference)*,*No class (Brian at conference)*,
-10,"Oct. 29, 31",[Linear regression](LECTURE6.html),[Exercise 4: Multiple linear regression](EXERCISE4.html),Exercise 4 - 11/1
-11,"Nov. 5, 7",[ANOVA](LECTURE7.html),[ANOVA](LECTURE7.html),
-12,"Nov. 13, 15",[GLM](LECTURE8.html),[GLM](LECTURE8.html),
-13,"Nov. 19, 21",[GLMM](LECTURE9.html),OPTIONAL: review roadrunner assignment (multiple linear regression),
-14,"Nov. 26, 28",[GLMM](LECTURE9.html),*No class (Thanksgiving)*,Peer reviews due 11/27
-15,"Dec. 3, 5",[Machine Learning](LECTURE10.html),[Discussion: code and data sharing](Git_tutorial.html),
-Finals,"Dec. 10, 12","[Next steps- multivariate, Bayesian, etc.](LECTURE11.html)",*No class*,
+9,"Oct. 22, 24",*No class*,*No class*,Brian at conference
+10,"Oct. 29, 31",TBD,TBD,Exercise 4 - 11/1
+11,"Nov. 5, 7",[GLM](LECTURE8.html),[GLM](LECTURE8.html),
+12,"Nov. 13, 15",[GLMM](LECTURE9.html),OPTIONAL: review roadrunner assignment (multiple linear regression),
+13,"Nov. 19, 21",[GLMM](LECTURE9.html),*No class (Thanksgiving)*,
+14,"Nov. 26, 28",[Machine Learning](LECTURE10.html),TBD,Peer reviews due 11/27
+15,"Dec. 3, 5",[Discussion: code and data sharing](Git_tutorial.html),"[Next steps: multivariate, Bayesian, etc.](LECTURE11.html)",
+Finals,"Dec. 10, 12",*No class*,*No class*,Good luck on your exams.
 Other,TBD,"[P-values, statistical tests](LECTURE1.html)",,
 Other,TBD,[Central limit theorem (CLT) and sampling distributions](LECTURE2.html),[Central limit theorem (CLT) and sampling distributions](LECTURE2.html),Exercise 1 due 9/13
 Other,TBD,[Taxonomy of statistics](LECTURE3.html),[t-tests and z tests](LECTURE4.html),
