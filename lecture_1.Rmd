@@ -28,7 +28,7 @@ knitr::opts_chunk$set(
 
 ```
 
-## Introduction among faculty and students
+## Introductions
 
 Introductions among faculty ([Brian Folt](https://www.unr.edu/nvcfwru/folt-brian)) and students
 
