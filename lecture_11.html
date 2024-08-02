@@ -12,7 +12,7 @@
 <meta name="author" content="NRES 710" />
 
 
-<title>Exercise 4: Analysis of Categorical Data</title>
+<title>Analysis of Categorical Data (cont.)</title>
 
 <script src="site_libs/header-attrs-2.27/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
@@ -425,111 +425,33 @@ div.tocify {
 
 
 
-<h1 class="title toc-ignore">Exercise 4: Analysis of Categorical
-Data</h1>
+<h1 class="title toc-ignore">Analysis of Categorical Data (cont.)</h1>
 <h4 class="author">NRES 710</h4>
 <h4 class="date">Last compiled: 2024-08-02</h4>
 
 </div>
 
 
-<div id="exercise-4-analysis-of-categorical-data"
-class="section level2">
-<h2>Exercise 4 – Analysis of Categorical Data</h2>
-</div>
-<div id="problems" class="section level2">
-<h2>Problems</h2>
-<p><strong><a href="exercise_4_dataset1.csv">Dataset 1</a></strong> –
-For this dataset, you are conducting an experiment to see if there is a
-difference in deer density (Y; deer/ha) between predator exclusion plots
-and control plots (X; groups). Technically, this could be analyzed with
-a ‘t-test’. However, for consistency with our general approach toward
-statistics, please use the ‘lm()’ function to do the analysis – not the
-‘t.test()’ function. Report your results using the standard
-sentence.</p>
-<p><img src="pic_deer.png" style="width:50.0%" /></p>
-<p>Picture: James Stewart</p>
-<p><strong><a href="exercise_4_dataset2.csv">Dataset 2</a></strong> –
-For this dataset, you are conducting an experiment to see if the density
-of California quail (<em>Callipepla californica</em>) (Y; quail/hectare)
-varies among four habitat types (X): open pine, closed pine, sagebrush,
-and agriculture. Answer the following questions:</p>
-<ol style="list-style-type: decimal">
-<li><p>Run an Analysis of Variance (ANOVA) in R. Write a sentence
-describing the results (i.e., p-value). Typically, this sentence is
-something like “ANOVA indicated that at least two of the [x-variable]
-were significantly different from each other (p = [p-value]).”</p></li>
-<li><p>Plot the relationship between quail density and habitat types in
-R and paste the graph in your Word document.</p></li>
-<li><p>Run a Tukey’s HSD Post-hoc test in R. Using the standard language
-we have been using throughout the class, describe the estimated
-differences between Closed Pine and Agriculture and between Open Pine
-and Agriculture. Be sure to include confidence intervals and
-p-values.</p></li>
-</ol>
-<p><img src="pic_quail.png" style="width:50.0%" /></p>
-<p>Picture: uzun (iNaturalist)</p>
-<p><strong><a href="exercise_4_dataset3.csv">Dataset 3</a></strong> –
-For this dataset, you are examining how pronghorn (<em>Antilocapra
-americana</em>) hunter success rate (Y; pronghorn killed / hunter) is
-related to hunting method (X; the variable is called ‘Method’). Types of
-hunting methods considered in this study include bow, muzzleloader, and
-rifle. Answer the following questions:</p>
-<ol style="list-style-type: decimal">
-<li><p>Run an Analysis of Variance (ANOVA) in R and write a sentence
-(like we discussed in class) describing the results (i.e.,
-p-value).</p></li>
-<li><p>Plot the relationship between hunting method and hunter success
-rates in R and paste the graph in your Word document.</p></li>
-<li><p>Run a Tukey’s HSD post-hoc test in R. Using the standard language
-we have been using throughout the class, describe the estimated
-differences among all hunting methods. Include confidence intervals and
-p-values.</p></li>
-<li><p>Dummy code the data. Make 3 new columns - one for each hunting
-method - and assign 0s and 1s as appropriate. You can do this in Excel
-or in R. Use a linear model to test for differences between group and
-describe with 1-2 sentences how those results compare to the results
-from the Tukey’s HSD post-hoc test.</p></li>
-</ol>
-<p><img src="pic_pronghorn.png" style="width:50.0%" /></p>
-<p>Picture: Ted Floyd</p>
-<p><strong><a href="exercise_4_dataset4.csv">Dataset 4</a></strong> –
-For this dataset, you are examining how fertilizer (X; grams) influences
-biomass production (Y; kg/ha) in restored sagebrush plots. Fertilizer
-has been applied at 0 (control), 2, 4, 6, 8, 10 grams in each of 5
-plots. Run the following analyses:</p>
-<ol style="list-style-type: decimal">
-<li><p>Run an analysis to determine the relationship between biomass and
-fertilizer, where fertilizer is treated as a categorical variable.
-Because we won’t be conducting a post-hoc test, use the ‘lm()’ function
-for this analysis. Report the difference in biomass between 2 grams and
-0 grams of fertilizer using the standard sentence.</p></li>
-<li><p>Continued from the last question, report the difference in
-biomass between 2 grams and 4 grams of fertilizer using the standard
-sentence. As with the last question, use the ‘lm()’ function, rather
-than Tukey’s HSD Test.</p></li>
-<li><p>Run an analysis to determine the relationship between Biomass and
-Fertilizer; however, in this case, treat Fertilizer as a continuous
-variable. Report the results using the standard sentence.</p></li>
-<li><p>Run an F-drop test to compare the models where Fertilizer was
-treated as categorical (from questions 1 and 2) to the model where
-fertilizer was treated as continuous (from question 3). What is the
-F-statistic and p-value from the F-drop test?</p></li>
-<li><p>Based on the results from 4, which model is preferred: the one
-where Fertilizer is continuous or the one where Fertilizer is
-categorical? Briefly explain.</p></li>
-<li><p>Continued from 5: what does that mean about the nature of the
-relationship between Biomass and Fertilizer?</p></li>
-</ol>
-<p><img src="pic_sagebrush.png" style="width:50.0%" /></p>
+<div id="review" class="section level2">
+<h2>Review</h2>
 <p><br></p>
 </div>
 <div id="truth" class="section level2">
 <h2>Truth</h2>
-<p>If you would like to know the values used to create these datasets
-(i.e., ‘truth’), download and examine this <a href="exercise_4.R">R
-script</a>.</p>
-<p><a href="exercise_5.html">–go to next exercise–</a></p>
+<p>Here is code to simulate the data we analyzed in this lecture.</p>
+<pre class="r"><code>### Lecture 11: code to simulate data for post-hoc tests 
+
+# # Set the seed for reproducibility
+# set.seed(123)
+# 
+# 
+# 
+# # Create dataframe
+# datum &lt;- cbind(datum, Mass = y)
+# 
+# # Save the CSV file
+# write.csv(datum, &quot;lecture_10_seasons.csv&quot;, row.names = FALSE)</code></pre>
+<p><a href="lecture_12.html">–go to next lecture–</a></p>
 </div>
 
 

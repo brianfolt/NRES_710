@@ -69,6 +69,10 @@ Picture: Ted Floyd
 
 6. Continued from 5: what does that mean about the nature of the relationship between Biomass and Fertilizer?
 
+![](pic_sagebrush.png){width=50%}
+
+<br>
+
 ## Truth
 
 If you would like to know the values used to create these datasets (i.e., 'truth'), download and examine this [R script](exercise_4.R).
