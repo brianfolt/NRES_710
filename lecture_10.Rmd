@@ -85,9 +85,7 @@ The main point I want to make here: don't get too hung up on post-hoc tests. Ins
 
 ## Tukey's HSD Test
 
-**Tukey's Honest Significant Difference (HSD) Test**
-
-This test trades off Type I error to increase power. 
+**Tukey's Honest Significant Difference (HSD) Test** -- harder to get significant differences, but less likely to commit Type I error.
 
 To explore this, let's use some data that I made in R. These data simulate the body mass of Greater Sage-grouse (*Centrocurcus urophasianus*). You can download it [here](lecture_10_seasons.csv), and a script to simulate it is included at the bottom of the page.
 
@@ -108,6 +106,8 @@ head(datum)
 
 The data have the mass of animals measured in four different season: spring, summer, fall, and winter. We have a categorical X-variable "Season", and also dummy-coded variables for each of the individual seasons.
 
+### The number of comparisons
+
 Our goal is to estimate if mass of the animal is different between the seasons. How many comparisons might we need to make?
 
 Here's a trick to do it!
@@ -124,6 +124,8 @@ Winter
 5) Then add up all the lines!
 
 In this case, we might have to do **6 pairwise comparisons**.
+
+### Linear model
 
 Let's write out our linear model:
 
@@ -143,6 +145,8 @@ What are the 'true' values?
 - **$\beta_1$ = $\beta_2$ = -0.6**
 - **$\beta_3$ = -0.05**
 
+### Analysis in R
+
 Let's analyze these data in R:
 
 ```{r seasons-2, echo=TRUE, message=FALSE, warning=FALSE}
@@ -151,11 +155,155 @@ datum$Season <- factor(datum$Season)
 plot(Mass ~ Season, data = datum)
 
 # Fit a linear model
-results <- lm(Mass ~ Spring + Summer + Winter, data = datum)
+results <- lm(Mass ~ Season, data = datum)
 summary(results)
-
-
 ```
+
+Because we only have one variable ('Season'), the p-value in the bottom right is the same as the p-value we would get running an ANOVA. This gives us the significance of the season variable as a whole: it tells us that at least two groups within this variale are different from each other.
+
+When we examining the significance of effects within the model, we can see that mass in the Spring is different from Fall and that mass in the Summer is different from Fall.
+
+**Trick question:** Is Winter different from Fall?
+
+Yes, it is! We simulated it to have an effect of -0.05. However, we are not able to detect that effect with this statistical analysis. We need to be careful to not distinguish biological from statistical significance. We know that Winter is different from Fall, we made the data.
+
+**Q:** If we wanted to be sure to detect this, what would we have to do? Increase our sample size.
+
+Betas are all pretty close to truth.
+
+**Q:** How would we test for the difference between Spring and Summer?
+
+Change the reference.
+
+```{r seasons-3, echo=TRUE, message=FALSE, warning=FALSE}
+# Fit a linear model
+results2 <- lm(Mass ~ relevel(Season, ref="Summer"), data = datum)
+summary(results2)
+```
+
+Now we can see other differences: summer and spring, summer and winter.
+
+We just have to re-run this one more time to get the final comparison that we need.
+
+### Tukey's HSD
+
+Let's start by examining the help file for 'TukeyHSD()'.
+
+```{r seasons-4, echo=TRUE, message=FALSE, warning=FALSE}
+# Help file
+help(TukeyHSD)
+
+# Tukey requires an ANOVA output
+results3 <- aov(Mass ~ Season, data = datum) # or
+results3 <- aov(results)
+summary(results3)
+
+# This analysis is so simple that it doesn't even have a summary file. Run it directly.
+TukeyHSD(results3)
+```
+
+Let's compare that to our original 'lm()' results:
+```{r seasons-5, echo=TRUE, message=FALSE, warning=FALSE}
+summary(results)
+```
+
+- The difference between spring and fall is: -0.57
+- The difference between summer and fall is: -0.59
+- Point being: Tukey's HSD does not change the betas!
+
+The 'diff' is the difference between the groups. The first columns tells us those exact differences: e.g., "Spring - Fall".
+
+We can use the 'lwr' and 'upr' to calculate 95% CI, as we have done before.
+
+Let's look at the p-values.
+
+- Winter-to-Fall was 0.358, but Tukey's says it is 0.79.
+- Etc.
+
+Tukey's causes **p-values get larger**.
+
+Let's look at confidence intervals:
+
+```{r seasons-6, echo=TRUE, message=FALSE, warning=FALSE}
+TukeyHSD(results3)
+confint(results)
+```
+
+Compare Spring-Fall from both outputs.
+
+```{r seasons-7, echo=TRUE, message=FALSE, warning=FALSE}
+# Spring to Fall
+(-0.63274618 - -0.5149456)/2 # LM
+(-0.65152888 - -0.49616295)/2 #Tukey
+```
+
+Tukey causes **confidence intervals to become wider**.
+
+**Takehome:** Both the p-values and confidence intervals have become artificially inflated.
+
+### Cautionary tale
+
+Sometimes people take a categorical variable and they turn it into a continuous variable. This can be dangerous! Take a look:
+
+```{r seasons-8, echo=TRUE, message=FALSE, warning=FALSE}
+# Look at the second to last column
+head(datum)
+```
+
+They then run a model with that as the predictor variable.
+
+```{r seasons-9, echo=TRUE, message=FALSE, warning=FALSE}
+# Run a 'lm()' with that
+results4 <- lm(Mass ~ SeasonN, data = datum)
+summary(results4)
+```
+
+Season is significant! They write that in their paper and send it in for publication and they are done. 
+
+But they made a lot of errors here. 
+
+- First, they focused too much on p-values.
+- If they would have been thinking about effects between groups (betas), they might have realized the issue.
+
+**Q:** What did R do?
+
+It ran a regression with two continuous variables, X as a continuous variable. This assumes there is a linear relationship between 1, 2, 3, 4 and mass. That might be valid... but it isn't!
+
+```{r seasons-10, echo=TRUE, message=FALSE, warning=FALSE}
+# Scatterplot
+plot(Mass ~ SeasonN, data = datum)
+```
+
+**Q:** How do we know it ran it as a regression?
+
+It only gave us a single beta, and it only used 1 degree of freedom (should have been 3).
+
+A post-hoc test... won't work:
+
+```{r seasons-11, echo=TRUE, message=FALSE, warning=FALSE}
+# Scatterplot
+#TukeyHSD(aov(results4)) # doesn't work!
+# Error in `TukeyHSD.aov()`:
+# ! no factors in the fitted model
+```
+
+R is trying to tell us that 'Season' is not a number -- it is a 'factor'.
+
+**factor -- a categorical X-variable**
+
+**covariate -- a continuous X-variable in a statistical model**
+
+Two terms we should be aware of.
+
+## Summary
+
+We need to know that there are these things called 'post-hoc tests'.
+
+They try to maintain the 'experiment-wide error rate' (0.05 Type 1 error rate), and are still used a lot, particularly in classic agricultural or fisheries journals if you have done a manipulative experiment.
+
+As you build more complicated models that have more complicated models (with both categorical and continuous variables), post-hoc tests won't work.
+
+Bonferonni corrections (basic math) can be used if absolutely necessary.
 
 <br>
 
@@ -174,7 +322,7 @@ n <- 80
 x <- factor(c(rep("Spring", n/4), rep("Summer", n/4), rep("Winter", n/4), rep("Fall", n/4)))
 
 # Season as a numeric
-SeasonN <- as.numeric(x)
+SeasonN <- as.numeric(factor(x, levels = c("Fall", "Winter", "Spring", "Summer")))
 
 # Simulate error
 error <- rnorm(n, mean = 0, sd = 0.1)
