@@ -24,7 +24,7 @@ knitr::opts_chunk$set(
 
 #  NRES 710, Analysis of Categorical Data (cont.)
 #     University of Nevada, Reno
-#     Presenting results and multiple groups
+#     Presenting results and testing among multiple groups
 
 ```
 

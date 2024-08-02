@@ -24,7 +24,7 @@ knitr::opts_chunk$set(
 
 #  NRES 710, Analysis of Categorical Data
 #     University of Nevada, Reno
-#     Testing between groups
+#     Testing between two roups
 
 ```
 

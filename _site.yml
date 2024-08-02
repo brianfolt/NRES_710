@@ -23,9 +23,9 @@ navbar:
       href: lecture_6.html
     - text: Linear Regression - predictions
       href: lecture_7.html
-    - text: Analysis of Categorical Data
+    - text: Analysis of Categorical Data - 2 groups
       href: lecture_8.html
-    - text: Analysis of Categorical Data (cont.)
+    - text: Analysis of Categorical Data - >2 groups
       href: lecture_9.html
     - text: Analysis of Categorical Data - posthoc tests
       href: lecture_10.html

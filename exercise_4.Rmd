@@ -23,13 +23,13 @@ knitr::opts_chunk$set(
 
 ## Problems
 
-**[Dataset 1](exercise4_dataset1.csv)** -- For this dataset, you are conducting an experiment to see if there is a difference in deer density (Y; deer/ha) between predator exclusion plots and control plots (X; groups). Technically, this could be analyzed with a 't-test'. However, for consistency with our general approach toward statistics, please use the 'lm()' function to do the analysis -- not the 't.test()' function. Report your results using the standard sentence.
+**[Dataset 1](exercise_4_dataset1.csv)** -- For this dataset, you are conducting an experiment to see if there is a difference in deer density (Y; deer/ha) between predator exclusion plots and control plots (X; groups). Technically, this could be analyzed with a 't-test'. However, for consistency with our general approach toward statistics, please use the 'lm()' function to do the analysis -- not the 't.test()' function. Report your results using the standard sentence.
 
 ![](pic_deer.png){width=50%}
 
 Picture: James Stewart
 
-**[Dataset 2](exercise4_dataset2.csv)** -- For this dataset, you are conducting an experiment to see if the density of California quail (*Callipepla californica*) (Y; quail/hectare) varies among four habitat types (X): open pine, closed pine, sagebrush, and agriculture. Answer the following questions:
+**[Dataset 2](exercise_4_dataset2.csv)** -- For this dataset, you are conducting an experiment to see if the density of California quail (*Callipepla californica*) (Y; quail/hectare) varies among four habitat types (X): open pine, closed pine, sagebrush, and agriculture. Answer the following questions:
 
 1. Run an Analysis of Variance (ANOVA) in R. Write a sentence describing the results (i.e., p-value). Typically, this sentence is something like "ANOVA indicated that at least two of the [x-variable] were significantly different from each other (p = [p-value])."
 
@@ -41,7 +41,7 @@ Picture: James Stewart
 
 Picture: uzun (iNaturalist)
 
-**[Dataset 3](exercise4_dataset3.csv)** -- For this dataset, you are examining how pronghorn (*Antilocapra americana*) hunter success rate (Y; pronghorn killed / hunter) is related to hunting method (X; the variable is called 'Method'). Types of hunting methods considered in this study include bow, muzzleloader, and rifle. Answer the following questions:
+**[Dataset 3](exercise_4_dataset3.csv)** -- For this dataset, you are examining how pronghorn (*Antilocapra americana*) hunter success rate (Y; pronghorn killed / hunter) is related to hunting method (X; the variable is called 'Method'). Types of hunting methods considered in this study include bow, muzzleloader, and rifle. Answer the following questions:
 
 1. Run an Analysis of Variance (ANOVA) in R and write a sentence (like we discussed in class) describing the results (i.e., p-value).
 
@@ -55,7 +55,7 @@ Picture: uzun (iNaturalist)
 
 Picture: Ted Floyd
 
-**[Dataset 4](exercise4_dataset4.csv)** -- For this dataset, you are examining how fertilizer (X; grams) influences biomass production (Y; kg/ha) in restored sagebrush plots. Fertilizer has been applied at 0 (control), 2, 4, 6, 8, 10 grams in each of 5 plots. Run the following analyses:
+**[Dataset 4](exercise_4_dataset4.csv)** -- For this dataset, you are examining how fertilizer (X; grams) influences biomass production (Y; kg/ha) in restored sagebrush plots. Fertilizer has been applied at 0 (control), 2, 4, 6, 8, 10 grams in each of 5 plots. Run the following analyses:
 
 1. Run an analysis to determine the relationship between biomass and fertilizer, where fertilizer is treated as a categorical variable. Because we won't be conducting a post-hoc test, use the 'lm()' function for this analysis. Report the difference in biomass between 2 grams and 0 grams of fertilizer using the standard sentence.
 
