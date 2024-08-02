@@ -31,15 +31,15 @@ Compile all of your results in a Word document. Load this into the WebCampus ass
 
 ## Problems 
 
-[Dataset 1](exercise3_dataset1.csv) -- the relationship between prey density (X; prey/ha) and predation rate (Y; prey killed per predator per day).
+**[Dataset 1](exercise_3_dataset1.csv)** -- the relationship between prey density (X; prey/ha) and predation rate (Y; prey killed per predator per day).
 
-[Dataset 2](exercise3_dataset2.csv) -- the relationship between tree basal area (Y; m2) and stand age (X; years).
+**[Dataset 2](exercise_3_dataset2.csv)** -- the relationship between tree basal area (Y; m2) and stand age (X; years).
 
-[Dataset 3](exercise3_dataset3.csv) -- the relationship between prey density (X; prey/ha) and black bear litter size (Y; pups); Note: litter size is not continuous, but that's not the assumption that has been violated.
+**[Dataset 3](exercise_3_dataset3.csv)** -- the relationship between prey density (X; prey/ha) and black bear litter size (Y; pups); Note: litter size is not continuous, but that's not the assumption that has been violated.
 
-[Dataset 4](exercise3_dataset4.csv) -- the relationship between road density (X; roads/km2) and probability of habitat use by sage grouse (Y; %).
+**[Dataset 4](exercise_3_dataset4.csv)** -- the relationship between road density (X; roads/km2) and probability of habitat use by sage grouse (Y; %).
 
-[Dataset 5](exercise3_dataset5.csv) -- the relationship between native deer (X; deer/ha) and number of domestic livestock killed by wolves (Y; livestock/km2).
+**[Dataset 5](exercise_3_dataset5.csv)** -- the relationship between native deer (X; deer/ha) and number of domestic livestock killed by wolves (Y; livestock/km2).
 
 - For this problem, describe the relationship between X and Y using the standard statements, but also use prediction to report what the expected number of livestock killed by tigers is at 20.0 deer/ha with prediction intervals. Finally, generate a graph of the y predictions and the prediction intervals, like we saw in class.
 
@@ -75,7 +75,7 @@ y <- abs(2 + 0.5 * x + error) # abs() gets rid of negative numbers drawn by chan
 datum <- data.frame(PreyDens = x, PredRate = y)
 
 # Save the CSV file
-write.csv(datum, "exercise3_dataset1.csv")
+write.csv(datum, "exercise_3_dataset1.csv")
 
 
 ## Dataset 2
@@ -97,7 +97,7 @@ y <- 2 + 2 * x + error
 datum <- data.frame(Age = x, BasalArea = y)
 
 # Save the CSV file
-write.csv(datum, "exercise3_dataset2.csv")
+write.csv(datum, "exercise_3_dataset2.csv")
 
 
 ## Dataset 3
@@ -115,7 +115,7 @@ y <- round(1 + 0.5 * x + error^2, 0)
 datum <- data.frame(PreyDensity = x, LitterSize = y)
 
 # Save the CSV file
-write.csv(datum, "exercise3_dataset3.csv")
+write.csv(datum, "exercise_3_dataset3.csv")
 
 
 ## Dataset 4
@@ -133,7 +133,7 @@ y <- 0.2 + 0.1 * x - 0.01 * x^2 + error
 datum <- data.frame(RoadDensity = x, ProbUse = y)
 
 # Save the CSV file
-write.csv(datum, "exercise3_dataset4.csv")
+write.csv(datum, "exercise_3_dataset4.csv")
 
 
 ## Dataset 5
@@ -153,7 +153,7 @@ y <- abs(8 - 1*x + error)
 datum <- data.frame(DeerDensity = x, CowsKilled = y)
 
 # Save the CSV file
-write.csv(datum, "exercise3_dataset5.csv")
+write.csv(datum, "exercise_3_dataset5.csv")
 ```
 
 [--go to next exercise--](exercise_4.html)
