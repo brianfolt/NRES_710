@@ -14,10 +14,9 @@ output:
 
 [Brian Folt](https://www.unr.edu/nvcfwru/folt-brian)<br>
 Office: Knudsten Resource Center, Room 100A<br>
-Phone: TBD<br>
 Email: [bfolt@unr.edu](bfolt@unr.edu)
 
-I have no pre-scheduled office hours for this class; instead, please email me to set up a meeting. In general, I will be in my office during working hours from 8:30AM--5PM and can be available to discuss course material.
+I have no pre-scheduled office hours for this class; instead, please email me to set up a meeting. In general, I will be in my office during working hours from 8:00AM--5PM and can be available to discuss course material.
 
 ### Course Meeting Times
 
@@ -184,6 +183,9 @@ rmarkdown::render('lecture_4.Rmd', rmarkdown::pdf_document())
 rmarkdown::render('lecture_5.Rmd', rmarkdown::pdf_document())
 rmarkdown::render('lecture_6.Rmd', rmarkdown::pdf_document())
 rmarkdown::render('lecture_7.Rmd', rmarkdown::pdf_document())
+rmarkdown::render('lecture_8.Rmd', rmarkdown::pdf_document())
+rmarkdown::render('lecture_9.Rmd', rmarkdown::pdf_document())
+rmarkdown::render('lecture_10.Rmd', rmarkdown::pdf_document())
 # rmarkdown::render('LECTURE1.Rmd', rmarkdown::pdf_document())
 # rmarkdown::render('LECTURE2.Rmd', rmarkdown::pdf_document())  # latex_engine="xelatex"
 # rmarkdown::render('LECTURE3.Rmd', rmarkdown::pdf_document())
@@ -237,6 +239,11 @@ rmd2rscript("lecture_6.Rmd")
 rmd2rscript("exercise_2.Rmd")
 rmd2rscript("lecture_7.Rmd")
 rmd2rscript("exercise_3.Rmd")
+rmd2rscript("lecture_8.Rmd")
+rmd2rscript("lecture_9.Rmd")
+rmd2rscript("lecture_10.Rmd")
+rmd2rscript("exercise_4.Rmd")
+
 rmd2rscript("INTRO.Rmd")
 rmd2rscript("LECTURE1.Rmd")
 rmd2rscript("LECTURE2.Rmd")
