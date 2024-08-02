@@ -27,16 +27,8 @@ navbar:
       href: lecture_8.html
     - text: Analysis of Categorical Data (cont.)
       href: lecture_9.html
-    - text: Taxonomy of common statistics
-      href: LECTURE3.html
-    - text: t-test and z-test
-      href: LECTURE4.html
-    - text: chi-squared tests
-      href: LECTURE5.html
-    - text: Linear Regression
-      href: LECTURE6.html
-    - text: ANOVA
-      href: LECTURE7.html
+    - text: Analysis of Categorical Data - posthoc tests
+      href: lecture_10.html
     - text: GLM
       href: LECTURE8.html
     - text: GLMM

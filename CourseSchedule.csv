@@ -5,7 +5,7 @@ Week,Dates,Tuesday class meeting,Thursday class meeting,Exercises/deadlines
 4,"Sep. 17, 19","[Exercise 2: Linear Regression, pt. 1](exercise_2.html)",[Linear Regression - assumptions](lecture_6.html),Quiz 1 - due 9/19
 5,"Sep. 24, 26",[Linear Regression - predictions](lecture_7.html),"[Exercise 3: Linear Regression, pt. 2](exercise_3.html)",Exercise 2 and Quiz 3 - due 9/26
 6,"Sep. 31, Oct. 2",[Analysis of Categorical Data](lecture_8.html),[Analysis of Categorical Data - cont.](lecture_9.html),Exercise 3 - due 10/2
-7,"Oct. 8, 10",TBD,[Exercise 4: Analysis of Categorical Data](exercise_4.html),"[Ruxton & Beauchamp (2008)](papers/ruxton_beauchamp_2008.pdf), Quiz 4 - 10/10"
+7,"Oct. 8, 10",[Analysis of Categorical Data - posthoc tests](lecture_10.html),[Exercise 4: Analysis of Categorical Data](exercise_4.html),"[Ruxton & Beauchamp (2008)](papers/ruxton_beauchamp_2008.pdf), Quiz 4 - 10/10"
 8,"Oct. 15, 17",TBD,TBD,TBD
 9,"Oct. 22, 24",*No class*,*No class*,Brian at conference
 10,"Oct. 29, 31",TBD,TBD,Exercise 4 - 11/1
@@ -15,8 +15,3 @@ Week,Dates,Tuesday class meeting,Thursday class meeting,Exercises/deadlines
 14,"Nov. 26, 28",[Machine Learning](LECTURE10.html),TBD,Peer reviews due 11/27
 15,"Dec. 3, 5",[Discussion: code and data sharing](Git_tutorial.html),"[Next steps: multivariate, Bayesian, etc.](LECTURE11.html)",
 Finals,"Dec. 10, 12",*No class*,*No class*,Good luck on your exams.
-Other,TBD,"[P-values, statistical tests](LECTURE1.html)",,
-Other,TBD,[Central limit theorem (CLT) and sampling distributions](LECTURE2.html),[Central limit theorem (CLT) and sampling distributions](LECTURE2.html),Exercise 1 due 9/13
-Other,TBD,[Taxonomy of statistics](LECTURE3.html),[t-tests and z tests](LECTURE4.html),
-Other,TBD,[t-tests and z-tests](LECTURE4.html),[Exercise 2: t-tests](EXERCISE2.html),
-Other,TBD,[Chi-squared tests](LECTURE5.html),TBD,
