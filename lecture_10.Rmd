@@ -24,12 +24,176 @@ knitr::opts_chunk$set(
 
 #  NRES 710, Analysis of Categorical Data (cont.)
 #     University of Nevada, Reno
-#     post-hoc tests, etc.
+#     Post-hoc tests
 
 ```
 
-## Summary
+## Review
 
-adfadfad
+I asked you all to read Ruxton & Beauchamp (2008), and I'm not going to discuss it today in class. My goal was mostly to provide you all with some background context and considerations related to post-hoc tests before this lecture.
+
+Last class we discussed **'Analysis of Variance (ANOVA)'** -- the classic test which partitions the total sum of squares in Y into both the error and the differences between the groups. This does the same thing as regression, but now we have categorical X variables.
+
+- **Continuous Y**
+- **Categorical X with >2 groups**
+
+If you only had two groups, you would just use a t-test -- although we have learned that these are really the same thing and both just use a linear model.
+
+Most of the lecture today is going to focus on historical approaches to using post-hoc tests. These studies often were experimental in nature, perhaps in agricultural settings, and involved setting up an experimental manipulation of something in the field. Those experiments often involved collecting data and then running an ANOVA.
+
+The ANOVA result provide a **single p-value -- the significance of variable as a whole**. Today we will look at data describing the mass of an animal across four seasons as an example. The single ANOVA p-value will give us the significance of this entire 'season' variable. Historically speaking, researchers would often respond to that p-value in two ways:
+
+- **p > 0.05 --> none of the category groups are statistically significantly different**
+  - In this case, you would no longer pursue any further statistical testing.
+  - I don't like this approach! You don't know whether your lack of result was due to a lack of sample size or due to a lack of effect size.
+  - But this path was often followed to avoid doing unnecessary tests and to **minimize the Type I error rate**. (And also why we do ANOVA instead of jumping into a bunch of pairwise t-tests.)
+- **p < 0.05 --> at least two groups are statistically significantly different**
+  - In this case, you would then try to figure out which groups were the different ones using post-hoc tests.
+  
+## Post-hoc tests
+  
+**Post-hoc test -- "after the fact" test**
+
+- There is some confusion about post-hoc tests, as many people think that the purpose of post-hoc tests is to test for all pairwise comparisons. In fact, we don't need a post-hoc test to do this, because we can easily test for all pairwise comparisons in our linear model using dummy-coded variables.
+- **Purpose -- artificially inflate p-values in order to maintain the experiment-wide Type I error rate**.
+- Post-hoc tests do not changes estimates or differences ($\beta$s) between groups. Instead, they only affect p-values and confidence intervals, because these are both calculated using the same underlying distribution.
+- Because I don't much care for p-values, I don't really like post-hoc tests. But, I feel like it's important to discuss them in this class, given their large history in the field of statistics and that you likely have or will encounter them.
+
+So you do an ANOVA, and then you need to do a post-hoc tests. How do you do that? First step, is to choose which post-hoc test to run. There are many!
+
+**Q:** What are post-hoc tests that you are aware of??
+
+Tukey test, Fisher's Least Significance Difference test (aka, Fisher's LSD), Dunnett, Schauffe, many others, etc.
+
+Ruxton & Beauchamp (2008) identified 10 different post-hoc tests used in their survey.
+
+The reason why there are so many post-hoc tests is folks are trying to find an optimal **balance between the Type I error rate and Power"** -- our ability to detect a significant difference when one exists.
+
+Ultimately, it should make sense that power and Type I error rate are inversely related. For example, let's say we use a p-value of 0.01 as a cutoff. This decreases the chance that we will commit Type I error from 0.05 to 0.01, and we will be very unlikely to commit Type I error. But, we lose Power to detect significant differences when they likely exist! This balance represents a tradeoff between "getting things wrong" and "learning about differences".
+
+In an idea world when we do a post-hoc test, we would have a Type I error rate of 0.05 and also have some theoretically-determined maximum power. Statisticians at universities trying to get tenure try to develop their own post-hoc test to do this...
+
+**Tukey's post-hoc test** -- has pretty good power! But it has a higher Type I error rate (0.06, 0.07). This causes weird circumstances where you had a marginally significant ANOVA (e.g., 0.049), but Tukey's test fails to detect significant differences between pairwise comparisons.
+
+All of the above tests try to balance this tradeoff, and all of them vary at it. And whichever one you choose is **arbitrary**. When you have a marginally significant result, you might start chasing pairwise significant results by using different post-hoc tests. Let's try Tukeys! Oh, that didn't work. Let's try Schauffe's! Nope, that didn't work either. And then you try another, and it gives you two significant comparisons.
+
+This causes us to go on a 'fishing expedition', which, in my opinion, is not a very good approach to science. We should use statistics to test specific *a priori* hypotheses that we have developed for a good reason -- not go chasing after results we have no reason to suspect exist in reality. Ruxton & Beauchamp (2008) made comments to this effect a few times.
+
+The strange thing is that no matter which post-hoc test you used, your results are all the same: the effects (betas) between groups have never changed, because post-hoc tests have not changed that. The confidence intervals and p-values will be similar. Was this marginally different inference worth your time and effort?
+
+The main point I want to make here: don't get too hung up on post-hoc tests. Instead, let's focus on the estimates of effects, the confidence intervals, and is that statistically significant.
+
+## Tukey's HSD Test
+
+**Tukey's Honest Significant Difference (HSD) Test**
+
+This test trades off Type I error to increase power. 
+
+To explore this, let's use some data that I made in R. These data simulate the body mass of Greater Sage-grouse (*Centrocurcus urophasianus*). You can download it [here](lecture_10_seasons.csv), and a script to simulate it is included at the bottom of the page.
+
+![](pic_grouse.png){width=50%}
+
+Picture: Bert Filemyr
+
+Let's take a look at it now.
+
+```{r seasons, echo=TRUE, message=FALSE, warning=FALSE}
+# Load and examine the data
+datum <- read.csv("lecture_10_seasons.csv")
+head(datum)
+```
+**Y-variable -- mass**
+
+**X-variable -- season (4 groups)**
+
+The data have the mass of animals measured in four different season: spring, summer, fall, and winter. We have a categorical X-variable "Season", and also dummy-coded variables for each of the individual seasons.
+
+Our goal is to estimate if mass of the animal is different between the seasons. How many comparisons might we need to make?
+
+Here's a trick to do it!
+
+Fall
+Spring
+Summer
+Winter
+
+1) Draw a line connecting all the neighbors.
+2) Draw a line connecting all the two-neighbors away.
+3) Draw a line connecting all the three-neighbors away.
+4) Etc.
+5) Then add up all the lines!
+
+In this case, we might have to do **6 pairwise comparisons**.
+
+Let's write out our linear model:
+
+**$Mass = \beta_0 + \beta_1 Spring + \beta_2 Summer + \beta_3 Winter + \epsilon \sim N(0, \sigma)$**
+
+**Review each of the betas**
+
+- \beta_0 -- average mass in the fall
+- \beta_1 -- difference in mass between spring and fall
+- \beta_2 -- difference in mass between summer and fall
+- \beta_3 -- difference in mass between winter and fall
+- If we want to know other differences, we have to change the references and re-run.
+
+What are the 'true' values?
+
+- **$\beta_0$ = 4.6**
+- **$\beta_1$ = $\beta_2$ = -0.6**
+- **$\beta_3$ = -0.05**
+
+Let's analyze these data in R:
+
+```{r seasons-2, echo=TRUE, message=FALSE, warning=FALSE}
+# Plot the data
+datum$Season <- factor(datum$Season)
+plot(Mass ~ Season, data = datum)
+
+# Fit a linear model
+results <- lm(Mass ~ Spring + Summer + Winter, data = datum)
+summary(results)
+
+
+```
+
+<br>
+
+## Truth
+
+Here is code to simulate the data we analyzed in this lecture.
+
+```{r datasets, echo=TRUE, message=FALSE, warning=FALSE}
+### Lecture 10: code to simulate data for post-hoc tests 
+
+# Set the seed for reproducibility
+set.seed(123)
+
+# Simulate X-variable
+n <- 80
+x <- factor(c(rep("Spring", n/4), rep("Summer", n/4), rep("Winter", n/4), rep("Fall", n/4)))
+
+# Season as a numeric
+SeasonN <- as.numeric(x)
+
+# Simulate error
+error <- rnorm(n, mean = 0, sd = 0.1)
+
+# Create dummy-coded variables
+dummy <- model.matrix(~ x - 1)
+colnames(dummy) <- c("Fall", "Spring", "Summer", "Winter")
+
+# Create the dataframe
+datum <- data.frame(Season = x, error = error, dummy, SeasonN)
+
+# Calculate Y-variable
+y <- 4.6 - (0.6 * datum$Spring) - (0.6 * datum$Summer) - (0.05 * datum$Winter) + error
+
+# Create dataframe
+datum <- cbind(datum, Mass = y)
+
+# Save the CSV file
+write.csv(datum, "lecture_10_seasons.csv", row.names = FALSE)
+```
 
 [--go to next lecture--](lecture_11.html)
