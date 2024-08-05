@@ -35,8 +35,6 @@ navbar:
       href: LECTURE8.html
     - text: GLMM
       href: LECTURE9.html
-    - text: Machine Learning
-      href: LECTURE10.html
     - text: Intro to GIT
       href: GIT_tutorial.html
     - text: Next steps
@@ -51,6 +49,8 @@ navbar:
       href: exercise_3.html
     - text: Exercise 4 - Analysis of Categorical Data
       href: exercise_4.html
+    - text: Exercise 5 - Analysis of Continuous and Categorical Data
+      href: exercise_5.html      
   - text: More Resources
     menu:
     - text: Links 
