@@ -28,6 +28,17 @@ knitr::opts_chunk$set(
 
 ```
 
+<script type="text/x-mathjax-config">
+MathJax.Hub.Register.StartupHook("TeX Jax Ready",function () {
+  MathJax.Hub.Insert(MathJax.InputJax.TeX.Definitions.macros,{
+    cancel: ["Extension","cancel"],
+    bcancel: ["Extension","cancel"],
+    xcancel: ["Extension","cancel"],
+    cancelto: ["Extension","cancel"]
+  });
+});
+</script>
+
 ## Summary
 
 Last class we discussed how to analyze data when we have a categorical X-variable data. 
@@ -188,15 +199,22 @@ The individuals that were 0 for both Subadults and Adults must be Juveniles, by 
 
 **$Y = \beta_0 + \beta_1 Subadult + \beta_2 Adult + \epsilon$**
 
-**$Y(juv) = \beta_0 + \beta_1 * 0 + \beta_2 * 0 + \epsilon = \beta_0 + \epsilon$**
+**$Y(juv) = \beta_0 + \cancel{\beta_1 * 0} + \cancel{\beta_2 * 0} + \epsilon$**
+
+**$Y(juv) = \beta_0 + \epsilon$**
 
 The meaning of $\beta_0$ has not changed -- the average Y (size) of our reference group.
 
-**$Y(sub) = \beta_0 + \beta_1 * 1 + \beta_2 * 0 + \epsilon = \beta_0 + \beta_1 + \epsilon$**
+**$Y(sub) = \beta_0 + \beta_1 * 1 + \cancel{\beta_2 * 0} + \epsilon$**
+
+**$Y(sub) = \beta_0 + \beta_1 + \epsilon$**
 
 The meaning of $\beta_1$ has not changed either -- the difference between juveniles and subadults.
 
-**$Y(adult) = \beta_0 + \beta_1 * 0 + \beta_2 * 1 + \epsilon = \beta_0 + \beta_2 + \epsilon$**
+**$Y(adult) = \beta_0 + \cancel{\beta_1 * 0} + \beta_2 * 1 + \epsilon$**
+
+**$Y(adult) = \beta_0 + \beta_2 + \epsilon$**
+
 
 Our new variable, $\beta_2$, has a similar meaning to $\beta_1$ -- the difference between adults and juveniles.
 

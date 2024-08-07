@@ -367,13 +367,13 @@ div.tocify {
       <a href="lecture_11.html">Analysis with Continuous or Categorical X?</a>
     </li>
     <li>
+      <a href="lecture_12.html">Multi-variable Modeling</a>
+    </li>
+    <li>
       <a href="LECTURE8.html">GLM</a>
     </li>
     <li>
       <a href="LECTURE9.html">GLMM</a>
-    </li>
-    <li>
-      <a href="LECTURE10.html">Machine Learning</a>
     </li>
     <li>
       <a href="GIT_tutorial.html">Intro to GIT</a>
@@ -401,6 +401,9 @@ div.tocify {
     </li>
     <li>
       <a href="exercise_4.html">Exercise 4 - Analysis of Categorical Data</a>
+    </li>
+    <li>
+      <a href="exercise_5.html">Exercise 5 - Analysis of Continuous and Categorical Data</a>
     </li>
   </ul>
 </li>
@@ -430,11 +433,21 @@ div.tocify {
 
 <h1 class="title toc-ignore">Analysis of Categorical Data (cont.)</h1>
 <h4 class="author">NRES 710</h4>
-<h4 class="date">Last compiled: 2024-08-05</h4>
+<h4 class="date">Last compiled: 2024-08-06</h4>
 
 </div>
 
 
+<script type="text/x-mathjax-config">
+MathJax.Hub.Register.StartupHook("TeX Jax Ready",function () {
+  MathJax.Hub.Insert(MathJax.InputJax.TeX.Definitions.macros,{
+    cancel: ["Extension","cancel"],
+    bcancel: ["Extension","cancel"],
+    xcancel: ["Extension","cancel"],
+    cancelto: ["Extension","cancel"]
+  });
+});
+</script>
 <div id="summary" class="section level2">
 <h2>Summary</h2>
 <p>Last class we discussed how to analyze data when we have a
@@ -695,17 +708,22 @@ Juveniles, by the process of elimination.</p>
 <p><strong>Let’s see how this works mathematically:</strong></p>
 <p><strong><span class="math inline">\(Y = \beta_0 + \beta_1 Subadult +
 \beta_2 Adult + \epsilon\)</span></strong></p>
-<p><strong><span class="math inline">\(Y(juv) = \beta_0 + \beta_1 * 0 +
-\beta_2 * 0 + \epsilon = \beta_0 + \epsilon\)</span></strong></p>
+<p><strong><span class="math inline">\(Y(juv) = \beta_0 +
+\cancel{\beta_1 * 0} + \cancel{\beta_2 * 0} +
+\epsilon\)</span></strong></p>
+<p><strong><span class="math inline">\(Y(juv) = \beta_0 +
+\epsilon\)</span></strong></p>
 <p>The meaning of <span class="math inline">\(\beta_0\)</span> has not
 changed – the average Y (size) of our reference group.</p>
 <p><strong><span class="math inline">\(Y(sub) = \beta_0 + \beta_1 * 1 +
-\beta_2 * 0 + \epsilon = \beta_0 + \beta_1 +
+\cancel{\beta_2 * 0} + \epsilon\)</span></strong></p>
+<p><strong><span class="math inline">\(Y(sub) = \beta_0 + \beta_1 +
 \epsilon\)</span></strong></p>
 <p>The meaning of <span class="math inline">\(\beta_1\)</span> has not
 changed either – the difference between juveniles and subadults.</p>
-<p><strong><span class="math inline">\(Y(adult) = \beta_0 + \beta_1 * 0
-+ \beta_2 * 1 + \epsilon = \beta_0 + \beta_2 +
+<p><strong><span class="math inline">\(Y(adult) = \beta_0 +
+\cancel{\beta_1 * 0} + \beta_2 * 1 + \epsilon\)</span></strong></p>
+<p><strong><span class="math inline">\(Y(adult) = \beta_0 + \beta_2 +
 \epsilon\)</span></strong></p>
 <p>Our new variable, <span class="math inline">\(\beta_2\)</span>, has a
 similar meaning to <span class="math inline">\(\beta_1\)</span> – the

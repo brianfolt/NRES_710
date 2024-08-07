@@ -31,6 +31,8 @@ navbar:
       href: lecture_10.html
     - text: Analysis with Continuous or Categorical X?
       href: lecture_11.html
+    - text: Multi-variable Modeling
+      href: lecture_12.html
     - text: GLM
       href: LECTURE8.html
     - text: GLMM
