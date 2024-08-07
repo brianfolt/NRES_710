@@ -8,10 +8,10 @@ Week,Dates,Tuesday class meeting,Thursday class meeting,Exercises/deadlines
 7,"Oct. 8, 10",[Analysis of Categorical Data - posthoc tests](lecture_10.html),[Exercise 4: Analysis of Categorical Data](exercise_4.html),"[Ruxton & Beauchamp (2008)](papers/ruxton_beauchamp_2008.pdf) - 10/8, Quiz 4 - 10/10"
 8,"Oct. 15, 17",[Analysis of Continuous or Categorical X?](lecture_11.html),[Multi-variable Modeling](lecture_12.html),"[Cottingham et al. (2005)](papers/cottingham_etal_2005.pdf) - 10/15, Quiz 5 - 10/17"
 9,"Oct. 22, 24",*No class*,*No class*,Brian at conference
-10,"Oct. 29, 31",TBD,TBD,Exercise 4 - 11/1
-11,"Nov. 5, 7",[GLM](LECTURE8.html),[GLM](LECTURE8.html),
-12,"Nov. 13, 15",[GLMM](LECTURE9.html),OPTIONAL: review roadrunner assignment (multiple linear regression),
-13,"Nov. 19, 21",[GLMM](LECTURE9.html),*No class (Thanksgiving)*,
-14,"Nov. 26, 28",TBD,TBD,Peer reviews due 11/27
+10,"Oct. 29, 31",[Collinearity](lecture_13.html),[Exercise 5: Multi-variable Analysis](exercise_5.html),TBD
+11,"Nov. 5, 7",[Generalized linear models](lecture_14.html),TBD,TBD
+12,"Nov. 13, 15",TBD,[Exercise 6: Generalized Linear Models](exercise_6.html),TBD
+13,"Nov. 19, 21",TBD,*No class (Thanksgiving)*,NA
+14,"Nov. 26, 28",TBD,[Exercise 7: TBD](exercise_7.html),TBD
 15,"Dec. 3, 5",[Discussion: code and data sharing](Git_tutorial.html),"[Next steps: multivariate, Bayesian, etc.](LECTURE11.html)",
-Finals,"Dec. 10, 12",*No class*,*No class*,Good luck on your exams.
+Finals,"Dec. 10, 12",*No class*,*No class*,Good luck on your exams!

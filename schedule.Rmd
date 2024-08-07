@@ -20,13 +20,12 @@ Note: this schedule is subject to change. Please check for updates frequently. A
 
 ```{r load_data, include=FALSE}
 courseSchedule <- read.csv("CourseSchedule.csv")
-
 ```
 
 ```{r make_table, results='asis', echo=FALSE}
 knitr::kable(courseSchedule, caption="", col.names = c("Week", "Dates",
                                                        "Tuesday",
-                                                       "Thursday (R mini-lab)",
+                                                       "Thursday",
                                                        "Assignments"))
 ```
 
