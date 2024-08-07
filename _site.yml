@@ -33,14 +33,12 @@ navbar:
       href: lecture_11.html
     - text: Multi-variable Modeling
       href: lecture_12.html
-    - text: GLM
-      href: LECTURE8.html
-    - text: GLMM
-      href: LECTURE9.html
-    - text: Intro to GIT
-      href: GIT_tutorial.html
-    - text: Next steps
-      href: LECTURE11.html
+    - text: Multi-variable Modeling - collinearity
+      href: lecture_13.html
+    - text: Multi-variable Modeling - interactions
+      href: lecture_14.html    
+    - text: Generalized Linear Models
+      href: lecture_15.html
   - text: Exercises
     menu:
     - text: Exercise 1 - Data Summary Functions
@@ -51,8 +49,14 @@ navbar:
       href: exercise_3.html
     - text: Exercise 4 - Analysis of Categorical Data
       href: exercise_4.html
-    - text: Exercise 5 - Analysis of Continuous and Categorical Data
-      href: exercise_5.html      
+    - text: Exercise 5 - Multi-variable Analysis
+      href: exercise_5.html 
+    - text: Exercise 6 - Multi-variable Analysis (cont.)
+      href: exercise_6.html
+    - text: Exercise 7 - Generalized Linear Models
+      href: exercise_7.html
+    - text: Exercise 8 - Model Selection
+      href: exercise_8.html
   - text: More Resources
     menu:
     - text: Links 
