@@ -1,0 +1,1163 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+<meta name="author" content="NRES 710" />
+
+
+<title>Multi-variable modeling - collinearity</title>
+
+<script src="site_libs/header-attrs-2.27/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/yeti.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/jqueryui-1.13.2/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+<link rel="stylesheet" href="styles.css" type="text/css" />
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "\e258";
+  font-family: 'Glyphicons Halflings';
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">NRES 710</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Syllabus</a>
+</li>
+<li>
+  <a href="schedule.html">Schedule</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    Lectures
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="lecture_1.html">Syllabus and the Purpose of Statistics</a>
+    </li>
+    <li>
+      <a href="lecture_2.html">P-value Discussion and Intro to R</a>
+    </li>
+    <li>
+      <a href="lecture_3.html">Sampling Uncertainty</a>
+    </li>
+    <li>
+      <a href="lecture_4.html">Linear Regression</a>
+    </li>
+    <li>
+      <a href="lecture_5.html">Linear Regression - results</a>
+    </li>
+    <li>
+      <a href="lecture_6.html">Linear Regression - assumptions</a>
+    </li>
+    <li>
+      <a href="lecture_7.html">Linear Regression - predictions</a>
+    </li>
+    <li>
+      <a href="lecture_8.html">Analysis of Categorical Data - 2 groups</a>
+    </li>
+    <li>
+      <a href="lecture_9.html">Analysis of Categorical Data - &gt;2 groups</a>
+    </li>
+    <li>
+      <a href="lecture_10.html">Analysis of Categorical Data - posthoc tests</a>
+    </li>
+    <li>
+      <a href="lecture_11.html">Analysis with Continuous or Categorical X?</a>
+    </li>
+    <li>
+      <a href="lecture_12.html">Multi-variable Modeling</a>
+    </li>
+    <li>
+      <a href="lecture_13.html">Multi-variable Modeling - collinearity</a>
+    </li>
+    <li>
+      <a href="lecture_14.html">Multi-variable Modeling - interactions</a>
+    </li>
+    <li>
+      <a href="lecture_15.html">Generalized Linear Models</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    Exercises
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="exercise_1.html">Exercise 1 - Data Summary Functions</a>
+    </li>
+    <li>
+      <a href="exercise_2.html">Exercise 2 - Linear Regression</a>
+    </li>
+    <li>
+      <a href="exercise_3.html">Exercise 3 - Linear Regression (cont.)</a>
+    </li>
+    <li>
+      <a href="exercise_4.html">Exercise 4 - Analysis of Categorical Data</a>
+    </li>
+    <li>
+      <a href="exercise_5.html">Exercise 5 - Multi-variable Analysis</a>
+    </li>
+    <li>
+      <a href="exercise_6.html">Exercise 6 - TBD</a>
+    </li>
+    <li>
+      <a href="exercise_7.html">Exercise 7 - TBD</a>
+    </li>
+    <li>
+      <a href="exercise_8.html">Exercise 8 - TBD</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    More Resources
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="Links.html">Links</a>
+    </li>
+  </ul>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+
+
+<h1 class="title toc-ignore">Multi-variable modeling - collinearity</h1>
+<h4 class="author">NRES 710</h4>
+<h4 class="date">Last compiled: 2024-08-21</h4>
+
+</div>
+
+
+<div id="collinearity" class="section level2">
+<h2>Collinearity</h2>
+<div id="introduction" class="section level3">
+<h3>Introduction</h3>
+<p>Today’s class is an important one. The topic is on something that
+very few people understand well. So the plan is to spend 1-2 days on
+this topic so that you will understand it well. Many people have a
+decent idea of what collinearity is – but tend to make bad decisions
+about how to handle it.</p>
+<p>Let’s start with a question for the class. We often say that
+“<em>correlation does not equal causation</em>”. More specifically, you
+might run a regression between X and Y and find a relationship, but that
+does not mean that X causes Y.</p>
+<p><strong>Q:</strong> Why not?</p>
+<p>Let’s consider an example. Let’s say there was a study that came out
+– and generated some interest from the press – that suggested that for
+each 1 additional hour of TV that you watch per day, it increases the
+risk of mortality by 11%.</p>
+<p>Let’s think about this for a minute. Do you think the actual act of
+watching TV increases the risk of mortality? How would that happen? Is
+the TV going to fall out of the wall and potentially injure you? No,
+probably not. Watching TV itself is not going to cause this
+relationship.</p>
+<p>What’s the problem here? Well, there are a lot of other things that
+are <strong>correlated</strong> to watching TV that have their own
+effect on the Y variable (mortality).</p>
+<p><strong>Confounding factors – an X-variable that is correlated with
+the X-variable of interest that has its own effect on Y</strong></p>
+<p>What is correlated with watching TV?</p>
+<ul>
+<li>You aren’t being active (e.g., exercising)!</li>
+<li>You might be snacking, and your snacks might not be something
+healthy (you probably aren’t eating carrots if you are watching
+TV).</li>
+<li>You aren’t working, which might relate to your socioeconomic
+status.</li>
+<li>You may be less likely to have healthcare.</li>
+<li>Etc.</li>
+</ul>
+<p>This things might all be correlated to how much an individual watches
+TV and might all have their own effects on mortality.</p>
+<p><strong>Q:</strong> Here’s the key takehome. If we really want to
+know what the true effect of TV watching on mortality is, what would
+would we do? A MANIPULATIVE EXPERIMENT. In an ideal world, we would do a
+manipulative experiment, which is the only true way to show
+causation.</p>
+<ul>
+<li>Option 1: We would try to control for all of the above factors:
+everyone has the same job, goes to the gym the same amount of time, no
+smoking, etc. Let’s assume this class is our sample! We would assign
+half of the class to watch TV for 1 hour a day, while the other half of
+the class watches for 10 hours per day.</li>
+<li>Option 2: We wouldn’t try to control for any of those factors, but
+we would randomly assign for 1 vs. 10 hours of TV per day. This is a
+lower-quality experiment, because all of those other factors may
+<em>swamp out</em> our ability to detect an effect of watching TV. We
+are not controlling for anything, so all of these other factors may
+create <em>noise</em>.
+<ul>
+<li>But, we could collect data on those factors, and include those data
+in the models, and then we could avoid the swamping issue.</li>
+<li>Of course, this experimental design is super impractical. There’s no
+way we could get our sample to watch TV for 10 hours a day – or even 1
+hour per day.</li>
+</ul></li>
+</ul>
+<p>So what do we do? We do an <strong>observation study</strong> and
+then collect data on all of these other features that might also
+influence the response variable. Diet, exercise, socioeconomic status,
+smoking, alcohol, and maybe a whole slew of other things that we might
+hypothesize also influence the response variable (mortality). We could
+then put all those variables into the model and <em>statistically</em>
+control for those other variables. When we include correlated variables
+in a model, it statistically controls for them – and we’ll demonstrate
+this today.</p>
+<p>We may not be able to show causation, because there may be some other
+confounding variable(s) in the world that we did not measure and collect
+data.</p>
+<p><strong>Important takehome:</strong> When you are conducting studies
+and experiments, you need to <em>think carefully</em> about what are the
+potential confounding factors – the other variables – that are
+correlated to the X-variable you are interested in and that might
+influence your results.</p>
+<ul>
+<li>This is less of a concern in a well-designed manipulative study,
+where random assignment of treatment removes collinearity. For example,
+if I randomly assign to the class who watches 1 vs. 10 hours of TV, then
+there won’t be any collinearity between exercise and TV watching.
+Presumably people that go the gym often will be randomly assigned to 10
+hours of TV, and people who never go to the gym will be made to watch 1
+hour of TV. This random assignment removes potential collinearity
+between these variables.</li>
+</ul>
+<p>If you have confounding variables and you don’t include them in your
+model/analysis, you get biased (incorrect) estimates.</p>
+<p><strong>If confounding variables are not included in model/analysis
+–&gt; biased (incorrect) estimates (<span
+class="math inline">\(\beta\)</span>s)</strong></p>
+<p>People kind of understand this… but I want you to really understand
+it. If there are variables that are correlated to your X-variable of
+interest and you don’t collect those data and include them, then your
+estimates are biased. This is scary! That’s why this is one of the more
+important topics in this class.</p>
+<p>Let’s see how this works.</p>
+</div>
+</div>
+<div id="biased-estimates-without-confounding-variables"
+class="section level2">
+<h2>Biased estimates without confounding variables</h2>
+<p>Let’s reconsider an example that we examined in the last class.</p>
+<ul>
+<li><strong>Y = size</strong></li>
+<li><strong><span class="math inline">\(X_1\)</span> = age</strong></li>
+<li><strong><span class="math inline">\(X_2\)</span> = sex</strong></li>
+</ul>
+<p>However, this time around when you were sampling the animals of
+interest, for some reason you had a hard time collecting data on young
+females.</p>
+<p><img src="lecture_13_files/figure-html/example_1-1.png" width="432" /></p>
+<p>And you also had a really hard time catching old males…</p>
+<p><img src="lecture_13_files/figure-html/example_2-1.png" width="432" /></p>
+<p>Let’s say I run this model:</p>
+<p><strong><span class="math inline">\(Y = \beta_0 + \beta_1
+Age\)</span></strong></p>
+<p>Sex is not included in this model… but Sex is correlated with age!
+Our sample only includes old females and young males. (A T-test
+comparing age between females and males would be different.)</p>
+<p><strong>Q:</strong> If I ran a regression, where would the line
+go?</p>
+<p><img src="lecture_13_files/figure-html/example_3-1.png" width="432" /></p>
+<p>For these data, it would be ~horizontal across the data. This is a
+biased estimate. This estimate incorrectly estimates the effect of age
+on size of these animals.</p>
+<p>However, if we run this model:</p>
+<p><strong><span class="math inline">\(Y = \beta_0 + \beta_1 Age +
+\beta_2 Sex\)</span></strong></p>
+<p>We get two lines! And these lines will look like:</p>
+<p><img src="lecture_13_files/figure-html/example_4-1.png" width="432" /></p>
+<p>Now, we get <em>unbiased</em> estimates of the effect of Age on Size
+for each Sex.</p>
+<p>If we leave out Sex in the first model, some of that Sex effect is
+being transmitted to the effect of Age.</p>
+<ul>
+<li>Females are smaller than males, and it’s biasing that effect on
+Size.</li>
+<li>The difference in size is transmitted to the effect of Age.</li>
+</ul>
+<p>The same thing might be happening in the TV-effect on mortality
+study. There were many other variables that were correlated to watching
+TV that were really influencing mortality. Their effects, which were
+left out of the statistical model, were being transmitted to the effect
+of watching TV.</p>
+<p><strong>Q:</strong> Does that make sense? Questions?</p>
+<p>Reiterating the important point: if we leave confounding variables
+out of our model, we get biased estimates of the variables that we do
+leave in the model.</p>
+<ul>
+<li>So, we want to collect data on confounding variables and include
+them in the model.</li>
+<li>And we want to do this even if they are not statistically
+significant. We’ll talk about model building later in the class and when
+you should/should not remove variables from models.</li>
+</ul>
+<p>In general though, we want to leave variables in to statistically
+control for confounding effects.</p>
+</div>
+<div id="tradeoff" class="section level2">
+<h2>Tradeoff</h2>
+<p><strong>If confounding variables <em>are</em> included in model –&gt;
+Variance Inflation</strong></p>
+<p>When we run a model with multiple X-variables, the computer package
+is trying to figure out which of the two variables are having an effect
+on Y. But they are correlated to eachother, which makes it tough for the
+software to figure out out which X-variable is having what effect. And
+the more strongly they are associated with eachother, it becomes more
+difficult for the software to disentangle these effects.</p>
+<p>A consequence of this is that more variables cause greater
+uncertainty in the effects (<span
+class="math inline">\(\beta\)</span>s). Increased uncertainty is
+reflected in:</p>
+<ul>
+<li><strong>increased SE</strong></li>
+<li><strong>increased CI</strong></li>
+<li><strong>increased P-values</strong></li>
+</ul>
+<p>This can lead to problematic results.</p>
+<p>I mentioned during the last class that, generally, if we add a
+variable to a model, the p-values for the variables in a model go down.
+<u>However, collinearity is the one exception to that rule!</u> And in
+fact, it’s a red flag.</p>
+<p>My recommendation is that, before you even start your analysis, you
+need to know what the collinearity is between your X-variables! Plot
+your X-variables, run some linear models (e.g., between Age and Sex),
+and learn about what the collinearity is.</p>
+<ul>
+<li>Some people fail to do this and problems occur. For example, they
+might build a model where Age was significant… and then they add Sex,
+and Age is no longer significant…</li>
+<li>If the P-value goes up a lot when you add a variable to a model,
+this is a symptom of collinearity! This is happening because of
+collinearity between X-variables.</li>
+</ul>
+</div>
+<div id="symptoms-of-collinearity" class="section level2">
+<h2>Symptoms of collinearity</h2>
+<ol style="list-style-type: decimal">
+<li>Collinearity between independent variables</li>
+</ol>
+<ul>
+<li>High <span class="math inline">\(r^2\)</span> values</li>
+<li>Statistically-significant relationships between X-variables</li>
+</ul>
+<ol start="2" style="list-style-type: decimal">
+<li>High variance inflation factors (VIF) of variables in model</li>
+<li>Variables significant in simple regression, but not in
+multi-variable regression</li>
+<li>Individual variables not significant in multi-variable regression
+model, but the overall multi-variable regression model is
+significant</li>
+<li>Large changes in coefficient estimates between full and reduced
+models</li>
+<li>Large SE in multi-variable regresion models, despite high power</li>
+</ol>
+<p>Breaking this list down a bit…</p>
+<ol style="list-style-type: decimal">
+<li><p>The easiest way to know if you have collinearity is to examine
+fit a linear model between your two independent variables and see if
+they have <strong>high <span class="math inline">\(r^2\)</span>
+values</strong> or if there is a <strong>statistically-significant
+relationship</strong> between them.</p></li>
+<li><p>High variance inflation factors (VIF) of variables in model. Next
+class I will show you how to examine VIF for variables in a
+model.</p></li>
+<li><p>As I said before, if you have significant variables in a simple
+linear regression, but then you add another variable(s) to create a
+multi-variable regression and the individual variable(s) is no longer
+significant, then you have collinearity.</p></li>
+<li><p>If you build a multi-variable model where (i) none of the
+individuals variables are significant, but (ii) the overall whole model
+is significant (the p-value at the bottom of the model0), then you have
+collinearity. The whole model is significant, but none of the individual
+variables is significant.</p></li>
+</ol>
+<ul>
+<li>How does that happen? All of the X-variables are explaining a lot of
+the Y-variable, but the software is having a hard-time figure out which
+X-variable is explaining the response. And the collinearity causes the
+p-values for individual variables to go up.</li>
+</ul>
+<ol start="5" style="list-style-type: decimal">
+<li><p>Generally, when you add variables to a model, the betas
+<em>should not change too much</em>. What do I mean by ‘too much’? E.g.,
+when you have a simple model with beta and CI, and then you add another
+X-variable to the model to create a multi-variable model, then the new
+estimate for your beta should be within the 95% CI of the original
+estimate. If it moves to be outside of the 95% CI of the original
+estimate, that’s a considerable change and is a symptom of collinearity
+of the X-variables.</p></li>
+<li><p>What if you have 25,000 samples, and you have huge standard
+errors. Why are the SE so big, when we have such a large sample size?
+Collinearity in the system can increase SE, increase CI, and decrease
+p-values.</p></li>
+</ol>
+<p><strong>Questions?</strong></p>
+</div>
+<div id="simulation-exercise" class="section level2">
+<h2>Simulation exercise</h2>
+<p>When confronted with collinearity, a common approach taken by many
+folks in our field is to <u>take variables out of the model</u>.
+However, this has a consequence that they do not understand – it biases
+our estimates! – so this is not the approach I recommend.</p>
+<p>I’m going to show you a simulation exercise that demonstrates:</p>
+<ol style="list-style-type: decimal">
+<li>Collinearity influences parameter <strong>estimates</strong>,
+<strong>uncertainty</strong>, and <strong>p-values</strong> when
+confounding variables are not included in the model, and</li>
+<li>When all the necessary confounding variables are included,
+collinearity increases uncertainty and p-values but <u>does not bias
+estimates</u>.</li>
+</ol>
+<div id="truth" class="section level3">
+<h3>Truth</h3>
+<p><span class="math inline">\(\beta_1 = 3\)</span> <span
+class="math inline">\(\beta_2 = 3\)</span> <span class="math inline">\(z
+= U[0.5,20]\)</span> – an estimate of how much correlation
+(collinearity) there is between <span class="math inline">\(X_1\)</span>
+and <span class="math inline">\(X_2\)</span></p>
+<p>For the simulation exercise, I simulated 1,000 datasets with varying
+degrees of collinearity (correlation) between two X-variables. Here is
+truth:</p>
+<ul>
+<li>Simulations: <span class="math inline">\(n = 1,000\)</span></li>
+<li><span class="math inline">\(y = 10 + 3X_1 + 3X_2 + \epsilon \sim
+N(0, 2)\)</span></li>
+<li><span class="math inline">\(X_1 = U[0,10]\)</span></li>
+<li><span class="math inline">\(X_2 = X_1 + N(0, z)\)</span></li>
+<li>For each simulation, I used a different value of <em>z</em> from a
+uniform distribution: <span class="math inline">\(z = U[0.5,
+20]\)</span>.</li>
+</ul>
+<p>Low values of <em>z</em> (e.g., <em>z</em> = 0.5) caused high
+collinearity between the X-variables, because only a little bit of noise
+gets added to <span class="math inline">\(X_1\)</span> to calculate
+<span class="math inline">\(X_2\)</span>. Alternatively, high values of
+<em>z</em> (e.g., <em>z</em> = 20) had low collinearity, because large
+noise was added to <span class="math inline">\(X_1\)</span> to calculate
+<span class="math inline">\(X_2\)</span>. In other words, the low values
+of <em>z</em> caused very little noise (and high collinearity) between
+<span class="math inline">\(X_1\)</span> and <span
+class="math inline">\(X_2\)</span>, while the high values caused great
+noise (and low collinearity) between the variables.</p>
+<p>For each simulation, I did a few things:</p>
+<ul>
+<li>Fit a simple model (<span class="math inline">\(Y ~ X_1\)</span>)
+and measured the estimate, SE, and p-value for <span
+class="math inline">\(\beta1\)</span></li>
+<li>Fit a multi-variable model (<span class="math inline">\(Y ~ X_1 +
+X_2\)</span>) that included both of the collinear, confounding
+variables, and measured the effect, SE, and p-value for <span
+class="math inline">\(\beta1\)</span>.</li>
+</ul>
+<p>Most importantly, I measured how collinearity between <span
+class="math inline">\(X_1\)</span> and <span
+class="math inline">\(X_2\)</span> (i.e., <span
+class="math inline">\(r^2\)</span>) influenced the the Variance
+Inflation Factor from the multi-variable model.</p>
+<p>I’m going to show a number of graphs, and for all of these graphs the
+X-axis is a measure of collinearity (correlation; <span
+class="math inline">\(r^2\)</span>) between <span
+class="math inline">\(X_1\)</span> and <span
+class="math inline">\(X_2\)</span>. If it’s collinearity equals 1, then
+the variables are perfectly correlated, whereas low values show weak/no
+correlation.</p>
+<p>The first graph I am going to show you describes how the
+<strong>Variance Inflation Factor</strong> score is influenced by
+collinearity. The <strong>Variance Inflation Factor</strong> is a metric
+used to diagnose whether there may be collinearity between X-variables
+in a multiple-variable model.</p>
+<p><strong>Variance Inflation Factor (VIF) – the amount (in
+<em>times</em>) that the variance (<span
+class="math inline">\(SE^2\)</span>) in the <span
+class="math inline">\(\beta\)</span> increases due to
+collinearity</strong></p>
+<ul>
+<li>E.g., if VIF = 4, then the variance is 4 times what it would be if
+you didn’t have collinearity – and the SE would be doubled (<span
+class="math inline">\(SE = \sqrt4 = 2\)</span>).</li>
+</ul>
+<p>First, let’s see how the VIF is influenced by collinearity:</p>
+<p><img src="lecture_13_files/figure-html/simulation_2-1.png" width="768" /></p>
+<p>This graph shows how VIF scores increase with increasing
+collinearity.</p>
+<p>Some people say that if the VIF &gt; 10, you need to worry about
+collinearity. In this case, the SE would be triple what it would
+otherwise be without collinearity. This happens when <span
+class="math inline">\(r^2 = 0.9\)</span>, and the two X-variables are
+almost perfectly correlated. This is too high, in my opinion.</p>
+<p>Rule-of-thumb: <strong>VIF &gt; 2, recognize that you have
+collinearity in your data.</strong></p>
+<p>VIF = 2 ~ <span class="math inline">\(r^2\)</span> = 0.6 – so another
+rule of thumb is that an <span class="math inline">\(r^2 &gt;
+0.6\)</span> may also indicate collinearity.</p>
+</div>
+<div id="simple-regression-model-y-sim-x_1" class="section level3">
+<h3>Simple regression model: <span class="math inline">\(Y \sim
+X_1\)</span></h3>
+<p>Now, let’s consider results from the simple model (<span
+class="math inline">\(Y \sim X_1\)</span>) across the simulations.</p>
+<p>The most important thing I want to emphasize to you all is in this
+first graph. How is the <strong>beta for <span
+class="math inline">\(X_1\)</span></strong> influenced by collinearity
+in the simple model?</p>
+<p><img src="lecture_13_files/figure-html/simulation_3-1.png" width="768" /></p>
+<p>This graph shows, again, the <span class="math inline">\(r^2\)</span>
+between <span class="math inline">\(X_1\)</span> and <span
+class="math inline">\(X_2\)</span> (how correlated they are) on the
+X-axis, and the Y-axis shows the estimate for the beta for <span
+class="math inline">\(X_1\)</span>. If there is no collinearity, the
+estimate is 3 – which is truth! Bottom-left-hand side of the graph.</p>
+<p>However, even with a very little bit of collinearity (<span
+class="math inline">\(r^2 &lt; 0.2\)</span>), the parameter estimate is
+biased! As collinearity increases, the parameter estimate jumps pretty
+quickly up to 6!</p>
+<p><strong>Q:</strong> Why 6? 6 = 3 + 3. Because the two X-variables are
+correlated, the estimation model starts to assign the effect of <span
+class="math inline">\(X_2\)</span> onto <span
+class="math inline">\(X_1\)</span>.</p>
+<p>Not including the confounding variable introduces bias in our
+estimates and negatively influences our inference.</p>
+<p>Now, often in this class we ask: how do different approaches
+influence betas, uncertainty, and p-values. Next we might ask ourselves:
+how is <strong>standard error (SE)</strong> influenced by collinearity
+in the simple model?</p>
+<p><img src="lecture_13_files/figure-html/simulation_4-1.png" width="768" /></p>
+<p>This is where it gets a little scary.</p>
+<p>Not only is the parameter estimate biased, the standard error gets
+smaller and smaller. As collinearity increases, your estimates are
+getting more and more precise…</p>
+<p>How are <strong>p-values</strong> influenced by collinearity in the
+simple model?</p>
+<p><img src="lecture_13_files/figure-html/simulation_5-1.png" width="768" /></p>
+<p>As uncertainty gets smaller and samller, our p-values also get
+smaller and smaller, because the effect of collinearity gets bigger and
+bigger…</p>
+<p>So, collinearity is <strong>really dangerous</strong>! If you have
+collinearity in your data, and you leave out some confounding variable,
+you are going to get biased estimates, and it’s going to seem like it’s
+a really precise estimate with a clear result. Unless…</p>
+<p><strong>Q:</strong> What if the effect of <span
+class="math inline">\(X_2\)</span> was -3? The two effects might cancel
+eachother out, and our estimate would be zero, with a small SE, and
+<em>false confidence that there is no effect</em>.</p>
+<p>If the effect of the unaccounted confounding variable, <span
+class="math inline">\(X_2\)</span>, has an effect in the opposite
+direction, the collinear effects may partially or wholly cancel
+eachother out, and you may fail to observe any true effect of X on
+Y.</p>
+</div>
+<div id="multi-variable-model-y-sim-x_1-x_2" class="section level3">
+<h3>Multi-variable model: <span class="math inline">\(Y \sim X_1 +
+X_2\)</span></h3>
+<p>Now, let’s consider results from the multi-variable model (<span
+class="math inline">\(Y \sim X_1 + X_2\)</span>) across the simulations.
+This is the model where we have <em>statistically controlled</em> for
+that collinearity.</p>
+<p>Let’s start here by asking: how does collinearity influence the
+<strong>beta for <span class="math inline">\(X_1\)</span></strong> in
+the multi-variable model?</p>
+<p><img src="lecture_13_files/figure-html/simulation_6-1.png" width="768" /></p>
+<p>On the Y-axis, we have the coefficient estimate for <span
+class="math inline">\(\beta_1\)</span>, and the X-axis is again the
+correlation between the two X-variables.</p>
+<p>The estimate is good, right around 3 (truth)!! But as collinearity
+increases, the estimate can be more variable. So by including the
+confounding variables, your estimate is good, but the bad news is that
+due to the collinearity, you have less certainty in your estimate. But
+at least the estimate is unbiased, which is the most important
+thing.</p>
+<p>Remember the rule of thumb about <span
+class="math inline">\(r^2\)</span> indicating collinearity? Previously I
+said that when <span class="math inline">\(r^2 = 0.6\)</span>,
+collinearity should be on your radar. In this graph, we can see that
+simulations with collinearity greater than 0.6 start to have parameter
+estimates that are more variable. However, the mean is still centered on
+~3 (Truth) after this rule-of-thumb. So no matter how much collinearity
+there is, on average we will continue to get an unbiased estimate of the
+effect of X-variables in the model. In statistics, any one estimate may
+be bad – but on average, for this multi-variable model, the estimates
+will be unbiased.</p>
+<p>Another thing that we can see from this graph is the <strong>variance
+inflation</strong> itself! As collinearity increases along the X-axis,
+the cone of simulation results gets bigger, because there is more and
+more uncertainty in what the parameter estimate really is.</p>
+<p><img src="lecture_13_files/figure-html/simulation_7-1.png" width="768" /></p>
+<p>And we see this here as well with the SE estimates. As collinearity
+increases, SE of the estimate increases, again suggesting increasing
+uncertainty due to collinearity.</p>
+<p><img src="lecture_13_files/figure-html/simulation_8-1.png" width="768" /></p>
+<p>And again, as uncertainty increases, p-values increase as well.</p>
+<p>But hopefully the takehome message is clear. Failing to account for
+confounding variables in a model will bias estimates. Accounting for
+those confounding variables will produce unbiased estimates, although
+the uncertainty may increase.</p>
+</div>
+</div>
+<div id="practical-guide-to-handling-collinearity"
+class="section level2">
+<h2>Practical guide to handling collinearity</h2>
+<ol style="list-style-type: decimal">
+<li>Be careful to identify potential confounding variables prior to data
+collection.</li>
+</ol>
+<ul>
+<li>Think carefully about what these might be, and include them in your
+data collection method so that you can masure them.</li>
+<li>A helpful way to do this is to build a <u>conceptual model</u>
+describing hypotheses for how all variables might be related in your
+system and then use that model to guide what variables you might want to
+measure.</li>
+</ul>
+<ol start="2" style="list-style-type: decimal">
+<li>Calculate collinearity and VIF among independent variables – before
+you start your analysis.</li>
+</ol>
+<ul>
+<li>Don’t forget to do this! If you add a variable and coefficient
+estimates and variable significance change, this is likely due to
+collinearity.</li>
+</ul>
+<ol start="3" style="list-style-type: decimal">
+<li>Pay attention to how coefficient estimates and variable significance
+change as variables are removed or added.</li>
+</ol>
+<div id="confounding-variables" class="section level3">
+<h3>Confounding variables</h3>
+<ol style="list-style-type: decimal">
+<li><p>Sample in a manner that eliminates collinearity. Collinearity may
+be real, or it may be due to sampling artifact. E.g., in the example
+above, collinearity was introduced due to non-random sampling of the
+different sexes.</p></li>
+<li><p>Use multi-variable regression. If you have collinear X-variables,
+it may cause your SE to be large, but <u>your estimates will be
+unbiased</u>. If you fail to include confounding variables, then
+estimates will be biased.</p></li>
+<li><p>Include confounding variables, even if they are
+non-significant.</p></li>
+</ol>
+<p>Scenarios: two collinear variables (Age and Sex), and you run the
+full model. VIF is really high (e.g., 10). SE and CI are very inflated,
+but everything is still significant. Do you do anything? No.</p>
+<ul>
+<li>Your estimates are unbiased, because you ran the full model.</li>
+<li>Your CI are large, but still statistically significant.</li>
+<li>You have identified that you have collinearity, which caused the
+large CI. But the betas are unbiased.</li>
+</ul>
+<p>But sometimes you run the analysis but X-variables are not
+significant. What do you do then?</p>
+<ol start="4" style="list-style-type: decimal">
+<li>Get more data! This decreases SE and VIF.</li>
+</ol>
+<p>Most problems in statistics can be improved by getting more data.
+Increasing N decreases SE, CI, and P-values… If none of your data are
+significant due to collinearity, maybe you just need to collect more
+data.</p>
+<ol start="5" style="list-style-type: decimal">
+<li>There are statistical techniques that can eliminate collinearity.
+One of those is Principal Component’s Analysis, which we may talk about
+in this class. Popular analysis. What this analysis does is it creates
+<em>new variables</em> that are orthogonal – which means they have zero
+collinearity.</li>
+</ol>
+</div>
+<div id="redundant-variables" class="section level3">
+<h3>Redundant variables</h3>
+<p>If collinearity between X-variables results in biased estimates, why
+do so many people throw out their variables in favor of reduced models
+that will suffer from collinearity and thus have biased estimates?</p>
+<p>Well, you can do this <u><em>sometimes</em></u> – primarily when your
+collinear X-variables <u>don’t have an effect on Y</u>.</p>
+<p>These are sometimes called <strong>redundant variables – collinear
+X-variables that don’t have an effect on the Y-variable</strong>.</p>
+<ul>
+<li>If they don’t really have an effect (i.e., <span
+class="math inline">\(\beta\)</span> = 0), there is no problem when you
+take them out.</li>
+<li>If you leave out a confounding variable, it assigns it’s effect to
+the other collinear variable you left in. (In this case, the effect is
+zero.)</li>
+</ul>
+<p>In truth, there are no confounding or redundant variables, but rather
+it’s a continuum depending on the <span
+class="math inline">\(\beta\)</span>.</p>
+<ul>
+<li>If the <span class="math inline">\(\beta \neq 0\)</span>, it’s a
+confounding variable.</li>
+<li>If the <span class="math inline">\(\beta = 0\)</span>, it’s a
+redundant variable.</li>
+</ul>
+<p>You don’t need to leave in redundant variables, and leaving them in
+will generate variance inflation.</p>
+<p>What’s an example of a redundant variable? Watching TV and it’s
+effect on mortality. If you leave this in your analysis, you will
+measure a <span class="math inline">\(\beta = 0\)</span> after you
+include all of the other important things that truly do influence
+mortality. And by leaving it in the model you will increase SE, CI, and
+p-values of all of the other important variables.</p>
+<p><br></p>
+</div>
+</div>
+<div id="truth-1" class="section level2">
+<h2>Truth</h2>
+<pre class="r"><code>### Lecture 13: code to simulate collinear data and to demonstrate how failing to account for collinearity influences estimates and uncertainty
+
+# Set the seed for reproducibility
+set.seed(123)
+
+# Number of simulations
+s &lt;- 1000
+
+# Empty vectors to save results from each simulation
+simple_beta1 &lt;- numeric(s)
+simple_se1 &lt;- numeric(s)
+simple_p1 &lt;- numeric(s)
+multi_beta1 &lt;- numeric(s)
+multi_se1 &lt;- numeric(s)
+multi_p1 &lt;- numeric(s)
+r2 &lt;- numeric(s)
+vif &lt;- numeric(s)
+
+# x2 = x1 + error(0, z), where
+# z can range from 0.5 (highly correlated to x1) to 20 (not correlated at ~all)
+z_values &lt;- seq(0.5, 20, length.out = s)
+
+# Loop through each simulation replicate to measure everything
+for (i in 1:s){
+  
+  # Number of datapoints per simulation
+  n &lt;- 100
+
+  # x1
+  x1 &lt;- runif(n, 0, 10) # Random, uniform variable; only simulated once
+
+  # error for y; only simulated once
+  error &lt;- rnorm(n, 0, 2)
+  
+  # X2 for each simulation
+  x2 &lt;- x1 + rnorm(n, 0, z_values[i])
+  
+  # Y for each
+  y &lt;- 10 + 3 * x1 + 3 * x2 + error
+
+  # Simple model
+  results1 &lt;- lm(y ~ x1)
+  simple_beta1[i] &lt;- summary(results1)$coefficients[2,1]
+  simple_se1[i] &lt;- summary(results1)$coefficients[2,2]
+  simple_p1[i] &lt;- summary(results1)$coefficients[2,4]
+
+  # Multi-variable model
+  results2 &lt;- lm(y ~ x1 + x2)
+  multi_beta1[i] &lt;- summary(results2)$coefficients[2,1]
+  multi_se1[i] &lt;- summary(results2)$coefficients[2,2]
+  multi_p1[i] &lt;- summary(results2)$coefficients[2,4]
+
+  # R^2 between X-variables
+  model_x12 &lt;- lm(x2 ~ x1)
+  r2[i] &lt;- summary(model_x12)$r.squared
+  
+  # VIF for multi-variable model
+  vif[i] &lt;- car::vif(results2)[&quot;x1&quot;]
+}</code></pre>
+</div>
+<div id="footnote" class="section level2">
+<h2>Footnote</h2>
+<p>TV-effect on mortality study: Wijndaele et al. 2011 <em>International
+Journal of Epidemiology</em>.</p>
+<p><a href="lecture_14.html">–go to next lecture–</a></p>
+</div>
+
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+<script>
+$(document).ready(function ()  {
+
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

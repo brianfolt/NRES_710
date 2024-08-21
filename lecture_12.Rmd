@@ -107,7 +107,7 @@ What are the advantages of analyzing all of your X-variables at the same time.
 - A rule in statistics (axiom) -- every time you add an X into a model, the p-values for the X-variables already in the model should go down. The reason is because the p-values for your X-variables is determined by your error. When you add more X-variables into your model, you get rid of error, by explaining more noise. So, as a general rule, when you add more variables to a model, the p-values for other variables go down.
 - If the variable you added explains a lot, then the p-values for other variables should go down a lot as well!
 
-**3. Collinearity -- when X-variables are associated with each other**
+**3. Collinearity -- when X-variables are associated (correlated) with each other**
 
 - Collinearity is a big problem in ecology and natural resource sciences. 
 - Collinearity is automatically dealt with in multi-variable models. 
