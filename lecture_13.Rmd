@@ -29,52 +29,55 @@ knitr::opts_chunk$set(
 
 ## Collinearity
 
-### Introduction
+Today's class is an important one. The topic is on something that very few people understand well. So the plan is to spend 1-2 days on this topic so that you will understand it well. Many people have a decent idea of what **collinearity** is -- but tend to make bad decisions about how to handle it.
 
-Today's class is an important one. The topic is on something that very few people understand well. So the plan is to spend 1-2 days on this topic so that you will understand it well. Many people have a decent idea of what collinearity is -- but tend to make bad decisions about how to handle it.
+**Collinearity -- when X-variables are associated (correlated) with eachother**
 
 Let's start with a question for the class. We often say that "*correlation does not equal causation*". More specifically, you might run a regression between X and Y and find a relationship, but that does not mean that X causes Y.
 
-**Q:** Why not?
+**Q:** Why not? Discuss this a bit. 
 
-Let's consider an example. Let's say there was a study that came out -- and generated some interest from the press -- that suggested that for each 1 additional hour of TV that you watch per day, it increases the risk of mortality by 11%.
+Let's consider an example. There was a study that came out a few years ago that generated some interest from the press. This study suggested that: for each 1 additional hour of TV that you watch per day, it increases the risk of mortality by 11%.
 
 Let's think about this for a minute. Do you think the actual act of watching TV increases the risk of mortality? How would that happen? Is the TV going to fall out of the wall and potentially injure you? No, probably not. Watching TV itself is not going to cause this relationship.
 
-What's the problem here? Well, there are a lot of other things that are **correlated** to watching TV that have their own effect on the Y variable (mortality).
+What's the problem here? Well, there are a lot of other things that are **correlated** to watching TV that may have their own effect on the Y variable (mortality).
 
 **Confounding factors -- an X-variable that is correlated with the X-variable of interest that has its own effect on Y**
 
 What is correlated with watching TV?
 
 - You aren't being active (e.g., exercising)!
-- You might be snacking, and your snacks might not be something healthy (you probably aren't eating carrots if you are watching TV).
+- You might be snacking, and your snacks might not be something healthy. You probably aren't eating carrots if you are watching TV. I like eating chocolate covered pretzels!
 - You aren't working, which might relate to your socioeconomic status.
 - You may be less likely to have healthcare.
-- Etc.
+- Et cetera, et cetera, et cetera.
 
-This things might all be correlated to how much an individual watches TV and might all have their own effects on mortality. 
+These features might all be correlated to how much an individual watches TV, and all might have their own effects on mortality. 
 
-**Q:** Here's the key takehome. If we really want to know what the true effect of TV watching on mortality is, what would would we do? A MANIPULATIVE EXPERIMENT. In an ideal world, we would do a manipulative experiment, which is the only true way to show causation.
+**Q:** Here's the key idea If we really want to know what the true effect of TV watching on mortality is, what would would we do?
+
+**A MANIPULATIVE EXPERIMENT**. In an ideal world, we would do a manipulative experiment, which is the only true way to show causation.
 
 - Option 1: We would try to control for all of the above factors: everyone has the same job, goes to the gym the same amount of time, no smoking, etc. Let's assume this class is our sample! We would assign half of the class to watch TV for 1 hour a day, while the other half of the class watches for 10 hours per day.
 - Option 2: We wouldn't try to control for any of those factors, but we would randomly assign for 1 vs. 10 hours of TV per day. This is a lower-quality experiment, because all of those other factors may *swamp out* our ability to detect an effect of watching TV. We are not controlling for anything, so all of these other factors may create *noise*.
   - But, we could collect data on those factors, and include those data in the models, and then we could avoid the swamping issue.
-  - Of course, this experimental design is super impractical. There's no way we could get our sample to watch TV for 10 hours a day -- or even 1 hour per day. 
+  - Of course, this experimental design is super impractical... There's no way we could get our sample to watch TV for 10 hours a day -- or probably even 1 hour per day in many cases. 
   
-So what do we do? We do an **observation study** and then collect data on all of these other features that might also influence the response variable. Diet, exercise, socioeconomic status, smoking, alcohol, and maybe a whole slew of other things that we might hypothesize also influence the response variable (mortality). We could then put all those variables into the model and *statistically* control for those other variables. When we include correlated variables in a model, it statistically controls for them -- and we'll demonstrate this today.
+So what do we do? Researchers often resort to performing an **observational study**, where theyn collect data on all of these other features that might also influence the response variable. Diet, exercise, socioeconomic status, smoking, alcohol, and maybe a whole slew of other things that we might hypothesize also influence the response variable (mortality). We could then put all those variables into the model and *statistically control* for those other variables. When we include correlated variables in a model, it statistically controls for them -- and we'll demonstrate this today.
 
 We may not be able to show causation, because there may be some other confounding variable(s) in the world that we did not measure and collect data.
 
-**Important takehome:** When you are conducting studies and experiments, you need to *think carefully* about what are the potential confounding factors -- the other variables -- that are correlated to the X-variable you are interested in and that might influence your results.
+**Important takehome message:** When you are conducting studies and experiments for your thesis or your careeer, you need to *think carefully* about what are the potential confounding factors -- the other variables -- that may be correlated to the X-variable you are interested in and that might influence your results.
 
 - This is less of a concern in a well-designed manipulative study, where random assignment of treatment removes collinearity. For example, if I randomly assign to the class who watches 1 vs. 10 hours of TV, then there won't be any collinearity between exercise and TV watching. Presumably people that go the gym often will be randomly assigned to 10 hours of TV, and people who never go to the gym will be made to watch 1 hour of TV. This random assignment removes potential collinearity between these variables.
+- Again, manipulative experiments are the strongest approach to inference in science, but can be impractical and many of us resort to observational studies.
 
-If you have confounding variables and you don't include them in your model/analysis, you get biased (incorrect) estimates.
+My goal with this lecture today is to demonstrate to you all that: if you have confounding variables and you don't include them in your model/analysis, the estimates from your analysis will be biased (incorrect)!
 
 **If confounding variables are not included in model/analysis --> biased (incorrect) estimates ($\beta$s)**
 
-People kind of understand this... but I want you to really understand it. If there are variables that are correlated to your X-variable of interest and you don't collect those data and include them, then your estimates are biased. This is scary! That's why this is one of the more important topics in this class.
+People kind of understand this... but I want you to really understand it. If there are variables that are correlated to your X-variable of interest and you don't collect those data and include them, then your estimates are biased. This is scary!! That's why this is one of the more important topics we will cover this semester.
 
 Let's see how this works.
 
@@ -193,7 +196,7 @@ Reiterating the important point: if we leave confounding variables out of our mo
 
 In general though, we want to leave variables in to statistically control for confounding effects.
 
-## Tradeoff
+### Tradeoff
 
 **If confounding variables *are* included in model --> Variance Inflation**
 
@@ -243,7 +246,7 @@ Breaking this list down a bit...
 
 **Questions?**
 
-## Simulation exercise
+## Simulation Exercise 1
 
 When confronted with collinearity, a common approach taken by many folks in our field is to <u>take variables out of the model</u>. However, this has a consequence that they do not understand -- it biases our estimates! -- so this is not the approach I recommend.
 
@@ -469,22 +472,16 @@ And again, as uncertainty increases, p-values increase as well.
 
 But hopefully the takehome message is clear. Failing to account for confounding variables in a model will bias estimates. Accounting for those confounding variables will produce unbiased estimates, although the uncertainty may increase.
 
-## Practical guide to handling collinearity
-
-1) Be careful to identify potential confounding variables prior to data collection. 
-
-- Think carefully about what these might be, and include them in your data collection method so that you can masure them.
-- A helpful way to do this is to build a <u>conceptual model</u> describing hypotheses for how all variables might be related in your system and then use that model to guide what variables you might want to measure.
-
-2) Calculate collinearity and VIF among independent variables -- before you start your analysis.
-
-- Don't forget to do this! If you add a variable and coefficient estimates and variable significance change, this is likely due to collinearity. 
-
-3) Pay attention to how coefficient estimates and variable significance change as variables are removed or added.
-
 ### Confounding variables
 
-1) Sample in a manner that eliminates collinearity. Collinearity may be real, or it may be due to sampling artifact. E.g., in the example above, collinearity was introduced due to non-random sampling of the different sexes.
+**Confounding variable -- a variable that will bias results if you leave it out**. There are two key features for confounding variables:
+
+- Correlated with another X-variable
+- Has it's own effect on Y
+
+To avoid negative effects of confounding variables, I recommend:
+
+1) Sample in a manner that eliminates collinearity. Collinearity may be real, or it may be due to sampling artifact. E.g., in the first example above, collinearity was introduced due to non-random sampling of the different sexes. Collect your data in a way that eliminates collinearity. 
 
 2) Use multi-variable regression. If you have collinear X-variables, it may cause your SE to be large, but <u>your estimates will be unbiased</u>. If you fail to include confounding variables, then estimates will be biased.
 
@@ -512,8 +509,14 @@ Well, you can do this <u>*sometimes*</u> -- primarily when your collinear X-vari
 
 These are sometimes called **redundant variables -- collinear X-variables that don't have an effect on the Y-variable**.
 
-- If they don't really have an effect (i.e., $\beta$ = 0), there is no problem when you take them out.
-- If you leave out a confounding variable, it assigns it's effect to the other collinear variable you left in. (In this case, the effect is zero.)
+1) Correlated to another X-variable, but
+2) Do not have an effect on Y
+
+They are similar to confounding variables by being correlated to another X-variable, but the key difference is that they do not have an effect on Y.
+
+- If they don't really have an effect (i.e., $\beta$ = 0), there is no problem when you take them out. Leaving out a redundant variable does not cause bias, because it does not have an effect to add onto another variable included in the model!
+- If you leave out a confounding variable, it assigns it's effect to the other collinear variable you left in. In the case of redundant variables, leaving them out assigns the effect to the other X-variable -- but that effect was zero!
+- If you include a redundant variable, it will cause **variance inflation**.
 
 In truth, there are no confounding or redundant variables, but rather it's a continuum depending on the $\beta$.
 
@@ -524,12 +527,428 @@ You don't need to leave in redundant variables, and leaving them in will generat
 
 What's an example of a redundant variable? Watching TV and it's effect on mortality. If you leave this in your analysis, you will measure a $\beta = 0$ after you include all of the other important things that truly do influence mortality. And by leaving it in the model you will increase SE, CI, and p-values of all of the other important variables.
 
+## Redundant vs. Confounding Variables
+
+Like I said before, many scientists tend to throw out correlated X-variables because they are afraid of 'collinearity', and they want to reduce the model to avoid variance inflation.
+
+This is fine -- <u>if you are 100% certain that those variables are redundant</u>.
+
+If they are confounding variables, they must be included -- because removing them will cause biased betas, reduced uncertainty, and small p-values. 
+
+So, how do we know whether variables are **redundant** or **confounding** variables?
+
+**Redundant vs. Confounding Variable**
+
+### 1. Logic!
+
+Put some thought into your variables. Statistics is a thinking exercise and should involve critical thinking. Is it likely that your X-variable has it's own effect on Y? If so, include it.
+
+![](pic_gopher_tortoise.jpg){width=50%}
+
+Example: Gopher Tortoises. The gopher tortoise is a burrow-digging turtle species in the southeastern United States that is a species of conservation concern. Reproduction is important for populations to grow and persist, and researchers are interested in what causes reproduction in tortoise populations. Male tortoises are known to compete with eachother for access to females, and they often get in wrestling matches for access to females. Males sometimes have large shell extensions under their neck called 'gular scutes' that are used to flip other males during male-male combat. People have wondered what are the factors that influence reproductive success of tortoises: age, body size, or gular scute size? These factors are all correlated: older tortoises get larger bodies and may grow larger gular scutes. However, there is likely variation in growth rates such that sometimes younger tortoises may be larger and/or have larger gular scutes than older tortoises. The question is: are these variables redundant or confounding variables?
+
+There may be an argument that they all of these variables are measures of age, and shell size and gular scute size are redundant variables. Alternatively, it could be that they each have their own effect, where age, size, and gular scute length have different effects on reproductive success. Maybe: (1) older tortoise are more experienced at winning wrestling matches, (2) larger animals are better at winning wrestling matches, and (3) animals with larger gular scutes are better at winning wrestling matches or provides a signal of fitness to females. So each one could have a different mechanism, such that you might have an instance where a young, small animal but with big gular scutes performs well at reproducing.
+
+So, think about mechanisms for how different X-variables might influence Y. If those mechanisms are different, then they may have different effects on Y, and thus may be **confounding variables**.
+
+A helpful way to do this is to build a <u>conceptual model</u> describing hypotheses for how all variables might be related in your system and then use that model to guide what variables you might want to measure. I recommend this to most students and collaborators I work with!
+
+### 2. **What happens between 'full' and 'reduced' models?**
+
+A full model has all of the X-variables, whereas a reduced model has a subset of X-variables. How does <u>reducing</u> the model influence the betas and p-values? If you reduce the model and the betas change a lot, this is an indication of collinearity.
+
+- **Confounding variable -- removing it changes the betas for the other variables**
+- **Redundant variable -- removing it does not change other betas**
+
+('Change' is a subjective term, but our usual rule of thumb would be that it caused effect to move outside of the original confidence limits.)
+
+Conversely, we can think about this in terms of <u>adding</u> variables to a model.
+
+**When adding other variables, redundant $\beta$s tend to go to zero**
+
+A good example of this is the 'watching TV study'! It looks like watching TV has an effect when it's all by itself in the model. But when you add the confounding variables that truly have an effect on Y, the effect of TV will probably go to zero, because it is a redundant variable. So, when you add other variables to a model, the beta for the redundant variable will tend to go to zero.
+
+In other words, if a variable had an effect but then you added in a bunch of other variables and the effect disappeared -- then it probably never had an effect to begin with, it was just a redundant variable.
+
+**When adding other variables, confounding $\beta$s will still be 'substantial'**. They may not still be statistically significant because we have added more variables and contributed to variance inflation. However, if we look at the beta and it still looks like a biologically-significant effect, then it may be a confounding variable that lost significance due to variance inflation.
+
+In general, betas should not change when you add additional variables to a model. If they do, you have collinearity.
+
+This is a point in the class where things are starting to get pretty nuanced and we need to be pretty strategic and careful about how we approach our work.
+
+### 3. **$r^2$ between variables**
+
+This is not a rule, but rather a guideline. If you examine the correlation between two X-variables and see an extremely high $r^2$ value, it's most likely that those variables are redundant. Very, very strong collinearity tends to imply redundancy.
+
+Rule-of-thumb: high $r^2$ tends to suggest redundancy.
+
+### 4. **Not sure? Treat as confounding.**
+
+If you are not sure, treat it as confounding. 
+
+**Q:** Why?
+
+Because then you will include it in your model, account for its statistical effect, if one exists. If it's actually a redundant variable, then there is no effect! Your parameter estimates will be unbiased and the only consequence will be a little bit of variance inflation and reduced uncertainty. This is much better than leaving out an important, confounding variable and having consequences on your betas! 
+
+<u>General takeaway here</u>: if adding variable(s) causes the beta of a variable to change to zero, then it's probably a redundant variable, and this should be pretty obvious.
+
+## Simulation Exercise 2
+
+This simulation exercise is similar as before, but now only $X_1$ has an effect, and $X_2$ is a redundant variable.
+
+```{r sim_exercise_2_1, echo=FALSE, message=FALSE, warning=FALSE, fig.height=4, fig.width=4.5}
+# Set the seed for reproducibility & set graphing parameter
+set.seed(123); par(mar=c(4,4,0,0))
+
+# Number of simulations
+s <- 1000
+
+# Empty vectors to save results from each simulation
+simple_beta1 <- numeric(s)
+simple_se1 <- numeric(s)
+simple_p1 <- numeric(s)
+simple_beta2 <- numeric(s)
+multi_beta1 <- numeric(s)
+multi_beta2 <- numeric(s)
+multi_se1 <- numeric(s)
+multi_p1 <- numeric(s)
+r2 <- numeric(s)
+vif <- numeric(s)
+
+# x2 = x1 + error(0, z), where
+# z can range from 0.5 (highly correlated to x1) to 20 (not correlated at ~all)
+z_values <- seq(0.5, 20, length.out = s)
+
+# Loop through each simulation replicate to measure everything
+for (i in 1:s){
+  
+  # Number of datapoints per simulation
+  n <- 100
+
+  # x1
+  x1 <- runif(n, 0, 10) # Random, uniform variable; only simulated once
+
+  # error for y; only simulated once
+  error <- rnorm(n, 0, 2)
+  
+  # X2 for each simulation
+  x2 <- x1 + rnorm(n, 0, z_values[i])
+  
+  # Y for each
+  y <- 10 + 3 * x1 + error
+
+  # Simple model of X1
+  results1 <- lm(y ~ x1)
+  simple_beta1[i] <- summary(results1)$coefficients[2,1]
+  simple_se1[i] <- summary(results1)$coefficients[2,2]
+  simple_p1[i] <- summary(results1)$coefficients[2,4]
+  
+  # Simple model of X2
+  results2 <- lm(y ~ x2)
+  simple_beta2[i] <- summary(results2)$coefficients[2,1]
+
+  # Multi-variable model
+  results3 <- lm(y ~ x1 + x2)
+  multi_beta1[i] <- summary(results3)$coefficients[2,1]
+  multi_beta2[i] <- summary(results3)$coefficients[3,1]
+  multi_se1[i] <- summary(results3)$coefficients[2,2]
+  multi_p1[i] <- summary(results3)$coefficients[2,4]
+
+  # R^2 between X-variables
+  model_x12 <- lm(x2 ~ x1)
+  r2[i] <- summary(model_x12)$r.squared
+  
+  # VIF for multi-variable model
+  vif[i] <- car::vif(results3)["x1"]
+}
+```
+
+Let's look at how correlation between $X_1$ and $X_2$ influences the Variance Inflation Factor.
+
+```{r sim_exercise_2_2, echo=FALSE, message=FALSE, warning=FALSE, fig.height=4, fig.width=8}
+# Set the seed for reproducibility & set graphing parameter
+set.seed(123); par(mar=c(4,4,0.5,1))
+
+# Plotting VIF against collinearity values
+plot(r2, vif, xlab = expression("Collinearity ("~ r^2 ~") between" ~ X[1] ~ "and" ~ X[2]), ylab = "VIF")
+
+# Add horizontal line for when VIF = 2
+abline(h = 2, lty = 2)
+```
+
+The relationship between collinearity and Variance Inflation does not change if it's a confounding or redundant variable. Adding a redundant variable will still cause Variance Inflation, as I mentioned before.
+
+### Simple regression model: $Y \sim X_1$
+
+Now, we see that the existence of a redundant variable does not influence our estimation of $\beta_1$ using a simple linear model! This is good.
+
+```{r sim_exercise_2_3, echo=FALSE, message=FALSE, warning=FALSE, fig.height=4, fig.width=8}
+# Set the seed for reproducibility & set graphing parameter
+set.seed(123); par(mar=c(4,4,0.5,1))
+
+# Plot beta1 estimate by collinearity values from the simple model
+plot(r2, simple_beta1, xlab = expression("Collinearity ("~ r^2 ~") between" ~ X[1] ~ "and" ~ X[2]), ylab = expression("Estimate of " ~ beta[1]))
+```
+
+There is some variation in the parameter estimates due to random chance, but the estimates are unbiased along the gradation of correlation with the redundant, collinear variable.
+
+```{r sim_exercise_2_4, echo=FALSE, message=FALSE, warning=FALSE, fig.height=4, fig.width=8}
+# Set the seed for reproducibility & set graphing parameter
+set.seed(123); par(mar=c(4,4,0.5,1))
+
+# Plot SE estimate by collinearity values from the simple model
+plot(r2, simple_se1,
+     xlab = expression("Collinearity ("~ r^2 ~") between" ~ X[1] ~ "and" ~ X[2]),
+    ylab = expression("SE of estimate of" ~ X[1]))
+```
+
+SE estimates are also unbiased and do not change due to the existence of the redundant variable.
+
+```{r sim_exercise_2_5, echo=FALSE, message=FALSE, warning=FALSE, fig.height=4.5, fig.width=8}
+# Set the seed for reproducibility & set graphing parameter
+set.seed(123); par(mar=c(4,4,0.5,1))
+
+# Plot p-values by collinearity values from the simple model
+plot(r2, log(simple_p1),
+     xlab = expression("Collinearity ("~ r^2 ~") between" ~ X[1] ~ "and" ~ X[2]),
+     ylab = expression("P-values of estimate of" ~ X[1] ~ " (log-transformed)"))
+```
+
+Nor are p-values influenced!
+
+This simulation supports my previous suggestion that: redundant variables do not influence estimation, error, or p-values in our simple linear model.
+
+### Simple linear model w/ redundant var: $Y \sim X_2$
+
+What if I now run a simple linear model but with $X_2$ as the only X-variable? Remember, $X_2$ is collinear with $X_1$ -- <u>but does not have an effect on Y</u>.
+
+```{r sim_exercise_2_6, echo=FALSE, message=FALSE, warning=FALSE, fig.height=4, fig.width=8}
+# Set the seed for reproducibility & set graphing parameter
+set.seed(123); par(mar=c(4,4,0.5,1))
+
+# Plot beta1 estimate by collinearity values from the simple model
+plot(r2, simple_beta2, xlab = expression("Collinearity ("~ r^2 ~") between" ~ X[1] ~ "and" ~ X[2]), ylab = expression("Estimate of " ~ beta[2]))
+```
+
+So this is interesting. When $X_2$ has low correlation with $X_1$, the effect is measured as zero -- because the two variables are not collinear, and $X_2$ truly does not have an effect. However, when correlation between $X_2$ and $X_1$ increases, all of the sudden the true effect of $X_1$ (the variable not included in the model), is now assigned to $X_2$! The stronger the relationship between X1 and X2, the more the effect of X1 is assigned to X2.
+
+This is what is happening in the TV-mortality study. A redundant, collinear variable is being assigned the effect(s) of other true, confounding variables. 
+
+### Multi-variable model: $Y \sim X_1 + X_2$
+
+Now, what happens with the multi-variable model?
+
+Estimates of $X_1$:
+
+```{r sim_exercise_2_7, echo=FALSE, message=FALSE, warning=FALSE, fig.height=4, fig.width=8}
+# Set the seed for reproducibility & set graphing parameter
+set.seed(123); par(mar=c(4,4,0.5,1))
+
+# Plot beta1 estimate by collinearity values from the simple model
+plot(r2, multi_beta1, xlab = expression("Collinearity ("~ r^2 ~") between" ~ X[1] ~ "and" ~ X[2]), ylab = expression("Estimate of " ~ beta[1]))
+
+# Add line to indicate the start of variance inflation
+abline(v = 0.6, lty = 2)
+```
+
+Our estimate of $X_1$ is unbiased and close to truth! But the variance increases due to the presence of the collinear, redundant variable in the model. The cone shape suggests more uncertainty due to the variance inflation and the presence of the redundant variable. With two collinear variables in the model, R has a harder time figuring out which was has the effect.
+
+Let's see what it estimates for $X_2$:
+
+```{r sim_exercise_2_8, echo=FALSE, message=FALSE, warning=FALSE, fig.height=4, fig.width=8}
+# Set the seed for reproducibility & set graphing parameter
+set.seed(123); par(mar=c(4,4,0.5,1))
+
+# Plot beta1 estimate by collinearity values from the simple model
+plot(r2, multi_beta2, xlab = expression("Collinearity ("~ r^2 ~") between" ~ X[1] ~ "and" ~ X[2]), ylab = expression("Estimate of " ~ beta[2]))
+
+# Add line to indicate the start of variance inflation
+abline(v = 0.6, lty = 2)
+```
+
+It estimates the effect of the redundant variable to be zero! As collinearity increases, the estimate remains unbiased and correct at around zero -- although the variance inflation again causes less certainty in the estimate, on average. 
+
+## Practical guidance for examining and dealing with collinearity
+
+These lists mostly review what I have talked about during class so far today - quite a bit of content! [**Show these lists on the projector**]
+
+Do you have collinearity in your data or system?
+
+1) Be careful to identify potential confounding variables prior to data collection. Use logic and try to identify all confounding variables and measure these.
+2) Calculate collinearity and VIF among independent variables -- before you start your analysis. High collinearity between X-variables tends to imply redundancy.
+3) Pay attention to how coefficient estimates and variable significance change as variables are removed or added.
+
+Is a variable redundant or confounding?
+
+1) Think! Use logic.
+2) If there is extreme collinearity
+  - Likely **redundant**
+3) Large changes in coefficient estimates of both variables between full and reduced models
+  - **Confounding**
+4) Large changes in coefficient estimates of one variable between full and reduced models
+  - **Redundant** -- full model estimate close to zero
+4) Not sure whether it's redundant or confounding? Assume confounding & include it.
+  - Multi-variable regression also produces unbiased estimates (on average) regardless of the type of collinearity
+  
+What to do with **redundant variables**?
+
+1) Determine which variable best explains the response using P-values from regression and changes in coefficient estimates with variable addition and removal
+2) Do not include redundant variable in final model (to reduce VIF)
+3) Try a variable reduction technique (e.g., PCA)
+
+What to do with **confounding variables**?
+
+1) Sample in a manner that eliminates collinearity, which can be due to real collinearity or sampling artifact
+2) Use multiple regression; may hvae large SE if collinearity is strong
+3) Include confounding variables, even if non-significant.
+4) Get more data! Decrease SE due to variance inflation.
+
+## Analysis in R
+
+Let's examine some data I simulated in R. The dataset is located [here](lecture_13_dataset1.csv).
+
+These data are similar to the Age, Sex, and Size data we simulated for last class. There is no collinearity between Age and Sex. However, now there are two additional X-variables, MotherSize and FatherSize, and both of those variables are a function of Age. All of these variables influence size, so they are all examples of <u>confounding variables</u>.
+
+```{r analysis_1, echo=TRUE, message=FALSE, warning=FALSE, fig.height=4.5, fig.width=4.5}
+par(mar=c(4,4,0,0))
+
+# Read in the data
+datum <- read.csv("lecture_13_dataset1.csv")
+
+# Examine the data
+head(datum, 10)
+
+# Plot the data
+plot(Size ~ Age, data = datum)
+```
+
+It's useful to write Truth up on the white board so that we can refer back to that while running the analysis in R...
+
+Truth:
+
+- Age = 1.5
+- Sex = 2.5
+- MotherSize = 0.2
+- FatherSize = 0.2
+- $\sigma = 1.2$
+
+We want to start by testing if there is collinearity among our data. The easiest way to do this is by running linear models among our X-variables.
+
+```{r analysis_2, echo=TRUE, message=FALSE, warning=FALSE, fig.height=4.5, fig.width=4.5}
+# Run lm() for different pairs of X-variables
+results <- lm(Age ~ Sex, data = datum)
+summary(results)
+```
+
+The p-value is high (non-significant) and $r^2$ value is low, suggesting there is no collinearity. (And there isn't, because I didn't simulate there to be any.)
+
+```{r analysis_3, echo=TRUE, message=FALSE, warning=FALSE, fig.height=4.5, fig.width=4.5}
+# Run lm() for different pairs of X-variables
+results <- lm(Age ~ MotherSize, data = datum)
+summary(results)
+```
+
+$r^2$ is now 0.874 -- definitely collinearity here! (And we know this to be the case.)
+
+And we can do this for other pair of X-variables as well, as much as we want or need to.
+
+However, an alternative way to do this is to create a 'correlation matrix' using the function 'cor()', which calculates the correlation among all pairs of continuous X-variables your provide to the function.
+
+- 'cor()' won't work for our dataframe, because it requires all continuous variables and Sex is a categorical variable. So drop Sex and Size.
+- This will run a simple 'lm()' between all pairs of X-variables and calculate *r* value for each pair (measure of correlation)
+
+```{r analysis_4, echo=TRUE, message=FALSE, warning=FALSE, fig.height=4.5, fig.width=4.5}
+# Create new dataframe without categorical Sex
+datum2 <- subset(datum, select = -Sex)
+datum2 <- subset(datum2, select = -Size)
+
+# Examine new subsetted data
+head(datum2)
+
+# Correlation matrix - runs a simple 'lm()' between each pair of X-variables
+cor(datum2)
+```
+
+[Squaring this would produce the usual $r^2$ metric we are familiar with.]
+
+This is a quick-and-easy way to assess correlation between X-variables.
+
+Another way is to run a full linear model with all of the X-variables and ask for the Variance Inflation Factors! The VIF function exists in the package 'car', which you will have to download to your computer one time. It has a lot of 'dependencies' (other necessary R packages) that will have to be downloaded...
+
+```{r analysis_5, echo=TRUE, message=FALSE, warning=FALSE, fig.height=4.5, fig.width=4.5}
+# Download 'car' by uncommenting this next line and running it through your console
+# install.packages("car", dependencies=TRUE)
+```
+
+Now we can fit a linear model with all X-variables and then run the VIF function.
+
+```{r analysis_6, echo=TRUE, message=FALSE, warning=FALSE, fig.height=4.5, fig.width=4.5}
+# Full linear model with all X-variables
+results <- lm(Size ~ Age + Sex + MotherSize + FatherSize, data = datum)
+
+# Use the VIF function from 'car'
+# using 'car::vif()' will tell R to call the function 'vif()' from the package 'car' specifically
+car::vif(results)
+```
+
+These are the Variance Inflation Factors for each X-variable. These effects describe how much (in *times*) the variance of each variable increased due to collinearity. So, the variance of Age was 17 times increased what it would have been in the absence of collinearity...
+
+```{r analysis_7, echo=TRUE, message=FALSE, warning=FALSE, fig.height=4.5, fig.width=4.5}
+# Square-root this to get VIF in terms of Standard Error
+car::vif(results)^0.5
+```
+
+SE of Age is 4 times larger than what it would have been without collinearity. Sex is not influenced (times ~1), but the SE and 95% CI are 4 or 3 times larger than what would happen without collinearity. 
+
+Note: the VIF is the variance inflation due to collinearity of all other variables combined. So collinearity with multiple other X-variables can contribute to variance inflation of each variable.
+
+```{r analysis_8, echo=TRUE, message=FALSE, warning=FALSE, fig.height=4.5, fig.width=4.5}
+# Simple linear model of Size ~ Age
+results <- lm(Size ~ Age, data = datum)
+summary(results)
+```
+
+This estimate is wrong -- not close to truth -- and the confidence intervals are small.The effect size and confidence intervals were misleading because we did not account for confounding variables!
+
+```{r analysis_9, echo=TRUE, message=FALSE, warning=FALSE, fig.height=4.5, fig.width=4.5}
+# Simple linear model of Size ~ MotherSize
+results <- lm(Size ~ MotherSize, data = datum)
+summary(results)
+```
+
+Again, same problem here.
+
+```{r analysis_10, echo=TRUE, message=FALSE, warning=FALSE, fig.height=4.5, fig.width=4.5}
+# Simple linear model of Size ~ MotherSize
+results <- lm(Size ~ Age + MotherSize, data = datum)
+summary(results)
+```
+
+Truth for Age is 1.5, so this is closer -- but the 95% CI around this estimate of age still do not overlap truth. And MotherSize is not significant, which it should be.
+
+Last, the full model with all of the confounding variables:
+
+```{r analysis_11, echo=TRUE, message=FALSE, warning=FALSE, fig.height=4.5, fig.width=4.5}
+# Simple linear model of Size ~ MotherSize
+results <- lm(Size ~ Age + Sex + MotherSize + FatherSize, data = datum)
+summary(results)
+```
+
+We now get unbiased estimates that overlap with truth, and all estimates are ~significant. MotherSize is narrowly insigificant, but it's CI overlap truth. And the p-value for the whole model is highly significant.
+
+## Summary
+
+- If you add variables to a model, p-values should go down due to swamping.
+- Multivariable models are generally good because they eliminate issues related to swamping & collinearity.
+
 <br>
 
 ## Truth
 
 ```{r collinearity_simulation, echo=TRUE, message=FALSE, warning=FALSE}
 ### Lecture 13: code to simulate collinear data and to demonstrate how failing to account for collinearity influences estimates and uncertainty
+
+## Simulation Exercise 1
 
 # Set the seed for reproducibility
 set.seed(123)
@@ -588,6 +1007,106 @@ for (i in 1:s){
   # VIF for multi-variable model
   vif[i] <- car::vif(results2)["x1"]
 }
+
+## Simulation Exercise 2
+
+# Set seed
+set.seed(123)
+
+# Number of simulations
+s <- 1000
+
+# Empty vectors to save results from each simulation
+simple_beta1 <- numeric(s)
+simple_se1 <- numeric(s)
+simple_p1 <- numeric(s)
+simple_beta2 <- numeric(s)
+multi_beta1 <- numeric(s)
+multi_beta2 <- numeric(s)
+multi_se1 <- numeric(s)
+multi_p1 <- numeric(s)
+r2 <- numeric(s)
+vif <- numeric(s)
+
+# x2 = x1 + error(0, z), where
+# z can range from 0.5 (highly correlated to x1) to 20 (not correlated at ~all)
+z_values <- seq(0.5, 20, length.out = s)
+
+# Loop through each simulation replicate to measure everything
+for (i in 1:s){
+  
+  # Number of datapoints per simulation
+  n <- 100
+
+  # x1
+  x1 <- runif(n, 0, 10) # Random, uniform variable; only simulated once
+
+  # error for y; only simulated once
+  error <- rnorm(n, 0, 2)
+  
+  # X2 for each simulation
+  x2 <- x1 + rnorm(n, 0, z_values[i])
+  
+  # Y for each
+  y <- 10 + 3 * x1 + error
+
+  # Simple model of X1
+  results1 <- lm(y ~ x1)
+  simple_beta1[i] <- summary(results1)$coefficients[2,1]
+  simple_se1[i] <- summary(results1)$coefficients[2,2]
+  simple_p1[i] <- summary(results1)$coefficients[2,4]
+  
+  # Simple model of X2
+  results2 <- lm(y ~ x2)
+  simple_beta2[i] <- summary(results2)$coefficients[2,1]
+
+  # Multi-variable model
+  results3 <- lm(y ~ x1 + x2)
+  multi_beta1[i] <- summary(results3)$coefficients[2,1]
+  multi_beta2[i] <- summary(results3)$coefficients[3,1]
+  multi_se1[i] <- summary(results3)$coefficients[2,2]
+  multi_p1[i] <- summary(results3)$coefficients[2,4]
+
+  # R^2 between X-variables
+  model_x12 <- lm(x2 ~ x1)
+  r2[i] <- summary(model_x12)$r.squared
+  
+  # VIF for multi-variable model
+  vif[i] <- car::vif(results3)["x1"]
+}
+
+## Data for analysis in class
+# Set the seed for reproducibility & set graphing parameter
+set.seed(123)
+
+# This is similar to the Age, Sex, and Size data we simulated for last class.
+# There is no collinearity between Age and Sex.
+
+# X-variables
+n <- 50
+Sex <- c(rep("Female", n), rep("Male", n))
+Age <- runif(n * 2, 1, 10)
+dummy <- data.frame(model.matrix(~ Sex - 1))
+colnames(dummy) <- c("Female", "Male")
+
+# However, there are now two additional X-variables: MotherSize and FatherSize
+# And both of those variables are a function of Age
+MotherSize <- rnorm(n * 2, Age - 5, 1)
+FatherSize <- rnorm(n * 2, Age, 1)
+
+# All of these variables influence size, so they are all examples of confounding variables.
+
+# Simulate error
+Error <- rnorm(n * 2, 0, 1.2)
+
+# Predict Y
+Response <- 4 + 1.5 * Age + 2.5 * dummy$Male + 0.2 * MotherSize + 0.2 * FatherSize + Error
+
+# Dataframe
+datum <- data.frame(Age = Age, Sex = Sex, Male = dummy$Male, MotherSize = MotherSize, FatherSize = FatherSize, Size = Response)
+
+# Save the data
+write.csv(datum, "lecture_13_dataset1.csv", row.names = FALSE)
 ```
 
 ## Footnote

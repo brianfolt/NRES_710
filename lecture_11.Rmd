@@ -392,7 +392,7 @@ This does not mean the simpler model is *better*; it is **adequate**. The simple
 
 As always, the limitations of p-values apply here: sample sizes, effect sizes, etc.
 
-Now, let's consider another scenario. What if our data really looked like the second example from above:
+Now, let's consider another scenario. What if our data really looked like the second example from above? Here is the [dataset(lecture_11_dataset2.csv).
 
 ```{r stripplot-4, echo=TRUE, message=FALSE, warning=FALSE, fig.height=3.5, fig.width=4.5}
 # Read in the data

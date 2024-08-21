@@ -395,7 +395,7 @@ Maybe... but there is a lot of noise here, and the groups overlap eachother. A l
 
 ### Simple analysis
 
-So let's load up some data in R and take a look at it.
+So let's load up some data in R and take a look at it. The dataset is located [here](lecture_12_dataset1.csv).
 
 ```{r analysis_1, echo=TRUE, message=FALSE, warning=FALSE, fig.height=4, fig.width=9}
 # Load in the data and take a look at it
@@ -508,7 +508,8 @@ One sentence for each variable, and the same sentences we already know!
 
 ### More complex analysis
 
-Let's assume the same dataset as before, but we now have a third group: hermaphrodites. Individual animals with sexual reproductive organs for both sexes.
+Let's assume the same dataset as before, but we now have a third group: hermaphrodites. Individual animals with sexual reproductive organs for both sexes. The dataset is located [here](lecture_12_dataset2.csv).
+
 
 ```{r analysis_2_1, echo=TRUE, message=FALSE, warning=FALSE, fig.height=4, fig.width=9}
 # Load in the data and take a look at it
