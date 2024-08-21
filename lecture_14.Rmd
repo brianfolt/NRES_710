@@ -1,0 +1,74 @@
+---
+title: "Multi-Variable Modeling - Interactions"
+author: "NRES 710"
+date: "Last compiled: `r Sys.Date()`"
+output: 
+  html_document: 
+    theme: yeti
+    toc: yes
+    toc_float: yes
+    css: styles.css
+---
+
+```{r setup, include=FALSE}
+
+knitr::opts_chunk$set(
+	echo = TRUE,
+	message = FALSE,
+	warning = FALSE,
+	cache = TRUE
+	)
+```
+
+```{r echo=FALSE}
+
+#  NRES 710, Multi-Variable Modeling - Interactions
+#     University of Nevada, Reno
+
+```
+
+## Interactions
+
+<br>
+
+## Truth
+
+```{r interactions_simulation, echo=TRUE, message=FALSE, warning=FALSE}
+### Lecture 14: code to simulate data for class
+
+# Set the seed for reproducibility
+set.seed(123)
+
+# This is similar to the Age, Sex, and Size data we simulated for last class.
+# There is no collinearity between Age and Sex.
+
+# X-variables
+n <- 50
+Sex <- c(rep("Female", n), rep("Male", n))
+Age <- runif(n * 2, 1, 10)
+dummy <- data.frame(model.matrix(~ Sex - 1))
+colnames(dummy) <- c("Female", "Male")
+
+# However, there are now two additional X-variables: MotherSize and FatherSize
+# And both of those variables are a function of Age
+MotherSize <- rnorm(n * 2, Age - 5, 1)
+FatherSize <- rnorm(n * 2, Age, 1)
+
+# All of these variables influence size, so they are all examples of confounding variables.
+
+# Simulate error
+Error <- rnorm(n * 2, 0, 1.2)
+
+# Predict Y
+Response <- 4 + 1.5 * Age + 2.5 * dummy$Male + 0.2 * MotherSize + 0.2 * FatherSize + Error
+
+# Dataframe
+datum <- data.frame(Age = Age, Sex = Sex, Male = dummy$Male, MotherSize = MotherSize, FatherSize = FatherSize, Size = Response)
+
+# Save the data
+write.csv(datum, "lecture_13_dataset1.csv", row.names = FALSE)
+```
+
+
+
+[--go to next lecture--](lecture_15.html)
