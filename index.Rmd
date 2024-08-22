@@ -16,7 +16,7 @@ output:
 Office: Knudsten Resource Center, Room 100A<br>
 Email: [bfolt@unr.edu](bfolt@unr.edu)
 
-I have no pre-scheduled office hours for this class; instead, please email me to set up a meeting. In general, I will be in my office during working hours from 8:00AM--5PM and can be available to discuss course material.
+I have no pre-scheduled office hours for this class; instead, please email me to set up a meeting. In general, I will be in my office during working hours from ca. 8AM--5PM and can be available to discuss course material.
 
 ### Course Meeting Times
 
@@ -63,20 +63,22 @@ There are many good books about R, but ultimately, most material can be found fo
 
 Instruction will consist of lessons on general statistical concepts and specific methods commonly used to address questions in ecology and environmental science. Stats lessons will include lecture-style materials, readings, demonstrations, exercises and class discussions.   
 
-A large portion of the overall grade (30%) will be based upon periodic, relatively brief homework assignments that follow from the topics covered in class. Most assignments will involve statistical analysis and interpretation of sample data sets that are provided. There will be a final project (40% of your grade) that is designed to test your ability to understand and apply the tools that you have developed during the semester using R. The final project will involve conducting a rigorous data analysis using statistical approaches that we have learned during the semester (or other tools as approved by the instructor). You can choose whichever statistical methods are suitable to your project scope and questions, but they must be methods we covered in class and appropriate to your data. Please turn in your own work and assignment, but you may use as many resources as you wish (class material, online material, or the insight/experience of other students) to generate the material presented. More specific instructions will come during the semester.
+A large portion of the overall grade (60%) will be based upon periodic, relatively brief homework assignments ('**Exercises**') that follow from the topics covered in class. Most exercise assignments will involve statistical analysis and interpretation of sample data sets that are provided. We will use classtime for student's to work on the Exercises on their computers, either individually or in small groups (2-3 people). You can show me the results of your Exercises and I will give you credit for completing the assignment. If you are unable to make class during an Exercise day, you have one week to complete and submit the assignment via WebCampus/email (TBD). More specific instructions will come during the semester.
 
-With roughly 5 weeks left in the semester, first drafts of your final projects will be due. These first drafts will then be subjected to anonymous peer review. At this time, the assignment itself will not be “graded,” but the assignment will be reviewed by at least two other students, and the peer reviews will be graded (20% of the overall grade). The reviews are designed to provide feedback on the statistical approach being used and whether the appropriate connections are made between research question, data, statistical model, and inferences developed from model outputs. Are the statistics relevant to the data, and appropriate for the experimental design? The reviews will be due within two weeks and will be provided to the author for their consideration and assistance in their final project. 
+There will be periodic **Quizzes** throughout the semester that will comprise 20% of the grade and which will be administered through WebCampus. Quiz due dates are indicated on the course schedule.
 
-Given the nature of graduate classes, student participation is expected.
+Students will be graded on **Participation** (20%). As this is a graduate-level class, engagement and participation during class, discussions, exercise labs, and other course-related opportunities is expected and students will be given a grade on their participation.
+
+Last, an extra-credit opportunity is available to students by participating in '[StatsChats](https://guides.library.unr.edu/StatsChats)'. StatsChats is an informal weekly gathering to discuss any quantitative questions you may have related to your research (statistics, experimental design, model simulation, analysis, debugging R code, etc.). This is open to any students and faculty that want to improve their their quantitative skills and/or share their knowledge and experience. StatsChats will occur once per week at the Lilli Brant reading room in the DeLaMare Science and Engineering Library (third floor). Students will gain +20% credit to their overall class grade **if they attend four (4) out of the ten StatsChats sessions during the semester**. I will try post the StatsChat schedule here when I learn it.
 
 ### Grading
 
 |Course component                | Weight                                   |
 |--------------------------------|------------------------------------------|
-|Homework                        |	30%                                     |
-|Final project                   |	40%                                     |
-|Peer review                   	 |  20%                                     |
-|Participation                   |  10%                                     |
+|Exercises                       |	60%                                     |
+|Quizzes                         |	20%                                     |
+|Participation                   |  20%                                     |
+|Extra credit: Attend 4 StatChats|  +20%                                    |
 
 Letter grades will be assigned as follows:	
 
@@ -94,9 +96,7 @@ Letter grades will be assigned as follows:
 
 ### Course Schedule
 
-The course schedule can be found here: [Course Schedule](schedule.html)  
-
-NOTE: the course schedule is subject to change, so please check back frequently!
+The course schedule can be found [Course Schedule](schedule.html). The course schedule is subject to change, so please check back frequently; I will also provide verbal updates to the schedule in class. 
 
 ### Make-up Policy and Late Work
 
@@ -109,6 +109,10 @@ Any student with a disability that needs academic adjustments or accommodations 
 ### Statement on Academic Dishonesty
 
 Cheating, plagiarism, or otherwise obtaining grades under false pretenses constitute academic dishonesty according to the code of this university. Plagiarism is using the ideas or words of another person without giving credit to the original source; this includes copying another student in class. Always cite the source of your information. This includes copying or paraphrasing from a book, journal, or unpublished material without giving credit to the author(s), and submitting a term paper that was used in another course. Academic dishonesty will not be tolerated and penalties can include filing a final grade of "F"; reducing the student's final course grade one or two full grade points; awarding a failing mark on the coursework in question; or requiring the student to retake or resubmit the coursework. For more details, see the [University of Nevada, Reno General Catalog](http://catalog.unr.edu/).
+
+### Use of Generative Artificial Intelligence (AI) in Assignments
+
+Generative AI tools have become extremely accessible and, in certain instances, can be useful with data analysis. However, I believe it is important that the students in this class  develop a deep, foundational understanding of the concepts covered here. To fully benefit from the course, I strongly encourage you to complete all assignments without relying on AI-generated solutions. This will not only help you grasp the material more effectively but also ensure that you can confidently apply these techniques in real-world scenarios (e.g., your graduate thesis or dissertation) without external assistance. Mastering these skills now will provide you with a solid foundation for your graduate research and your future career as a scientist or practitioner. I promise that the course content will not be so overwhelming as to require external help from generative AI.
 
 ### Statement on Audio and Video Recording
 
@@ -146,10 +150,6 @@ The University of Nevada, Reno is committed to providing a safe learning and wor
 
 Your student fees cover usage of the University Math Center (https://www.unr.edu/university-math-center), (775) 784-4433; University Tutoring Center (https://www.unr.edu/tutoring-center), (775) 784-6801; and University Writing & Speaking Center (https://www.unr.edu/writing-speaking-center), (775) 784-6030. These centers support your classroom learning; it is your responsibility to take advantage of their services. Keep in mind that seeking help outside of class is the sign of a responsible and successful student.
 
-### Use of Generative Artificial Intelligence (AI) in Assignments
-
-Generative AI tools have become extremely accessible and, in certain instances, can be useful with data analysis. However, I believe it is important that the students in this class  develop a deep, foundational understanding of the concepts covered here. To fully benefit from the course, I strongly encourage you to complete all assignments without relying on AI-generated solutions. This will not only help you grasp the material more effectively but also ensure that you can confidently apply these techniques in real-world scenarios (e.g., your graduate thesis or dissertation) without external assistance. Mastering these skills now will provide you with a solid foundation for your graduate research and your future career as a scientist or practitioner. I promise that the course content will not be so overwhelming as to require external help from generative AI.
-
 ```{r echo=FALSE, eval=FALSE}
 ## Manually run these lines through console to turn the RMD into DOCX or PDF
 rmarkdown::render('index.Rmd', output_file = 'syllabus.docx', 'word_document')
@@ -167,6 +167,8 @@ rmarkdown::render('lecture_7.Rmd', rmarkdown::pdf_document())
 rmarkdown::render('lecture_8.Rmd', rmarkdown::pdf_document())
 rmarkdown::render('lecture_9.Rmd', rmarkdown::pdf_document())
 rmarkdown::render('lecture_10.Rmd', rmarkdown::pdf_document())
+rmarkdown::render('lecture_11.Rmd', rmarkdown::pdf_document())
+rmarkdown::render('lecture_12.Rmd', rmarkdown::pdf_document())
 # rmarkdown::render('LECTURE1.Rmd', rmarkdown::pdf_document())
 # rmarkdown::render('LECTURE2.Rmd', rmarkdown::pdf_document())  # latex_engine="xelatex"
 # rmarkdown::render('LECTURE3.Rmd', rmarkdown::pdf_document())
