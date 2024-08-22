@@ -465,7 +465,7 @@ Another way to get this is to use:
 anova(results2)
 ```
 
-So now we know that there is at least two groups are differnet than eachother.
+So now we know that there is at least two groups that are different from each other.
 
 To know **which ones**, we can use a 'post-hoc test'... or we can just look up to the results of the linear model! The p-values with our effects tell us that:
 

@@ -12,7 +12,7 @@ output:
 
 ### Instructor
 
-[Brian Folt](https://www.unr.edu/nvcfwru/folt-brian)<br>
+[Dr. Brian Folt](https://www.unr.edu/nvcfwru/folt-brian) (he/him)<br>
 Office: Knudsten Resource Center, Room 100A<br>
 Email: [bfolt@unr.edu](bfolt@unr.edu)
 
@@ -63,13 +63,13 @@ There are many good books about R, but ultimately, most material can be found fo
 
 Instruction will consist of lessons on general statistical concepts and specific methods commonly used to address questions in ecology and environmental science. Stats lessons will include lecture-style materials, readings, demonstrations, exercises and class discussions.   
 
-A large portion of the overall grade (60%) will be based upon periodic, relatively brief homework assignments ('**Exercises**') that follow from the topics covered in class. Most exercise assignments will involve statistical analysis and interpretation of sample data sets that are provided. We will use classtime for student's to work on the Exercises on their computers, either individually or in small groups (2-3 people). You can show me the results of your Exercises and I will give you credit for completing the assignment. If you are unable to make class during an Exercise day, you have one week to complete and submit the assignment via WebCampus/email (TBD). More specific instructions will come during the semester.
+A large portion of the overall grade (60%) will be based upon periodic, relatively brief homework assignments ('**Exercises**'; *n* = 8) that follow from the topics covered in class. Most exercise assignments will involve statistical analysis and interpretation of sample data sets that are provided. We will use classtime for student's to work on the Exercises on their computers, either individually or in small groups (2-3 people). You can show me the results of your Exercises and I will give you credit for completing the assignment. If you are unable to make class during an Exercise day, you have one week to complete and submit the assignment via WebCampus/email (TBD). More specific instructions will come during the semester.
 
-There will be periodic **Quizzes** throughout the semester that will comprise 20% of the grade and which will be administered through WebCampus. Quiz due dates are indicated on the course schedule.
+There will be periodic **Quizzes** (*n* = 6) throughout the semester that will comprise 20% of the grade and which will be administered through WebCampus. Quiz due dates are indicated on the course schedule.
 
 Students will be graded on **Participation** (20%). As this is a graduate-level class, engagement and participation during class, discussions, exercise labs, and other course-related opportunities is expected and students will be given a grade on their participation.
 
-Last, an extra-credit opportunity is available to students by participating in '[StatsChats](https://guides.library.unr.edu/StatsChats)'. StatsChats is an informal weekly gathering to discuss any quantitative questions you may have related to your research (statistics, experimental design, model simulation, analysis, debugging R code, etc.). This is open to any students and faculty that want to improve their their quantitative skills and/or share their knowledge and experience. StatsChats will occur once per week at the Lilli Brant reading room in the DeLaMare Science and Engineering Library (third floor). Students will gain +20% credit to their overall class grade **if they attend four (4) out of the ten StatsChats sessions during the semester**. I will try post the StatsChat schedule here when I learn it.
+Last, an extra-credit opportunity is available to students by participating in '[StatsChats](https://guides.library.unr.edu/StatsChats)'. StatsChats is an informal weekly gathering to discuss any quantitative questions you may have related to your research (statistics, experimental design, model simulation, analysis, debugging R code, etc.). This is open to any students and faculty that want to improve their their quantitative skills and/or share their knowledge and experience. StatsChats will occur once per week at the Lilli Brant reading room in the DeLaMare Science and Engineering Library (third floor). Students will gain +20% credit to their overall class grade **if they attend four (4) out of the ten total StatsChats sessions during the semester**. I will try post the StatsChat schedule here when I learn it.
 
 ### Grading
 
