@@ -2,7 +2,8 @@
 title: "P-values and Intro to R"
 author: "NRES 710"
 date: "Last compiled: `r Sys.Date()`"
-output: 
+always_allow_html: true
+output:
   html_document: 
     theme: yeti
     toc: yes
@@ -11,7 +12,6 @@ output:
 ---
 
 ```{r setup, include=FALSE}
-
 knitr::opts_chunk$set(
 	echo = TRUE,
 	message = FALSE,
@@ -104,7 +104,7 @@ Example: a drug to reduce the risk of heart attack. This drug is being used by t
 ```{r, echo=FALSE, message=FALSE}
 # Load necessary libraries
 library(knitr)
-library(kableExtra)
+#library(kableExtra)
 
 # Create the data frame
 data <- data.frame(
@@ -116,9 +116,8 @@ data <- data.frame(
 )
 
 # Create the table
-kable(data, col.names = c("Group", "Heart Attack", "No Attack", "Percentage", "Additional Info")) %>%
-  kable_styling(full_width = FALSE)
-
+kable(data, col.names = c("Group", "Heart Attack", "No Attack", "Percentage", "Additional Info")) #%>%
+  #kable_styling(full_width = FALSE)
 ```
 
 **Q:** Does this drug work??
