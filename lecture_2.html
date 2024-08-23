@@ -369,19 +369,16 @@ div.tocify {
       <a href="lecture_11.html">Analysis with Continuous or Categorical X?</a>
     </li>
     <li>
-      <a href="LECTURE8.html">GLM</a>
+      <a href="lecture_12.html">Multi-variable Modeling</a>
     </li>
     <li>
-      <a href="LECTURE9.html">GLMM</a>
+      <a href="lecture_13.html">Multi-variable Modeling - collinearity</a>
     </li>
     <li>
-      <a href="LECTURE10.html">Machine Learning</a>
+      <a href="lecture_14.html">Multi-variable Modeling - interactions</a>
     </li>
     <li>
-      <a href="GIT_tutorial.html">Intro to GIT</a>
-    </li>
-    <li>
-      <a href="LECTURE11.html">Next steps</a>
+      <a href="lecture_15.html">Generalized Linear Models</a>
     </li>
   </ul>
 </li>
@@ -403,6 +400,18 @@ div.tocify {
     </li>
     <li>
       <a href="exercise_4.html">Exercise 4 - Analysis of Categorical Data</a>
+    </li>
+    <li>
+      <a href="exercise_5.html">Exercise 5 - Multi-variable Analysis</a>
+    </li>
+    <li>
+      <a href="exercise_6.html">Exercise 6 - TBD</a>
+    </li>
+    <li>
+      <a href="exercise_7.html">Exercise 7 - TBD</a>
+    </li>
+    <li>
+      <a href="exercise_8.html">Exercise 8 - TBD</a>
     </li>
   </ul>
 </li>
@@ -432,7 +441,7 @@ div.tocify {
 
 <h1 class="title toc-ignore">P-values and Intro to R</h1>
 <h4 class="author">NRES 710</h4>
-<h4 class="date">Last compiled: 2024-08-05</h4>
+<h4 class="date">Last compiled: 2024-08-23</h4>
 
 </div>
 
@@ -904,12 +913,12 @@ plant.data &lt;- data.frame(
 )
 head(plant.data)</code></pre>
 <pre><code>##   Obs.Id Treatment Block Germination AvgHeight
-## 1      1         A     1           0 11.407381
-## 2      2         A     2           0 10.422546
-## 3      3         A     3           2 10.270785
-## 4      4         A     4           4 10.633338
-## 5      5         A     5           0 11.525027
-## 6      6         A     6           2  9.091846</code></pre>
+## 1      1         A     1           0 10.187753
+## 2      2         A     2           0  9.699283
+## 3      3         A     3           2 10.713996
+## 4      4         A     4           0  9.727436
+## 5      5         A     5           1 10.217158
+## 6      6         A     6           1 11.329497</code></pre>
 <p>We can also import data from files stored on our computers (or even
 directly from the web)</p>
 <pre class="r"><code># import data from file ----------------------

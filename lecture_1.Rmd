@@ -36,19 +36,25 @@ Introductions among faculty ([Brian Folt](https://www.unr.edu/nvcfwru/folt-brian
 
 We will discuss the course organization and expectations. Please see [course syllabus](syllabus.pdf) and [schedule](schedule.pdf) documents, provided separately.
 
-Office hours: no office hours, best thing to do is send me an email and find a time to meet; I am happy to meet with you; my office is in KRC 100, enter from the north side of the building.
+**Office hours:** no office hours, best thing to do is send me an email and find a time to meet; I am happy to meet with you; my office is in KRC 100, enter from the north side of the building.
 
-Prerequisites: Students are expected to have a basic understanding of standard statistical concepts and methods, obtained through other coursework. They should be familiar with what a p-value is, an ANOVA, a t-test, these sorts of basic things. But, we are going to cover all of these topics in class -- with a practical emphasis.
+**Prerequisites:** Students are expected to have a basic understanding of standard statistical concepts and methods, obtained through other coursework. They should be familiar with what a p-value is, an ANOVA, a t-test, these sorts of basic things. But, we are going to cover all of these topics in class -- with a practical emphasis.
 
-Attendance: This is a graduate student class and attendance is not mandatory; you are all adults and make your own decisions. Life happens & you will be busy with field work, other obligations, whatever. It’s okay.
+**Attendance:** This is a graduate student class and attendance is not mandatory; you are all adults and make your own decisions. Life happens & you will be busy with field work, other obligations, whatever. It’s okay.
 
-Schedule: Tuesdays we will have a lecture, Thursdays we will have a lecture and a mini-lab. Lab assignments will be often due before the Thursday lab. Sometimes these will be readings that we will discuss on Thursdays, other times they will be homework assignments.
+**Schedule:** The typical schedule for the class will be a **lecture** on Tuesdays and either another lecture or an laboratory **Exercise** on Thrusdays. Some days there will be required readings to be read prior to class, so keep an eye on the schedule for those.
 
-Exercises: These will be due periodically throughout the semester. I encourage you to work on these with your peers! The best way to learn something, is if you can communicate it to someone else. However, the goal of the class is to learn how to analyze data. So I encourage you not to lean too heavily on your peers and instead make sure that you are learning the material yourselves.
+**Exercises:** The largest part of your grade in the class will be from **Exercises** (60%). These will be every two weeks ago so during the semester, and my goal is have eight different exercises. We will use class time to work on the Exercises; you can work on them individually or in small groups with 2-3 people. I encourage you to work on these with your peers, because a great way to learn material is by communicating it to someone else. However, the goal of the class is to learn how to analyze data and learn those practical skills. So I encourage you to be mindful and make sure that you are learning the material yourselves.
 
-In this class, we will be learning how to analyze data in R. Why in R? Because it’s free, open-source statistical and it is accessible to anyone with a computer and internet connection.
+On class days with Exercises, we will work on the material in class. I will be present and available for questions. My hope is that you all will be able to finish the Exercises during classtime, and then I will briefly review your work and give you credit for completing the assignment. However, if you are unable to attend the class session or unable to finish the Exercise during class, you will have six days to complete it and submit it through WebCampus.
 
-Course website! A central location for class materials. 
+**Quizzes:** There will be 6-7 quizzes throughout the semester (20%). They will be given through WebCampus and they will become available the day after the material is presented. Sometimes there will be quick turnaround times on the quizzes and you will only have ~36 hours to finish them. So be mindful of quiz dates and getting them done before they are due.
+
+**Participation:** Students will be graded on **Participation** (20%). As this is a graduate-level class, engagement and participation during class, discussions, exercise labs, and other course-related opportunities is expected and students will be given a grade on their participation.
+
+**Extra Credit:** An extra-credit opportunity is available to students by participating in '[StatsChats](https://guides.library.unr.edu/StatsChats)'. StatsChats is an informal weekly gathering to discuss any quantitative questions you may have related to your research (statistics, experimental design, model simulation, analysis, debugging R code, etc.). This is open to any students and faculty that want to improve their their quantitative skills and/or share their knowledge and experience. StatsChats will be weekly on Tuesdays (starting September 3) from 12-1PM in the Lilli Brant reading room in the DeLaMare Science and Engineering Library (third floor). Students will gain +20% credit to their overall class grade **if they attend four (4) out of the ten total StatsChats sessions during the semester**.
+
+**Course website!** A central location for class materials, including lecture and exercise materials, readings, and other useful information.  
 
 No text books. Free resources from the internet. See the 'Links' page on the course website.
 
@@ -56,7 +62,7 @@ No text books. Free resources from the internet. See the 'Links' page on the cou
 
 NRES 710 is designed to be an introductory, graduate-level statistics class. “Introductory” because you are not assumed to have much in the way of prior statistical knowledge (although an undergrad course under your belt will be helpful) or prior experience in R programming (although some prior exposure will make the learning curve less steep). “Graduate-level” because once we get rolling, it’ll be full steam ahead! However, another dimension of a graduate-level course is an emphasis on collaborative knowledge development through group discussion and collective learning, and NRES 710 will provide opportunities for this. 
 
-This course provides an introduction to both statistics and computer programming. With a solid grounding in basic rules of probability and statistics, and armed with some basic computer programming abilities (and some human creativity and ingenuity), you can go extremely far in making sense of data and communicating that understanding with others!!   
+This course provides an introduction to both statistics and computer programming in R. With a solid grounding in basic rules of probability and statistics, and armed with some basic computer programming abilities (and some human creativity and ingenuity), you can go extremely far in making sense of data and communicating that understanding with others!!   
 
 ## What is science?
 

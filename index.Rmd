@@ -69,7 +69,7 @@ There will be periodic **Quizzes** (*n* = 6) throughout the semester that will c
 
 Students will be graded on **Participation** (20%). As this is a graduate-level class, engagement and participation during class, discussions, exercise labs, and other course-related opportunities is expected and students will be given a grade on their participation.
 
-Last, an extra-credit opportunity is available to students by participating in '[StatsChats](https://guides.library.unr.edu/StatsChats)'. StatsChats is an informal weekly gathering to discuss any quantitative questions you may have related to your research (statistics, experimental design, model simulation, analysis, debugging R code, etc.). This is open to any students and faculty that want to improve their their quantitative skills and/or share their knowledge and experience. StatsChats will be weekly on Tuesdays (starting September 3) from 12-1PM in the Lilli Brant reading room in the DeLaMare Science and Engineering Library (third floor). Students will gain +20% credit to their overall class grade **if they attend four (4) out of the ten total StatsChats sessions during the semester**. I will try post the StatsChat schedule here when I learn it.
+Last, an extra-credit opportunity is available to students by participating in '[StatsChats](https://guides.library.unr.edu/StatsChats)'. StatsChats is an informal weekly gathering to discuss any quantitative questions you may have related to your research (statistics, experimental design, model simulation, analysis, debugging R code, etc.). This is open to any students and faculty that want to improve their their quantitative skills and/or share their knowledge and experience. StatsChats will be weekly on Tuesdays (starting September 3) from 12-1PM in the Lilli Brant reading room in the DeLaMare Science and Engineering Library (third floor). Students will gain +20% credit to their overall class grade **if they attend four (4) out of the ten total StatsChats sessions during the semester**.
 
 ### Grading
 
@@ -154,6 +154,8 @@ Your student fees cover usage of the University Math Center (https://www.unr.edu
 ## Manually run these lines through console to turn the RMD into DOCX or PDF
 rmarkdown::render('index.Rmd', output_file = 'syllabus.docx', 'word_document')
 rmarkdown::render('schedule.Rmd', 'word_document')
+rmarkdown::render('lecture_1.Rmd', 'word_document')
+
 knitr::opts_chunk$set(echo = TRUE, message = FALSE)
 rmarkdown::render('index.Rmd', output_file = 'syllabus.pdf', rmarkdown::pdf_document())
 rmarkdown::render('schedule.Rmd', rmarkdown::pdf_document())

@@ -1,3 +1,7 @@
-knitr
-kableExtra
-titanic
+base
+methods
+datasets
+utils
+grDevices
+graphics
+stats
