@@ -69,7 +69,7 @@ There will be periodic **Quizzes** (*n* = 6) throughout the semester that will c
 
 Students will be graded on **Participation** (20%). As this is a graduate-level class, engagement and participation during class, discussions, exercise labs, and other course-related opportunities is expected and students will be given a grade on their participation.
 
-Last, an extra-credit opportunity is available to students by participating in '[StatsChats](https://guides.library.unr.edu/StatsChats)'. StatsChats is an informal weekly gathering to discuss any quantitative questions you may have related to your research (statistics, experimental design, model simulation, analysis, debugging R code, etc.). This is open to any students and faculty that want to improve their their quantitative skills and/or share their knowledge and experience. StatsChats will be weekly on Tuesdays (starting September 3) from 12-1PM in the Lilli Brant reading room in the DeLaMare Science and Engineering Library (third floor). Students will gain +20% credit to their overall class grade **if they attend four (4) out of the ten total StatsChats sessions during the semester**.
+Last, an extra-credit opportunity is available to students by participating in '[StatsChats](https://guides.library.unr.edu/StatsChats)'. StatsChats is an informal weekly gathering to discuss any quantitative questions you may have related to your research (statistics, experimental design, model simulation, analysis, debugging R code, etc.). This is open to any students and faculty that want to improve their their quantitative skills and/or share their knowledge and experience. StatsChats will be weekly on Tuesdays (starting September 3) from 12-1PM in the Lilli Brant reading room in the DeLaMare Science and Engineering Library (third floor). Students will gain **+10%** credit to their overall class grade **if they attend four (4) out of the ten total StatsChats sessions during the semester**.
 
 ### Grading
 
@@ -78,20 +78,15 @@ Last, an extra-credit opportunity is available to students by participating in '
 |Exercises                       |	60%                                     |
 |Quizzes                         |	20%                                     |
 |Participation                   |  20%                                     |
-|Extra credit: Attend 4 StatChats|  +20%                                    |
+|Extra credit: Attend 4 StatChats|  +10%                                    |
 
 Letter grades will be assigned as follows:	
 
 |Grade                           | Semester Average (%)                      |
 |--------------------------------|-------------------------------------------|
-|A                               |	93--100                                  |
-|A-                              |	90--92                                   |
-|B+                              |	87--89                                   |
-|B                               |	83--86                                   |
-|B-                              |	80--82                                   |
-|C+                              |	77--79                                   |
-|C                            	 |  73--76                                   |
-|C-                              |	70--72                                   |
+|A                               |	90--100                                  |
+|B                               |	80--89                                   |
+|C                            	 |  70--79                                   |
 |F                               |	below 70                                 |
 
 ### Course Schedule
@@ -154,7 +149,7 @@ The University of Nevada, Reno is committed to providing a safe learning and wor
 
 Your student fees cover usage of the University Math Center (https://www.unr.edu/university-math-center), (775) 784-4433; University Tutoring Center (https://www.unr.edu/tutoring-center), (775) 784-6801; and University Writing & Speaking Center (https://www.unr.edu/writing-speaking-center), (775) 784-6030. These centers support your classroom learning; it is your responsibility to take advantage of their services. Keep in mind that seeking help outside of class is the sign of a responsible and successful student.
 
-## Download the Syllabus
+### Download the Syllabus
 
 Downloadable copies of syllabus as a [Word Document](syllabus.docx).
 
