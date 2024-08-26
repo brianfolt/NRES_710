@@ -1,8 +1,8 @@
-simpleboot
-emmeans
-agricolae
 titanic
+emmeans
 ggplot2
+simpleboot
+agricolae
 statmod
 knitr
 kableExtra
