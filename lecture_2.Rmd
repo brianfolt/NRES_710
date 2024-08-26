@@ -330,4 +330,27 @@ We can also import data from files stored on our computers (or even directly fro
 
 Note: I recommend always using RStudio projects whenever you are working on any statistical analysis in R (homework exercises, class projects, analysis for your thesis chapter, etc.). This reduces the hassle of setting working directories and is a great habit to get into. By default, the project directory automatically becomes the working directory for your analysis!
 
+<!-- ## The Statistical Program R -->
+
+<!-- R is an open-source project, and new packages are being added all the time.  -->
+
+<!-- R is incredibly powerful and feature rich. You are NOT expected to memorize syntax right away, but rather just know that the answer is always a few clicks away! 'help' files in R are extremely useful, as is information about how to use R that is found in books or on the internet. -->
+
+<!-- 'Base R' is the default software built into R that does not including loading any additional packages. Here is a ['base R' cheat sheet](base-r.pdf); this is a great reference for most of the basic tasks you will need to perform in R. -->
+
+<!-- Learn to use R scripts, and save your scripts frequently! This is the primary record of what you've done and allows you and others to reproduce your workflows. -->
+
+<!-- ### Install R and RStudio -->
+
+<!--  [CRAN website for downloading R](https://cran.r-project.org/)   -->
+<!--  [RStudio main site](https://www.rstudio.com/)  -->
+
+<!-- Make sure you have the most recent versions! -->
+
+<!-- ### Make a new RStudio "project" for this class   -->
+
+<!-- [R projects are an **extremely useful** feature of RStudio](https://support.rstudio.com/hc/en-us/articles/200526207-Using-Projects). Just store all the code and data for this course in your project folder and it will make your life much, much easier! -->
+
+
+
 [--go to next lecture--](lecture_3.html)
