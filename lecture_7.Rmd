@@ -184,7 +184,7 @@ Let's show you how to make predictions in R, including with **prediction interva
 
 Before we make predictions, we first have to run our analysis. Let's use the results from the biomass x rainfall data regression analysis.
 
-```{r predict_1, echo=TRUE, message=FALSE, warning=FALSE, fig.width=4.5, fig.height=4.5}
+```{r fig.width=4.5, fig.height=4.5}
 # Read in the biomass data again, if necessary
 datum <- read.csv("lecture_7_biomass_data.csv")
 
@@ -194,27 +194,30 @@ plot(biomass ~ rainfall, data = datum, xlab = "Rainfall (cm)", ylab = "Biomass (
 # Regression
 results <- lm(biomass ~ rainfall, data = datum)
 abline(results)
+
 ```
 
 ### Single-value predictions
 
 Let's say we want to know what the biomass is predicted to be when rainfall = 5 cm. We would simply do this using the linear model results:
 
-```{r predict_2, echo=TRUE, message=FALSE, warning=FALSE, fig.width=4.5, fig.height=3.5}
+```{r fig.width=4.5, fig.height=3.5}
 # Examine the results 
 summary(results)
 
 # Make a prediction for when rainfall = 5 cm
 4.08 + 2.82 * 5
+
 ```
 
 18.18 kg/ha biomass when rainfall is 5 cm!
 
 The most common (and easy) way to make predictions in R is using the 'predict()' function. We will use 'predict.lm()'.
 
-```{r predict_3, echo=TRUE, message=FALSE, warning=FALSE, fig.width=4.5, fig.height=3.5}
+```{r fig.width=4.5, fig.height=3.5}
 # Examine the help file
 help(predict.lm)
+
 ```
 
 Things that 'predict.lm()' needs:
@@ -226,7 +229,7 @@ Things that 'predict.lm()' needs:
 
 Let's try to validate my prediction for biomass when rainfall = 5 cm.
 
-```{r predict_4, echo=TRUE, message=FALSE, warning=FALSE, fig.width=4.5, fig.height=3.5}
+```{r fig.width=4.5, fig.height=3.5}
 # Create predict data
 datumPredict <- data.frame(rainfall = 5)
 datumPredict
@@ -234,6 +237,7 @@ datumPredict
 # Create a new object called predictions
 predictions <- predict(results, datumPredict, interval = "prediction")
 predictions
+
 ```
 
 Three outputs: fit, lwr, and upr.
@@ -244,8 +248,9 @@ Three outputs: fit, lwr, and upr.
   - upper prediction limit (upr) -- 
 - if we want the prediction interval, we need to do some math:
 
-```{r predict_5, echo=TRUE, message=FALSE, warning=FALSE, fig.width=4.5, fig.height=3.5}
+```{r fig.width=4.5, fig.height=3.5}
 predictions[1,"upr"] - predictions[1,"fit"]
+
 ```
 
 The 95% prediction interval is +/-10.51.
@@ -254,7 +259,7 @@ The 95% prediction interval is +/-10.51.
 
 Normally we will want to make predictions over a good interval range that encompasses our X-data. This might help us fill in some holes.
 
-```{r predict_6, echo=TRUE, message=FALSE, warning=FALSE, fig.width=4.5, fig.height=3.5}
+```{r fig.width=4.5, fig.height=3.5}
 # Examine summary
 summary(datum)
 
@@ -267,13 +272,14 @@ predictions <- predict(results, datumPredict, interval = "prediction")
 
 # Examine predictions
 head(predictions)
+
 ```
 
 We now have a whole sequence of predictions, as well as lower and upper 'prediction intervals'!
 
 An annoying feature here is that we don't really have X-value data in here; the 'rainfall' data.
 
-```{r predict_7, echo=TRUE, message=FALSE, warning=FALSE, fig.width=4.5, fig.height=3.5}
+```{r fig.width=4.5, fig.height=3.5}
 # Make it a dataframe to make it easier to add data to it.
 predictions <- as.data.frame(predictions)
 
@@ -282,22 +288,24 @@ predictions$rainfall <- seq(from = 0, to = 10, by = 0.5)
 
 # Examine
 predictions
+
 ```
 
 Pretty cool!?
 
 Last thing I want to show you: plotting the prediction intervals over the range of X-values.
 
-```{r predict_8, echo=TRUE, message=FALSE, warning=FALSE, fig.width=4.5, fig.height=4.5}
+```{r fig.width=4.5, fig.height=4.5}
 # Very simple way to plot the prediction intervals
 matplot(predictions$rainfall, predictions[,1:3], type = "l")
+
 ```
 
 This graph ain't too pretty.
 
 **Q:** What's this graph missing? The original data.
 
-```{r predict_9, echo=TRUE, message=FALSE, warning=FALSE, fig.width=4.5, fig.height=4.5}
+```{r fig.width=4.5, fig.height=4.5}
 # Plot the data, but this time specify what the x- and y-limits are.
 # This is important to make sure everything will fit on here.
 plot(biomass ~ rainfall, data = datum, xlim = c(0, 10), ylim = c(0, 40), xlab = "Rainfall (cm)", ylab = "Biomass (kg/ha)")
@@ -310,6 +318,7 @@ par(new = TRUE)
 plot(lwr ~ rainfall, data = predictions, type = "l", xlim = c(0, 10), ylim = c(0, 40), ylab = "", xlab = "")
 par(new = TRUE)
 plot(upr ~ rainfall, data = predictions, type = "l", xlim = c(0, 10), ylim = c(0, 40), ylab = "", xlab = "")
+
 ```
 
 This is more useful, I would say!

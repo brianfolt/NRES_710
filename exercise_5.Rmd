@@ -84,10 +84,12 @@ Tough fishing conditions in Hermosa Creek, Colorado (Picture: Jason Folt).
 
 ## Truth
 
-If you would like to know the values used to create these datasets (i.e., 'truth'), download and examine this [R script](exercise_5.R).
+If you would like to know the values used to create these datasets (i.e., 'truth'), examine the code here:
 
-```{r datasets, echo=FALSE, message=FALSE, warning=FALSE}
-### Exercise 5: code to simulate datasets for the exploration of collinearity in multi-variable analysis
+```{r}
+########################## 'Truth' ############################# 
+### Exercise 5: code to simulate datasets for the exploration of
+### collinearity in multi-variable analysis
 
 # Set the seed for reproducibility
 set.seed(123)

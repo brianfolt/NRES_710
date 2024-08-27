@@ -367,19 +367,16 @@ div.tocify {
       <a href="lecture_11.html">Analysis with Continuous or Categorical X?</a>
     </li>
     <li>
-      <a href="LECTURE8.html">GLM</a>
+      <a href="lecture_12.html">Multi-variable Modeling</a>
     </li>
     <li>
-      <a href="LECTURE9.html">GLMM</a>
+      <a href="lecture_13.html">Multi-variable Modeling - collinearity</a>
     </li>
     <li>
-      <a href="LECTURE10.html">Machine Learning</a>
+      <a href="lecture_14.html">Multi-variable Modeling - interactions</a>
     </li>
     <li>
-      <a href="GIT_tutorial.html">Intro to GIT</a>
-    </li>
-    <li>
-      <a href="LECTURE11.html">Next steps</a>
+      <a href="lecture_15.html">Generalized Linear Models</a>
     </li>
   </ul>
 </li>
@@ -401,6 +398,18 @@ div.tocify {
     </li>
     <li>
       <a href="exercise_4.html">Exercise 4 - Analysis of Categorical Data</a>
+    </li>
+    <li>
+      <a href="exercise_5.html">Exercise 5 - Multi-variable Analysis</a>
+    </li>
+    <li>
+      <a href="exercise_6.html">Exercise 6 - TBD</a>
+    </li>
+    <li>
+      <a href="exercise_7.html">Exercise 7 - TBD</a>
+    </li>
+    <li>
+      <a href="exercise_8.html">Exercise 8 - TBD</a>
     </li>
   </ul>
 </li>
@@ -430,7 +439,7 @@ div.tocify {
 
 <h1 class="title toc-ignore">Exercise 3: Linear Regression (cont.)</h1>
 <h4 class="author">NRES 710</h4>
-<h4 class="date">Last compiled: 2024-08-05</h4>
+<h4 class="date">Last compiled: 2024-08-27</h4>
 
 </div>
 
@@ -481,14 +490,116 @@ expected number of livestock killed by tigers is at 20.0 deer/ha with
 prediction intervals. Finally, generate a graph of the y predictions and
 the prediction intervals, like we saw in class.</li>
 </ul>
+<p><img src="pic_grouse.png" style="width:50.0%" /></p>
+<p>Picture: Bert Filemyr</p>
+<p><br></p>
 </div>
 <div id="truth" class="section level2">
 <h2>Truth</h2>
 <p>If you would like to know the values used to create these datasets
-(i.e., ‘truth’), download and examine this <a href="exercise_3.R">R
-script</a>.</p>
-<p><img src="pic_grouse.png" style="width:50.0%" /></p>
-<p>Picture: Bert Filemyr</p>
+(i.e., ‘truth’), examine the code below:</p>
+<pre class="r"><code>### Exercise 3: code to simulate datasets 
+
+# Set the seed for reproducibility
+set.seed(123)
+
+## Dataset 1
+# Simulate X-variable
+n &lt;- 150
+x &lt;- runif(n, 0, 10)
+
+# Simulate error
+error &lt;- rep(NA, n)
+for (i in 1:n){
+  error[i] &lt;- rnorm(1, mean = 0, sd = 0.5 * x[i])
+}
+
+# Calculate Y-variable
+y &lt;- abs(2 + 0.5 * x + error) # abs() gets rid of negative numbers drawn by chance
+
+# Create dataframe
+datum &lt;- data.frame(PreyDens = x, PredRate = y)
+
+# Save the CSV file
+write.csv(datum, &quot;exercise_3_dataset1.csv&quot;)
+
+
+## Dataset 2
+# Simulate x-variable
+n &lt;- 70
+x &lt;- seq(0, n, by = 1)
+
+# Simulate error
+error &lt;- rep(NA, n + 1)
+error[1] &lt;- 0
+for (i in 2:(n + 1)){
+  error[i] &lt;- rnorm(1, mean = error[i-1], 2)
+}
+
+# Calculate y
+y &lt;- 2 + 2 * x + error
+
+# Create dataframe
+datum &lt;- data.frame(Age = x, BasalArea = y)
+
+# Save the CSV file
+write.csv(datum, &quot;exercise_3_dataset2.csv&quot;)
+
+
+## Dataset 3
+# Simulate x-variable
+n &lt;- 100
+x &lt;- runif(n, 0, 10)
+
+# Error
+error &lt;- rnorm(n, mean = 0, 1)
+
+# Y variable
+y &lt;- round(1 + 0.5 * x + error^2, 0)
+  
+# Dataframe
+datum &lt;- data.frame(PreyDensity = x, LitterSize = y)
+
+# Save the CSV file
+write.csv(datum, &quot;exercise_3_dataset3.csv&quot;)
+
+
+## Dataset 4
+# Simulate x-variable
+n &lt;- 100
+x &lt;- runif(n, 0, 10)
+
+# Error
+error &lt;- rnorm(n, mean = 0, 0.05)
+
+# Y variable
+y &lt;- 0.2 + 0.1 * x - 0.01 * x^2 + error
+
+# Dataframe
+datum &lt;- data.frame(RoadDensity = x, ProbUse = y)
+
+# Save the CSV file
+write.csv(datum, &quot;exercise_3_dataset4.csv&quot;)
+
+
+## Dataset 5
+# Simulate x-variable
+n &lt;- 50
+
+# X variable
+x &lt;- runif(n, 0, 5)
+
+# error
+error &lt;- rnorm(n, 0, 2)
+
+# Y variable
+y &lt;- abs(8 - 1*x + error)
+
+# Create dataframe
+datum &lt;- data.frame(DeerDensity = x, CowsKilled = y)
+
+# Save the CSV file
+write.csv(datum, &quot;exercise_3_dataset5.csv&quot;)</code></pre>
 <p><a href="exercise_4.html">–go to next exercise–</a></p>
 </div>
 

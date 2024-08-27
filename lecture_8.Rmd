@@ -24,7 +24,7 @@ knitr::opts_chunk$set(
 
 #  NRES 710, Analysis of Categorical Data
 #     University of Nevada, Reno
-#     Testing between two roups
+#     Testing between two groups
 
 ```
 
@@ -109,7 +109,7 @@ The truth is that males are larger than females.
 
 Let's make these data in R, and run a t-test:
 
-```{r size-2, echo=TRUE, message=FALSE, warning=FALSE, fig.width=4.5, fig.height=3.5}
+```{r fig.width=4.5, fig.height=3.5}
 ### Code for simulating data to be analyzed body size data for two sexes
 
 # Set the seed for reproducibility
@@ -150,6 +150,7 @@ summary(results)
 
 # Just ask for the object
 results
+
 ```
 
 All the results come from the object itself!
@@ -167,16 +168,18 @@ It does not provide an **estimate** of the size difference between two groups!! 
 
 We can calculate it by doing some math... subtract the smaller group from the larger group:
 
-```{r size-3, echo=TRUE, message=FALSE, warning=FALSE, fig.width=4.5, fig.height=3.5}
+```{r fig.width=4.5, fig.height=3.5}
 251.2 - 198.9
+
 ```
 
 This is how much larger the males are than females.
 
 The confidence interval would be:
 
-```{r size-4, echo=TRUE, message=FALSE, warning=FALSE, fig.width=4.5, fig.height=3.5}
+```{r fig.width=4.5, fig.height=3.5}
 (64.44 - 40.14)/2
+
 ```
 
 **Q:** Why is the 95% confidence interval that R provided negative?
@@ -237,10 +240,11 @@ Let's examine how this works mathematically. Anytime a sample is a male, it give
 
 Let's go back to our original graph.
 
-```{r size-5, echo=TRUE, message=FALSE, warning=FALSE, fig.width=4.5, fig.height=3.5}
+```{r fig.width=4.5, fig.height=3.5}
 # Plot
 stripchart(Size ~ Sex, data = datum, vertical = TRUE, method = "jitter", 
            pch = 19, xlab = "Sex", ylab = "Body size (cm)")
+
 ```
 
 **Q:** how might we visualize $\beta_0$ and $\beta_1$ on this graph?
@@ -261,7 +265,7 @@ Let's see what this looks like by trying this again in R.
 
 ## Analysis of categorical data w/ lm()
 
-```{r size-6, echo=TRUE, message=FALSE, warning=FALSE, fig.width=4.5, fig.height=3.5}
+```{r fig.width=4.5, fig.height=3.5}
 ### Code for simulating data to be analyzed body size data for two sexes
 
 # Recall our 'datum' object
@@ -276,13 +280,14 @@ datum <- cbind(datum, Male)
 
 # Plot the data!
 plot(Size ~ Male, data = datum)
+
 ```
 
 Note: previously R made the X-axis as a categorical (female vs. male), but now it's continuous... R automatically makes graphs depending on it's default interpretation of the data. It reads characters/letters as 'categorical' and numbers and continuous variables. Since we swapped this to be dummy-coded with 1s and 0s, it automatically scaled the X-axis as continuous!
 
 Let's now try to run our t-test using 'lm()':
 
-```{r size-7, echo=TRUE, message=FALSE, warning=FALSE, fig.width=4.5, fig.height=3.5}
+```{r fig.width=4.5, fig.height=3.5}
 # Examine the old t-test results
 results
 248.9749 - 202.8325 # effect of being male
@@ -290,6 +295,7 @@ results
 # Use lm() to run regression with dummy-coded X-data
 results2 <- lm(Size ~ Male, data = datum)
 summary(results2)
+
 ```
 
 **Q:** What do we see?? 
@@ -301,19 +307,21 @@ The numbers are the same!
 
 Turns out that when you run 't.test()', it does dummy-coded behind the scenes, and then just runs a 'lm()'. 
 
-```{r size-8, echo=TRUE, message=FALSE, warning=FALSE, fig.width=4.5, fig.height=3.5}
+```{r fig.width=4.5, fig.height=3.5}
 # Confidence intervals
 confint(results2)
+
 ```
 
 Confidence intervals also ~match up between t-test and lm results.
 
 What if we run a regression but with a categorical X-variable...?
 
-```{r size-9, echo=TRUE, message=FALSE, warning=FALSE, fig.width=4.5, fig.height=3.5}
+```{r fig.width=4.5, fig.height=3.5}
 # Regression with a categorical variable
 results3 <- lm(Size ~ Sex, data = datum)
 summary(results3)
+
 ```
 
 This works also! Because R will automatically turn that categorical X-variable into a dummy-coded continuous variable. In this case, it became 1 for 'SexMale' and 0 for 'SexFemale'. It chose 'Female' as the reference group, and male becomes the group females are being compared to.
@@ -343,6 +351,7 @@ We will learn how to tweak this formula to analyze our data as the data become m
 ```{r size-10, echo=FALSE, message=FALSE, warning=FALSE, fig.width=4.5, fig.height=3.5}
 # Save the data for future lectures, if needed
 write.csv(datum, "lecture_8_seal_data.csv")
+
 ```
 
 [--go to next lecture--](lecture_9.html)

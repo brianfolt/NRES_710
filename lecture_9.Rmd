@@ -61,7 +61,7 @@ With continuous X data, we start out by saying: "For each 1 unit increase in X, 
 
 Let's take a peak in R at the elephant [seal body size data](lecture_8_seal_data.csv) from last class. We will analyze it using 'lm()' with a categorical X-variable:
 
-```{r seals, echo=TRUE, message=FALSE, warning=FALSE, fig.width=4.5, fig.height=3.5}
+```{r fig.width=4.5, fig.height=3.5}
 # Load the data
 datum <- read.csv("lecture_8_seal_data.csv")
 
@@ -95,7 +95,7 @@ The analysis output from linear regression with **categorical X-data** is the sa
 
 We can now use this output to populate the our 'presenting resultings' sentence. We will need the +/- 95% CI:
 
-```{r seals-2, echo=TRUE, message=FALSE, warning=FALSE, fig.width=4.5, fig.height=3.5}
+```{r fig.width=4.5, fig.height=3.5}
 # Confidence intervals
 confint(results)
 
@@ -120,7 +120,7 @@ If you give R categorical data, R will automatically create the 'reference' grou
 
 We can change what the reference group is in R using the 'factor()' function. For example, using our seal data:
 
-```{r seals-3, echo=TRUE, message=FALSE, warning=FALSE, fig.width=4.5, fig.height=3.5}
+```{r fig.width=4.5, fig.height=3.5}
 # Examine the categorical data
 str(datum$Sex)
 # The 'levels' are the groups in the variable, and they are ordered alphabetically by default.
@@ -352,7 +352,7 @@ You might be wondering... how would we estimate the difference between subadults
 
 Let's see what this would look like in R. Download some simulated data [here](lecture_9_ages.csv).
 
-```{r three-groups-analysis, echo=TRUE, message=FALSE, warning=FALSE}
+```{r}
 ### Code to test for differences among three groups
 
 # Read in the data
@@ -380,6 +380,7 @@ datum <- cbind(datum, dummy) # bind to dataframe
 
 # Re-examine data
 head(datum)
+
 ```
 
 'Truth' for these data are:
@@ -390,7 +391,7 @@ head(datum)
 
 Let's use 'lm()' to test for these differences in R:
 
-```{r three-groups-analysis-2, echo=TRUE, message=FALSE, warning=FALSE}
+```{r}
 ## Analysis of variance; 'aov()'
 help(aov)
 # Fit an analysis of variance... by calling 'lm()'!!
@@ -398,17 +399,19 @@ help(aov)
 # Run an ANOVA
 results <- aov(Size ~ Age, data = datum)
 summary(results)
+
 ```
 
 What does it give us...? An ANOVA table!
 
 **Q:** What's missing here..? Estimates of effects -- and whether those individual effects are significant or not. So, this is **not very useful**.
 
-```{r three-groups-analysis-3, echo=TRUE, message=FALSE, warning=FALSE}
+```{r}
 ## Multiple comparison using 'lm()'
 # Run analysis
 results2 <- lm(Size ~ Age, data = datum)
 summary(results2)
+
 ```
 
 Here are the results, and by now hopefully this is starting to look familiar!
@@ -440,12 +443,13 @@ Remember: Type I error is when we reject the null when in fact it is True; what 
 - **P(No errors) = (1 - 0.05)^3**
 - **P(>1 errors) = 1 - (1 - 0.05)^3**
 
-```{r three-groups-analysis-4, echo=TRUE, message=FALSE, warning=FALSE}
+```{r}
 # Probability of committing no errors in three t-tests
 (1 - 0.05)^3
 
 # Probability of committing >=1 Type I errors in three t-tests
 1 - (1 - 0.05)^3
+
 ```
 
 This is why they teach us to use analyses like ANOVA in statistics. It is meant to be one single test that can evaluate multiple comparisons and thus minimizes our risk of committing Type I error.
@@ -460,9 +464,10 @@ The important part is that our 'lm()' summary output gives us the single ANOVA p
 
 Another way to get this is to use:
 
-```{r three-groups-analysis-5, echo=TRUE, message=FALSE, warning=FALSE}
+```{r}
 # ANOVA test
 anova(results2)
+
 ```
 
 So now we know that there is at least two groups that are different from each other.
@@ -478,9 +483,10 @@ And now we also have **estimates**! The effect sizes for each of the $\beta$ val
 
 How do we report the results?
 
-```{r three-groups-analysis-6, echo=TRUE, message=FALSE, warning=FALSE}
+```{r}
 summary(results2)
 confint(results2)
+
 ```
 
 "We found that subadults were 133.6 kg (+/-13.7; +/-95% CI) heavier than juveniles (p < 2e-16)."
@@ -491,10 +497,11 @@ But, there are three groups, so we will need to write three sentences to report 
 
 We will use the 'relevel()' function
 
-```{r three-groups-analysis-7, echo=TRUE, message=FALSE, warning=FALSE}
+```{r}
 # Re-run analysis with different reference
 results3 <- lm(Size ~ relevel(Age, ref = "Subadult"), data = datum)
 summary(results3)
+
 ```
 
 This new summary looks a little uglier... but it gives us the information that we needed.
@@ -520,7 +527,7 @@ Dummy coded variables can be pretty useful!
 
 Turns out we can really easily fit these models using the 'dummy-coded' variables. Here's how that works.
 
-```{r three-groups-analysis-8, echo=TRUE, message=FALSE, warning=FALSE}
+```{r}
 # Using the dummy-coded variables to run this analysis
 results4 <- lm(Size ~ Subadult + Adult, data = datum)
 summary(results4)
@@ -528,6 +535,7 @@ summary(results4)
 # Changing the reference
 results5 <- lm(Size ~ Juvenile + Adult, data = datum)
 summary(results5)
+
 ```
 
 We purposefully left-out 'Juvenile', and it is forced to the reference. 
@@ -538,20 +546,22 @@ I like these results better because the effect description is really accurate: "
 
 What if we specified all three of the dummy-coded variables, would that screw it up?
 
-```{r three-groups-analysis-9, echo=TRUE, message=FALSE, warning=FALSE}
+```{r}
 # Using the dummy-coded variables to run this analysis
 results6 <- lm(Size ~ Subadult + Adult + Juvenile, data = datum)
 summary(results6)
+
 ```
 
 Juvenile was forced to be "NA", and instead Juvenile was forced to be reference because -- it was the last one included.
 
 Let's try a little critical thinking exercise. Consider this model:
 
-```{r three-groups-analysis-10, echo=TRUE, message=FALSE, warning=FALSE}
+```{r}
 # Using the dummy-coded variables to run this analysis
 results7 <- lm(Size ~ Adult, data = datum)
 summary(results7)
+
 ```
 
 **Q:** What does this model do...?
@@ -562,11 +572,14 @@ It compares the size of adults compared to the size of all other observations co
 
 Here's another way to do it:
 
-```{r three-groups-analysis-11, echo=TRUE, message=FALSE, warning=FALSE}
+```{r}
 # Using the dummy-coded variables to run this analysis
 results8 <- lm(Size ~ I(Juvenile + Subadult), data = datum)
 # I() is a function to do whatever is inside the parentheses
 summary(results8)
+
+
+
 ```
 
 These are advantages of using 'dummy-coded' variables! It gives us *flexibility.*
@@ -589,7 +602,8 @@ These are advantages of using 'dummy-coded' variables! It gives us *flexibility.
 
 Code to simulate the three-age data and save it. Just here in case you are interested in how it was made.
 
-```{r three-groups-data-sim, echo=TRUE, message=FALSE, warning=FALSE}
+```{r}
+############################### 'Truth' ################################ 
 ### Code for simulating data to be analyzed body size data for two sexes
 
 # Simulate the binomial X-variable (sex)

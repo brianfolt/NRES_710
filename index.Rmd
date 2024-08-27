@@ -215,18 +215,22 @@ rmd2rscript <- function(infile="LECTURE2.Rmd"){
 ```{r echo=FALSE, eval=FALSE}
 ## Manually run these lines through console to turn the RMD to R scripts
 rmd2rscript("lecture_2.Rmd")
-rmd2rscript("lecture_3.Rmd")
-rmd2rscript("exercise_1.Rmd")
+#rmd2rscript("lecture_3.Rmd") # no R code
+#rmd2rscript("exercise_1.Rmd") # no R code of substance necessary for students to have
 rmd2rscript("lecture_4.Rmd")
 rmd2rscript("lecture_5.Rmd")
 rmd2rscript("lecture_6.Rmd")
-rmd2rscript("exercise_2.Rmd")
+#rmd2rscript("exercise_2.Rmd") # sharing 'truth' at the bottom of the page
 rmd2rscript("lecture_7.Rmd")
-rmd2rscript("exercise_3.Rmd")
+#rmd2rscript("exercise_3.Rmd") # sharing 'truth' at the bottom of the page
 rmd2rscript("lecture_8.Rmd")
 rmd2rscript("lecture_9.Rmd")
 rmd2rscript("lecture_10.Rmd")
-rmd2rscript("exercise_4.Rmd")
+#rmd2rscript("exercise_4.Rmd") # sharing 'truth' at the bottom of the page
+rmd2rscript("lecture_11.Rmd")
+rmd2rscript("lecture_12.Rmd")
+rmd2rscript("lecture_13.Rmd")
+rmd2rscript("lecture_14.Rmd")
 
 rmd2rscript("INTRO.Rmd")
 rmd2rscript("LECTURE1.Rmd")

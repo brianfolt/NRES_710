@@ -1,7 +1,7 @@
 
 #  NRES 710, P-values and an Intro to R  
 #     University of Nevada, Reno
-#     P-values, a discussion of readings, and an intro to R   
+#     P-values, a discussion of readings, and an intro to R
 
 
 # Getting started with R ----------------- 

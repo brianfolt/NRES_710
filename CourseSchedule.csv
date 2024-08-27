@@ -1,15 +1,15 @@
 Week,Dates,Tuesday class meeting,Thursday class meeting,Exercises/deadlines
-1,"Aug. 27, 29",[Syllabus and the Purpose of Statistics](lecture_1.html),[Paper Discussion and Intro to R](lecture_2.html),"[Johnson (1999)](papers/Johnson1999.pdf), [Dushoff et al. (2019)](papers/Dushoff_etal_2019.pdf) - read before Aug. 29"
+1,"Aug. 27, 29",[Syllabus and the Purpose of Statistics](lecture_1.html),[Paper Discussion and Intro to R](lecture_2.html) ([Code](lecture_2.R)),"[Johnson (1999)](papers/Johnson1999.pdf), [Dushoff et al. (2019)](papers/Dushoff_etal_2019.pdf) - read before Aug. 29"
 2,"Sep. 3, 5",[Basic Concepts](lecture_3.html),[Exercise 1: Functions and Summary Stats](exercise_1.html),Quiz 1 - due Sep. 4
-3,"Sep. 10, 12",[Linear Regression](lecture_4.html),[Linear Regression - results](lecture_5.html),Exercise 1 - due Sep. 11
-4,"Sep. 17, 19","[Exercise 2: Linear Regression, pt. 1](exercise_2.html)",[Linear Regression - assumptions](lecture_6.html),Quiz 2 - due Sep. 18
-5,"Sep. 24, 26",[Linear Regression - predictions](lecture_7.html),"[Exercise 3: Linear Regression, pt. 2](exercise_3.html)",Exercise 2 and Quiz 3 - due Sep. 25
-6,"Oct. 1, Oct. 3",[Analysis of Categorical Data](lecture_8.html),[Analysis of Categorical Data - cont.](lecture_9.html),Exercise 3 - due Oct. 2
-7,"Oct. 8, 10",[Analysis of Categorical Data - posthoc tests](lecture_10.html),[Exercise 4: Analysis of Categorical Data](exercise_4.html),"[Ruxton & Beauchamp (2008)](papers/ruxton_beauchamp_2008.pdf) - read before Oct. 8, Quiz 4 - due Oct. 9"
-8,"Oct. 15, 17",[Analysis of Continuous or Categorical X?](lecture_11.html),[Multi-variable Modeling](lecture_12.html),"[Cottingham et al. (2005)](papers/cottingham_etal_2005.pdf) - read before Oct. 15, Exercise 4 - due Oct. 16"
+3,"Sep. 10, 12",[Linear Regression](lecture_4.html) ([Code](lecture_4.R)),[Linear Regression - results](lecture_5.html) ([Code](lecture_5.R)),Exercise 1 - due Sep. 11
+4,"Sep. 17, 19","[Exercise 2: Linear Regression, pt. 1](exercise_2.html)",[Linear Regression - assumptions](lecture_6.html) ([Code](lecture_6.R)),Quiz 2 - due Sep. 18
+5,"Sep. 24, 26",[Linear Regression - predictions](lecture_7.html) ([Code](lecture_7.R)),"[Exercise 3: Linear Regression, pt. 2](exercise_3.html)",Exercise 2 and Quiz 3 - due Sep. 25
+6,"Oct. 1, Oct. 3",[Analysis of Categorical Data](lecture_8.html) ([Code](lecture_8.R)),[Analysis of Categorical Data - cont.](lecture_9.html) ([Code](lecture_9.R)),Exercise 3 - due Oct. 2
+7,"Oct. 8, 10",[Analysis of Categorical Data - posthoc tests](lecture_10.html) ([Code](lecture_10.R)),[Exercise 4: Analysis of Categorical Data](exercise_4.html),"[Ruxton & Beauchamp (2008)](papers/ruxton_beauchamp_2008.pdf) - read before Oct. 8, Quiz 4 - due Oct. 9"
+8,"Oct. 15, 17",[Analysis of Continuous or Categorical X?](lecture_11.html) ([Code](lecture_11.R)),[Multi-variable Modeling](lecture_12.html) ([Code](lecture_12.R)),"[Cottingham et al. (2005)](papers/cottingham_etal_2005.pdf) - read before Oct. 15, Exercise 4 - due Oct. 16"
 9,"Oct. 22, 24",*No class*,*No class*,Brian at conference
-10,"Oct. 29, 31",[Multi-variable Modeling - Collinearity](lecture_13.html),[Exercise 5: Collinearity](exercise_5.html),Quiz 5 - due Oct. 30
-11,"Nov. 5, 7",[Multi-variable Modeling - Interactions](lecture_14.html),[Exercise 6: Interactions](exercise_6.html),Exercise 5 - due Nov. 6
+10,"Oct. 29, 31",[Multi-variable Modeling - Collinearity](lecture_13.html) ([Code](lecture_13.R)),[Exercise 5: Collinearity](exercise_5.html),Quiz 5 - due Oct. 30
+11,"Nov. 5, 7",[Multi-variable Modeling - Interactions](lecture_14.html) ([Code](lecture_14.R)),[Exercise 6: Interactions](exercise_6.html),Exercise 5 - due Nov. 6
 12,"Nov. 12, 14",TBD,[Exercise 7: TBD](exercise_7.html),Exercise 6 - due Nov. 13
 13,"Nov. 19, 21",TBD,*No class (Thanksgiving)*,Exercise 7 - due Nov. 20
 14,"Nov. 26, 28",TBD,[Exercise 8: TBD](exercise_8.html),TBD

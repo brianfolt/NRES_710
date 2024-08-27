@@ -784,7 +784,7 @@ We can use different graphs to test these assumptions (**see above table**).
 
 Save code and data for this lecture in your working directory:
 
-- Click [here](lecture_6_code.R) to download code. This is general code to help make these graphs.
+- Click [here](lecture_6_assumptions_code.R) to download code. This is general code to help make these graphs.
 
 - Click on these links to download and save the data: [good data](lecture_6_good_data.csv), [nonlinear data](lecture_6_nonlinear_data.csv), [nonnormal data](lecture_6_nonnormal_data.csv), [heteroscedastic data](lecture_6_heteroscedastic_data.csv), and [autocorrelated data](lecture_6_autocorrelated_data.csv).
   - Note: all of these datafiles were simulated using code at the end of this lecture; see that code if you are interested in understanding 'truth'.
@@ -793,7 +793,7 @@ Save code and data for this lecture in your working directory:
 
 Let's start by examining a dataset that has no issues with it!
 
-```{r no-violations_1, echo=TRUE, message=FALSE, warning=FALSE, fig.width=4.5, fig.height=4.5}
+```{r fig.width=4.5, fig.height=4.5}
 # Load the data
 datum <- read.csv("lecture_6_good_data.csv")
 
@@ -803,7 +803,7 @@ plot(y ~ x, data = datum)
 
 Y is continuous, definitely linear, the residuals appear normally distributed (most close to the line), variance seems constant, does not appear to have any autocorrelation (but it's possible).
 
-```{r nonlinearity, echo=TRUE, message=FALSE, warning=FALSE, fig.width=4.5, fig.height=4.5}
+```{r fig.width=4.5, fig.height=4.5}
 # Load the data
 nonlinear <- read.csv("lecture_6_nonlinear_data.csv")
 
@@ -813,7 +813,7 @@ plot(y ~ x, data = nonlinear)
 
 Very clearly nonlinear!
 
-```{r normality, echo=TRUE, message=FALSE, warning=FALSE, fig.width=4.5, fig.height=4.5}
+```{r fig.width=4.5, fig.height=4.5}
 # Load the data
 norm <- read.csv("lecture_6_nonnormal_data.csv")
 
@@ -823,7 +823,7 @@ plot(y ~ x, data = norm)
 
 These data have a heavy tail about the line, but don't really have any tail below the line. The residuals are likely not normally distributed.
 
-```{r hetero, echo=TRUE, message=FALSE, warning=FALSE, fig.width=4.5, fig.height=4.5}
+```{r fig.width=4.5, fig.height=4.5}
 # Load the data
 hetero <- read.csv("lecture_6_heteroscedastic_data.csv")
 
@@ -833,7 +833,7 @@ plot(y ~ x, data = hetero)
 
 As the X-variable increases, noise/error in Y increases. This is clearly heteroscedastic.
 
-```{r auto, echo=TRUE, message=FALSE, warning=FALSE, fig.width=4.5, fig.height=4.5}
+```{r fig.width=4.5, fig.height=4.5}
 # Load the data
 auto <- read.csv("lecture_6_autocorrelated_data.csv")
 
@@ -847,7 +847,7 @@ Pretty easy to see the autocorrelation in these data. Most observations of Y at 
 
 Before we can run a residual plots, we have to generate the residuals! Which means we have to first fit a regression. X-Y Scatterplots use the raw data, but the other three graphs we use require a regression to be run for us to then make these plots. Let's run a few analyses:
 
-```{r results, echo=TRUE, message=FALSE, warning=FALSE, fig.width=4.5, fig.height=4.5}
+```{r fig.width=4.5, fig.height=4.5}
 # Fit linear regression models to the five datasets
 results <- lm(y ~ x, data = datum)
 resultsNonlinear <- lm(y ~ x, data = nonlinear)
@@ -860,7 +860,7 @@ I'm not going to look up the summaries for each of the models. We could use thes
 
 The code to extract residuals is called 'residuals()'. This tells us the distance from each point in our dataset to the line of best fit identified by the regression analysis. E.g.,
 
-```{r residuals, echo=TRUE, message=FALSE, warning=FALSE, fig.width=4.5, fig.height=4.5}
+```{r fig.width=4.5, fig.height=4.5}
 # Examine the residuals (just the first ~20)
 residuals(results)[1:20]
 ```
@@ -869,7 +869,7 @@ These data are used to calculate the **standard deviation of the error** around 
 
 But we want to examine these residuals graphically. It may be tempting to plot these residuals very simply using:
 
-```{r residuals_plot, echo=TRUE, message=FALSE, warning=FALSE, fig.width=4.5, fig.height=4.5}
+```{r fig.width=4.5, fig.height=4.5}
 # Simple way
 plot(residuals(results))
 ```
@@ -878,7 +878,7 @@ However, note that the X-axis title is "Index". This means that the X-values her
 
 We are drawing the residuals from the 'results' object, so we can't reference the 'datum' object like we usually do. Instead we have to explicitly call the raw X-variable data. We can call an individual variable from an object in R using the money sign command: 'datum$x''. We can call'. E.g.,
 
-```{r residuals_plot_2, echo=TRUE, message=FALSE, warning=FALSE, fig.width=4.5, fig.height=4.5}
+```{r fig.width=4.5, fig.height=4.5}
 # Correct way to examine residuals plot
 plot(residuals(results) ~ datum$x)
 
@@ -896,7 +896,7 @@ We can see that (1) most of our residual points are close to the line, few are f
 
 Let's examine this for nonlinear data:
 
-```{r residuals_plot_nonlinear, echo=TRUE, message=FALSE, warning=FALSE, fig.width=4.5, fig.height=4.5}
+```{r fig.width=4.5, fig.height=4.5}
 # Correct way to examine residuals plot
 plot(residuals(resultsNonlinear) ~ nonlinear$x)
 
@@ -908,7 +908,7 @@ Clearly this is nonlinear: bunch of points below the line, then a bunch above, a
 
 Non-normal data:
 
-```{r residuals_plot_norm, echo=TRUE, message=FALSE, warning=FALSE, fig.width=4.5, fig.height=4.5}
+```{r fig.width=4.5, fig.height=4.5}
 # Correct way to examine residuals plot
 plot(residuals(resultsNorm) ~ norm$x)
 
@@ -918,7 +918,7 @@ abline(a = 0, b = 0)
 
 Notice where the regression line is! It's way down at the bottom of the graph, rather than being in the middle. This is a red flag. And then most of the noise is above the line. This suggests non-normality.
 
-```{r residuals_plot_hetero, echo=TRUE, message=FALSE, warning=FALSE, fig.width=4.5, fig.height=4.5}
+```{r fig.width=4.5, fig.height=4.5}
 # Correct way to examine residuals plot
 plot(residuals(resultsHetero) ~ hetero$x)
 
@@ -928,7 +928,7 @@ abline(a = 0, b = 0)
 
 Pretty easy to see the heteroscedasticity: small variance with small X-values, and then larger variance with larger X-values.
 
-```{r residuals_plot_auto, echo=TRUE, message=FALSE, warning=FALSE, fig.width=4.5, fig.height=4.5}
+```{r fig.width=4.5, fig.height=4.5}
 # Correct way to examine residuals plot
 plot(residuals(resultsAuto) ~ auto$x)
 
@@ -942,7 +942,7 @@ The points (residual error) are following each other! This path is a good indica
 
 The histogram of residuals will make a simple bar chart that examines '*global*' normality across all of your data. What I mean by 'global' is that it does examine normality as the X-variable increases, but lumps all the error across all X-values into a single chart.
 
-```{r resid_hist, echo=TRUE, message=FALSE, warning=FALSE, fig.width=4.5, fig.height=4.5}
+```{r fig.width=4.5, fig.height=4.5}
 # Correct way to examine residuals plot
 hist(residuals(results))
 ```
@@ -955,7 +955,7 @@ We have taken all of the residuals and examined the distribution of residuals ac
 
 Nah, not really. It never will. But what we are looking for is obvious, egregious violations of the assumption of normal error. For example, let's make this graph for the non-normal data:
 
-```{r resid_hist_nonnorm, echo=TRUE, message=FALSE, warning=FALSE, fig.width=4.5, fig.height=4.5}
+```{r fig.width=4.5, fig.height=4.5}
 # Correct way to examine residuals plot
 hist(residuals(resultsNorm))
 ```
@@ -966,7 +966,7 @@ This might be a time where you would use a 'log transformation' to fix this issu
 
 Let's examine the heteroscedastic data:
 
-```{r resid_hist_hetero, echo=TRUE, message=FALSE, warning=FALSE, fig.width=4.5, fig.height=4.5}
+```{r fig.width=4.5, fig.height=4.5}
 # Correct way to examine residuals plot
 hist(residuals(resultsHetero))
 ```
@@ -975,7 +975,7 @@ hist(residuals(resultsHetero))
 
 If you don't like the appearance of your histogram and want to adjust it, you can change the appearance of it using the 'breaks' command:
 
-```{r resid_hist_hetero_breaks, echo=TRUE, message=FALSE, warning=FALSE, fig.width=9, fig.height=4.5}
+```{r fig.width=9, fig.height=4.5}
 # Make two graphs side-by-side
 par(mfrow = c(1, 2))
 
@@ -996,7 +996,7 @@ The **autocorrelation function** measures how similar each datapoint is to the o
 - At lags of 1 or more, if there is autocorrelation, then the ACF metric will be high and positive (> 0.2) when comparing each a datapoint to points lagged behind it (i.e., high correlation to nearby data in the dataset).
 - If there is no autocorrelation, then the ACF metric will randomly be positive and negative and usually within 0.2 of 0.
 
-```{r acf_2, echo=TRUE, message=FALSE, warning=FALSE, fig.width=4.5, fig.height=4.5}
+```{r fig.width=4.5, fig.height=4.5}
 # Autocorrelation function for normal data
 acf(residuals(results)[order(datum$x)])
 ```
@@ -1012,7 +1012,7 @@ Let's examine the ACF graph a bit more. On the X-axis, we have a 'lag' in compar
 
 What does obvious autocorrelation look like...?
 
-```{r acf_3, echo=TRUE, message=FALSE, warning=FALSE, fig.width=4.5, fig.height=4.5}
+```{r fig.width=4.5, fig.height=4.5}
 # Autocorrelation function for normal data
 acf(residuals(resultsAuto)[order(auto$x)])
 ```
@@ -1023,7 +1023,7 @@ This is obvious autocorrelation. We see that each point is highly correlated wit
 
 This chart is best for testing for autocorrelation. But, I mentioned last class, that sometimes these charts can indicate autocorrelation *when data are nonlinear*:
 
-```{r acf_4, echo=TRUE, message=FALSE, warning=FALSE, fig.width=9, fig.height=4.5}
+```{r fig.width=9, fig.height=4.5}
 # Two graphs
 par(mfrow=c(1,2))
 
@@ -1032,6 +1032,9 @@ plot(y ~ x, data = nonlinear)
 
 # Autocorrelation function with correct order
 acf(residuals(resultsNonlinear)[order(nonlinear$x)])
+
+
+
 ```
 
 Remember, the autocorrelation function is comparing residuals. Is one residual similar to the residuals next to it?
@@ -1048,8 +1051,9 @@ I use these graphs to test the assumptions of linear regression model. You do ha
 
 Code to simulate the above datasets is included here:
 
-```{r simulate_data, echo=TRUE, message=FALSE, warning=FALSE}
-### Code for simulating data to be analyzed in this lecture
+```{r}
+########################## 'Truth' ############################ 
+### Code for simulating data that were analyzed in this lecture
 
 # Set the seed for reproducibility
 set.seed(123)
@@ -1126,9 +1130,5 @@ datum <- data.frame(x = x1, error = error, y = y1)
 # Save the CSV file
 write.csv(datum, "lecture_6_autocorrelated_data.csv")
 ```
-
-
-
-
 
 [--go to next lecture--](lecture_7.html)

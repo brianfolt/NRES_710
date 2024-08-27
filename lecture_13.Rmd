@@ -107,6 +107,7 @@ females <- subset(datum, Sex == "Female" & Age > 4)
 # Plot the data
 plot(Size ~ Age, data = females,
      xlim=c(0,max(datum$Age)), ylim=c(8, max(datum$Size)), pch = 1)
+
 ```
 
 And you also had a really hard time catching old males...
@@ -123,6 +124,7 @@ males$Size <- males$Size + 4
 plot(Size ~ Age, data = females,
      xlim=c(0,max(datum$Age)), ylim=c(8, max(datum$Size)), pch = 1)
 points(males$Age, males$Size, pch=2)
+
 ```
 
 Let's say I run this model:
@@ -146,6 +148,7 @@ points(males$Age, males$Size, pch=2)
 datum <- rbind(females, males)
 results <- lm(Size ~ Age, data = datum)
 abline(results)
+
 ```
 
 For these data, it would be ~horizontal across the data. This is a biased estimate. This estimate incorrectly estimates the effect of age on size of these animals.
@@ -176,6 +179,7 @@ abline(results2, lty=2)
 # lm() for females
 results3 <- lm(Size ~ Age, data = females)
 abline(results3, lty=2)
+
 ```
 
 Now, we get *unbiased* estimates of the effect of Age on Size for each Sex.
@@ -327,6 +331,7 @@ for (i in 1:s){
   # VIF for multi-variable model
   vif[i] <- car::vif(results2)["x1"]
 }
+
 ```
 
 Low values of *z* (e.g., *z* = 0.5) caused high collinearity between the X-variables, because only a little bit of noise gets added to $X_1$ to calculate $X_2$. Alternatively, high values of *z* (e.g., *z* = 20) had low collinearity, because large noise was added to $X_1$ to calculate $X_2$. In other words, the low values of *z* caused very little noise (and high collinearity) between $X_1$ and $X_2$, while the high values caused great noise (and low collinearity) between the variables.
@@ -357,6 +362,7 @@ plot(r2, vif, xlab = expression("Collinearity ("~ r^2 ~") between" ~ X[1] ~ "and
 
 # Add horizontal line for when VIF = 2
 abline(h = 2, lty = 2)
+
 ```
 
 This graph shows how VIF scores increase with increasing collinearity. 
@@ -379,6 +385,7 @@ set.seed(123); par(mar=c(4,4,0.5,1))
 
 # Plot beta1 estimate by collinearity values from the simple model
 plot(r2, simple_beta1, xlab = expression("Collinearity ("~ r^2 ~") between" ~ X[1] ~ "and" ~ X[2]), ylab = expression("Estimate of " ~ beta[1]))
+
 ```
 
 This graph shows, again, the $r^2$ between $X_1$ and $X_2$ (how correlated they are) on the X-axis, and the Y-axis shows the estimate for the beta for $X_1$. If there is no collinearity, the estimate is 3 -- which is truth! Bottom-left-hand side of the graph.
@@ -399,6 +406,7 @@ set.seed(123); par(mar=c(4,4,0.5,1))
 plot(r2, simple_se1,
      xlab = expression("Collinearity ("~ r^2 ~") between" ~ X[1] ~ "and" ~ X[2]),
     ylab = expression("SE of estimate of" ~ X[1]))
+
 ```
 
 This is where it gets a little scary. 
@@ -415,6 +423,7 @@ set.seed(123); par(mar=c(4,4,0.5,1))
 plot(r2, log(simple_p1),
      xlab = expression("Collinearity ("~ r^2 ~") between" ~ X[1] ~ "and" ~ X[2]),
      ylab = expression("P-values of estimate of" ~ X[1] ~ " (log-transformed)"))
+
 ```
 
 As uncertainty gets smaller and samller, our p-values also get smaller and smaller, because the effect of collinearity gets bigger and bigger...
@@ -440,6 +449,7 @@ plot(r2, multi_beta1, xlab = expression("Collinearity ("~ r^2 ~") between" ~ X[1
 
 # Add a horizontal line for when r^2 = 0.6
 abline(v = 0.6, lty=2)
+
 ```
 
 On the Y-axis, we have the coefficient estimate for $\beta_1$, and the X-axis is again the correlation between the two X-variables.
@@ -456,6 +466,7 @@ set.seed(123); par(mar=c(4,4,0.5,1))
 
 # Plot beta1 estimate by collinearity values from the multi-variable model
 plot(r2, multi_se1, xlab = expression("Collinearity ("~ r^2 ~") between" ~ X[1] ~ "and" ~ X[2]), ylab = expression("SE of estimate of " ~ beta[1]))
+
 ```
 
 And we see this here as well with the SE estimates. As collinearity increases, SE of the estimate increases, again suggesting increasing uncertainty due to collinearity.
@@ -466,6 +477,7 @@ set.seed(123); par(mar=c(4,4,0.5,1))
 
 # Plot beta1 estimate by collinearity values from the multi-variable model
 plot(r2, log(multi_p1), xlab = expression("Collinearity ("~ r^2 ~") between" ~ X[1] ~ "and" ~ X[2]), ylab = expression("P-value of estimate of " ~ beta[1] ~ "(log-transformed)"))
+
 ```
 
 And again, as uncertainty increases, p-values increase as well.
@@ -661,6 +673,7 @@ for (i in 1:s){
   # VIF for multi-variable model
   vif[i] <- car::vif(results3)["x1"]
 }
+
 ```
 
 Let's look at how correlation between $X_1$ and $X_2$ influences the Variance Inflation Factor.
@@ -674,6 +687,7 @@ plot(r2, vif, xlab = expression("Collinearity ("~ r^2 ~") between" ~ X[1] ~ "and
 
 # Add horizontal line for when VIF = 2
 abline(h = 2, lty = 2)
+
 ```
 
 The relationship between collinearity and Variance Inflation does not change if it's a confounding or redundant variable. Adding a redundant variable will still cause Variance Inflation, as I mentioned before.
@@ -688,6 +702,7 @@ set.seed(123); par(mar=c(4,4,0.5,1))
 
 # Plot beta1 estimate by collinearity values from the simple model
 plot(r2, simple_beta1, xlab = expression("Collinearity ("~ r^2 ~") between" ~ X[1] ~ "and" ~ X[2]), ylab = expression("Estimate of " ~ beta[1]))
+
 ```
 
 There is some variation in the parameter estimates due to random chance, but the estimates are unbiased along the gradation of correlation with the redundant, collinear variable.
@@ -700,6 +715,7 @@ set.seed(123); par(mar=c(4,4,0.5,1))
 plot(r2, simple_se1,
      xlab = expression("Collinearity ("~ r^2 ~") between" ~ X[1] ~ "and" ~ X[2]),
     ylab = expression("SE of estimate of" ~ X[1]))
+
 ```
 
 SE estimates are also unbiased and do not change due to the existence of the redundant variable.
@@ -712,6 +728,7 @@ set.seed(123); par(mar=c(4,4,0.5,1))
 plot(r2, log(simple_p1),
      xlab = expression("Collinearity ("~ r^2 ~") between" ~ X[1] ~ "and" ~ X[2]),
      ylab = expression("P-values of estimate of" ~ X[1] ~ " (log-transformed)"))
+
 ```
 
 Nor are p-values influenced!
@@ -728,6 +745,7 @@ set.seed(123); par(mar=c(4,4,0.5,1))
 
 # Plot beta1 estimate by collinearity values from the simple model
 plot(r2, simple_beta2, xlab = expression("Collinearity ("~ r^2 ~") between" ~ X[1] ~ "and" ~ X[2]), ylab = expression("Estimate of " ~ beta[2]))
+
 ```
 
 So this is interesting. When $X_2$ has low correlation with $X_1$, the effect is measured as zero -- because the two variables are not collinear, and $X_2$ truly does not have an effect. However, when correlation between $X_2$ and $X_1$ increases, all of the sudden the true effect of $X_1$ (the variable not included in the model), is now assigned to $X_2$! The stronger the relationship between X1 and X2, the more the effect of X1 is assigned to X2.
@@ -749,6 +767,7 @@ plot(r2, multi_beta1, xlab = expression("Collinearity ("~ r^2 ~") between" ~ X[1
 
 # Add line to indicate the start of variance inflation
 abline(v = 0.6, lty = 2)
+
 ```
 
 Our estimate of $X_1$ is unbiased and close to truth! But the variance increases due to the presence of the collinear, redundant variable in the model. The cone shape suggests more uncertainty due to the variance inflation and the presence of the redundant variable. With two collinear variables in the model, R has a harder time figuring out which was has the effect.
@@ -764,6 +783,7 @@ plot(r2, multi_beta2, xlab = expression("Collinearity ("~ r^2 ~") between" ~ X[1
 
 # Add line to indicate the start of variance inflation
 abline(v = 0.6, lty = 2)
+
 ```
 
 It estimates the effect of the redundant variable to be zero! As collinearity increases, the estimate remains unbiased and correct at around zero -- although the variance inflation again causes less certainty in the estimate, on average. 
@@ -809,7 +829,7 @@ Let's examine some data I simulated in R. The dataset is located [here](lecture_
 
 These data are similar to the Age, Sex, and Size data we simulated for last class. There is no collinearity between Age and Sex. However, now there are two additional X-variables, MotherSize and FatherSize, and both of those variables are a function of Age. All of these variables influence size, so they are all examples of <u>confounding variables</u>.
 
-```{r analysis_1, echo=TRUE, message=FALSE, warning=FALSE, fig.height=4.5, fig.width=4.5}
+```{r fig.height=4.5, fig.width=4.5}
 par(mar=c(4,4,0,0))
 
 # Read in the data
@@ -820,6 +840,7 @@ head(datum, 10)
 
 # Plot the data
 plot(Size ~ Age, data = datum)
+
 ```
 
 It's useful to write Truth up on the white board so that we can refer back to that while running the analysis in R...
@@ -834,18 +855,20 @@ Truth:
 
 We want to start by testing if there is collinearity among our data. The easiest way to do this is by running linear models among our X-variables.
 
-```{r analysis_2, echo=TRUE, message=FALSE, warning=FALSE, fig.height=4.5, fig.width=4.5}
+```{r fig.height=4.5, fig.width=4.5}
 # Run lm() for different pairs of X-variables
 results <- lm(Age ~ Sex, data = datum)
 summary(results)
+
 ```
 
 The p-value is high (non-significant) and $r^2$ value is low, suggesting there is no collinearity. (And there isn't, because I didn't simulate there to be any.)
 
-```{r analysis_3, echo=TRUE, message=FALSE, warning=FALSE, fig.height=4.5, fig.width=4.5}
+```{r fig.height=4.5, fig.width=4.5}
 # Run lm() for different pairs of X-variables
 results <- lm(Age ~ MotherSize, data = datum)
 summary(results)
+
 ```
 
 $r^2$ is now 0.874 -- definitely collinearity here! (And we know this to be the case.)
@@ -857,7 +880,7 @@ However, an alternative way to do this is to create a 'correlation matrix' using
 - 'cor()' won't work for our dataframe, because it requires all continuous variables and Sex is a categorical variable. So drop Sex and Size.
 - This will run a simple 'lm()' between all pairs of X-variables and calculate *r* value for each pair (measure of correlation)
 
-```{r analysis_4, echo=TRUE, message=FALSE, warning=FALSE, fig.height=4.5, fig.width=4.5}
+```{r fig.height=4.5, fig.width=4.5}
 # Create new dataframe without categorical Sex
 datum2 <- subset(datum, select = -Sex)
 datum2 <- subset(datum2, select = -Size)
@@ -867,6 +890,7 @@ head(datum2)
 
 # Correlation matrix - runs a simple 'lm()' between each pair of X-variables
 cor(datum2)
+
 ```
 
 [Squaring this would produce the usual $r^2$ metric we are familiar with.]
@@ -875,63 +899,72 @@ This is a quick-and-easy way to assess correlation between X-variables.
 
 Another way is to run a full linear model with all of the X-variables and ask for the Variance Inflation Factors! The VIF function exists in the package 'car', which you will have to download to your computer one time. It has a lot of 'dependencies' (other necessary R packages) that will have to be downloaded...
 
-```{r analysis_5, echo=TRUE, message=FALSE, warning=FALSE, fig.height=4.5, fig.width=4.5}
+```{r fig.height=4.5, fig.width=4.5}
 # Download 'car' by uncommenting this next line and running it through your console
 # install.packages("car", dependencies=TRUE)
+
 ```
 
 Now we can fit a linear model with all X-variables and then run the VIF function.
 
-```{r analysis_6, echo=TRUE, message=FALSE, warning=FALSE, fig.height=4.5, fig.width=4.5}
+```{r fig.height=4.5, fig.width=4.5}
 # Full linear model with all X-variables
 results <- lm(Size ~ Age + Sex + MotherSize + FatherSize, data = datum)
 
 # Use the VIF function from 'car'
 # using 'car::vif()' will tell R to call the function 'vif()' from the package 'car' specifically
 car::vif(results)
+
 ```
 
 These are the Variance Inflation Factors for each X-variable. These effects describe how much (in *times*) the variance of each variable increased due to collinearity. So, the variance of Age was 17 times increased what it would have been in the absence of collinearity...
 
-```{r analysis_7, echo=TRUE, message=FALSE, warning=FALSE, fig.height=4.5, fig.width=4.5}
+```{r fig.height=4.5, fig.width=4.5}
 # Square-root this to get VIF in terms of Standard Error
 car::vif(results)^0.5
+
 ```
 
 SE of Age is 4 times larger than what it would have been without collinearity. Sex is not influenced (times ~1), but the SE and 95% CI are 4 or 3 times larger than what would happen without collinearity. 
 
 Note: the VIF is the variance inflation due to collinearity of all other variables combined. So collinearity with multiple other X-variables can contribute to variance inflation of each variable.
 
-```{r analysis_8, echo=TRUE, message=FALSE, warning=FALSE, fig.height=4.5, fig.width=4.5}
+```{r fig.height=4.5, fig.width=4.5}
 # Simple linear model of Size ~ Age
 results <- lm(Size ~ Age, data = datum)
 summary(results)
+
 ```
 
 This estimate is wrong -- not close to truth -- and the confidence intervals are small.The effect size and confidence intervals were misleading because we did not account for confounding variables!
 
-```{r analysis_9, echo=TRUE, message=FALSE, warning=FALSE, fig.height=4.5, fig.width=4.5}
+```{r fig.height=4.5, fig.width=4.5}
 # Simple linear model of Size ~ MotherSize
 results <- lm(Size ~ MotherSize, data = datum)
 summary(results)
+
 ```
 
 Again, same problem here.
 
-```{r analysis_10, echo=TRUE, message=FALSE, warning=FALSE, fig.height=4.5, fig.width=4.5}
+```{r fig.height=4.5, fig.width=4.5}
 # Simple linear model of Size ~ MotherSize
 results <- lm(Size ~ Age + MotherSize, data = datum)
 summary(results)
+
 ```
 
 Truth for Age is 1.5, so this is closer -- but the 95% CI around this estimate of age still do not overlap truth. And MotherSize is not significant, which it should be.
 
 Last, the full model with all of the confounding variables:
 
-```{r analysis_11, echo=TRUE, message=FALSE, warning=FALSE, fig.height=4.5, fig.width=4.5}
+```{r fig.height=4.5, fig.width=4.5}
 # Simple linear model of Size ~ MotherSize
 results <- lm(Size ~ Age + Sex + MotherSize + FatherSize, data = datum)
 summary(results)
+
+
+
 ```
 
 We now get unbiased estimates that overlap with truth, and all estimates are ~significant. MotherSize is narrowly insigificant, but it's CI overlap truth. And the p-value for the whole model is highly significant.
@@ -945,8 +978,10 @@ We now get unbiased estimates that overlap with truth, and all estimates are ~si
 
 ## Truth
 
-```{r collinearity_simulation, echo=TRUE, message=FALSE, warning=FALSE}
-### Lecture 13: code to simulate collinear data and to demonstrate how failing to account for collinearity influences estimates and uncertainty
+```{r}
+################################ 'Truth' ################################### 
+### Lecture 13: code to simulate collinear data and to demonstrate how
+### failing to account for collinearity influences estimates and uncertainty
 
 ## Simulation Exercise 1
 

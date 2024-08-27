@@ -448,7 +448,7 @@ It's not enough to report the slope... we can also benefit from reporting $r^2$ 
 
 Let's try this with our results from last class.
 
-```{r regression_example, echo=TRUE, message=FALSE, warning=FALSE}
+```{r}
 # Set the seed for reproducibility
 set.seed(123)
 
@@ -479,6 +479,7 @@ summary(results)
 confint(results)
 # These are actually the confidence limits! Annoying
 # How do we calculate the confidence intervals
+
 ```
 
 **For each 1 cm increase in precipitation, we observed a 2.81 kg/ha ...** -- but where are the confidence intervals??
@@ -487,10 +488,11 @@ confint(results)
 
 - (Sidenote: technically, usual scientific convention involved reporting significant digits according to precision in the sampling... Maybe you remember this from chemistry class? But we often don't know that in ecology, so we can be more relaxed about this here.)
 
-```{r regression_example_2, echo=TRUE, message=FALSE, warning=FALSE}
+```{r}
 # Print the confidence intervals
 confint(results)
 # These are actually the confidence limits! Annoying
+
 ```
 
 These are actually the confidence limits! This is annoying.
@@ -502,9 +504,10 @@ These are actually the confidence limits! This is annoying.
 - 3) Upper limit minus lower limit divided by two
 - Use whichever one makes most sense to you. I frequently use (3), but don't forget to divide by two! Also, be careful with negative values...
 
-```{r regression_example_3, echo=TRUE, message=FALSE, warning=FALSE}
+```{r}
 (3.071 - 2.556) / 2
 3.071 - 2.814
+
 ```
 
 **For each 1 cm increase in precipitation, we observed a 2.81 kg/ha (+/-0.25; 95% CI) increase in biomass, which was statistically significant (p < 2x10^-16; $r^2$ = 0.95).**

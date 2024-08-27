@@ -367,19 +367,16 @@ div.tocify {
       <a href="lecture_11.html">Analysis with Continuous or Categorical X?</a>
     </li>
     <li>
-      <a href="LECTURE8.html">GLM</a>
+      <a href="lecture_12.html">Multi-variable Modeling</a>
     </li>
     <li>
-      <a href="LECTURE9.html">GLMM</a>
+      <a href="lecture_13.html">Multi-variable Modeling - collinearity</a>
     </li>
     <li>
-      <a href="LECTURE10.html">Machine Learning</a>
+      <a href="lecture_14.html">Multi-variable Modeling - interactions</a>
     </li>
     <li>
-      <a href="GIT_tutorial.html">Intro to GIT</a>
-    </li>
-    <li>
-      <a href="LECTURE11.html">Next steps</a>
+      <a href="lecture_15.html">Generalized Linear Models</a>
     </li>
   </ul>
 </li>
@@ -401,6 +398,18 @@ div.tocify {
     </li>
     <li>
       <a href="exercise_4.html">Exercise 4 - Analysis of Categorical Data</a>
+    </li>
+    <li>
+      <a href="exercise_5.html">Exercise 5 - Multi-variable Analysis</a>
+    </li>
+    <li>
+      <a href="exercise_6.html">Exercise 6 - TBD</a>
+    </li>
+    <li>
+      <a href="exercise_7.html">Exercise 7 - TBD</a>
+    </li>
+    <li>
+      <a href="exercise_8.html">Exercise 8 - TBD</a>
     </li>
   </ul>
 </li>
@@ -431,7 +440,7 @@ div.tocify {
 <h1 class="title toc-ignore">Exercise 4: Analysis of Categorical
 Data</h1>
 <h4 class="author">NRES 710</h4>
-<h4 class="date">Last compiled: 2024-08-05</h4>
+<h4 class="date">Last compiled: 2024-08-27</h4>
 
 </div>
 
@@ -530,8 +539,87 @@ relationship between Biomass and Fertilizer?</p></li>
 <div id="truth" class="section level2">
 <h2>Truth</h2>
 <p>If you would like to know the values used to create these datasets
-(i.e., ‘truth’), download and examine this <a href="exercise_4.R">R
-script</a>.</p>
+(i.e., ‘truth’), see the code here:</p>
+<pre class="r"><code>### &#39;Truth&#39;
+### Exercise 4: code to simulate datasets 
+
+# Set the seed for reproducibility
+set.seed(123)
+
+## Dataset 1
+# Simulate X-variable
+n &lt;- 50
+Group &lt;- factor(c(rep(&quot;Control&quot;, n/2), rep(&quot;Exclusion&quot;, n/2)))
+Exclusion &lt;- c(rep(0, n/2), rep(1, n/2))
+
+# Simulate error
+error &lt;- rnorm(n, mean = 0, sd = 1)
+
+# Calculate Y-variable
+Density &lt;- 5 + 2.5 * Exclusion + error
+
+# Create dataframe
+datum &lt;- data.frame(Group, Exclusion, Density)
+
+# Save the CSV file
+write.csv(datum, &quot;exercise_4_dataset1.csv&quot;)
+
+
+## Dataset 2
+# Simulate X-variable
+Habitat &lt;- c(rep(&quot;Agriculture&quot;, 10), rep(&quot;ClosedPine&quot;, 10), rep(&quot;OpenPine&quot;, 10), rep(&quot;Sagebrush&quot;, 10))
+dummy &lt;- data.frame(model.matrix(~ Habitat - 1))
+colnames(dummy) &lt;- c(&quot;Agriculture&quot;, &quot;ClosedPine&quot;, &quot;OpenPine&quot;, &quot;Sagebrush&quot;)
+
+# Simulate error
+Error &lt;- rnorm(length(Habitat), 0, 0.1)
+
+# Predict Y
+QuailDensity &lt;- 0.85 - 0.25 * dummy$ClosedPine - 0.35 * dummy$OpenPine - 0.15 * dummy$Sagebrush + Error
+
+# Dataframe
+datum &lt;- data.frame(Habitat, QuailDensity)
+
+# Save the CSV file
+write.csv(datum, &quot;exercise_4_dataset2.csv&quot;)
+
+
+## Dataset 3
+# Simulate X-variable
+Hunt &lt;- as.factor(c(rep(&quot;Archery&quot;, 15), rep(&quot;Muzzleloader&quot;, 15), rep(&quot;Rifle&quot;, 15)))
+dummy &lt;- data.frame(model.matrix(~ Hunt - 1))
+colnames(dummy) &lt;- c(&quot;Archery&quot;, &quot;Muzzleloader&quot;, &quot;Rifle&quot;)
+
+# Error
+error &lt;- rnorm(length(Hunt), 0, 0.1)
+
+# Success
+Success &lt;- abs(0.12 + 0.45 * dummy$Muzzleloader + 0.6 * dummy$Rifle + error)
+
+# Dataframe
+datum &lt;- data.frame(Hunt, Success)
+
+# Save the CSV file
+write.csv(datum, &quot;exercise_4_dataset3.csv&quot;)
+
+
+## Dataset 4
+# x-variable
+Fertilizer &lt;- factor(sort(rep((0:5)*2, 5)))
+dummy &lt;- data.frame(model.matrix(~ Fertilizer - 1))
+colnames(dummy) = c(&quot;Zero&quot;, &quot;Two&quot;, &quot;Four&quot;, &quot;Six&quot;, &quot;Eight&quot;, &quot;Ten&quot;)
+
+# Error
+Error &lt;- rnorm(length(Fertilizer), mean = 0, sd = 1)
+
+# y-variable
+Biomass &lt;- 1.5 + 3.5 * dummy$Two + 5.25 * dummy$Four + 5.25 * dummy$Six + 4 * dummy$Eight + 0.25 * dummy$Ten + Error
+
+# Dataframe
+datum &lt;- data.frame(Fertilizer, Biomass)
+
+# Save only the first two columns in the CSV file
+write.csv(datum, &quot;exercise_4_dataset4.csv&quot;)</code></pre>
 <p><a href="exercise_5.html">–go to next exercise–</a></p>
 </div>
 

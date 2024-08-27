@@ -440,7 +440,7 @@ div.tocify {
 <h1 class="title toc-ignore">Exercise 5: Multivariable Analysis and
 Collinearity</h1>
 <h4 class="author">NRES 710</h4>
-<h4 class="date">Last compiled: 2024-08-22</h4>
+<h4 class="date">Last compiled: 2024-08-27</h4>
 
 </div>
 
@@ -591,8 +591,97 @@ Folt).</p>
 <div id="truth" class="section level2">
 <h2>Truth</h2>
 <p>If you would like to know the values used to create these datasets
-(i.e., ‘truth’), download and examine this <a href="exercise_5.R">R
-script</a>.</p>
+(i.e., ‘truth’), examine the code here:</p>
+<pre class="r"><code>########################## &#39;Truth&#39; ############################# 
+### Exercise 5: code to simulate datasets for the exploration of
+### collinearity in multi-variable analysis
+
+# Set the seed for reproducibility
+set.seed(123)
+
+## Dataset 1
+# Sample size
+n &lt;- 90
+
+# Simulate X-variables
+# Continuous variables: Latitude and Elevation
+Latitude &lt;- runif(n, 0, 1) * 5 + 37
+Elevation &lt;- runif(n, 0, 1) * 1000 + 2000
+
+# Categorical variable: State
+g &lt;- 3 # number of groups
+State &lt;- factor(c(rep(&quot;Colorado&quot;, n/g), rep(&quot;Nevada&quot;, n/g), rep(&quot;Utah&quot;, n/g)))
+
+# Dummy-code the States
+dummy &lt;- data.frame(model.matrix(~ State - 1))
+colnames(dummy) &lt;- c(&quot;Colorado&quot;, &quot;Nevada&quot;, &quot;Utah&quot;)
+
+# Error
+Error &lt;- rnorm(n, mean = 0, sd = 1)
+
+# Response variable: Size
+Size &lt;- 45 - 0.95*Latitude - 0.00167*Elevation + 2*dummy$Nevada + 1*dummy$Utah + Error
+
+# Create dataframe
+datum &lt;- data.frame(Latitude=Latitude, Elevation=Elevation, Nevada=dummy$Nevada,
+                    Utah=dummy$Utah, Size=Size)
+
+# Save the CSV file
+write.csv(datum, &quot;exercise_5_dataset1.csv&quot;)
+
+
+## Dataset 2
+# Sample size
+n &lt;- 100
+
+# Simulate two continuous X-variables
+Cover &lt;- runif(n, 0, 1)
+Food &lt;- 3 + 3*Cover + rnorm(n, 0, 0.5)
+
+# Error
+Error &lt;- rnorm(n, mean = 0, sd = 0.1)
+
+# Response variable: Density
+MarmotDensity &lt;- 0.01 + 3*Cover + 2*Food + Error
+
+# Create dataframe
+datum &lt;- data.frame(Cover = Cover, Food = Food, MarmotDensity = MarmotDensity)
+
+# Save the CSV file
+write.csv(datum, &quot;exercise_5_dataset2.csv&quot;)
+
+
+## Dataset 3
+# Sample size
+n &lt;- 100
+
+# X-variables
+# The &#39;true&#39; X-variable: RunOff
+RunOff &lt;- runif(n, 0, 100)
+
+# Collinear X-variables
+Sediment &lt;- matrix(NA, n, 1)
+for (i in 1:n){
+  # Each sediment value is simulated using the mean of the RunOff value with a bit of noise (3)
+  Sediment[i] &lt;- rnorm(1, RunOff[i], 3)
+}
+Organic &lt;- matrix(NA, n, 1)
+for (i in 1:n){
+  # Each organic matter value is simulated using the mean of RunOff with a lot of noise (15)
+  Organic[i] &lt;- rnorm(1, RunOff[i], 15)
+}
+
+# Error
+Error &lt;- rnorm(n, 0, 2)
+
+# Response variable
+Clarity &lt;- 50 - 0.4 * RunOff + Error
+
+# Dataframe
+datum &lt;- data.frame(Sediment, Organic, Clarity)
+
+# Save the CSV file
+write.csv(datum, &quot;exercise_5_dataset3.csv&quot;)</code></pre>
 <p><a href="exercise_6.html">–go to next exercise–</a></p>
 </div>
 

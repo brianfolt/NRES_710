@@ -75,9 +75,10 @@ Picture: Ted Floyd
 
 ## Truth
 
-If you would like to know the values used to create these datasets (i.e., 'truth'), download and examine this [R script](exercise_4.R).
+If you would like to know the values used to create these datasets (i.e., 'truth'), see the code here:
 
-```{r datasets, echo=FALSE, message=FALSE, warning=FALSE}
+```{r datasets, echo=TRUE, message=FALSE, warning=FALSE}
+### 'Truth'
 ### Exercise 4: code to simulate datasets 
 
 # Set the seed for reproducibility

@@ -23,9 +23,7 @@ knitr::opts_chunk$set(
 
 ## EXERCISE 1: Data summaries and custom functions
 
-Please submit your responses to all questions below via WebCampus (text box submission) on the date indicated (see WebCampus).  
-
-If you are new to R or would like a refresher, some university faculty held an R workshop last spring last spring. The material is all hosted [here](https://kevintshoemaker.github.io/R-Bootcamp/). You can work through the modules at your own pace:
+If you are new to R or would like a refresher, some university faculty held an R workshop last spring. The material is all hosted [here](https://kevintshoemaker.github.io/R-Bootcamp/). You can work through the modules at your own pace:
 
 * [Working with data objects](https://kevintshoemaker.github.io/R-Bootcamp/module1_1.html)    
 * [Managing data](https://kevintshoemaker.github.io/R-Bootcamp/module1_2.html)   
@@ -36,6 +34,7 @@ This material would help you gain more capacity at working in R; review at your 
 ### Background: custom functions
 
 Let’s look at the syntax of a custom R function:
+
 ```
 f <- function( <arguments>){ 
   ## Do something interesting 
@@ -74,7 +73,7 @@ Please note that these assignments are not formal exams -- you are encouraged to
 
 ### Part 1: Sample variance
 
-Using the formula [here](LECTURE2.html) (see "summary metrics" section) and reproduced below, write a function that computes the **sample variance** of any arbitrary data vector. Use this function to compute the sample variance for the "height" column in the "trees" dataset built into base R. Compare your answer with the results from using the `var()` function -- a built-in function from base R. Your submission should include (1) the function code, (2) a command (line of code) using your function to compute the sample variance of the "height" column, and (3) a test using the `var()` function to compute the same thing.  
+Using the formula below, write a function that computes the **sample variance** of any arbitrary data vector. Use this function to compute the sample variance for the "height" column in the "trees" dataset built into base R. Compare your answer with the results from using the `var()` function -- a built-in function from base R. Your submission should include (1) the function code, (2) a command (line of code) using your function to compute the sample variance of the "height" column, and (3) a test using the `var()` function to compute the same thing.  
 
 Here's the formula: $s^2 = \sum_{n=1}^{i}{\frac{(x_i-\bar{x})^2}{(N-1)}}$
 

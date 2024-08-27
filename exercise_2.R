@@ -19,7 +19,7 @@ y <- abs(0.1 + 2 * x + error) # abs() gets rid of negative numbers drawn by chan
 datum <- data.frame(PreyFrogs = x, Spiders = y)
 
 # Save the CSV file
-write.csv(datum, "exercise2_dataset1.csv")
+write.csv(datum, "exercise_2_dataset1.csv")
 
 ## Dataset 2
 
@@ -37,7 +37,7 @@ y <- abs(20 - 0.001 * x + error) # abs() gets rid of negative numbers drawn by c
 datum <- data.frame(Elevation = x, Size = y)
 
 # Save the CSV file
-write.csv(datum, "exercise2_dataset2.csv")
+write.csv(datum, "exercise_2_dataset2.csv")
 
 ## Dataset 3
 
@@ -55,4 +55,4 @@ Time <- round(rep(360, n) + error, 0)
 datum <- data.frame(Predators = Predators, Time = Time)
 
 # Save the CSV file
-write.csv(datum, "exercise2_dataset3.csv")
+write.csv(datum, "exercise_2_dataset3.csv")

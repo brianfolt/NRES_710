@@ -367,19 +367,16 @@ div.tocify {
       <a href="lecture_11.html">Analysis with Continuous or Categorical X?</a>
     </li>
     <li>
-      <a href="LECTURE8.html">GLM</a>
+      <a href="lecture_12.html">Multi-variable Modeling</a>
     </li>
     <li>
-      <a href="LECTURE9.html">GLMM</a>
+      <a href="lecture_13.html">Multi-variable Modeling - collinearity</a>
     </li>
     <li>
-      <a href="LECTURE10.html">Machine Learning</a>
+      <a href="lecture_14.html">Multi-variable Modeling - interactions</a>
     </li>
     <li>
-      <a href="GIT_tutorial.html">Intro to GIT</a>
-    </li>
-    <li>
-      <a href="LECTURE11.html">Next steps</a>
+      <a href="lecture_15.html">Generalized Linear Models</a>
     </li>
   </ul>
 </li>
@@ -401,6 +398,18 @@ div.tocify {
     </li>
     <li>
       <a href="exercise_4.html">Exercise 4 - Analysis of Categorical Data</a>
+    </li>
+    <li>
+      <a href="exercise_5.html">Exercise 5 - Multi-variable Analysis</a>
+    </li>
+    <li>
+      <a href="exercise_6.html">Exercise 6 - TBD</a>
+    </li>
+    <li>
+      <a href="exercise_7.html">Exercise 7 - TBD</a>
+    </li>
+    <li>
+      <a href="exercise_8.html">Exercise 8 - TBD</a>
     </li>
   </ul>
 </li>
@@ -430,7 +439,7 @@ div.tocify {
 
 <h1 class="title toc-ignore">Exercise 2: Linear Regression</h1>
 <h4 class="author">NRES 710</h4>
-<h4 class="date">Last compiled: 2024-08-05</h4>
+<h4 class="date">Last compiled: 2024-08-27</h4>
 
 </div>
 
@@ -451,7 +460,8 @@ the data.</p>
 sentence and one graph for each of the three problems; I don’t need
 anything else. Load this into the WebCampus assignment portal and submit
 it by the due date indicated in the course schedule.</p>
-<p><strong><a href="exercise_2_dataset1.csv">Dataset 1</a></strong></p>
+<div id="dataset-1" class="section level3">
+<h3><a href="exercise_2_dataset1.csv">Dataset 1</a></h3>
 <p>In this dataset, you are interested in examining the relationship
 between the density of <em>Ctenus</em> sp. (wandering spiders;
 y-variable – spiders / sq. meter) as a function of the density of small
@@ -465,7 +475,9 @@ What is the relationship between frog and spider density?</p>
 <p><img src="pic_spider_frog.png" style="width:50.0%" /></p>
 <p>Picture: Witold Lapinski</p>
 <p><br></p>
-<p><strong><a href="exercise_2_dataset2.csv">Dataset 2</a></strong></p>
+</div>
+<div id="dataset-2" class="section level3">
+<h3><a href="exercise_2_dataset2.csv">Dataset 2</a></h3>
 <p>In this dataset, you are testing the relationship between the size of
 a particular orchid flower (y-variable; diameter in cm) as a function of
 the elevation it is growing in the Andes Mountains in Peru (x-variable;
@@ -479,7 +491,9 @@ the scaling factor that you choose to use.</p>
 <p><img src="pic_orchid.png" style="width:50.0%" /></p>
 <p>Picture: Chen Shu (iNaturalist)</p>
 <p><br></p>
-<p><strong><a href="exercise_2_dataset3.csv">Dataset 3</a></strong></p>
+</div>
+<div id="dataset-3" class="section level3">
+<h3><a href="exercise_2_dataset3.csv">Dataset 3</a></h3>
 <p>Palmer’s chipmunks (<em>Neotamias palmeria</em>) is an endemic
 species of chipmunk that occurs in sky-island habitats in southern
 Nevada. In this dataset, you are interested in the relationship between
@@ -493,13 +507,71 @@ which is Y.</p>
 <p><img src="pic_chipmunk.png" style="width:50.0%" /></p>
 <p>Picture: Jason M Crockwell (iNaturalist)</p>
 <p><br></p>
-<div id="truth" class="section level3">
-<h3>Truth</h3>
-<p>If you would like to know the values used to create these datasets
-(i.e., ‘truth’), download and examine this <a href="exercise_2.R">R
-script</a>.</p>
-<p><a href="exercise_3.html">–go to next exercise–</a></p>
 </div>
+</div>
+<div id="truth" class="section level2">
+<h2>Truth</h2>
+<p>If you would like to know the values used to create these datasets
+(i.e., ‘truth’), examine the R code here:</p>
+<pre class="r"><code>### Exercise 2: code to simulate datasets 
+
+# Set the seed for reproducibility
+set.seed(123)
+
+## Dataset 1
+
+# Simulate X-variable
+n &lt;- 40
+x &lt;- runif(n, 0, 1) * 0.5
+
+# Simulate error
+error &lt;- rnorm(n, mean = 0, sd = 0.4)
+
+# Calculate Y-variable
+y &lt;- abs(0.1 + 2 * x + error) # abs() gets rid of negative numbers drawn by chance
+
+# Create dataframe
+datum &lt;- data.frame(PreyFrogs = x, Spiders = y)
+
+# Save the CSV file
+write.csv(datum, &quot;exercise_2_dataset1.csv&quot;)
+
+## Dataset 2
+
+# Simulate X-variable
+n &lt;- 480
+x &lt;- round(runif(n, 50, 3000), 0)
+
+# Simulate error
+error &lt;- rnorm(n, mean = 0, sd = 5)
+
+# Calculate Y-variable
+y &lt;- abs(20 - 0.001 * x + error) # abs() gets rid of negative numbers drawn by chance
+
+# Create dataframe
+datum &lt;- data.frame(Elevation = x, Size = y)
+
+# Save the CSV file
+write.csv(datum, &quot;exercise_2_dataset2.csv&quot;)
+
+## Dataset 3
+
+# Simulate the X-variable
+n &lt;- 140
+Predators &lt;- runif(n, 0, 1) * 20
+
+# Simulate the error
+error &lt;- rnorm(n, mean = 0, sd = 120)
+
+# Simulate Y-variable
+Time &lt;- round(rep(360, n) + error, 0)
+
+# Create dataframe
+datum &lt;- data.frame(Predators = Predators, Time = Time)
+
+# Save the CSV file
+write.csv(datum, &quot;exercise_2_dataset3.csv&quot;)</code></pre>
+<p><a href="exercise_3.html">–go to next exercise–</a></p>
 </div>
 
 

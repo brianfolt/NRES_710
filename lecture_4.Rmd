@@ -409,12 +409,11 @@ Let's consider two continuous variables, precipitation and biomass. Our hypothes
 
 Let's now simulate data, so that we know what 'Truth' is.
 
-```{r regression_example, echo=TRUE, message=FALSE, warning=FALSE}
+```{r}
+### To learn regression in R, let's simulate data so we know what 'Truth' is
+
 # Set the seed for reproducibility
 set.seed(123)
-
-# Adjust margins
-par(mar = c(4, 4, 1, 1))
 
 # Simulate a continuous predictor variable, precipitation
 n <- 30
@@ -441,16 +440,18 @@ datum <- data.frame(precip = precip, y_hat = y_hat, error = error, biomass = bio
 
 # First thing we should do when starting an analysis is.. look at our data!
 plot(biomass ~ precip, data = datum)
+
 ```
 
 The function we will be using for the rest of the semester to fit linear regression and many other statistical tests is... the linear model, 'lm()'!
 
 You can learn more about 'lm()' in R by reviewing the help files:
 
-```{r help, echo=TRUE, message=FALSE, warning=FALSE}
+```{r}
 # Ask R for information about how 'lm()' works
 help(lm)
 ?lm()
+
 ```
 
 Let's examine the 'lm()' documentation in R. Take a look at that.
@@ -463,12 +464,13 @@ R will automatically put an intercept into your model, so you don't have to spec
 
 Since we have defined all of our variables in R using code, we can fit the model just by calling those variable objects:
 
-```{r biomass_plot, echo=TRUE, message=FALSE, warning=FALSE}
+```{r}
 # Fit the linear model
 results <- lm(biomass ~ precip, data = datum)
 
 # Examine the results
 summary(results)
+
 ```
 
 In this class, I will refer to analysis outputs as 'results' and analysis data as 'datum'. I do this to be consistent, avoid confusion with code in our analysis, and avoid confusion with other functions in R (e.g., the 'data()' function).
@@ -498,7 +500,7 @@ There is other information below that people often don’t pay attention to, but
 - $R^2$ and confidence intervals; we will discuss these more in future classes.
 - P-value for the whole-model. Since there is only one parameter in the statistical model, the p-value for the entire model is the same as the p-value for the precipitation parameter.
 
-```{r examine-results, echo=TRUE, message=FALSE, warning=FALSE}
+```{r}
 # Plot the data with the line of best fit
 plot(biomass ~ precip)
 abline(results)

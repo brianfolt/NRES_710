@@ -335,7 +335,7 @@ Let's briefly examine truth. We can peak at the code I used to simulate it.
 
 Here is the [dataset(s) of interest](lecture_11_dataset1.csv)
 
-```{r example-analysis, echo=TRUE, message=FALSE, warning=FALSE, fig.height=4.5, fig.width=4.5}
+```{r fig.height=4.5, fig.width=4.5}
 ### Code for F-Drop tests
 
 # Read in the data
@@ -376,6 +376,7 @@ anova(results2, results)
 # A significant p-value means the more complex model is a significant improvement in fit
 # A non-significant p-value means the simpler model is adequate
 # Note: RSS (which is the same thing as SSE) is always lower in the more complex model
+
 ```
 
 The F-drop tests compares the residual sum of squares (RSS) of the two models and asks: how much does the sum of squares change when we add all those variables? Does it change a lot, such that there is a significant improvement in fit? Or did it not really decrease that much error?
@@ -394,13 +395,14 @@ As always, the limitations of p-values apply here: sample sizes, effect sizes, e
 
 Now, let's consider another scenario. What if our data really looked like the second example from above? Here is the [dataset(lecture_11_dataset2.csv).
 
-```{r stripplot-4, echo=TRUE, message=FALSE, warning=FALSE, fig.height=3.5, fig.width=4.5}
+```{r fig.height=3.5, fig.width=4.5}
 # Read in the data
 datum <- read.csv("lecture_11_dataset2.csv")
 head(datum)
 
 # Plot the data
 plot(Biomass ~ Bison, data = datum)
+
 ```
 
 We know that fitting a line to this data is not a good fit, and we also know that a categorical approach would also fit this data pretty well.
@@ -417,7 +419,7 @@ One of the easiest ways to fit a non-linear line to your data is using a **quadr
 
 Notice that this curve has the advantage of **no assumption of linearity** and also doesn't use nearly as many betas as treating X as categorical. In those ways, it is a good compromise between the two options we have discussed so far.
 
-```{r example-analysis-2, echo=TRUE, message=FALSE, warning=FALSE, fig.height=4.5, fig.width=4.5}
+```{r fig.height=4.5, fig.width=4.5}
 # BONUS: How to fit a quadratic curve to data when x is continuous
 
 # Fit a linear model
@@ -426,6 +428,7 @@ results <- lm(Biomass ~ Bison, data = datum)
 #Fit a quadratic curve to data when x is continuous
 results3 <- lm(Biomass ~ Bison + I(Bison^2), data = datum)
 anova(results3, results)
+
 ```
 
 The quadratic model is the more complicated model here, because it has more parameters than the linear model.
@@ -458,13 +461,16 @@ An F-drop test evaluates whether $\beta_1$ is significantly different from zero.
 
 In truth, this is what the p-value from our simple linear regression analysis is evaluating!
 
-```{r example-analysis-3, echo=TRUE, message=FALSE, warning=FALSE, fig.height=4.5, fig.width=4.5}
+```{r fig.height=4.5, fig.width=4.5}
 # Read in dataset 1
 datum <- read.csv("lecture_11_dataset1.csv")
 
 # Simple linear model
 results <- lm(Biomass ~ Bison, data = datum)
 summary(results)
+
+
+
 ```
 
 This p-value is called a **marginal p-value** and is asking whether or how much that additional parameter marginally improves the fit to the data beyond the simpler model without that variable. (This is also called Type III Sum of Squares). It is essentially an F-drop test that is built into our linear model. 
@@ -479,7 +485,8 @@ Next class, we will explore more situations around this topic.
 
 Here is code to simulate the data we analyzed in this lecture.
 
-```{r f_drop_tests, echo=TRUE, message=FALSE, warning=FALSE}
+```{r}
+###################### 'Truth' ######################## 
 ### Lecture 11: code to simulate data for F-drop tests 
 
 # Set the seed for reproducibility

@@ -367,19 +367,16 @@ div.tocify {
       <a href="lecture_11.html">Analysis with Continuous or Categorical X?</a>
     </li>
     <li>
-      <a href="LECTURE8.html">GLM</a>
+      <a href="lecture_12.html">Multi-variable Modeling</a>
     </li>
     <li>
-      <a href="LECTURE9.html">GLMM</a>
+      <a href="lecture_13.html">Multi-variable Modeling - collinearity</a>
     </li>
     <li>
-      <a href="LECTURE10.html">Machine Learning</a>
+      <a href="lecture_14.html">Multi-variable Modeling - interactions</a>
     </li>
     <li>
-      <a href="GIT_tutorial.html">Intro to GIT</a>
-    </li>
-    <li>
-      <a href="LECTURE11.html">Next steps</a>
+      <a href="lecture_15.html">Generalized Linear Models</a>
     </li>
   </ul>
 </li>
@@ -401,6 +398,18 @@ div.tocify {
     </li>
     <li>
       <a href="exercise_4.html">Exercise 4 - Analysis of Categorical Data</a>
+    </li>
+    <li>
+      <a href="exercise_5.html">Exercise 5 - Multi-variable Analysis</a>
+    </li>
+    <li>
+      <a href="exercise_6.html">Exercise 6 - TBD</a>
+    </li>
+    <li>
+      <a href="exercise_7.html">Exercise 7 - TBD</a>
+    </li>
+    <li>
+      <a href="exercise_8.html">Exercise 8 - TBD</a>
     </li>
   </ul>
 </li>
@@ -431,7 +440,7 @@ div.tocify {
 <h1 class="title toc-ignore">Exercise 1: Data Summary Functions in
 R</h1>
 <h4 class="author">NRES 710</h4>
-<h4 class="date">Last compiled: 2024-08-05</h4>
+<h4 class="date">Last compiled: 2024-08-27</h4>
 
 </div>
 
@@ -439,12 +448,10 @@ R</h1>
 <div id="exercise-1-data-summaries-and-custom-functions"
 class="section level2">
 <h2>EXERCISE 1: Data summaries and custom functions</h2>
-<p>Please submit your responses to all questions below via WebCampus
-(text box submission) on the date indicated (see WebCampus).</p>
 <p>If you are new to R or would like a refresher, some university
-faculty held an R workshop last spring last spring. The material is all
-hosted <a href="https://kevintshoemaker.github.io/R-Bootcamp/">here</a>.
-You can work through the modules at your own pace:</p>
+faculty held an R workshop last spring. The material is all hosted <a
+href="https://kevintshoemaker.github.io/R-Bootcamp/">here</a>. You can
+work through the modules at your own pace:</p>
 <ul>
 <li><a
 href="https://kevintshoemaker.github.io/R-Bootcamp/module1_1.html">Working
@@ -501,13 +508,12 @@ Exercise and so you get credit.</p>
 </div>
 <div id="part-1-sample-variance" class="section level3">
 <h3>Part 1: Sample variance</h3>
-<p>Using the formula <a href="LECTURE2.html">here</a> (see “summary
-metrics” section) and reproduced below, write a function that computes
-the <strong>sample variance</strong> of any arbitrary data vector. Use
-this function to compute the sample variance for the “height” column in
-the “trees” dataset built into base R. Compare your answer with the
-results from using the <code>var()</code> function – a built-in function
-from base R. Your submission should include (1) the function code, (2) a
+<p>Using the formula below, write a function that computes the
+<strong>sample variance</strong> of any arbitrary data vector. Use this
+function to compute the sample variance for the “height” column in the
+“trees” dataset built into base R. Compare your answer with the results
+from using the <code>var()</code> function – a built-in function from
+base R. Your submission should include (1) the function code, (2) a
 command (line of code) using your function to compute the sample
 variance of the “height” column, and (3) a test using the
 <code>var()</code> function to compute the same thing.</p>
