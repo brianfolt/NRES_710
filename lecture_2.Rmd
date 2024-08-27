@@ -201,7 +201,7 @@ If you have a problem, Google it! Someone has likely had the same problem as you
 
 ### First R demo!
 
-**NOTE:** for those wishing to follow along with the R-based demo in class, [click here](INTRO.R) for an R-script that contains all the code blocks in this web-based lecture. 
+**NOTE:** for those wishing to follow along with the R-based demo in class, [click here](lecture_2.R) for an R-script that contains all the code blocks in this web-based lecture. 
 
 All of you should have R and RStudio installed on your computers. See the [links page](https://brianfolt.github.io/NRES_710/Links.html) for some useful references.
 
