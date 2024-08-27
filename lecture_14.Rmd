@@ -99,6 +99,88 @@ legend("topleft", legend = c("Females", "Males"), col = c("red", "blue"), lwd = 
 
 ```
 
+The effect of sex is the same for all ages, and the effect of age is the same for both sexes. This is an assumption that we have made. But this is *not* an assumption that we *have* to make...
+
+What if we assume that these effects are different...?
+
+```{r echo=FALSE, fig.height=4, fig.width=4.5}
+# Specify plot margins
+par(mar=c(4,4,0,0))
+
+# Read in the size ~ age + sex + age*sex data
+datum <- read.csv("lecture_14_dataset1.csv")
+
+# Model for females
+results <- lm(Size ~ Age, data = subset(datum, datum$Sex == "Female"))
+
+# Model for males
+results2 <- lm(Size ~ Age, data = subset(datum, datum$Sex == "Male"))
+
+# Determine the range of the x and y axes
+xlim <- range(datum$Age)
+ylim <- c(0, max(datum$Size))
+
+# Make an empty plot with defined x and y limits
+plot(xlim, ylim, type = "n", xlab = "Age", ylab = "Size")
+
+# Add regression lines for females and males
+abline(results, col = "red", lwd = 2) # Red line for females
+abline(results2, col = "blue", lwd = 2) # Blue line for males
+
+# Optionally, add a legend to distinguish between the two lines
+legend("topleft", legend = c("Females", "Males"), col = c("red", "blue"), lwd = 2)
+
+```
+
+All individuals start out at about the same size, but then males grow faster and reach a larger size at an earlier age than females.
+
+This is an interaction! The effect of age depends on sex. We get a different beta (slope) for the age-size relationship for males then we do for females.
+
+Another interesting thing I want to point out is that for interactions, perspective does not matter:
+
+- The effect of age depends on sex.
+- The difference between the sexes also depends on age.
+
+For example:
+
+```{r echo=FALSE, fig.height=4, fig.width=4.5}
+# Specify plot margins
+par(mar=c(4,4,0,0))
+
+# Make an empty plot with defined x and y limits
+plot(xlim, ylim, type = "n", xlab = "Age", ylab = "Size")
+
+# Add regression lines for females and males
+abline(results, col = "red", lwd = 2) # Red line for females
+abline(results2, col = "blue", lwd = 2) # Blue line for males
+
+# Optionally, add a legend to distinguish between the two lines
+legend("topleft", legend = c("Females", "Males"), col = c("red", "blue"), lwd = 2)
+
+# Define ages for vertical lines (e.g., young age = 5, old age = 20)
+young_age <- 3
+old_age <- 8
+
+# Add vertical lines at the chosen ages
+segments(young_age, 8.5, young_age, 12, col = "black", lty = 2, lwd = 2)
+segments(old_age, 16, old_age, 24.4, col = "black", lty = 2, lwd = 2)
+
+```
+
+At a young age, the difference between sexes is small; at an older age, the difference is larger.
+
+You can take whatever perspective is most valid for you, and it depends on the questions you are asking. A little open to interpretation.
+
+## Interactions in the linear model
+
+How do we add an interaction into the linear model?
+
+1) Like I said before, you could just do this analysis separately: one regression for males, one for females. But you will get two betas and you won't know if they are statistically significant.
+2) Add in another effect to our linear model ($\beta_3$) and then multiply the two X-variables by eachother (times eachother).
+
+So now the linear model looks like:
+
+$Size = \beta_0 + \beta_1Size + \beta_2Sex + \beta_3 Age*Sex$
 
 
 
@@ -118,31 +200,26 @@ legend("topleft", legend = c("Females", "Males"), col = c("red", "blue"), lwd = 
 # Set the seed for reproducibility
 set.seed(123)
 
-# This is similar to the Age, Sex, and Size data we simulated for last class.
-# There is no collinearity between Age and Sex.
+# This is similar to the Age, Sex, and Size data we simulated for in Lecture 12.
+# There is no collinearity between Age and Sex, but now there is an interaction
+# between Sex and Age.
 
-# X-variables
+# First dataset
+# X variable
 n <- 50
-Sex <- c(rep("Female", n), rep("Male", n))
-Age <- runif(n * 2, 1, 10)
-dummy <- data.frame(model.matrix(~ Sex - 1))
+x1 <- c(rep("Female", n), rep("Male", n))
+x2 <- runif(n * 2, 1, 10)
+dummy <- data.frame(model.matrix(~ x1 - 1))
 colnames(dummy) <- c("Female", "Male")
 
-# However, there are now two additional X-variables: MotherSize and FatherSize
-# And both of those variables are a function of Age
-MotherSize <- rnorm(n * 2, Age - 5, 1)
-FatherSize <- rnorm(n * 2, Age, 1)
-
-# All of these variables influence size, so they are all examples of confounding variables.
-
 # Simulate error
-Error <- rnorm(n * 2, 0, 1.2)
+Error <- rnorm(n * 2, 0, 0.8)
 
 # Predict Y
-Response <- 4 + 1.5 * Age + 2.5 * dummy$Male + 0.2 * MotherSize + 0.2 * FatherSize + Error
+Response <- 4 + 1.5 * x2 + 1 * dummy$Male + 1 * x2 * dummy$Male + Error
 
 # Dataframe
-datum <- data.frame(Age = Age, Sex = Sex, Male = dummy$Male, MotherSize = MotherSize, FatherSize = FatherSize, Size = Response)
+datum <- data.frame(Age = x2, Sex = x1, Male = dummy$Male, Size = Response)
 
 # Save the data
 write.csv(datum, "lecture_14_dataset1.csv", row.names = FALSE)

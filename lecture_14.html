@@ -1,0 +1,658 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+<meta name="author" content="NRES 710" />
+
+
+<title>Multi-Variable Modeling - Interactions</title>
+
+<script src="site_libs/header-attrs-2.27/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/yeti.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/jqueryui-1.13.2/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+<link rel="stylesheet" href="styles.css" type="text/css" />
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "\e258";
+  font-family: 'Glyphicons Halflings';
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">NRES 710</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Syllabus</a>
+</li>
+<li>
+  <a href="schedule.html">Schedule</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    Lectures
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="lecture_1.html">Syllabus and the Purpose of Statistics</a>
+    </li>
+    <li>
+      <a href="lecture_2.html">P-value Discussion and Intro to R</a>
+    </li>
+    <li>
+      <a href="lecture_3.html">Sampling Uncertainty</a>
+    </li>
+    <li>
+      <a href="lecture_4.html">Linear Regression</a>
+    </li>
+    <li>
+      <a href="lecture_5.html">Linear Regression - results</a>
+    </li>
+    <li>
+      <a href="lecture_6.html">Linear Regression - assumptions</a>
+    </li>
+    <li>
+      <a href="lecture_7.html">Linear Regression - predictions</a>
+    </li>
+    <li>
+      <a href="lecture_8.html">Analysis of Categorical Data - 2 groups</a>
+    </li>
+    <li>
+      <a href="lecture_9.html">Analysis of Categorical Data - &gt;2 groups</a>
+    </li>
+    <li>
+      <a href="lecture_10.html">Analysis of Categorical Data - posthoc tests</a>
+    </li>
+    <li>
+      <a href="lecture_11.html">Analysis with Continuous or Categorical X?</a>
+    </li>
+    <li>
+      <a href="lecture_12.html">Multi-variable Modeling</a>
+    </li>
+    <li>
+      <a href="lecture_13.html">Multi-variable Modeling - collinearity</a>
+    </li>
+    <li>
+      <a href="lecture_14.html">Multi-variable Modeling - interactions</a>
+    </li>
+    <li>
+      <a href="lecture_15.html">Generalized Linear Models</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    Exercises
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="exercise_1.html">Exercise 1 - Data Summary Functions</a>
+    </li>
+    <li>
+      <a href="exercise_2.html">Exercise 2 - Linear Regression</a>
+    </li>
+    <li>
+      <a href="exercise_3.html">Exercise 3 - Linear Regression (cont.)</a>
+    </li>
+    <li>
+      <a href="exercise_4.html">Exercise 4 - Analysis of Categorical Data</a>
+    </li>
+    <li>
+      <a href="exercise_5.html">Exercise 5 - Multi-variable Analysis</a>
+    </li>
+    <li>
+      <a href="exercise_6.html">Exercise 6 - TBD</a>
+    </li>
+    <li>
+      <a href="exercise_7.html">Exercise 7 - TBD</a>
+    </li>
+    <li>
+      <a href="exercise_8.html">Exercise 8 - TBD</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    More Resources
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="Links.html">Links</a>
+    </li>
+  </ul>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+
+
+<h1 class="title toc-ignore">Multi-Variable Modeling - Interactions</h1>
+<h4 class="author">NRES 710</h4>
+<h4 class="date">Last compiled: 2024-08-27</h4>
+
+</div>
+
+
+<p>Any questions before we begin?</p>
+<div id="interactions" class="section level2">
+<h2>Interactions</h2>
+<p>Today we are going to learn about <strong>interactions</strong>!</p>
+<p>Last week I suggested that collinearity is critically important to
+understand, because it is a nuisance that we must account for to get
+unbiased estimates, and so we spent an entire week on the topic. This
+week, I think interactions are also critically important, so we will
+again spend a week on this topic. But interactions are actually really
+interesting and can greatly enhance the interest in our research and
+what we are learning.</p>
+<p>What are interactions…? Let’s start with an example.</p>
+<ul>
+<li><strong>Y – reproductive output</strong></li>
+<li><strong><span class="math inline">\(X_1\)</span> – Placebo /
+Pill</strong> – a binomial variable describing groups in a clinical
+trials of whether the ‘estrogen/progesterone/birth-control pill’.</li>
+</ul>
+<p><strong>Q:</strong> What is the effect of The Pill on reproductive
+output? ….does it cause reproduction to be ~0? <em>It depends….</em></p>
+<ul>
+<li><strong><span class="math inline">\(X_2\)</span> – Sex</strong></li>
+</ul>
+<p>The Pill reduces reproductive output of females to zero, but it does
+not influence the reproductive output of males. This is an
+interactions!</p>
+<p><strong>interactions – the effect (beta) of one X-variable depends on
+the value of another X-variable</strong></p>
+<p>Sometimes people will implicitly assume there is an interaction, and
+separate out their data to analyze the effect of the pill on two groups
+separately: males and females. This is okay! BUT…</p>
+<ol style="list-style-type: decimal">
+<li>You are implicitly assuming there is an interaction, and,</li>
+<li>if there is a difference, you cannot say the difference is
+statistically significant or not, because you did not test that.</li>
+</ol>
+<p>Let’s say that we find that the effect of the pill on males is some
+very small number close to ~0 (e.g., beta = 0.001), and then we get a
+large beta for the effect of the pill on females. How would we know that
+these effects are statistically different? Well, we can’t know that if
+we analyzed these effects separately.</p>
+<p>If you want to know if the effect is different between two groups
+(sexes, species, etc.), you need to test for an interaction.</p>
+</div>
+<div id="example" class="section level2">
+<h2>Example</h2>
+<p>Let’s again consider an example we have seen before, that I like,
+because it is easy…</p>
+<ul>
+<li><strong>Y – Size</strong></li>
+<li><strong><span class="math inline">\(X_1\)</span> – Age</strong></li>
+<li><strong><span class="math inline">\(X_2\)</span> –
+Sex</strong>’</li>
+</ul>
+<p>Previously we ran this multi-variable model: <span
+class="math inline">\(Size = \beta_0 + \beta_1 * Size + \beta_2 *
+Sex\)</span></p>
+<p>This model is implicitly assuming that lines for each group are
+parallel – they have the same slope:</p>
+<p><img src="lecture_14_files/figure-html/unnamed-chunk-2-1.png" width="432" /></p>
+<p>The effect of sex is the same for all ages, and the effect of age is
+the same for both sexes. This is an assumption that we have made. But
+this is <em>not</em> an assumption that we <em>have</em> to make…</p>
+<p>What if we assume that these effects are different…?</p>
+<p><img src="lecture_14_files/figure-html/unnamed-chunk-3-1.png" width="432" /></p>
+<p>All individuals start out at about the same size, but then males grow
+faster and reach a larger size at an earlier age than females.</p>
+<p>This is an interaction! The effect of age depends on sex. We get a
+different beta (slope) for the age-size relationship for males then we
+do for females.</p>
+<p>Another interesting thing I want to point out is that for
+interactions, perspective does not matter:</p>
+<ul>
+<li>The effect of age depends on sex.</li>
+<li>The difference between the sexes also depends on age.</li>
+</ul>
+<p>For example:</p>
+<p><img src="lecture_14_files/figure-html/unnamed-chunk-4-1.png" width="432" /></p>
+<p>At a young age, the difference between sexes is small; at an older
+age, the difference is larger.</p>
+<p>You can take whatever perspective is most valid for you, and it
+depends on the questions you are asking. A little open to
+interpretation.</p>
+</div>
+<div id="interactions-in-the-linear-model" class="section level2">
+<h2>Interactions in the linear model</h2>
+<p>How do we add an interaction into the linear model?</p>
+<ol style="list-style-type: decimal">
+<li>Like I said before, you could just do this analysis separately: one
+regression for males, one for females. But you will get two betas and
+you won’t know if they are statistically significant.</li>
+<li>Add in another effect to our linear model (<span
+class="math inline">\(\beta_3\)</span>) and then multiply the two
+X-variables by eachother (times eachother).</li>
+</ol>
+<p>So now the linear model looks like:</p>
+<p><span class="math inline">\(Size = \beta_0 + \beta_1Size + \beta_2Sex
++ \beta_3 Age*Sex\)</span></p>
+<p><br></p>
+</div>
+<div id="truth" class="section level2">
+<h2>Truth</h2>
+<pre class="r"><code>################### &#39;Truth&#39; #################### 
+### Lecture 14: code to simulate data for class
+
+# Set the seed for reproducibility
+set.seed(123)
+
+# This is similar to the Age, Sex, and Size data we simulated for in Lecture 12.
+# There is no collinearity between Age and Sex, but now there is an interaction
+# between Sex and Age.
+
+# First dataset
+# X variable
+n &lt;- 50
+x1 &lt;- c(rep(&quot;Female&quot;, n), rep(&quot;Male&quot;, n))
+x2 &lt;- runif(n * 2, 1, 10)
+dummy &lt;- data.frame(model.matrix(~ x1 - 1))
+colnames(dummy) &lt;- c(&quot;Female&quot;, &quot;Male&quot;)
+
+# Simulate error
+Error &lt;- rnorm(n * 2, 0, 0.8)
+
+# Predict Y
+Response &lt;- 4 + 1.5 * x2 + 1 * dummy$Male + 1 * x2 * dummy$Male + Error
+
+# Dataframe
+datum &lt;- data.frame(Age = x2, Sex = x1, Male = dummy$Male, Size = Response)
+
+# Save the data
+write.csv(datum, &quot;lecture_14_dataset1.csv&quot;, row.names = FALSE)</code></pre>
+<p><a href="lecture_15.html">–go to next lecture–</a></p>
+</div>
+
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+<script>
+$(document).ready(function ()  {
+
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
