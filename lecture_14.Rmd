@@ -28,7 +28,81 @@ knitr::opts_chunk$set(
 
 ```
 
+Any questions before we begin?
+
 ## Interactions
+
+Today we are going to learn about **interactions**!
+
+Last week I suggested that collinearity is critically important to understand, because it is a nuisance that we must account for to get unbiased estimates, and so we spent an entire week on the topic. This week, I think interactions are also critically important, so we will again spend a week on this topic. But interactions are actually really interesting and can greatly enhance the interest in our research and what we are learning.
+
+What are interactions...? Let's start with an example.
+
+- **Y -- reproductive output**
+- **$X_1$ -- Placebo / Pill** -- a binomial variable describing groups in a clinical trials of whether the 'estrogen/progesterone/birth-control pill'.
+
+**Q:** What is the effect of The Pill on reproductive output? ....does it cause reproduction to be ~0? *It depends....*
+
+- **$X_2$ -- Sex**
+
+The Pill reduces reproductive output of females to zero, but it does not influence the reproductive output of males. This is an interactions!
+
+**interactions -- the effect (beta) of one X-variable depends on the value of another X-variable**
+
+Sometimes people will implicitly assume there is an interaction, and separate out their data to analyze the effect of the pill on two groups separately: males and females. This is okay! BUT...
+
+1. You are implicitly assuming there is an interaction, and,
+2. if there is a difference, you cannot say the difference is statistically significant or not, because you did not test that.
+
+Let's say that we find that the effect of the pill on males is some very small number close to ~0 (e.g., beta = 0.001), and then we get a large beta for the effect of the pill on females. How would we know that these effects are statistically different? Well, we can't know that if we analyzed these effects separately.
+
+If you want to know if the effect is different between two groups (sexes, species, etc.), you need to test for an interaction.
+
+## Example
+
+Let's again consider an example we have seen before, that I like, because it is easy...
+
+- **Y -- Size**
+- **$X_1$ -- Age**
+- **$X_2$ -- Sex**'
+
+Previously we ran this multi-variable model: $Size = \beta_0 + \beta_1 * Size + \beta_2 * Sex$
+
+This model is implicitly assuming that lines for each group are parallel -- they have the same slope:
+
+```{r echo=FALSE, fig.height=4, fig.width=4.5}
+# Specify plot margins
+par(mar=c(4,4,0,0))
+
+# Read in the size ~ age + sex data
+datum <- read.csv("lecture_12_dataset1.csv")
+
+# Model for females
+results <- lm(Size ~ Age, data = subset(datum, datum$Sex == "Female"))
+
+# Model for males
+results2 <- lm(Size ~ Age, data = subset(datum, datum$Sex == "Male"))
+
+# Determine the range of the x and y axes
+xlim <- range(datum$Age)
+ylim <- range(datum$Size)
+
+# Make an empty plot with defined x and y limits
+plot(xlim, ylim, type = "n", xlab = "Age", ylab = "Size")
+
+# Add regression lines for females and males
+abline(results, col = "red", lwd = 2) # Red line for females
+abline(results2, col = "blue", lwd = 2) # Blue line for males
+
+# Optionally, add a legend to distinguish between the two lines
+legend("topleft", legend = c("Females", "Males"), col = c("red", "blue"), lwd = 2)
+
+```
+
+
+
+
+
 
 
 
