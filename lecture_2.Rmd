@@ -30,22 +30,25 @@ knitr::opts_chunk$set(
 
 ## Download R code for the lecture
 
-To follow along with the R-based lessons and demos, [right (or command) click on this link and save the script to your project directory](lecture_1.R). Open your RStudio project in RStudio, then open the R code file.
+To follow along with the R-based lessons and demos, [right (or command) click on this link and save the script to your project directory](lecture_2.R). Open your RStudio project in RStudio, then open the R code file.
 
 ## Overview
 
-A problem perceived by many in our field is that many ecologists and environmental scientists put **too much emphasis on p-values**. Not surprisingly, many statistics classes also focus heavily on how to calculate p-values. When I first learned statistics in graduate school, we had to calculate the F-statistics and then look up the associated p-value in the back of a book...  Computers can do this for us now! Which is a great benefit. But yet, classes still focus on calculating p-values, because professors have placed historical emphasis on it. It's a self-repeating process. My goal with this class is to de-ephasize p-values and avoid repeating this iterative process. So with this lecture and discussion today, we will talk about what p-values really area. 
+A problem perceived by many in our field is that many ecologists and environmental scientists put **too much emphasis on p-values**. Not surprisingly, many statistics classes also focus heavily on how to calculate p-values. When I first learned statistics in graduate school, we had to calculate the F-statistics and then look up the associated p-value in the back of a book...  Computers can do this for us now! Which is a great benefit. But yet, classes still focus on calculating p-values, because professors have placed historical emphasis on it. It's a <u>self-repeating process</u>. My goal with this class is to de-emphasize p-values and avoid repeating this iterative process. So with this lecture and discussion today, we will talk about what p-values really area. 
 
 ## Probability values (p-values)
 
 **p-value -- the probability of getting the observed data or something more extreme, given the null hypothesis ($H_0$) ('H-naught') is assumed true**
 
 - What is the null hypothesis? No relationship; e.g., no difference between groups, no slope in a regression line; no ‘signal’ in your data.
-- We assume there is some hypothesized relationship, so we collect data and test the null that there is no relationship.
+- We assume there is some hypothesized relationship. We then collect data and perform a statistical test of the null hypothesis: there is no relationship between the X and Y-variables.
 - If we get a p-value less than 0.05, this is ‘statistically significant’. We then reject the null and infer (learn) that a relationship really does exist in the world.
-- However, the p-value says nothing about your data. It tells us the probability of getting some data ‘like ours’ or more extreme than ours, given that the null hypothesis is true.
+- p = 0.05 is often called the $\alpha$ level; it is the threshold of whether a result is significant or not.
+
+However, the p-value says nothing about your data. It tells us the probability of getting some data ‘like ours’ or more extreme than ours, given that the null hypothesis is true.
+
 - In order to know the probability of getting our data, we would have to know the truth about the system – what the true relationship is. We would have to know if there really is a relationship, or not. 
-- The p-value assumes there is no relationship (no slope, no difference between groups) and tells us what the probability of getting the outcome we got, under that assumption of no groups.
+- The p-value assumes there is no relationship (no slope, no difference between groups) and tells us what the probability of getting the outcome we got, under that assumption of no relationship.
 
 **Q:** I flipped a coin and it is in my hand. what is the probability that it is heads? 50%?
 
@@ -53,13 +56,16 @@ A problem perceived by many in our field is that many ecologists and environment
 - What is the probability that you guess correct? Now you’ve got a 50:50 chance.
 - Once it’s been flipped, it either is or it isn’t.
 
+Similarly, a p-value tells us the probability of observing data (or something more extreme) assuming the null hypothesis is true -- but it does not tell us the probability that the null hypothesis itself is true or false.
+
 ## Alternative definitions of p-values
 
 There are alternative definitions of a p-value that you might come across.
 
-- Probability that your data was due to chance. However, this is **wrong**: we know your data was due to process or sampling error.
-- Probability that the null hypothesis is true, with the idea being that if the p-value is low, then we might think there is a small probability that the null is true.
-  - However, in reality, the null is either TRUE or NOT. Just because we don’t whether the null is true or false does not mean there is some underlying probability of one reality vs the other. So this interpretation is also **wrong**.
+- <u>Probability that your data was due to *chance*</u>.
+  - However, this is **wrong**: we know your data was due to sampling or process error.
+- <u>Probability that the null hypothesis is true</u>; with the idea being that if the p-value is low, then we might think there is a small probability that the null is true.
+  - However, in reality, the null is either TRUE or NOT. Just because we don’t whether the null is true or false does not mean there is some underlying probability of one reality vs. the other. So this interpretation is also **wrong**.
   
 Statistics can be hard to understand because these strange or whonky definitions are used. But we use them, and they do work, if we understand what the limitations are. This is one of the main reasons why Johnson (1999) doesn’t like the use of ‘naked p-values’. Too often people use p-values:
 
