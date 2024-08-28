@@ -248,7 +248,6 @@ text(x = 0, y = beta0/3, labels = expression(beta[0]), pos = 4, col = "Orange", 
 text(x = max(datum$Age)/2, y = beta0 + beta1 * (max(datum$Age)/5), labels = expression(beta[1]), pos = 4, col = "Red", font = 2, cex = 2)
 
 # Add vertical line from origin to regression line for beta0
-#abline(v = 0, col = "red", lty = 2)
 segments(x0 = 0, y0 = 0, x1 = 0, y1 = beta0, col = "Orange", lty = 2, lwd = 3)
 
 # Define points to illustrate rise over run for slope beta1
