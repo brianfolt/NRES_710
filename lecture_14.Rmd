@@ -661,7 +661,7 @@ The * will fit all possible combinations of effects between the variables includ
 
 Interactions are not that complicated! An interaction means that your betas for a given variable change depending on another variable. If you have groups, the beta depends on the group; different betas for each group. If you have interactions between continuous variables, the effect of each variable depends on the other variable, and you can change perspective depending on either variable (e.g., the second 3-D plot above).
 
-I encourage you to always tests for interactions, rather than splitting your data and running separate tests for your groups. That way you can get an explicit test that your data are different, according to that interaction term! However, once you find that significant interaction term, I then *do* encourage you to break those groups apart, so that the explanation is much more simple. 
+I encourage you to always tests for interactions, rather than splitting your data and running separate tests for your groups. That way you can get an explicit test that your data are different, according to that interaction term! However, once you find that significant interaction term, I then *do* encourage you to break those groups apart, so that the explanation is much more simple.
 
 <br>
 
