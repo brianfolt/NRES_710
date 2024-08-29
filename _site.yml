@@ -49,9 +49,9 @@ navbar:
       href: exercise_3.html
     - text: Exercise 4 - Analysis of Categorical Data
       href: exercise_4.html
-    - text: Exercise 5 - Multi-variable Analysis
+    - text: Exercise 5 - Multi-variable Analysis - Collinearity
       href: exercise_5.html 
-    - text: Exercise 6 - TBD
+    - text: Exercise 6 - Multi-variable Analysis - Interactions
       href: exercise_6.html
     - text: Exercise 7 - TBD
       href: exercise_7.html
