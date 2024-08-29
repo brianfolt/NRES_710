@@ -67,7 +67,9 @@ There are alternative definitions of a p-value that you might come across.
 - <u>Probability that the null hypothesis is true</u>; with the idea being that if the p-value is low, then we might think there is a small probability that the null is true.
   - However, in reality, the null is either TRUE or NOT. Just because we don’t whether the null is true or false does not mean there is some underlying probability of one reality vs. the other. So this interpretation is also **wrong**.
   
-Statistics can be hard to understand because these strange or whonky definitions are used. But we use them, and they do work, if we understand what the limitations are. This is one of the main reasons why Johnson (1999) doesn’t like the use of ‘naked p-values’. Too often people use p-values:
+Statistics can be hard to understand because these strange or whonky definitions are used. But we use them, and they do work, if we understand what the limitations are.
+
+This is one of the main reasons why Johnson (1999) and many, many other authors don’t like the use of ‘naked p-values’. Too often people use p-values:
 
 - Inappropriately 
 - Using a wrong or incorrect definition
@@ -78,39 +80,38 @@ And then they make conclusions that they should not be making.
 
 All the p-value really tells us is *how clear the statistical results are* that we are inferring from our data. Large p-values are unclear results; small p-values are clear results. 
 
-If the p-value is small, we conclude there is a statistically significant relationship.
+If the p-value is small (e.g., less the $\alpha$ threshold of 0.05), we conclude there is a statistically significant relationship.
 
 - But this does not necessarily mean the relationship is LARGE. 
 - Similarly, if we get a large p-value, it does not mean the relationship is absent or SMALL.
 
 **Q:** Is the null hypothesis ever really true to begin with? What do you think?
 
-- Yes, it can be! Trivial example: we might hypothesize that the color of a human's shirt when they are planting trees influences plant growth. Because shirt is unlikely to have a biological effect on, the null hypothesis (no influence of shirt color on plant growth) is likely to be true. A controlled experiment will support this.
+- Yes, it can be!! Trivial example: we might hypothesize that the color of a human's shirt when they are planting trees influences plant growth. Because shirt is unlikely to have a biological effect on, the null hypothesis (no influence of shirt color on plant growth) is likely to be true. A controlled experiment will support this.
 - However, with observational studies, there is rarely zero different between groups and the null hypothesis is rarely true. 
   - E.g., coyote diet difference between spring and fall, tree density between clear cut and non-clear cut forest stands, etc.
-- Often you have an a priori reason to believe there is a relationship. So, the chance that there is no difference is often nonsensical. You may have a small effect, but there is often a relationship. 
+- Often you have an *a priori* reason to believe there is a relationship. So, the chance that there is no difference is often nonsensical. You may have a small effect, but there is often a relationship. 
 - This is a limitation of p-vales: the null hypothesis is never really true… and yet we are calculating p-values based on the assumption that the null is true!
 
 ## P-values, effect size, and sample size
 
 P-values are a function of two things: *effect size* and *sample size*
 
-- **effect size -- the slope or differenc between groups**
+- **effect size -- the slope or difference between groups**
 - **sample size -- the number of observations; as sample size increases, p-values decrease, and vice versa**
 - We will use the term 'effect size' loosely in this class:
-  - Correlation does not mean causation. Just because we observe a relationship between two variables in an observation study does not mean cause and effect.
-  - Must do a **manipulative experiment** to demonstrate causation.
+  - Correlation does not mean causation. Just because we observe a relationship between two variables in an observational study does not mean cause and effect.
+  - We must do a **manipulative experiment** to demonstrate causation.
   - We may make assumptions about causation when looking at the effect of variable X on Y, but we never actually claim there is causation.
-  - Best not to confuse statistical significance with biological significance.
+  - Best not to confuse *statistical significance* with *biological significance*.
 
 ## Statistical vs. biological significance
 
-Example: a drug to reduce the risk of heart attack. This drug is being used by the public and as such, it had to pass clinical trials. Researchers sampled the population of heart attack survivors and gave them either this new drug or a placebo drug and tested whether the drug reduced risk of having a second heart attack in five years.
+Example: a drug to reduce the risk of heart attack. This drug is being used by the public and as such, it had to pass clinical trials. Researchers sampled the population of heart attack survivors and gave them either this new drug or a placebo drug. The patients were monitored for five years and the researchers used a statistical analysis to test whether the drug reduced risk of having a second heart attack.
 
 ```{r, echo=FALSE, message=FALSE}
 # Load necessary libraries
 library(knitr)
-#library(kableExtra)
 
 # Create the data frame
 data <- data.frame(
@@ -122,8 +123,8 @@ data <- data.frame(
 )
 
 # Create the table
-kable(data, col.names = c("Group", "Heart Attack", "No Attack", "Percentage", "Additional Info")) #%>%
-  #kable_styling(full_width = FALSE)
+kable(data, col.names = c("Group", "Heart Attack", "No Attack", "Percentage", "Additional Info
+
 ```
 
 **Q:** Does this drug work??
@@ -132,7 +133,7 @@ Yes! It has a statistically significant effect of reducing heart attack. The res
 
 **Q:** Is this a drug you would take??
 
-I dunno. How much does it cost? How do results compare to walking a mile every day, eating healthy, quitting alcohol or tobacco products, etc.
+I dunno. How much does it cost? How do results compare to walking a mile every day, eating healthy, quitting alcohol or tobacco products, etc. (Johnson suggested we should consider more than just statistical probability when evaluating results....)
 
 Is this a biologically significant effect? Maybe not so much.
 
@@ -155,7 +156,7 @@ Just because we get a significant p-value, it doesn’t mean that we have a larg
 
 **Power analysis** -- something you do before an experiment starts to try to understand the sample size needed to measure a statistically significant effect.
 
-- The problem with power analysis is that we don’t know what the effect is! That’s why we are doing the study...
+- The problem with power analysis is that we don’t know what the effect is! That’s why we are doing the study... I am not a fan of this.
 - Power analysis is often required by IACUC or grant applications. However, it's not involved in theses or studies published in peer-reviewed papers. I won’t teach you how to do this in the class.
 
 ## Putting things in perspective
