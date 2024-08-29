@@ -28,35 +28,41 @@ knitr::opts_chunk$set(
 
 ```
 
-## Download R code for the lecture
+Updates: first quiz is available as of today! It will cover the readings and will be due Monday night at midnight.
 
-To follow along with the R-based lessons and demos, [right (or command) click on this link and save the script to your project directory](lecture_2.R). Open your RStudio project in RStudio, then open the R code file.
+For today, I asked you all to read Johnson (1999) and Dushoff et al. (2019). What did you all think... was this eye-opening, perhaps?
 
 ## Overview
 
-A problem perceived by many in our field is that many ecologists and environmental scientists put **too much emphasis on p-values**. Not surprisingly, many statistics classes also focus heavily on how to calculate p-values. When I first learned statistics in graduate school, we had to calculate the F-statistics and then look up the associated p-value in the back of a book...  Computers can do this for us now! Which is a great benefit. But yet, classes still focus on calculating p-values, because professors have placed historical emphasis on it. It's a <u>self-repeating process</u>. My goal with this class is to de-emphasize p-values and avoid repeating this iterative process. So with this lecture and discussion today, we will talk about what p-values really area. 
+A problem perceived by many in our field is that **too many ecologists and environmental scientists** put **too much emphasis on p-values**. Not surprisingly, many statistics classes also focus heavily on how to calculate p-values. When I first learned statistics in graduate school, we had to calculate the F-statistics and then look up the associated p-value in the back of a book...
+
+Computers can do this for us now! Which is a great benefit. But yet, classes still focus on calculating p-values, because professors have placed historical emphasis on it. It's a <u>self-repeating process</u>. My goal with this class is to de-emphasize p-values and avoid repeating this iterative process. So with this lecture and discussion today, we will talk about what p-values really area -- and practical ways to approach using them.
 
 ## Probability values (p-values)
 
-**p-value -- the probability of getting the observed data or something more extreme, given the null hypothesis ($H_0$) ('H-naught') is assumed true**
+**p-value -- the probability of getting the observed data or something more extreme, given $H_0$ (null hypothesis; 'H-naught') is assumed true** (Johnson 1999).
 
-- What is the null hypothesis? No relationship; e.g., no difference between groups, no slope in a regression line; no ‘signal’ in your data.
-- We assume there is some hypothesized relationship. We then collect data and perform a statistical test of the null hypothesis: there is no relationship between the X and Y-variables.
-- If we get a p-value less than 0.05, this is ‘statistically significant’. We then reject the null and infer (learn) that a relationship really does exist in the world.
+- **What is the null hypothesis**? No relationship; e.g., no difference between groups, no slope in a regression line; no ‘signal’ in your data.
+- We assume there is some **alternative, hypothesized relationship**. We then collect data and perform a statistical test of the null hypothesis: there is no relationship between the X and Y-variables.
+- If we get a p-value less than 0.05, this is ‘statistically significant’. We then reject the null and infer (learn) that this alternative relationship really does exist in the world.
 - p = 0.05 is often called the $\alpha$ level; it is the threshold of whether a result is significant or not.
 
-However, the p-value says nothing about your data. It tells us the probability of getting some data ‘like ours’ or more extreme than ours, given that the null hypothesis is true.
+However, the first thing I want you to know about p-value is that it says nothing *about your data* -- nothing about the data you have in hand. It tells us the probability of getting some data ‘like ours’ or more extreme than ours, given that the null hypothesis is true.
 
-- In order to know the probability of getting our data, we would have to know the truth about the system – what the true relationship is. We would have to know if there really is a relationship, or not. 
+- In order to know the probability of getting our data, we would have to know the truth about the system -- what the true relationship is. We would have to know if there really is a relationship, or not. But we don't know this.
 - The p-value assumes there is no relationship (no slope, no difference between groups) and tells us what the probability of getting the outcome we got, under that assumption of no relationship.
 
-**Q:** I flipped a coin and it is in my hand. what is the probability that it is heads? 50%?
+**Q:** I flipped a coin and it is in my hand. What is the probability that it is heads? 50%?
 
 - Wrong. It has already been flipped. It either **is** heads (1), or it **is not** (0). I know the truth.
 - What is the probability that you guess correct? Now you’ve got a 50:50 chance.
 - Once it’s been flipped, it either is or it isn’t.
 
+So, this idea that your data can have some probability, that it's due to chance, under the assumption that the null hypothesis is true -- this doesn't make sense. <u>The p-value does not tell us about the probability of our data</u>. 
+
 Similarly, a p-value tells us the probability of observing data (or something more extreme) assuming the null hypothesis is true -- but it does not tell us the probability that the null hypothesis itself is true or false.
+
+And finally: the probability of getting your data or more extreme data depends on the methods, which is impractical to account for in a statistical model. Johnson didn't like this either.
 
 ## Alternative definitions of p-values
 
@@ -64,46 +70,64 @@ There are alternative definitions of a p-value that you might come across.
 
 - <u>Probability that your data was due to *chance*</u>.
   - However, this is **wrong**: we know your data was due to sampling or process error.
-- <u>Probability that the null hypothesis is true</u>; with the idea being that if the p-value is low, then we might think there is a small probability that the null is true.
+- <u>Probability that the null hypothesis is true</u>.
+  - The idea here is that if the p-value is low, then we might think there is a small probability that the null is true.
   - However, in reality, the null is either TRUE or NOT. Just because we don’t whether the null is true or false does not mean there is some underlying probability of one reality vs. the other. So this interpretation is also **wrong**.
   
-Statistics can be hard to understand because these strange or whonky definitions are used. But we use them, and they do work, if we understand what the limitations are.
+Statistics can be hard to understand because these strange or *whonky* definitions are used. But we use them, and they do work, if we understand what the limitations are.
 
-This is one of the main reasons why Johnson (1999) and many, many other authors don’t like the use of ‘naked p-values’. Too often people use p-values:
-
-- Inappropriately 
-- Using a wrong or incorrect definition
-
-And then they make conclusions that they should not be making.
+This is one of the main reasons why Johnson (1999) and many, many other authors don’t like the use of ‘naked p-values’. Too often people use p-values **inappropriately** or with **a wrong/incorrect definition**. And then they make conclusions that they should not be making.
 
 ## P-values: an expression of *clarity*
 
-All the p-value really tells us is *how clear the statistical results are* that we are inferring from our data. Large p-values are unclear results; small p-values are clear results. 
+All the p-value really tells us is *how clear the statistical results are* that we are inferring from our data. Large p-values are unclear results; small p-values are clear results.
 
-If the p-value is small (e.g., less the $\alpha$ threshold of 0.05), we conclude there is a statistically significant relationship.
+I am not going to advocate for using the approach described by Dushoff, because I don't think it solves the problem. But I think they make a good point, that: we want to think about a p-value as **some indication of your data and how *clear* the results of those data are.**
 
-- But this does not necessarily mean the relationship is LARGE. 
-- Similarly, if we get a large p-value, it does not mean the relationship is absent or SMALL.
+- If the p-value is **large**, the results are unclear. 
+- If the p-value is small (e.g., less the $\alpha$ threshold of 0.05), we conclude there is a clear relationship.
+
+Generally, when the p-value is small, we conclude that there is a statistically-significant relationship. But the <u>p-value does not necessarily mean the relationship is **LARGE**</u>.
+
+Similarly, if we get a large p-value, it does not mean the relationship is absent or SMALL.
+
+## The null hypothesis is often not true
+
+Another problem that Johnson points out with p-values and this definition is...
 
 **Q:** Is the null hypothesis ever really true to begin with? What do you think?
 
 - Yes, it can be!! Trivial example: we might hypothesize that the color of a human's shirt when they are planting trees influences plant growth. Because shirt is unlikely to have a biological effect on, the null hypothesis (no influence of shirt color on plant growth) is likely to be true. A controlled experiment will support this.
-- However, with observational studies, there is rarely zero different between groups and the null hypothesis is rarely true. 
+- However, with observational studies, there is rarely zero different between groups and the null hypothesis is rarely true. Johnson talked about nonsensical tests that were performed:
   - E.g., coyote diet difference between spring and fall, tree density between clear cut and non-clear cut forest stands, etc.
+  - These are nonsensical because we know these to be false beforehand.
 - Often you have an *a priori* reason to believe there is a relationship. So, the chance that there is no difference is often nonsensical. You may have a small effect, but there is often a relationship. 
-- This is a limitation of p-vales: the null hypothesis is never really true… and yet we are calculating p-values based on the assumption that the null is true!
+- This is a limitation of p-vales: the null hypothesis is never really true… and yet we are calculating p-values <u>based on the assumption that the null is true</u>! This doesn't make a lot of sense.
 
 ## P-values, effect size, and sample size
 
-P-values are a function of two things: *effect size* and *sample size*
+Regardless of the statistical test you use, P-values are a function of two things: *'effect size'* and *sample size*
 
-- **effect size -- the slope or difference between groups**
-- **sample size -- the number of observations; as sample size increases, p-values decrease, and vice versa**
-- We will use the term 'effect size' loosely in this class:
-  - Correlation does not mean causation. Just because we observe a relationship between two variables in an observational study does not mean cause and effect.
-  - We must do a **manipulative experiment** to demonstrate causation.
-  - We may make assumptions about causation when looking at the effect of variable X on Y, but we never actually claim there is causation.
-  - Best not to confuse *statistical significance* with *biological significance*.
+- **effect size -- the slope or difference between groups**; the larger the effect size, the smaller the p-value
+
+We will use the term 'effect size' loosely in this class:
+
+- Just because you demonstrate a correlation, it does not mean there is 'causation'. Just because we observe a relationship between two variables in an observational study does not mean cause and effect.
+- The only way to demonstrate causation is to use a **manipulative experiment**.
+- We may make assumptions about causation when looking at the effect of variable X on Y, but we never actually claim there is causation.
+
+- **sample size -- the number of observations**
+  - ***n* increases, p decreases**
+  - ***n* decreases, p increases**
+
+P-values are arbitrarily influenced by effect size and sample size, <u>which can have consequences on how we interpret our results</u>.
+
+- It is possible to have large sample sizes and get a significant p-value with a very, very small effect size.
+- For this reason, we have to report how big the effect sizes are, and then interpret whether the effect sizes are biologically significant or not.
+
+Best not to confuse *statistical significance* with *biological significance*.
+
+And I have a good example of this.
 
 ## Statistical vs. biological significance
 
@@ -118,14 +142,16 @@ data <- data.frame(
   Group = c("Placebo", "Drug"),
   `Heart Attack` = c(8040, 7560),
   `No Attack` = c(3960, 4440),
-  `Percentage` = c("67%", "63%"),
+  `Percentage` = c("=67%", "=63%"),
   `Additional Info` = c("Chi-squared = 42.2, 1 df", "P-value = 9.02x10^-11")
 )
 
 # Create the table
-kable(data, col.names = c("Group", "Heart Attack", "No Attack", "Percentage", "Additional Info
+kable(data, col.names = c("Group", "Heart Attack", "No Attack", "Percentage", "Additional Info"))
 
 ```
+
+If we do the math and run a chi-squared contingency table analysis... the chi-squared is 42.2 with 1 degree of freedom; look up the p-value for that, and it is 9.02x10-11.
 
 **Q:** Does this drug work??
   
@@ -133,66 +159,93 @@ Yes! It has a statistically significant effect of reducing heart attack. The res
 
 **Q:** Is this a drug you would take??
 
-I dunno. How much does it cost? How do results compare to walking a mile every day, eating healthy, quitting alcohol or tobacco products, etc. (Johnson suggested we should consider more than just statistical probability when evaluating results....)
+I dunno. I would next ask:
 
-Is this a biologically significant effect? Maybe not so much.
+- How much does it cost?
+- How do results compare to walking a mile every day, eating healthy, quitting alcohol or tobacco products, etc. (Johnson suggested we should consider more than just statistical probability when evaluating results....)
+
+Is this a biologically significant effect? Maybe not so much. This is open to interpretation.
 
 **Statistics are not objective; they are subjective**. The depend on the analysis you use, the assumptions you made, and how you interpreted the results.
 
 **Q:** Why do you think the result was so significant?
 
-- Sample size of 12,000 people!
-- Drug companies want to use statistics to get their drugs approved. If you are a drug company statistician, what are you going to do during your trials? Crank up your sample size. 
+- Sample size of 12,000 people! Do you think the drug company knew what they were doing when they gave the drug to 12,000 people? Yeah, they have statisticians on their payroll, who know what they are doing...
+- Drug companies want to use statistics to get their drugs approved. If you are a drug company statistician, what are you going to do during your trials? <u>Crank up your sample size</u>. Another way is to give the highest dose possible without hurting somebody. The highest dose ensure the best opportunity to measure an effect.
+  - An example of this is the birth-control pill: the original pill form was dosing people multiple factors of ten higher than what was necessary to prevent pregnancy. It had really bad side-effects for many years! Drug companies have tricks to make sure they get statistically-significant results...
 
 It’s important that as scientists we are aware of how statistics should be used in honest way. Our goal is to help people learn -- not to fool people.
 
 Just because we get a significant p-value, it doesn’t mean that we have a large biological effect. This is why Johnson (1999) argues that we **report the estimates of effects** -– slope, difference -- and the **confidence intervals** around those estimates -- measures of uncertainty.
 
-- We will report effect sizes and uncertainty in this class.
+<u>We will report effect sizes and uncertainty in this class</u>
 
-**A small p-value can be due to a large effect or a large sample size.**
+## Reasons for getting different p-values
 
-**A big p-value can be due to a small effect or a small sample size.**
+**Small p-value** -- can be due to a **big effect, or a big sample size.**
+
+**Big p-value** -- can be due to a **small effect, or a small sample size.**
+
+Just because you do not get a significant p-value does not mean there is no relationship. This can be due to your sample size being too small! Wildlife biologists try to do experiments or studies on large animals, and it's difficult get sufficient sample sizes to measure significant effects. It does not mean the effect does not exist! To use the words of Dushoff, those non-significant results might be better framed as being 'unclear' -- it's unclear if there is an effect.
 
 **Power analysis** -- something you do before an experiment starts to try to understand the sample size needed to measure a statistically significant effect.
 
-- The problem with power analysis is that we don’t know what the effect is! That’s why we are doing the study... I am not a fan of this.
+- Something done before an experiment starts to guide the number of samples included in the study or experiment. It requires an estimate of the effect to guess how many samples will be needed to measure the effect. But we don't know the effect yet! That’s why we are doing the study... I think power analysis is **silly**.
 - Power analysis is often required by IACUC or grant applications. However, it's not involved in theses or studies published in peer-reviewed papers. I won’t teach you how to do this in the class.
+
+If you have a non-significant p-value, we never really know if it's due to sample size or effect size. The solution is to then report the effect, it's confidence intervals, and the sample size.
+
+For the heart-attack drug study, assume we didn't have 12,000 individuals, but rather had 12 in each group. We observed the same 4% difference, but our P-value was much higher (0.2).
+
+- In this case, we have a small sample size and a small effect size.
+- We can calculate confidence intervals: **4% effect plus/minus 12%**.
+- There is a lot of information in the confidence intervals. The drug might have as large as a 16% effect. Maybe you would look at that and say: "16% isn't big enough, we want a drug that might have 20%. The results are unclear, but they are clear enough that the effect isn't large."
+- By looking at the numbers, and not the p-value, we can help make better decisions. 
 
 ## Putting things in perspective
 
-Science is the search for truth through the accumulation of fact. Statistics is the method we use to calculate the estimate of truth using those facts. Keep this in mind. The goal of every statistical test is to give us an estimate of truth. A p-value does not provide us the estimate of truth. The estimate of truth is the slope or a difference between groups and the associated uncertainties around those effects.
+On Tuesday, I said that: science is the search for truth through the accumulation of facts. Statistics is the method we use to calculate the estimate of truth using those facts. Keep this in mind. The goal of every statistical test is to give us an estimate of truth. A p-value does not provide us the estimate of truth. The estimate of truth is the slope or a difference between groups and the associated uncertainties around those effects.
 
-**Q:** Which results would you rather have in your graduate student student?
+**Q:** Here is a question you might get asked on your graduate thesis defense. Which results would you rather have in your graduate student student?
 
 - **P = 0.04, *n* = 20**
-- **P = 0.04, *n* = 100**
+- **P = 0.04, *n* = 120**
 
-The first one! There is a bigger effect that was recovered with a smaller sample size. This is more likely to be a biologically significant effect in nature.
+The first one! There is a bigger effect that was recovered with a smaller sample size. Both of these effects might be biologically significant, or not biologically significant. But since the first result has a larger effect, it is more likely to be a <u>biologically significant effect</u> in nature.
+
+One problem I see in working with other scientists is that people are often concerned with trying to understand *whether* a variable has an effect. I don't think this is particularly useful. I want to understand what *is* the effect, whether the effect is large or small, and whether it is biologically significant. 
 
 As scientists, let’s assume everything has an effect. This is why we are doing these studies, because there is something we suspect to be true and we are thus doing these studies. 
 
-- In this class, I am going to encourage us as scientists to ask two questions during our science.
-  - How big is that effect?
-  - How clear is our results?
-- We don’t need a p-value for either. How big is it? **Estimate**. How clear is the result? **Confidence intervals**.
-- We will still report the p-value because every journal on Earth requires it. But we are moving beyond this (*sensu* Johnson 1999) will instead report our EFFECT SIZE and our measure of UNCERTAINTY in that effect (the 95% confidence intervals) to help infer how clear the results are (*sensu* Dushoff et al. 2019).
+In this class, I am going to encourage us as scientists to ask two questions during our science.
+
+- How big is that effect?
+- How clear is our results?
+
+We don’t need a p-value for either. How big is it? **Estimate**. How clear is the result? **Confidence Intervals**.
+
+We will still report the p-value because most journals require them. But we are moving beyond this (*sensu* Johnson 1999) will instead report our EFFECT SIZE and our measure of UNCERTAINTY in that effect (the 95% confidence intervals) to help infer how clear the results are (*sensu* Dushoff et al. 2019).
 
 ## Final thoughts
 
 - You should have some background familiarity with p-values, t-test, ANOVA, etc.
-- Our goals in this class are to use statistics to estimate truth. We assume there is a relationship, and we want to measure with it is a big relationship, a small relationship, and/or how clear.
-- Don’t test for frivolous hypotheses in this class. Don’t test whether clear-cuts have small trees than uncut forests. Every p-value we generate should have an underlying reason to consider. 
-- The purpose of statistics is to validate hypotheses that we have. If you don’t have a hypothesis, don’t run statistics – instead you are data dredging and wasting your time and it’s not very good science. Some may be true relationship, some may be spurious correlations.
+- Our goals in this class are to use <u>statistics to estimate truth</u>. We assume there is a relationship, and we want to measure with it is a big relationship, a small relationship, and/or how clear.
+- <u>Don’t test for frivolous hypotheses</u> in this class -- or ever! Don’t test whether clear-cuts have small trees than uncut forests. Every p-value we generate should have an underlying reason to consider.
+- The purpose of statistics is to <u>test hypotheses</u> that we have. If you don’t have a hypothesis, don’t run statistics – instead you are <u>data dredging</u> and wasting your time, but this is *not very good science*. Some may be true relationship, but others may be spurious correlations and that's why it's not good science.
 - Let’s think about what we are doing, why, and what is our goal. It should be: I want to get an estimate of truth. Will the statistic we are using give you an estimate of that? 
-- There are many ways to analyze our data… and they are all wrong!! Think carefully and try to use the best approach that suits our needs. 
-- Always estimate effects and confidence intervals. Don’t report naked p-values.
-- Let’s look for SUBSTANTIAL EFFECTS: effects that would be measured strong even with small sample sizes.
-- The p-value problem is not just a problem for environmental scientists. American Statistical Association in 2016 came out with a statement on the use of p-values and made a long to-do list of DON’TS for p-values. In 2019, American Statistician special issue: started with an article “Moving to a World Beyond P-Values” followed by over 40 separate articles on HOW NOT or HOW TO use p-values.
+- There are many ways to analyze our data... and <u>many may be incorrect for your needs</u>!! Think carefully and try to use the best approach that suits our needs. 
+- Always <u>estimate effects</u> and <u>confidence intervals</u>. Don’t report naked p-values. Let’s look for <u>SUBSTANTIAL EFFECTS</u>: effects that would be measured strong even with small sample sizes. Sometimes our results will be insignificant and unclear, but if we can identify substantial effects that are large, then this might direct further study to get greater samples sizes and measure significant effects.
+- The p-value problem is not just a problem for environmental scientists. American Statistical Association in 2016 came out with a statement on the use of p-values and made a long to-do list of <u>'DO NOTS'</u> for p-values. In 2019, American Statistician special issue: started with an article “Moving to a World Beyond P-Values” followed by over 40 separate articles on HOW NOT or HOW TO use p-values. Despite Johnson (1999) and many others arguing against P-values for decades, the problem persists.
 
 ## Working with data in R: 
 
-Let's explore some of R's built-in data sets (e.g., iris, mtcars, titanic).  We will install the 'titanic' package first.
+To follow along with the R-based lessons and demos, the code is available on the Schedule on the course website -- you should be able to download an R code file called 'lecture_2.R'.
+
+I recommend creating a folder on your computer -- somewhere convenient, like your Desktop -- that is called '**NRES_710**'. Inside that folder, I want you to create an RStudio 'project'. Let's all do that right now.
+
+Open your RStudio project in RStudio, then open the R code file.
+
+Today we will learn about some basic functions and capabilities in R, and to illustrate that, we will explore some of R's built-in dataset (e.g., iris, mtcars, titanic). 
 
 ### Notes about working in R:
 
@@ -206,11 +259,15 @@ Learn to use R scripts, and save your scripts frequently! This is the primary re
 
 If you have a problem, Google it! Someone has likely had the same problem as you in the past and asked for solutions online. Or, ask ChatGPT for help on how to solve your coding problem in R. When either Googling or prompting ChatGPT for help, be mindful that potential solutions presented to you may not be ideal for your problem.
 
-### First R demo!
+## First R demo!
 
 **NOTE:** for those wishing to follow along with the R-based demo in class, [click here](lecture_2.R) for an R-script that contains all the code blocks in this web-based lecture. 
 
 All of you should have R and RStudio installed on your computers. See the [links page](https://brianfolt.github.io/NRES_710/Links.html) for some useful references.
+
+We just created an RStudio Project for you to work out of for this class.
+
+Brian will orient you all to the RStudio layout.
 
 Starting at the most basic level, R can be used as a calculator. Try it! 
 
@@ -357,7 +414,5 @@ Note: I recommend always using RStudio projects whenever you are working on any 
 <!-- ### Make a new RStudio "project" for this class   -->
 
 <!-- [R projects are an **extremely useful** feature of RStudio](https://support.rstudio.com/hc/en-us/articles/200526207-Using-Projects). Just store all the code and data for this course in your project folder and it will make your life much, much easier! -->
-
-
 
 [--go to next lecture--](lecture_3.html)
