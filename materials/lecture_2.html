@@ -1,0 +1,1140 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+<meta name="author" content="NRES 710" />
+
+
+<title>P-values and Intro to R</title>
+
+<script src="site_libs/header-attrs-2.27/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/yeti.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/jqueryui-1.13.2/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+<link rel="stylesheet" href="styles.css" type="text/css" />
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "\e258";
+  font-family: 'Glyphicons Halflings';
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">NRES 710</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Syllabus</a>
+</li>
+<li>
+  <a href="schedule.html">Schedule</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    Lectures
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="lecture_1.html">Syllabus and the Purpose of Statistics</a>
+    </li>
+    <li>
+      <a href="lecture_2.html">P-value Discussion and Intro to R</a>
+    </li>
+    <li>
+      <a href="lecture_3.html">Sampling Uncertainty</a>
+    </li>
+    <li>
+      <a href="lecture_4.html">Linear Regression</a>
+    </li>
+    <li>
+      <a href="lecture_5.html">Linear Regression - results</a>
+    </li>
+    <li>
+      <a href="lecture_6.html">Linear Regression - assumptions</a>
+    </li>
+    <li>
+      <a href="lecture_7.html">Linear Regression - predictions</a>
+    </li>
+    <li>
+      <a href="lecture_8.html">Analysis of Categorical Data - 2 groups</a>
+    </li>
+    <li>
+      <a href="lecture_9.html">Analysis of Categorical Data - &gt;2 groups</a>
+    </li>
+    <li>
+      <a href="lecture_10.html">Analysis of Categorical Data - posthoc tests</a>
+    </li>
+    <li>
+      <a href="lecture_11.html">Analysis with Continuous or Categorical X?</a>
+    </li>
+    <li>
+      <a href="lecture_12.html">Multi-variable Modeling</a>
+    </li>
+    <li>
+      <a href="lecture_13.html">Multi-variable Modeling - collinearity</a>
+    </li>
+    <li>
+      <a href="lecture_14.html">Multi-variable Modeling - interactions</a>
+    </li>
+    <li>
+      <a href="lecture_15.html">Generalized Linear Models</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    Exercises
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="exercise_1.html">Exercise 1 - Data Summary Functions</a>
+    </li>
+    <li>
+      <a href="exercise_2.html">Exercise 2 - Linear Regression</a>
+    </li>
+    <li>
+      <a href="exercise_3.html">Exercise 3 - Linear Regression (cont.)</a>
+    </li>
+    <li>
+      <a href="exercise_4.html">Exercise 4 - Analysis of Categorical Data</a>
+    </li>
+    <li>
+      <a href="exercise_5.html">Exercise 5 - Multi-variable Analysis - Collinearity</a>
+    </li>
+    <li>
+      <a href="exercise_6.html">Exercise 6 - Multi-variable Analysis - Interactions</a>
+    </li>
+    <li>
+      <a href="exercise_7.html">Exercise 7 - TBD</a>
+    </li>
+    <li>
+      <a href="exercise_8.html">Exercise 8 - TBD</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    More Resources
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="Links.html">Links</a>
+    </li>
+  </ul>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+
+
+<h1 class="title toc-ignore">P-values and Intro to R</h1>
+<h4 class="author">NRES 710</h4>
+<h4 class="date">Last compiled: 2024-08-29</h4>
+
+</div>
+
+
+<p>Updates: first quiz is available as of today! It will cover the
+readings and will be due Monday night at midnight.</p>
+<p>For today, I asked you all to read Johnson (1999) and Dushoff et
+al. (2019). What did you all think… was this eye-opening, perhaps?</p>
+<div id="overview" class="section level2">
+<h2>Overview</h2>
+<p>A problem perceived by many in our field is that <strong>too many
+ecologists and environmental scientists</strong> put <strong>too much
+emphasis on p-values</strong>. Not surprisingly, many statistics classes
+also focus heavily on how to calculate p-values. When I first learned
+statistics in graduate school, we had to calculate the F-statistics and
+then look up the associated p-value in the back of a book…</p>
+<p>Computers can do this for us now! Which is a great benefit. But yet,
+classes still focus on calculating p-values, because professors have
+placed historical emphasis on it. It’s a <u>self-repeating process</u>.
+My goal with this class is to de-emphasize p-values and avoid repeating
+this iterative process. So with this lecture and discussion today, we
+will talk about what p-values really area – and practical ways to
+approach using them.</p>
+</div>
+<div id="probability-values-p-values" class="section level2">
+<h2>Probability values (p-values)</h2>
+<p><strong>p-value – the probability of getting the observed data or
+something more extreme, given <span class="math inline">\(H_0\)</span>
+(null hypothesis; ‘H-naught’) is assumed true</strong> (Johnson
+1999).</p>
+<ul>
+<li><strong>What is the null hypothesis</strong>? No relationship; e.g.,
+no difference between groups, no slope in a regression line; no ‘signal’
+in your data.</li>
+<li>We assume there is some <strong>alternative, hypothesized
+relationship</strong>. We then collect data and perform a statistical
+test of the null hypothesis: there is no relationship between the X and
+Y-variables.</li>
+<li>If we get a p-value less than 0.05, this is ‘statistically
+significant’. We then reject the null and infer (learn) that this
+alternative relationship really does exist in the world.</li>
+<li>p = 0.05 is often called the <span
+class="math inline">\(\alpha\)</span> level; it is the threshold of
+whether a result is significant or not.</li>
+</ul>
+<p>However, the first thing I want you to know about p-value is that it
+says nothing <em>about your data</em> – nothing about the data you have
+in hand. It tells us the probability of getting some data ‘like ours’ or
+more extreme than ours, given that the null hypothesis is true.</p>
+<ul>
+<li>In order to know the probability of getting our data, we would have
+to know the truth about the system – what the true relationship is. We
+would have to know if there really is a relationship, or not. But we
+don’t know this.</li>
+<li>The p-value assumes there is no relationship (no slope, no
+difference between groups) and tells us what the probability of getting
+the outcome we got, under that assumption of no relationship.</li>
+</ul>
+<p><strong>Q:</strong> I flipped a coin and it is in my hand. What is
+the probability that it is heads? 50%?</p>
+<ul>
+<li>Wrong. It has already been flipped. It either <strong>is</strong>
+heads (1), or it <strong>is not</strong> (0). I know the truth.</li>
+<li>What is the probability that you guess correct? Now you’ve got a
+50:50 chance.</li>
+<li>Once it’s been flipped, it either is or it isn’t.</li>
+</ul>
+<p>So, this idea that your data can have some probability, that it’s due
+to chance, under the assumption that the null hypothesis is true – this
+doesn’t make sense. <u>The p-value does not tell us about the
+probability of our data</u>.</p>
+<p>Similarly, a p-value tells us the probability of observing data (or
+something more extreme) assuming the null hypothesis is true – but it
+does not tell us the probability that the null hypothesis itself is true
+or false.</p>
+<p>And finally: the probability of getting your data or more extreme
+data depends on the methods, which is impractical to account for in a
+statistical model. Johnson didn’t like this either.</p>
+</div>
+<div id="alternative-definitions-of-p-values" class="section level2">
+<h2>Alternative definitions of p-values</h2>
+<p>There are alternative definitions of a p-value that you might come
+across.</p>
+<ul>
+<li><u>Probability that your data was due to <em>chance</em></u>.
+<ul>
+<li>However, this is <strong>wrong</strong>: we know your data was due
+to sampling or process error.</li>
+</ul></li>
+<li><u>Probability that the null hypothesis is true</u>.
+<ul>
+<li>The idea here is that if the p-value is low, then we might think
+there is a small probability that the null is true.</li>
+<li>However, in reality, the null is either TRUE or NOT. Just because we
+don’t whether the null is true or false does not mean there is some
+underlying probability of one reality vs. the other. So this
+interpretation is also <strong>wrong</strong>.</li>
+</ul></li>
+</ul>
+<p>Statistics can be hard to understand because these strange or
+<em>whonky</em> definitions are used. But we use them, and they do work,
+if we understand what the limitations are.</p>
+<p>This is one of the main reasons why Johnson (1999) and many, many
+other authors don’t like the use of ‘naked p-values’. Too often people
+use p-values <strong>inappropriately</strong> or with <strong>a
+wrong/incorrect definition</strong>. And then they make conclusions that
+they should not be making.</p>
+</div>
+<div id="p-values-an-expression-of-clarity" class="section level2">
+<h2>P-values: an expression of <em>clarity</em></h2>
+<p>All the p-value really tells us is <em>how clear the statistical
+results are</em> that we are inferring from our data. Large p-values are
+unclear results; small p-values are clear results.</p>
+<p>I am not going to advocate for using the approach described by
+Dushoff, because I don’t think it solves the problem. But I think they
+make a good point, that: we want to think about a p-value as
+<strong>some indication of your data and how <em>clear</em> the results
+of those data are.</strong></p>
+<ul>
+<li>If the p-value is <strong>large</strong>, the results are
+unclear.</li>
+<li>If the p-value is small (e.g., less the <span
+class="math inline">\(\alpha\)</span> threshold of 0.05), we conclude
+there is a clear relationship.</li>
+</ul>
+<p>Generally, when the p-value is small, we conclude that there is a
+statistically-significant relationship. But the <u>p-value does not
+necessarily mean the relationship is <strong>LARGE</strong></u>.</p>
+<p>Similarly, if we get a large p-value, it does not mean the
+relationship is absent or SMALL.</p>
+</div>
+<div id="the-null-hypothesis-is-often-not-true" class="section level2">
+<h2>The null hypothesis is often not true</h2>
+<p>Another problem that Johnson points out with p-values and this
+definition is…</p>
+<p><strong>Q:</strong> Is the null hypothesis ever really true to begin
+with? What do you think?</p>
+<ul>
+<li>Yes, it can be!! Trivial example: we might hypothesize that the
+color of a human’s shirt when they are planting trees influences plant
+growth. Because shirt is unlikely to have a biological effect on, the
+null hypothesis (no influence of shirt color on plant growth) is likely
+to be true. A controlled experiment will support this.</li>
+<li>However, with observational studies, there is rarely zero different
+between groups and the null hypothesis is rarely true. Johnson talked
+about nonsensical tests that were performed:
+<ul>
+<li>E.g., coyote diet difference between spring and fall, tree density
+between clear cut and non-clear cut forest stands, etc.</li>
+<li>These are nonsensical because we know these to be false
+beforehand.</li>
+</ul></li>
+<li>Often you have an <em>a priori</em> reason to believe there is a
+relationship. So, the chance that there is no difference is often
+nonsensical. You may have a small effect, but there is often a
+relationship.</li>
+<li>This is a limitation of p-vales: the null hypothesis is never really
+true… and yet we are calculating p-values <u>based on the assumption
+that the null is true</u>! This doesn’t make a lot of sense.</li>
+</ul>
+</div>
+<div id="p-values-effect-size-and-sample-size" class="section level2">
+<h2>P-values, effect size, and sample size</h2>
+<p>Regardless of the statistical test you use, P-values are a function
+of two things: <em>‘effect size’</em> and <em>sample size</em></p>
+<ul>
+<li><strong>effect size – the slope or difference between
+groups</strong>; the larger the effect size, the smaller the
+p-value</li>
+</ul>
+<p>We will use the term ‘effect size’ loosely in this class:</p>
+<ul>
+<li><p>Just because you demonstrate a correlation, it does not mean
+there is ‘causation’. Just because we observe a relationship between two
+variables in an observational study does not mean cause and
+effect.</p></li>
+<li><p>The only way to demonstrate causation is to use a
+<strong>manipulative experiment</strong>.</p></li>
+<li><p>We may make assumptions about causation when looking at the
+effect of variable X on Y, but we never actually claim there is
+causation.</p></li>
+<li><p><strong>sample size – the number of observations</strong></p>
+<ul>
+<li><strong><em>n</em> increases, p decreases</strong></li>
+<li><strong><em>n</em> decreases, p increases</strong></li>
+</ul></li>
+</ul>
+<p>P-values are arbitrarily influenced by effect size and sample size,
+<u>which can have consequences on how we interpret our results</u>.</p>
+<ul>
+<li>It is possible to have large sample sizes and get a significant
+p-value with a very, very small effect size.</li>
+<li>For this reason, we have to report how big the effect sizes are, and
+then interpret whether the effect sizes are biologically significant or
+not.</li>
+</ul>
+<p>Best not to confuse <em>statistical significance</em> with
+<em>biological significance</em>.</p>
+<p>And I have a good example of this.</p>
+</div>
+<div id="statistical-vs.-biological-significance"
+class="section level2">
+<h2>Statistical vs. biological significance</h2>
+<p>Example: a drug to reduce the risk of heart attack. This drug is
+being used by the public and as such, it had to pass clinical trials.
+Researchers sampled the population of heart attack survivors and gave
+them either this new drug or a placebo drug. The patients were monitored
+for five years and the researchers used a statistical analysis to test
+whether the drug reduced risk of having a second heart attack.</p>
+<table>
+<colgroup>
+<col width="11%" />
+<col width="19%" />
+<col width="14%" />
+<col width="16%" />
+<col width="37%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">Group</th>
+<th align="right">Heart Attack</th>
+<th align="right">No Attack</th>
+<th align="left">Percentage</th>
+<th align="left">Additional Info</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Placebo</td>
+<td align="right">8040</td>
+<td align="right">3960</td>
+<td align="left">=67%</td>
+<td align="left">Chi-squared = 42.2, 1 df</td>
+</tr>
+<tr class="even">
+<td align="left">Drug</td>
+<td align="right">7560</td>
+<td align="right">4440</td>
+<td align="left">=63%</td>
+<td align="left">P-value = 9.02x10^-11</td>
+</tr>
+</tbody>
+</table>
+<p>If we do the math and run a chi-squared contingency table analysis…
+the chi-squared is 42.2 with 1 degree of freedom; look up the p-value
+for that, and it is 9.02x10-11.</p>
+<p><strong>Q:</strong> Does this drug work??</p>
+<p>Yes! It has a statistically significant effect of reducing heart
+attack. The results are pretty clear.</p>
+<p><strong>Q:</strong> Is this a drug you would take??</p>
+<p>I dunno. I would next ask:</p>
+<ul>
+<li>How much does it cost?</li>
+<li>How do results compare to walking a mile every day, eating healthy,
+quitting alcohol or tobacco products, etc. (Johnson suggested we should
+consider more than just statistical probability when evaluating
+results….)</li>
+</ul>
+<p>Is this a biologically significant effect? Maybe not so much. This is
+open to interpretation.</p>
+<p><strong>Statistics are not objective; they are subjective</strong>.
+The depend on the analysis you use, the assumptions you made, and how
+you interpreted the results.</p>
+<p><strong>Q:</strong> Why do you think the result was so
+significant?</p>
+<ul>
+<li>Sample size of 12,000 people! Do you think the drug company knew
+what they were doing when they gave the drug to 12,000 people? Yeah,
+they have statisticians on their payroll, who know what they are
+doing…</li>
+<li>Drug companies want to use statistics to get their drugs approved.
+If you are a drug company statistician, what are you going to do during
+your trials? <u>Crank up your sample size</u>. Another way is to give
+the highest dose possible without hurting somebody. The highest dose
+ensure the best opportunity to measure an effect.
+<ul>
+<li>An example of this is the birth-control pill: the original pill form
+was dosing people multiple factors of ten higher than what was necessary
+to prevent pregnancy. It had really bad side-effects for many years!
+Drug companies have tricks to make sure they get
+statistically-significant results…</li>
+</ul></li>
+</ul>
+<p>It’s important that as scientists we are aware of how statistics
+should be used in honest way. Our goal is to help people learn – not to
+fool people.</p>
+<p>Just because we get a significant p-value, it doesn’t mean that we
+have a large biological effect. This is why Johnson (1999) argues that
+we <strong>report the estimates of effects</strong> -– slope, difference
+– and the <strong>confidence intervals</strong> around those estimates –
+measures of uncertainty.</p>
+<p><u>We will report effect sizes and uncertainty in this class</u></p>
+</div>
+<div id="reasons-for-getting-different-p-values" class="section level2">
+<h2>Reasons for getting different p-values</h2>
+<p><strong>Small p-value</strong> – can be due to a <strong>big effect,
+or a big sample size.</strong></p>
+<p><strong>Big p-value</strong> – can be due to a <strong>small effect,
+or a small sample size.</strong></p>
+<p>Just because you do not get a significant p-value does not mean there
+is no relationship. This can be due to your sample size being too small!
+Wildlife biologists try to do experiments or studies on large animals,
+and it’s difficult get sufficient sample sizes to measure significant
+effects. It does not mean the effect does not exist! To use the words of
+Dushoff, those non-significant results might be better framed as being
+‘unclear’ – it’s unclear if there is an effect.</p>
+<p><strong>Power analysis</strong> – something you do before an
+experiment starts to try to understand the sample size needed to measure
+a statistically significant effect.</p>
+<ul>
+<li>Something done before an experiment starts to guide the number of
+samples included in the study or experiment. It requires an estimate of
+the effect to guess how many samples will be needed to measure the
+effect. But we don’t know the effect yet! That’s why we are doing the
+study… I think power analysis is <strong>silly</strong>.</li>
+<li>Power analysis is often required by IACUC or grant applications.
+However, it’s not involved in theses or studies published in
+peer-reviewed papers. I won’t teach you how to do this in the
+class.</li>
+</ul>
+<p>If you have a non-significant p-value, we never really know if it’s
+due to sample size or effect size. The solution is to then report the
+effect, it’s confidence intervals, and the sample size.</p>
+<p>For the heart-attack drug study, assume we didn’t have 12,000
+individuals, but rather had 12 in each group. We observed the same 4%
+difference, but our P-value was much higher (0.2).</p>
+<ul>
+<li>In this case, we have a small sample size and a small effect
+size.</li>
+<li>We can calculate confidence intervals: <strong>4% effect plus/minus
+12%</strong>.</li>
+<li>There is a lot of information in the confidence intervals. The drug
+might have as large as a 16% effect. Maybe you would look at that and
+say: “16% isn’t big enough, we want a drug that might have 20%. The
+results are unclear, but they are clear enough that the effect isn’t
+large.”</li>
+<li>By looking at the numbers, and not the p-value, we can help make
+better decisions.</li>
+</ul>
+</div>
+<div id="putting-things-in-perspective" class="section level2">
+<h2>Putting things in perspective</h2>
+<p>On Tuesday, I said that: science is the search for truth through the
+accumulation of facts. Statistics is the method we use to calculate the
+estimate of truth using those facts. Keep this in mind. The goal of
+every statistical test is to give us an estimate of truth. A p-value
+does not provide us the estimate of truth. The estimate of truth is the
+slope or a difference between groups and the associated uncertainties
+around those effects.</p>
+<p><strong>Q:</strong> Here is a question you might get asked on your
+graduate thesis defense. Which results would you rather have in your
+graduate student student?</p>
+<ul>
+<li><strong>P = 0.04, <em>n</em> = 20</strong></li>
+<li><strong>P = 0.04, <em>n</em> = 120</strong></li>
+</ul>
+<p>The first one! There is a bigger effect that was recovered with a
+smaller sample size. Both of these effects might be biologically
+significant, or not biologically significant. But since the first result
+has a larger effect, it is more likely to be a <u>biologically
+significant effect</u> in nature.</p>
+<p>One problem I see in working with other scientists is that people are
+often concerned with trying to understand <em>whether</em> a variable
+has an effect. I don’t think this is particularly useful. I want to
+understand what <em>is</em> the effect, whether the effect is large or
+small, and whether it is biologically significant.</p>
+<p>As scientists, let’s assume everything has an effect. This is why we
+are doing these studies, because there is something we suspect to be
+true and we are thus doing these studies.</p>
+<p>In this class, I am going to encourage us as scientists to ask two
+questions during our science.</p>
+<ul>
+<li>How big is that effect?</li>
+<li>How clear is our results?</li>
+</ul>
+<p>We don’t need a p-value for either. How big is it?
+<strong>Estimate</strong>. How clear is the result? <strong>Confidence
+Intervals</strong>.</p>
+<p>We will still report the p-value because most journals require them.
+But we are moving beyond this (<em>sensu</em> Johnson 1999) will instead
+report our EFFECT SIZE and our measure of UNCERTAINTY in that effect
+(the 95% confidence intervals) to help infer how clear the results are
+(<em>sensu</em> Dushoff et al. 2019).</p>
+</div>
+<div id="final-thoughts" class="section level2">
+<h2>Final thoughts</h2>
+<ul>
+<li>You should have some background familiarity with p-values, t-test,
+ANOVA, etc.</li>
+<li>Our goals in this class are to use <u>statistics to estimate
+truth</u>. We assume there is a relationship, and we want to measure
+with it is a big relationship, a small relationship, and/or how
+clear.</li>
+<li><u>Don’t test for frivolous hypotheses</u> in this class – or ever!
+Don’t test whether clear-cuts have small trees than uncut forests. Every
+p-value we generate should have an underlying reason to consider.</li>
+<li>The purpose of statistics is to <u>test hypotheses</u> that we have.
+If you don’t have a hypothesis, don’t run statistics – instead you are
+<u>data dredging</u> and wasting your time, but this is <em>not very
+good science</em>. Some may be true relationship, but others may be
+spurious correlations and that’s why it’s not good science.</li>
+<li>Let’s think about what we are doing, why, and what is our goal. It
+should be: I want to get an estimate of truth. Will the statistic we are
+using give you an estimate of that?</li>
+<li>There are many ways to analyze our data… and <u>many may be
+incorrect for your needs</u>!! Think carefully and try to use the best
+approach that suits our needs.</li>
+<li>Always <u>estimate effects</u> and <u>confidence intervals</u>.
+Don’t report naked p-values. Let’s look for <u>SUBSTANTIAL EFFECTS</u>:
+effects that would be measured strong even with small sample sizes.
+Sometimes our results will be insignificant and unclear, but if we can
+identify substantial effects that are large, then this might direct
+further study to get greater samples sizes and measure significant
+effects.</li>
+<li>The p-value problem is not just a problem for environmental
+scientists. American Statistical Association in 2016 came out with a
+statement on the use of p-values and made a long to-do list of <u>‘DO
+NOTS’</u> for p-values. In 2019, American Statistician special issue:
+started with an article “Moving to a World Beyond P-Values” followed by
+over 40 separate articles on HOW NOT or HOW TO use p-values. Despite
+Johnson (1999) and many others arguing against P-values for decades, the
+problem persists.</li>
+</ul>
+</div>
+<div id="working-with-data-in-r" class="section level2">
+<h2>Working with data in R:</h2>
+<p>To follow along with the R-based lessons and demos, the code is
+available on the Schedule on the course website – you should be able to
+download an R code file called ‘lecture_2.R’.</p>
+<p>I recommend creating a folder on your computer – somewhere
+convenient, like your Desktop – that is called
+‘<strong>NRES_710</strong>’. Inside that folder, I want you to create an
+RStudio ‘project’. Let’s all do that right now.</p>
+<p>Open your RStudio project in RStudio, then open the R code file.</p>
+<p>Today we will learn about some basic functions and capabilities in R,
+and to illustrate that, we will explore some of R’s built-in dataset
+(e.g., iris, mtcars, titanic).</p>
+<div id="notes-about-working-in-r" class="section level3">
+<h3>Notes about working in R:</h3>
+<p>R is an open-source project, and new packages are being added all the
+time.</p>
+<p>R is incredibly powerful and feature rich. You are NOT expected to
+memorize syntax right away, but rather just know that the answer is
+always a few clicks away! ‘help’ files in R are extremely useful, as is
+information about how to use R that is found in books or on the
+internet.</p>
+<p>‘Base R’ is the default software built into R that does not including
+loading any additional packages. Here is a <a href="base-r.pdf">‘base R’
+cheat sheet</a>; this is a great reference for most of the basic tasks
+you will need to perform in R.</p>
+<p>Learn to use R scripts, and save your scripts frequently! This is the
+primary record of what you’ve done and allows you and others to
+reproduce your workflows.</p>
+<p>If you have a problem, Google it! Someone has likely had the same
+problem as you in the past and asked for solutions online. Or, ask
+ChatGPT for help on how to solve your coding problem in R. When either
+Googling or prompting ChatGPT for help, be mindful that potential
+solutions presented to you may not be ideal for your problem.</p>
+</div>
+</div>
+<div id="first-r-demo" class="section level2">
+<h2>First R demo!</h2>
+<p><strong>NOTE:</strong> for those wishing to follow along with the
+R-based demo in class, <a href="lecture_2.R">click here</a> for an
+R-script that contains all the code blocks in this web-based
+lecture.</p>
+<p>All of you should have R and RStudio installed on your computers. See
+the <a href="https://brianfolt.github.io/NRES_710/Links.html">links
+page</a> for some useful references.</p>
+<p>We just created an RStudio Project for you to work out of for this
+class.</p>
+<p>Brian will orient you all to the RStudio layout.</p>
+<p>Starting at the most basic level, R can be used as a calculator. Try
+it!</p>
+<pre class="r"><code># Getting started with R ----------------- 
+
+# Use R as a calculator. Run the following code from your script (top-left panel in RStudio)
+# through your Console (bottom-left panel in RStudio)
+
+2 + 2                 # use R as a calculator</code></pre>
+<pre><code>## [1] 4</code></pre>
+<pre class="r"><code>four &lt;- 2 + 2         # define your first variable! This creates an &#39;object&#39; called &#39;four&#39;
+four</code></pre>
+<pre><code>## [1] 4</code></pre>
+<pre class="r"><code>five &lt;- 2 + 2         # BEWARE: you can make mistakes and define misleading labels - so be careful!
+three &lt;- four + five
+three</code></pre>
+<pre><code>## [1] 8</code></pre>
+<p>What about those hashtags (#) in the above code block? These are
+‘comments’ that can be used to annotate your code so that your code is
+more understandable to someone reading it (you!). Comments are super
+helpful; use them early and often!</p>
+<p>Use RStudio’s autofill feature to avoid typos!</p>
+<div id="explore-rs-existing-datasets" class="section level4">
+<h4>Explore R’s existing datasets</h4>
+<pre class="r"><code># R has many built in datasets 
+
+# data()    # &#39;uncomment&#39; this command and run it to explore built-in datasets
+#           # code can be uncommented with CTRL SHIFT C (PC) or COMMAND SHIFT C (Mac)</code></pre>
+<p>Let’s start by working with Fisher’s famous iris dataset:</p>
+<p><img src="iris1.png" style="width:85.0%" /></p>
+<pre class="r"><code>#iris                 # this is a data frame -- the basic data storage type in R
+head(iris)            # [add your own comment here!]</code></pre>
+<pre><code>##   Sepal.Length Sepal.Width Petal.Length Petal.Width Species
+## 1          5.1         3.5          1.4         0.2  setosa
+## 2          4.9         3.0          1.4         0.2  setosa
+## 3          4.7         3.2          1.3         0.2  setosa
+## 4          4.6         3.1          1.5         0.2  setosa
+## 5          5.0         3.6          1.4         0.2  setosa
+## 6          5.4         3.9          1.7         0.4  setosa</code></pre>
+<pre class="r"><code># tail(iris)
+
+#  ?iris              # uncomment this to learn more about the iris dataset
+# str(iris)
+
+
+len &lt;- iris$Petal.Length
+hist(len)             # what does this do? How could you learn more about this &#39;hist&#39; function?</code></pre>
+<p><img src="lecture_2_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
+<pre class="r"><code># Q: what kind of data are petal lengths?</code></pre>
+<p>Now let’s switch to the ‘titanic’ dataset. To get this dataset you
+need to install an R package!</p>
+<pre class="r"><code>#install.packages(&quot;titanic&quot;)    # uncomment this command to install the package. you only need to install once! so comment the code after installing.
+ 
+library(titanic)              # this &#39;loads&#39; the package and needs to be done every time you run this script
+
+data(&quot;titanic_train&quot;)
+head(titanic_train)</code></pre>
+<pre><code>##   PassengerId Survived Pclass
+## 1           1        0      3
+## 2           2        1      1
+## 3           3        1      3
+## 4           4        1      1
+## 5           5        0      3
+## 6           6        0      3
+##                                                  Name    Sex Age SibSp Parch
+## 1                             Braund, Mr. Owen Harris   male  22     1     0
+## 2 Cumings, Mrs. John Bradley (Florence Briggs Thayer) female  38     1     0
+## 3                              Heikkinen, Miss. Laina female  26     0     0
+## 4        Futrelle, Mrs. Jacques Heath (Lily May Peel) female  35     1     0
+## 5                            Allen, Mr. William Henry   male  35     0     0
+## 6                                    Moran, Mr. James   male  NA     0     0
+##             Ticket    Fare Cabin Embarked
+## 1        A/5 21171  7.2500              S
+## 2         PC 17599 71.2833   C85        C
+## 3 STON/O2. 3101282  7.9250              S
+## 4           113803 53.1000  C123        S
+## 5           373450  8.0500              S
+## 6           330877  8.4583              Q</code></pre>
+<pre class="r"><code># ?titanic_train              # uncomment and run to learn more about the data
+
+# Q: What kind of data are those in the &quot;Embarked&quot; column? How might you learn more 
+# Q: What kind of data are those in &quot;Pclass?&quot;
+# Q: How might you learn more about data types for all variables?</code></pre>
+<p>We can even make our own dataset!</p>
+<pre class="r"><code># Make our own data -------------------
+
+# lets pull 15 numbers from the standard normal distribution
+
+a &lt;- rnorm(15)
+a &lt;- rnorm(15, mean = 2, sd = 0.5)
+
+# let&#39;s pull 15 numbers from the binomial distribution
+b &lt;- rbinom(15, size = 1, prob = 0.2) # we could &quot;weight the coin&quot;
+
+
+# we can create categories: 
+unit &lt;- rep(c(&quot;Control&quot;, &quot;+N&quot;, &quot;+P&quot;, &quot;+NP&quot;), each = 20)
+
+
+# we can even create a whole dataframe
+plant.data &lt;- data.frame(
+  Obs.Id = 1:100, # 100 plants
+  Treatment = rep(c(&quot;A&quot;, &quot;B&quot;, &quot;C&quot;, &quot;D&quot;, &quot;E&quot;), each = 20), # 5 treatments
+  Block = rep(1:20, times = 5), # 5 randomized blocks
+  Germination = rpois(100, lambda = rep(c(1, 5, 4, 7, 1), each = 20)), # Germination status: 1 (yes), 0 (no)
+  AvgHeight = rnorm(100, mean = rep(c(10, 30, 31, 25, 35, 7), each = 20)) # Final plant height
+)
+head(plant.data)</code></pre>
+<pre><code>##   Obs.Id Treatment Block Germination AvgHeight
+## 1      1         A     1           0 10.187753
+## 2      2         A     2           0  9.699283
+## 3      3         A     3           2 10.713996
+## 4      4         A     4           0  9.727436
+## 5      5         A     5           1 10.217158
+## 6      6         A     6           1 11.329497</code></pre>
+<p>We can also import data from files stored on our computers (or even
+directly from the web)</p>
+<pre class="r"><code># import data from file ----------------------
+
+# Don&#39;t forget to set your working directory (or just make sure you&#39;re using an Rstudio Project). 
+
+# setwd(&quot;~/Desktop&quot;)       # uncomment and run if you want to set the desktop as your working directory.
+
+#Read in the data. Note that the file needs to be in CSV format, the name must be in quotes, and the name must include the csv extension.
+
+# Pleach &lt;- read.csv(&quot;PbyTime_Bio.csv&quot;, header=T) # this won&#39;t work for you because you don&#39;t have this file. 
+
+# Use your own file to try it out. Or, download a file by entering this link into your web browser: https://brianfolt.github.io/NRES_710/CourseSchedule.csv</code></pre>
+<p>Note: I recommend always using RStudio projects whenever you are
+working on any statistical analysis in R (homework exercises, class
+projects, analysis for your thesis chapter, etc.). This reduces the
+hassle of setting working directories and is a great habit to get into.
+By default, the project directory automatically becomes the working
+directory for your analysis!</p>
+<!-- ## The Statistical Program R -->
+<!-- R is an open-source project, and new packages are being added all the time.  -->
+<!-- R is incredibly powerful and feature rich. You are NOT expected to memorize syntax right away, but rather just know that the answer is always a few clicks away! 'help' files in R are extremely useful, as is information about how to use R that is found in books or on the internet. -->
+<!-- 'Base R' is the default software built into R that does not including loading any additional packages. Here is a ['base R' cheat sheet](base-r.pdf); this is a great reference for most of the basic tasks you will need to perform in R. -->
+<!-- Learn to use R scripts, and save your scripts frequently! This is the primary record of what you've done and allows you and others to reproduce your workflows. -->
+<!-- ### Install R and RStudio -->
+<!--  [CRAN website for downloading R](https://cran.r-project.org/)   -->
+<!--  [RStudio main site](https://www.rstudio.com/)  -->
+<!-- Make sure you have the most recent versions! -->
+<!-- ### Make a new RStudio "project" for this class   -->
+<!-- [R projects are an **extremely useful** feature of RStudio](https://support.rstudio.com/hc/en-us/articles/200526207-Using-Projects). Just store all the code and data for this course in your project folder and it will make your life much, much easier! -->
+<p><a href="lecture_3.html">–go to next lecture–</a></p>
+</div>
+</div>
+
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+<script>
+$(document).ready(function ()  {
+
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

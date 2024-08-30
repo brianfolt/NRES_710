@@ -1,0 +1,1010 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+<meta name="author" content="NRES 710" />
+
+
+<title>Analysis of Categorical Data (cont.)</title>
+
+<script src="site_libs/header-attrs-2.27/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/yeti.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/jqueryui-1.13.2/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+<link rel="stylesheet" href="styles.css" type="text/css" />
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "\e258";
+  font-family: 'Glyphicons Halflings';
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">NRES 710</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Syllabus</a>
+</li>
+<li>
+  <a href="schedule.html">Schedule</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    Lectures
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="lecture_1.html">Syllabus and the Purpose of Statistics</a>
+    </li>
+    <li>
+      <a href="lecture_2.html">P-value Discussion and Intro to R</a>
+    </li>
+    <li>
+      <a href="lecture_3.html">Sampling Uncertainty</a>
+    </li>
+    <li>
+      <a href="lecture_4.html">Linear Regression</a>
+    </li>
+    <li>
+      <a href="lecture_5.html">Linear Regression - results</a>
+    </li>
+    <li>
+      <a href="lecture_6.html">Linear Regression - assumptions</a>
+    </li>
+    <li>
+      <a href="lecture_7.html">Linear Regression - predictions</a>
+    </li>
+    <li>
+      <a href="lecture_8.html">Analysis of Categorical Data - 2 groups</a>
+    </li>
+    <li>
+      <a href="lecture_9.html">Analysis of Categorical Data - &gt;2 groups</a>
+    </li>
+    <li>
+      <a href="lecture_10.html">Analysis of Categorical Data - posthoc tests</a>
+    </li>
+    <li>
+      <a href="lecture_11.html">Analysis with Continuous or Categorical X?</a>
+    </li>
+    <li>
+      <a href="lecture_12.html">Multi-variable Modeling</a>
+    </li>
+    <li>
+      <a href="lecture_13.html">Multi-variable Modeling - collinearity</a>
+    </li>
+    <li>
+      <a href="lecture_14.html">Multi-variable Modeling - interactions</a>
+    </li>
+    <li>
+      <a href="lecture_15.html">Generalized Linear Models</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    Exercises
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="exercise_1.html">Exercise 1 - Data Summary Functions</a>
+    </li>
+    <li>
+      <a href="exercise_2.html">Exercise 2 - Linear Regression</a>
+    </li>
+    <li>
+      <a href="exercise_3.html">Exercise 3 - Linear Regression (cont.)</a>
+    </li>
+    <li>
+      <a href="exercise_4.html">Exercise 4 - Analysis of Categorical Data</a>
+    </li>
+    <li>
+      <a href="exercise_5.html">Exercise 5 - Multi-variable Analysis - Collinearity</a>
+    </li>
+    <li>
+      <a href="exercise_6.html">Exercise 6 - Multi-variable Analysis - Interactions</a>
+    </li>
+    <li>
+      <a href="exercise_7.html">Exercise 7 - TBD</a>
+    </li>
+    <li>
+      <a href="exercise_8.html">Exercise 8 - TBD</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    More Resources
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="Links.html">Links</a>
+    </li>
+  </ul>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+
+
+<h1 class="title toc-ignore">Analysis of Categorical Data (cont.)</h1>
+<h4 class="author">NRES 710</h4>
+<h4 class="date">Last compiled: 2024-08-30</h4>
+
+</div>
+
+
+<div id="review" class="section level2">
+<h2>Review</h2>
+<p>I asked you all to read Ruxton &amp; Beauchamp (2008), and I’m not
+going to discuss it today in class. My goal was mostly to provide you
+all with some background context and considerations related to post-hoc
+tests before this lecture.</p>
+<p>Last class we discussed <strong>‘Analysis of Variance
+(ANOVA)’</strong> – the classic test which partitions the total sum of
+squares in Y into both the error and the differences between the groups.
+This does the same thing as regression, but now we have categorical X
+variables.</p>
+<ul>
+<li><strong>Continuous Y</strong></li>
+<li><strong>Categorical X with &gt;2 groups</strong></li>
+</ul>
+<p>If you only had two groups, you would just use a t-test – although we
+have learned that these are really the same thing and both just use a
+linear model.</p>
+<p>Most of the lecture today is going to focus on historical approaches
+to using post-hoc tests. These studies often were experimental in
+nature, perhaps in agricultural settings, and involved setting up an
+experimental manipulation of something in the field. Those experiments
+often involved collecting data and then running an ANOVA.</p>
+<p>The ANOVA result provide a <strong>single p-value – the significance
+of variable as a whole</strong>. Today we will look at data describing
+the mass of an animal across four seasons as an example. The single
+ANOVA p-value will give us the significance of this entire ‘season’
+variable. Historically speaking, researchers would often respond to that
+p-value in two ways:</p>
+<ul>
+<li><strong>p &gt; 0.05 –&gt; none of the category groups are
+statistically significantly different</strong>
+<ul>
+<li>In this case, you would no longer pursue any further statistical
+testing.</li>
+<li>I don’t like this approach! You don’t know whether your lack of
+result was due to a lack of sample size or due to a lack of effect
+size.</li>
+<li>But this path was often followed to avoid doing unnecessary tests
+and to <strong>minimize the Type I error rate</strong>. (And also why we
+do ANOVA instead of jumping into a bunch of pairwise t-tests.)</li>
+</ul></li>
+<li><strong>p &lt; 0.05 –&gt; at least two groups are statistically
+significantly different</strong>
+<ul>
+<li>In this case, you would then try to figure out which groups were the
+different ones using post-hoc tests.</li>
+</ul></li>
+</ul>
+</div>
+<div id="post-hoc-tests" class="section level2">
+<h2>Post-hoc tests</h2>
+<p><strong>Post-hoc test – “after the fact” test</strong></p>
+<ul>
+<li>There is some confusion about post-hoc tests, as many people think
+that the purpose of post-hoc tests is to test for all pairwise
+comparisons. In fact, we don’t need a post-hoc test to do this, because
+we can easily test for all pairwise comparisons in our linear model
+using dummy-coded variables.</li>
+<li><strong>Purpose – artificially inflate p-values in order to maintain
+the experiment-wide Type I error rate</strong>.</li>
+<li>Post-hoc tests do not changes estimates or differences (<span
+class="math inline">\(\beta\)</span>s) between groups. Instead, they
+only affect p-values and confidence intervals, because these are both
+calculated using the same underlying distribution.</li>
+<li>Because I don’t much care for p-values, I don’t really like post-hoc
+tests. But, I feel like it’s important to discuss them in this class,
+given their large history in the field of statistics and that you likely
+have or will encounter them.</li>
+</ul>
+<p>So you do an ANOVA, and then you need to do a post-hoc tests. How do
+you do that? First step, is to choose which post-hoc test to run. There
+are many!</p>
+<p><strong>Q:</strong> What are post-hoc tests that you are aware
+of??</p>
+<p>Tukey test, Fisher’s Least Significance Difference test (aka,
+Fisher’s LSD), Dunnett, Schauffe, many others, etc.</p>
+<p>Ruxton &amp; Beauchamp (2008) identified 10 different post-hoc tests
+used in their survey.</p>
+<p>The reason why there are so many post-hoc tests is folks are trying
+to find an optimal <strong>balance between the Type I error rate and
+Power”</strong> – our ability to detect a significant difference when
+one exists.</p>
+<p>Ultimately, it should make sense that power and Type I error rate are
+inversely related. For example, let’s say we use a p-value of 0.01 as a
+cutoff. This decreases the chance that we will commit Type I error from
+0.05 to 0.01, and we will be very unlikely to commit Type I error. But,
+we lose Power to detect significant differences when they likely exist!
+This balance represents a tradeoff between “getting things wrong” and
+“learning about differences”.</p>
+<p>In an idea world when we do a post-hoc test, we would have a Type I
+error rate of 0.05 and also have some theoretically-determined maximum
+power. Statisticians at universities trying to get tenure try to develop
+their own post-hoc test to do this…</p>
+<p><strong>Tukey’s post-hoc test</strong> – has pretty good power! But
+it has a higher Type I error rate (0.06, 0.07). This causes weird
+circumstances where you had a marginally significant ANOVA (e.g.,
+0.049), but Tukey’s test fails to detect significant differences between
+pairwise comparisons.</p>
+<p>All of the above tests try to balance this tradeoff, and all of them
+vary at it. And whichever one you choose is <strong>arbitrary</strong>.
+When you have a marginally significant result, you might start chasing
+pairwise significant results by using different post-hoc tests. Let’s
+try Tukeys! Oh, that didn’t work. Let’s try Schauffe’s! Nope, that
+didn’t work either. And then you try another, and it gives you two
+significant comparisons.</p>
+<p>This causes us to go on a ‘fishing expedition’, which, in my opinion,
+is not a very good approach to science. We should use statistics to test
+specific <em>a priori</em> hypotheses that we have developed for a good
+reason – not go chasing after results we have no reason to suspect exist
+in reality. Ruxton &amp; Beauchamp (2008) made comments to this effect a
+few times.</p>
+<p>The strange thing is that no matter which post-hoc test you used,
+your results are all the same: the effects (betas) between groups have
+never changed, because post-hoc tests have not changed that. The
+confidence intervals and p-values will be similar. Was this marginally
+different inference worth your time and effort?</p>
+<p>The main point I want to make here: don’t get too hung up on post-hoc
+tests. Instead, let’s focus on the estimates of effects, the confidence
+intervals, and is that statistically significant.</p>
+</div>
+<div id="tukeys-hsd-test" class="section level2">
+<h2>Tukey’s HSD Test</h2>
+<p><strong>Tukey’s Honest Significant Difference (HSD) Test</strong> –
+harder to get significant differences, but less likely to commit Type I
+error.</p>
+<p>To explore this, let’s use some data that I made in R. These data
+simulate the body mass of Greater Sage-grouse (<em>Centrocurcus
+urophasianus</em>). You can download it <a
+href="lecture_10_seasons.csv">here</a>, and a script to simulate it is
+included at the bottom of the page.</p>
+<p><img src="pictures/pic_grouse.png" style="width:50.0%" /></p>
+<p>Picture: Bert Filemyr</p>
+<p>Let’s take a look at it now.</p>
+<pre class="r"><code># Load and examine the data
+datum &lt;- read.csv(&quot;lecture_10_seasons.csv&quot;)
+head(datum)</code></pre>
+<pre><code>##   Season        error Fall Spring Summer Winter SeasonN     Mass
+## 1 Spring -0.056047565    0      1      0      0       3 3.943952
+## 2 Spring -0.023017749    0      1      0      0       3 3.976982
+## 3 Spring  0.155870831    0      1      0      0       3 4.155871
+## 4 Spring  0.007050839    0      1      0      0       3 4.007051
+## 5 Spring  0.012928774    0      1      0      0       3 4.012929
+## 6 Spring  0.171506499    0      1      0      0       3 4.171506</code></pre>
+<p><strong>Y-variable – mass</strong></p>
+<p><strong>X-variable – season (4 groups)</strong></p>
+<p>The data have the mass of animals measured in four different season:
+spring, summer, fall, and winter. We have a categorical X-variable
+“Season”, and also dummy-coded variables for each of the individual
+seasons.</p>
+<div id="the-number-of-comparisons" class="section level3">
+<h3>The number of comparisons</h3>
+<p>Our goal is to estimate if mass of the animal is different between
+the seasons. How many comparisons might we need to make?</p>
+<p>Here’s a trick to do it!</p>
+<p>Fall Spring Summer Winter</p>
+<ol style="list-style-type: decimal">
+<li>Draw a line connecting all the neighbors.</li>
+<li>Draw a line connecting all the two-neighbors away.</li>
+<li>Draw a line connecting all the three-neighbors away.</li>
+<li>Etc.</li>
+<li>Then add up all the lines!</li>
+</ol>
+<p>In this case, we might have to do <strong>6 pairwise
+comparisons</strong>.</p>
+</div>
+<div id="linear-model" class="section level3">
+<h3>Linear model</h3>
+<p>Let’s write out our linear model:</p>
+<p><strong><span class="math inline">\(Mass = \beta_0 + \beta_1 Spring +
+\beta_2 Summer + \beta_3 Winter + \epsilon \sim N(0,
+\sigma)\)</span></strong></p>
+<p><strong>Review each of the betas</strong></p>
+<ul>
+<li>_0 – average mass in the fall</li>
+<li>_1 – difference in mass between spring and fall</li>
+<li>_2 – difference in mass between summer and fall</li>
+<li>_3 – difference in mass between winter and fall</li>
+<li>If we want to know other differences, we have to change the
+references and re-run.</li>
+</ul>
+<p>What are the ‘true’ values?</p>
+<ul>
+<li><strong><span class="math inline">\(\beta_0\)</span> =
+4.6</strong></li>
+<li><strong><span class="math inline">\(\beta_1\)</span> = <span
+class="math inline">\(\beta_2\)</span> = -0.6</strong></li>
+<li><strong><span class="math inline">\(\beta_3\)</span> =
+-0.05</strong></li>
+</ul>
+</div>
+<div id="analysis-in-r" class="section level3">
+<h3>Analysis in R</h3>
+<p>Let’s analyze these data in R:</p>
+<pre class="r"><code># Plot the data
+datum$Season &lt;- factor(datum$Season)
+plot(Mass ~ Season, data = datum)</code></pre>
+<p><img src="lecture_10_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
+<pre class="r"><code># Fit a linear model
+results &lt;- lm(Mass ~ Season, data = datum)
+summary(results)</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = Mass ~ Season, data = datum)
+## 
+## Residuals:
+##       Min        1Q    Median        3Q       Max 
+## -0.218925 -0.058779 -0.005103  0.057739  0.217000 
+## 
+## Coefficients:
+##              Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)   4.58801    0.02091 219.402   &lt;2e-16 ***
+## SeasonSpring -0.57385    0.02957 -19.404   &lt;2e-16 ***
+## SeasonSummer -0.59313    0.02957 -20.056   &lt;2e-16 ***
+## SeasonWinter -0.02736    0.02957  -0.925    0.358    
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 0.09352 on 76 degrees of freedom
+## Multiple R-squared:  0.9073, Adjusted R-squared:  0.9036 
+## F-statistic: 247.9 on 3 and 76 DF,  p-value: &lt; 2.2e-16</code></pre>
+<p>Because we only have one variable (‘Season’), the p-value in the
+bottom right is the same as the p-value we would get running an ANOVA.
+This gives us the significance of the season variable as a whole: it
+tells us that at least two groups within this variale are different from
+each other.</p>
+<p>When we examining the significance of effects within the model, we
+can see that mass in the Spring is different from Fall and that mass in
+the Summer is different from Fall.</p>
+<p><strong>Trick question:</strong> Is Winter different from Fall?</p>
+<p>Yes, it is! We simulated it to have an effect of -0.05. However, we
+are not able to detect that effect with this statistical analysis. We
+need to be careful to not distinguish biological from statistical
+significance. We know that Winter is different from Fall, we made the
+data.</p>
+<p><strong>Q:</strong> If we wanted to be sure to detect this, what
+would we have to do? Increase our sample size.</p>
+<p>Betas are all pretty close to truth.</p>
+<p><strong>Q:</strong> How would we test for the difference between
+Spring and Summer?</p>
+<p>Change the reference.</p>
+<pre class="r"><code># Fit a linear model
+results2 &lt;- lm(Mass ~ relevel(Season, ref=&quot;Summer&quot;), data = datum)
+summary(results2)</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = Mass ~ relevel(Season, ref = &quot;Summer&quot;), data = datum)
+## 
+## Residuals:
+##       Min        1Q    Median        3Q       Max 
+## -0.218925 -0.058779 -0.005103  0.057739  0.217000 
+## 
+## Coefficients:
+##                                       Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)                            3.99487    0.02091 191.038   &lt;2e-16 ***
+## relevel(Season, ref = &quot;Summer&quot;)Fall    0.59313    0.02957  20.056   &lt;2e-16 ***
+## relevel(Season, ref = &quot;Summer&quot;)Spring  0.01929    0.02957   0.652    0.516    
+## relevel(Season, ref = &quot;Summer&quot;)Winter  0.56577    0.02957  19.131   &lt;2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 0.09352 on 76 degrees of freedom
+## Multiple R-squared:  0.9073, Adjusted R-squared:  0.9036 
+## F-statistic: 247.9 on 3 and 76 DF,  p-value: &lt; 2.2e-16</code></pre>
+<p>Now we can see other differences: summer and spring, summer and
+winter.</p>
+<p>We just have to re-run this one more time to get the final comparison
+that we need.</p>
+</div>
+<div id="tukeys-hsd" class="section level3">
+<h3>Tukey’s HSD</h3>
+<p>Let’s start by examining the help file for ‘TukeyHSD()’.</p>
+<pre class="r"><code># Help file
+help(TukeyHSD)
+
+# Tukey requires an ANOVA output
+results3 &lt;- aov(Mass ~ Season, data = datum) # or
+results3 &lt;- aov(results)
+summary(results3)</code></pre>
+<pre><code>##             Df Sum Sq Mean Sq F value Pr(&gt;F)    
+## Season       3  6.505  2.1683   247.9 &lt;2e-16 ***
+## Residuals   76  0.665  0.0087                   
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<pre class="r"><code># This analysis is so simple that it doesn&#39;t even have a summary file. Run it directly.
+TukeyHSD(results3)</code></pre>
+<pre><code>##   Tukey multiple comparisons of means
+##     95% family-wise confidence level
+## 
+## Fit: aov(formula = results)
+## 
+## $Season
+##                      diff         lwr         upr     p adj
+## Spring-Fall   -0.57384591 -0.65152888 -0.49616295 0.0000000
+## Summer-Fall   -0.59313401 -0.67081697 -0.51545105 0.0000000
+## Winter-Fall   -0.02735977 -0.10504273  0.05032319 0.7914826
+## Summer-Spring -0.01928810 -0.09697106  0.05839487 0.9144606
+## Winter-Spring  0.54648614  0.46880318  0.62416910 0.0000000
+## Winter-Summer  0.56577424  0.48809128  0.64345720 0.0000000</code></pre>
+<p>Let’s compare that to our original ‘lm()’ results:</p>
+<pre class="r"><code>summary(results)</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = Mass ~ Season, data = datum)
+## 
+## Residuals:
+##       Min        1Q    Median        3Q       Max 
+## -0.218925 -0.058779 -0.005103  0.057739  0.217000 
+## 
+## Coefficients:
+##              Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)   4.58801    0.02091 219.402   &lt;2e-16 ***
+## SeasonSpring -0.57385    0.02957 -19.404   &lt;2e-16 ***
+## SeasonSummer -0.59313    0.02957 -20.056   &lt;2e-16 ***
+## SeasonWinter -0.02736    0.02957  -0.925    0.358    
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 0.09352 on 76 degrees of freedom
+## Multiple R-squared:  0.9073, Adjusted R-squared:  0.9036 
+## F-statistic: 247.9 on 3 and 76 DF,  p-value: &lt; 2.2e-16</code></pre>
+<ul>
+<li>The difference between spring and fall is: -0.57</li>
+<li>The difference between summer and fall is: -0.59</li>
+<li>Point being: Tukey’s HSD does not change the betas!</li>
+</ul>
+<p>The ‘diff’ is the difference between the groups. The first columns
+tells us those exact differences: e.g., “Spring - Fall”.</p>
+<p>We can use the ‘lwr’ and ‘upr’ to calculate 95% CI, as we have done
+before.</p>
+<p>Let’s look at the p-values.</p>
+<ul>
+<li>Winter-to-Fall was 0.358, but Tukey’s says it is 0.79.</li>
+<li>Etc.</li>
+</ul>
+<p>Tukey’s causes <strong>p-values get larger</strong>.</p>
+<p>Let’s look at confidence intervals:</p>
+<pre class="r"><code>TukeyHSD(results3)</code></pre>
+<pre><code>##   Tukey multiple comparisons of means
+##     95% family-wise confidence level
+## 
+## Fit: aov(formula = results)
+## 
+## $Season
+##                      diff         lwr         upr     p adj
+## Spring-Fall   -0.57384591 -0.65152888 -0.49616295 0.0000000
+## Summer-Fall   -0.59313401 -0.67081697 -0.51545105 0.0000000
+## Winter-Fall   -0.02735977 -0.10504273  0.05032319 0.7914826
+## Summer-Spring -0.01928810 -0.09697106  0.05839487 0.9144606
+## Winter-Spring  0.54648614  0.46880318  0.62416910 0.0000000
+## Winter-Summer  0.56577424  0.48809128  0.64345720 0.0000000</code></pre>
+<pre class="r"><code>confint(results)</code></pre>
+<pre><code>##                    2.5 %     97.5 %
+## (Intercept)   4.54635952  4.6296571
+## SeasonSpring -0.63274618 -0.5149456
+## SeasonSummer -0.65203428 -0.5342337
+## SeasonWinter -0.08626004  0.0315405</code></pre>
+<p>Compare Spring-Fall from both outputs.</p>
+<pre class="r"><code># Spring to Fall
+(-0.63274618 - -0.5149456)/2 # LM</code></pre>
+<pre><code>## [1] -0.05890029</code></pre>
+<pre class="r"><code>(-0.65152888 - -0.49616295)/2 #Tukey</code></pre>
+<pre><code>## [1] -0.07768296</code></pre>
+<p>Tukey causes <strong>confidence intervals to become
+wider</strong>.</p>
+<p><strong>Takehome:</strong> Both the p-values and confidence intervals
+have become artificially inflated.</p>
+</div>
+<div id="cautionary-tale" class="section level3">
+<h3>Cautionary tale</h3>
+<p>Sometimes people take a categorical variable and they turn it into a
+continuous variable. This can be dangerous! Take a look:</p>
+<pre class="r"><code># Look at the second to last column
+head(datum)</code></pre>
+<pre><code>##   Season        error Fall Spring Summer Winter SeasonN     Mass
+## 1 Spring -0.056047565    0      1      0      0       3 3.943952
+## 2 Spring -0.023017749    0      1      0      0       3 3.976982
+## 3 Spring  0.155870831    0      1      0      0       3 4.155871
+## 4 Spring  0.007050839    0      1      0      0       3 4.007051
+## 5 Spring  0.012928774    0      1      0      0       3 4.012929
+## 6 Spring  0.171506499    0      1      0      0       3 4.171506</code></pre>
+<p>They then run a model with that as the predictor variable.</p>
+<pre class="r"><code># Run a &#39;lm()&#39; with that
+results4 &lt;- lm(Mass ~ SeasonN, data = datum)
+summary(results4)</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = Mass ~ SeasonN, data = datum)
+## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -0.36979 -0.10921 -0.00098  0.12215  0.36118 
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)  4.87090    0.04114  118.41   &lt;2e-16 ***
+## SeasonN     -0.23259    0.01502  -15.48   &lt;2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 0.1502 on 78 degrees of freedom
+## Multiple R-squared:  0.7545, Adjusted R-squared:  0.7514 
+## F-statistic: 239.8 on 1 and 78 DF,  p-value: &lt; 2.2e-16</code></pre>
+<p>Season is significant! They write that in their paper and send it in
+for publication and they are done.</p>
+<p>But they made a lot of errors here.</p>
+<ul>
+<li>First, they focused too much on p-values.</li>
+<li>If they would have been thinking about effects between groups
+(betas), they might have realized the issue.</li>
+</ul>
+<p><strong>Q:</strong> What did R do?</p>
+<p>It ran a regression with two continuous variables, X as a continuous
+variable. This assumes there is a linear relationship between 1, 2, 3, 4
+and mass. That might be valid… but it isn’t!</p>
+<pre class="r"><code># Scatterplot
+plot(Mass ~ SeasonN, data = datum)</code></pre>
+<p><img src="lecture_10_files/figure-html/unnamed-chunk-11-1.png" width="672" /></p>
+<p><strong>Q:</strong> How do we know it ran it as a regression?</p>
+<p>It only gave us a single beta, and it only used 1 degree of freedom
+(should have been 3).</p>
+<p>A post-hoc test… won’t work:</p>
+<pre class="r"><code># Scatterplot
+#TukeyHSD(aov(results4)) # doesn&#39;t work!
+# Error in `TukeyHSD.aov()`:
+# ! no factors in the fitted model</code></pre>
+<p>R is trying to tell us that ‘Season’ is not a number – it is a
+‘factor’.</p>
+<p><strong>factor – a categorical X-variable</strong></p>
+<p><strong>covariate – a continuous X-variable in a statistical
+model</strong></p>
+<p>Two terms we should be aware of.</p>
+</div>
+</div>
+<div id="summary" class="section level2">
+<h2>Summary</h2>
+<p>We need to know that there are these things called ‘post-hoc
+tests’.</p>
+<p>They try to maintain the ‘experiment-wide error rate’ (0.05 Type 1
+error rate), and are still used a lot, particularly in classic
+agricultural or fisheries journals if you have done a manipulative
+experiment.</p>
+<p>As you build more complicated models that have more complicated
+models (with both categorical and continuous variables), post-hoc tests
+won’t work.</p>
+<p>Bonferonni corrections (basic math) can be used if absolutely
+necessary.</p>
+<p><br></p>
+</div>
+<div id="truth" class="section level2">
+<h2>Truth</h2>
+<p>Here is code to simulate the data we analyzed in this lecture.</p>
+<pre class="r"><code>####################### &#39;Truth&#39; ######################## 
+### Lecture 10: code to simulate data for post-hoc tests 
+
+# Set the seed for reproducibility
+set.seed(123)
+
+# Simulate X-variable
+n &lt;- 80
+x &lt;- factor(c(rep(&quot;Spring&quot;, n/4), rep(&quot;Summer&quot;, n/4), rep(&quot;Winter&quot;, n/4), rep(&quot;Fall&quot;, n/4)))
+
+# Season as a numeric
+SeasonN &lt;- as.numeric(factor(x, levels = c(&quot;Fall&quot;, &quot;Winter&quot;, &quot;Spring&quot;, &quot;Summer&quot;)))
+
+# Simulate error
+error &lt;- rnorm(n, mean = 0, sd = 0.1)
+
+# Create dummy-coded variables
+dummy &lt;- model.matrix(~ x - 1)
+colnames(dummy) &lt;- c(&quot;Fall&quot;, &quot;Spring&quot;, &quot;Summer&quot;, &quot;Winter&quot;)
+
+# Create the dataframe
+datum &lt;- data.frame(Season = x, error = error, dummy, SeasonN)
+
+# Calculate Y-variable
+y &lt;- 4.6 - (0.6 * datum$Spring) - (0.6 * datum$Summer) - (0.05 * datum$Winter) + error
+
+# Create dataframe
+datum &lt;- cbind(datum, Mass = y)
+
+# Save the CSV file
+write.csv(datum, &quot;lecture_10_seasons.csv&quot;, row.names = FALSE)</code></pre>
+<p><a href="lecture_11.html">–go to next lecture–</a></p>
+</div>
+
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+<script>
+$(document).ready(function ()  {
+
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

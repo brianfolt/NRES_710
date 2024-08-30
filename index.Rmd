@@ -159,20 +159,21 @@ Downloadable copies of syllabus as a [PDF](syllabus.pdf).
 ## Manually run these lines through console to turn the RMD into DOCX or PDF
 rmarkdown::render('index.Rmd', output_file = 'syllabus.docx', 'word_document')
 rmarkdown::render('schedule.Rmd', 'word_document')
-rmarkdown::render('lecture_1.Rmd', 'word_document')
-rmarkdown::render('lecture_2.Rmd', 'word_document')
-rmarkdown::render('lecture_3.Rmd', 'word_document')
-rmarkdown::render('lecture_4.Rmd', 'word_document')
-rmarkdown::render('lecture_5.Rmd', 'word_document')
-rmarkdown::render('lecture_6.Rmd', 'word_document')
-rmarkdown::render('lecture_7.Rmd', 'word_document')
-rmarkdown::render('lecture_8.Rmd', 'word_document')
-rmarkdown::render('lecture_9.Rmd', 'word_document')
-rmarkdown::render('lecture_10.Rmd', 'word_document')
-rmarkdown::render('lecture_11.Rmd', 'word_document')
-rmarkdown::render('lecture_12.Rmd', 'word_document')
-rmarkdown::render('lecture_13.Rmd', 'word_document')
-rmarkdown::render('lecture_14.Rmd', 'word_document')
+rmarkdown::render('materials/lecture_1.Rmd', 'word_document')
+rmarkdown::render('materials/lecture_2.Rmd', 'word_document')
+rmarkdown::render('materials/lecture_3.Rmd', 'word_document')
+rmarkdown::render('materials/lecture_4.Rmd', 'word_document')
+rmarkdown::render('materials/lecture_5.Rmd', 'word_document')
+rmarkdown::render('materials/lecture_6.Rmd', 'word_document')
+rmarkdown::render('materials/lecture_7.Rmd', 'word_document')
+rmarkdown::render('materials/lecture_8.Rmd', 'word_document')
+rmarkdown::render('materials/lecture_9.Rmd', 'word_document')
+rmarkdown::render('materials/lecture_10.Rmd', 'word_document')
+rmarkdown::render('materials/lecture_11.Rmd', 'word_document')
+rmarkdown::render('materials/lecture_12.Rmd', 'word_document')
+rmarkdown::render('materials/lecture_13.Rmd', 'word_document')
+rmarkdown::render('materials/lecture_14.Rmd', 'word_document')
+rmarkdown::render('materials/lecture_15.Rmd', 'word_document')
 
 knitr::opts_chunk$set(echo = TRUE, message = FALSE)
 rmarkdown::render('index.Rmd', output_file = 'syllabus.pdf', rmarkdown::pdf_document())
@@ -214,35 +215,25 @@ rmd2rscript <- function(infile="LECTURE2.Rmd"){
 
 ```{r echo=FALSE, eval=FALSE}
 ## Manually run these lines through console to turn the RMD to R scripts
-rmd2rscript("lecture_2.Rmd")
-#rmd2rscript("lecture_3.Rmd") # no R code
+rmd2rscript("materials/lecture_2.Rmd")
+#rmd2rscript("materials/lecture_3.Rmd") # no R code
+rmd2rscript("materials/lecture_4.Rmd")
+rmd2rscript("materials/lecture_5.Rmd")
+rmd2rscript("materials/lecture_6.Rmd")
+rmd2rscript("materials/lecture_7.Rmd")
+rmd2rscript("materials/lecture_8.Rmd")
+rmd2rscript("materials/lecture_9.Rmd")
+rmd2rscript("materials/lecture_10.Rmd")
+rmd2rscript("materials/lecture_11.Rmd")
+rmd2rscript("materials/lecture_12.Rmd")
+rmd2rscript("materials/lecture_13.Rmd")
+rmd2rscript("materials/lecture_14.Rmd")
 #rmd2rscript("exercise_1.Rmd") # no R code of substance necessary for students to have
-rmd2rscript("lecture_4.Rmd")
-rmd2rscript("lecture_5.Rmd")
-rmd2rscript("lecture_6.Rmd")
 #rmd2rscript("exercise_2.Rmd") # sharing 'truth' at the bottom of the page
-rmd2rscript("lecture_7.Rmd")
 #rmd2rscript("exercise_3.Rmd") # sharing 'truth' at the bottom of the page
-rmd2rscript("lecture_8.Rmd")
-rmd2rscript("lecture_9.Rmd")
-rmd2rscript("lecture_10.Rmd")
 #rmd2rscript("exercise_4.Rmd") # sharing 'truth' at the bottom of the page
-rmd2rscript("lecture_11.Rmd")
-rmd2rscript("lecture_12.Rmd")
-rmd2rscript("lecture_13.Rmd")
-rmd2rscript("lecture_14.Rmd")
-
-rmd2rscript("INTRO.Rmd")
-rmd2rscript("LECTURE1.Rmd")
-rmd2rscript("LECTURE2.Rmd")
-rmd2rscript("LECTURE3.Rmd")
-rmd2rscript("LECTURE4.Rmd")
-rmd2rscript("LECTURE5.Rmd")
-rmd2rscript("LECTURE6.Rmd")
-rmd2rscript("LECTURE7.Rmd")
-rmd2rscript("LECTURE8.Rmd")
-rmd2rscript("LECTURE9.Rmd")
-rmd2rscript("LECTURE10.Rmd")
+#rmd2rscript("exercise_5.Rmd") # sharing 'truth' at the bottom of the page
+#rmd2rscript("exercise_6.Rmd") # sharing 'truth' at the bottom of the page
 ```
 
 ```{r echo=FALSE, eval=FALSE}
