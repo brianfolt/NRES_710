@@ -116,7 +116,7 @@ For this example, the variable is words that cannot be translated into a numeric
 
 Let's revisit the bison example I mentioned previously. We want to know: what is the effect of bison on ecosystem productivity?
 
-![](pic_bison.png){width=50%}
+![](pictures/pic_bison.png){width=50%}
 
 Photo: Ted Naninga (iNaturalist)
 

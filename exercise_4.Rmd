@@ -25,7 +25,7 @@ knitr::opts_chunk$set(
 
 **[Dataset 1](exercise_4_dataset1.csv)** -- For this dataset, you are conducting an experiment to see if there is a difference in deer density (Y; deer/ha) between predator exclusion plots and control plots (X; groups). Technically, this could be analyzed with a 't-test'. However, for consistency with our general approach toward statistics, please use the 'lm()' function to do the analysis -- not the 't.test()' function. Report your results using the standard sentence.
 
-![](pic_deer.png){width=50%}
+![](pictures/pic_deer.png){width=50%}
 
 Picture: James Stewart
 
@@ -37,7 +37,7 @@ Picture: James Stewart
 
 3. Run a Tukey's HSD Post-hoc test in R. Using the standard language we have been using throughout the class, describe the estimated differences between Closed Pine and Agriculture and between Open Pine and Agriculture. Be sure to include confidence intervals and p-values.
 
-![](pic_quail.png){width=50%}
+![](pictures/pic_quail.png){width=50%}
 
 Picture: uzun (iNaturalist)
 
@@ -51,7 +51,7 @@ Picture: uzun (iNaturalist)
 
 4. Dummy code the data. Make 3 new columns - one for each hunting method - and assign 0s and 1s as appropriate. You can do this in Excel or in R. Use a linear model to test for differences between group and describe with 1-2 sentences how those results compare to the results from the Tukey's HSD post-hoc test.
 
-![](pic_pronghorn.png){width=50%}
+![](pictures/pic_pronghorn.png){width=50%}
 
 Picture: Ted Floyd
 
@@ -69,7 +69,7 @@ Picture: Ted Floyd
 
 6. Continued from 5: what does that mean about the nature of the relationship between Biomass and Fertilizer?
 
-![](pic_sagebrush.png){width=50%}
+![](pictures/pic_sagebrush.png){width=50%}
 
 <br>
 

@@ -48,7 +48,7 @@ Let's assume that X-variable is binomial (two categories):
 
 For example, let's say we are interested in testing for body size differences between two sexes of **elephant seal** (*Mirounga leonina*).
 
-![](pic_seal.png){width=50%}
+![](pictures/pic_seal.png){width=50%}
 
 Photo: Luke Verburgt
 

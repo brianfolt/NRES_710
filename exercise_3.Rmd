@@ -43,7 +43,7 @@ Compile all of your results in a Word document. Load this into the WebCampus ass
 
 - For this problem, describe the relationship between X and Y using the standard statements, but also use prediction to report what the expected number of livestock killed by tigers is at 20.0 deer/ha with prediction intervals. Finally, generate a graph of the y predictions and the prediction intervals, like we saw in class.
 
-![](pic_grouse.png){width=50%}
+![](pictures/pic_grouse.png){width=50%}
 
 Picture: Bert Filemyr
 

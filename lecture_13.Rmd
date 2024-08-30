@@ -555,7 +555,7 @@ So, how do we know whether variables are **redundant** or **confounding** variab
 
 Put some thought into your variables. Statistics is a thinking exercise and should involve critical thinking. Is it likely that your X-variable has it's own effect on Y? If so, include it.
 
-![](pic_gopher_tortoise.jpg){width=50%}
+![](pictures/pic_gopher_tortoise.jpg){width=50%}
 
 Example: Gopher Tortoises. The gopher tortoise is a burrow-digging turtle species in the southeastern United States that is a species of conservation concern. Reproduction is important for populations to grow and persist, and researchers are interested in what causes reproduction in tortoise populations. Male tortoises are known to compete with eachother for access to females, and they often get in wrestling matches for access to females. Males sometimes have large shell extensions under their neck called 'gular scutes' that are used to flip other males during male-male combat. People have wondered what are the factors that influence reproductive success of tortoises: age, body size, or gular scute size? These factors are all correlated: older tortoises get larger bodies and may grow larger gular scutes. However, there is likely variation in growth rates such that sometimes younger tortoises may be larger and/or have larger gular scutes than older tortoises. The question is: are these variables redundant or confounding variables?
 

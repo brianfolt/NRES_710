@@ -89,7 +89,7 @@ The main point I want to make here: don't get too hung up on post-hoc tests. Ins
 
 To explore this, let's use some data that I made in R. These data simulate the body mass of Greater Sage-grouse (*Centrocurcus urophasianus*). You can download it [here](lecture_10_seasons.csv), and a script to simulate it is included at the bottom of the page.
 
-![](pic_grouse.png){width=50%}
+![](pictures/pic_grouse.png){width=50%}
 
 Picture: Bert Filemyr
 

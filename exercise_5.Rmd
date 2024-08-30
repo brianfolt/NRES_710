@@ -28,7 +28,7 @@ knitr::opts_chunk$set(
 3. Analyze the data using a single multi-variable model [i.e., with 'lm()' in R]. Write example sentences that you might include in a manuscript you are submitting for publication that describes the observed results. Note: you will need a total of five sentences here; be sure to include a sentence comparing each pair of countries.
 4. *Optional*: For an extra learning experience, try running a post-hoc test of your multi-variable model to determine the difference between the three countries. Note: you would have to convert your model to an analysis of variance ('AOV') object before you could run a post-hoc test, and will have to specify the variable you want to run the post-hoc test for. While it may ~run, are there any red flags that indicate it didn't do quite what you intended it to?
 
-![](pic_duskygrouse.png){width=50%}
+![](pictures/pic_duskygrouse.png){width=50%}
 
 Picture: Hannah Floyd, iNaturalist
 
@@ -52,7 +52,7 @@ Picture: Hannah Floyd, iNaturalist
     - What your final model would be in this analysis (be sure to explain why) and how you would deal with the collinearity among variables.
     - What you've learned from the exercise.
 
-![](pic_marmot.png){width=50%}
+![](pictures/pic_marmot.png){width=50%}
 
 Picture: Hannah Floyd, iNaturalist
 
@@ -76,7 +76,7 @@ Picture: Hannah Floyd, iNaturalist
     - What your final model would be in this analysis (be sure to explain why) and how you would deal with the collinearity among variables.
     - What you've learned from the exercise.
     
-![](pic_waterclarity.png){width=50%}
+![](pictures/pic_waterclarity.png){width=50%}
 
 Tough fishing conditions in Hermosa Creek, Colorado (Picture: Jason Folt).
 
