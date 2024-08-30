@@ -7,38 +7,6 @@ navbar:
     href: index.html
   - text: Schedule
     href: schedule.html
-  - text: Lectures
-    menu:
-    - text: Syllabus and the Purpose of Statistics
-      href: lecture_1.html
-    - text: P-value Discussion and Intro to R
-      href: lecture_2.html
-    - text: Sampling Uncertainty
-      href: lecture_3.html
-    - text: Linear Regression
-      href: lecture_4.html
-    - text: Linear Regression - results
-      href: lecture_5.html
-    - text: Linear Regression - assumptions
-      href: lecture_6.html
-    - text: Linear Regression - predictions
-      href: lecture_7.html
-    - text: Analysis of Categorical Data - 2 groups
-      href: lecture_8.html
-    - text: Analysis of Categorical Data - >2 groups
-      href: lecture_9.html
-    - text: Analysis of Categorical Data - posthoc tests
-      href: lecture_10.html
-    - text: Analysis with Continuous or Categorical X?
-      href: lecture_11.html
-    - text: Multi-variable Modeling
-      href: lecture_12.html
-    - text: Multi-variable Modeling - collinearity
-      href: lecture_13.html
-    - text: Multi-variable Modeling - interactions
-      href: lecture_14.html    
-    - text: Generalized Linear Models
-      href: lecture_15.html
   - text: Exercises
     menu:
     - text: Exercise 1 - Data Summary Functions

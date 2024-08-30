@@ -1,5 +1,5 @@
 ---
-title: "Exercise 6: Multivariable Analysis and Interactions"
+title: "Exercise 6: Multivariable Analysis - Interactions"
 author: "NRES 710"
 date: "Last compiled: `r Sys.Date()`"
 output: 
@@ -58,6 +58,8 @@ Bonus: Note that the squirrel dens is higher in pine at low road density and low
 "We found a significant interaction (p = [p-value for interaction term]), such that for each 1 [x1 units] increase in [x1], we observed that the slope of the [x2]-[y] relationship [increased/decreased] by [beta for interaction][y units]/[x2 units] ([95% C.I. of beta for interaction]; +/-95% C.I.)."
 
 ![](pictures/pic_plethodon.png){width=50%}
+
+Webster's Salamander (*Plethodon websteri*) -- a cousin of the red-backed salamander.
 
 <br>
 

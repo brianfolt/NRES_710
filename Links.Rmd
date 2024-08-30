@@ -16,9 +16,11 @@ knitr::opts_chunk$set(echo = TRUE)
 
 Please let me know if there are other links that you think should be included on this page!
 
+## UNR 'StatsChats'
+
 [Weekly math/bio "Stats Chats"](https://guides.library.unr.edu/StatsChats)
 
-### Methods links
+## Methods links
 
 #### Download R:
  [CRAN website](https://cran.r-project.org/)  
@@ -85,15 +87,15 @@ Please let me know if there are other links that you think should be included on
  ["bnlearn" package documentation for Bayes nets](http://www.bnlearn.com/)  
  
 #### Spatial Analysis in R
- ["raster" package vignette](https://cran.r-project.org/web/packages/raster/vignettes/Raster.pdf)   
-
+ ["raster" package vignette](https://cran.r-project.org/web/packages/raster/vignettes/Raster.pdf) 
+ 
 #### Spatial Capture Recapture (secr)   
  ['secr' Google Group](https://groups.google.com/forum/#!forum/secrgroup)    
  [BUGS code for secr](http://www.mikemeredith.net/blog/1309_SECR_in_JAGS_patchy_habitat.htm)
  
-### Data links
+## Data links
 
-#### Publicly available datasets, potentially for final project...  
+#### Publicly available datasets 
 (many links courtesy Tom Langen) 
 
 #### GOVERNMENT AGENCY DATA PORTALS 
@@ -148,8 +150,9 @@ Please let me know if there are other links that you think should be included on
 
 [WorldClim](http://www.worldclim.org/) (global climate layers (gridded climate data) with a spatial resolution of about 1 km2)     
 
-[DayMet](https://daymet.ornl.gov/dataaccess.html) (gridded estimates of daily weather parameters for North America)    
-#### BIODIVERSITY DATA CLEARINGHOUSES /ARCHIVES
+[DayMet](https://daymet.ornl.gov/dataaccess.html) (gridded estimates of daily weather parameters for North America)   
+
+#### BIODIVERSITY DATA CLEARINGHOUSES / ARCHIVES
 [International Union for the Conservation of Nature (IUCN) Redlist](http://www.iucnredlist.org/) (Searchable list of the world’s threatened and endangered plants and animal species on the IUCN Redlist.)   
 
 [National Biological Information Infrastructure](http://www.nbii.gov/) (Data archive and clearinghouse for biological data from the US. Also provides standards for metadata.)  
