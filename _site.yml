@@ -9,22 +9,20 @@ navbar:
     href: schedule.html
   - text: Exercises
     menu:
-    - text: Exercise 1 - Data Summary Functions
+    - text: Exercise 1 - Linear Regression
       href: exercise_1.html
-    - text: Exercise 2 - Linear Regression
+    - text: Exercise 2 - Linear Regression (cont.)
       href: exercise_2.html
-    - text: Exercise 3 - Linear Regression (cont.)
+    - text: Exercise 3 - Analysis of Categorical Data
       href: exercise_3.html
-    - text: Exercise 4 - Analysis of Categorical Data
-      href: exercise_4.html
-    - text: Exercise 5 - Multi-variable Analysis - Collinearity
-      href: exercise_5.html 
-    - text: Exercise 6 - Multi-variable Analysis - Interactions
+    - text: Exercise 4 - Multi-variable Analysis - Collinearity
+      href: exercise_4.html 
+    - text: Exercise 5 - Multi-variable Analysis - Interactions
+      href: exercise_5.html
+    - text: Exercise 6 - TBD
       href: exercise_6.html
     - text: Exercise 7 - TBD
       href: exercise_7.html
-    - text: Exercise 8 - TBD
-      href: exercise_8.html
   - text: More Resources
     menu:
     - text: Links 

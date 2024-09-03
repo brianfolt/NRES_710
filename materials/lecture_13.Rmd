@@ -1,5 +1,5 @@
 ---
-title: "Multi-variable modeling - collinearity"
+title: "Multi-Variable Modeling - Interactions"
 author: "NRES 710"
 date: "Last compiled: `r Sys.Date()`"
 output: 
@@ -9,6 +9,17 @@ output:
     toc_float: yes
     css: styles.css
 ---
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Register.StartupHook("TeX Jax Ready",function () {
+  MathJax.Hub.Insert(MathJax.InputJax.TeX.Definitions.macros,{
+    cancel: ["Extension","cancel"],
+    bcancel: ["Extension","cancel"],
+    xcancel: ["Extension","cancel"],
+    cancelto: ["Extension","cancel"]
+  });
+});
+</script>
 
 ```{r setup, include=FALSE}
 
@@ -22,1130 +33,764 @@ knitr::opts_chunk$set(
 
 ```{r echo=FALSE}
 
-#  NRES 710, Multi-variable Modeling - Collinearity
+#  NRES 710, Multi-Variable Modeling - Interactions
 #     University of Nevada, Reno
+#     Modeling interactions between X-variables
 
 ```
 
-## Collinearity
+Any questions before we begin?
 
-Today's class is an important one. The topic is on something that very few people understand well. So the plan is to spend 1-2 days on this topic so that you will understand it well. Many people have a decent idea of what **collinearity** is -- but tend to make bad decisions about how to handle it.
+## Interactions
 
-**Collinearity -- when X-variables are associated (correlated) with eachother**
+Today we are going to learn about **interactions**!
 
-Let's start with a question for the class. We often say that "*correlation does not equal causation*". More specifically, you might run a regression between X and Y and find a relationship, but that does not mean that X causes Y.
+Last week I suggested that collinearity is critically important to understand, because it is a nuisance that we must account for to get unbiased estimates, and so we spent an entire week on the topic. This week, I think interactions are also critically important, so we will again spend a week on this topic. But interactions are actually really interesting and can greatly enhance the interest in our research and what we are learning.
 
-**Q:** Why not? Discuss this a bit. 
+What are interactions...? Let's start with an example.
 
-Let's consider an example. There was a study that came out a few years ago that generated some interest from the press. This study suggested that: for each 1 additional hour of TV that you watch per day, it increases the risk of mortality by 11%.
+- **Y -- reproductive output**
+- **$X_1$ -- Placebo / Pill** -- a binomial variable describing groups in a clinical trials of whether the 'estrogen/progesterone/birth-control pill'.
 
-Let's think about this for a minute. Do you think the actual act of watching TV increases the risk of mortality? How would that happen? Is the TV going to fall out of the wall and potentially injure you? No, probably not. Watching TV itself is not going to cause this relationship.
+**Q:** What is the effect of The Pill on reproductive output? ....does it cause reproduction to be ~0? *It depends....*
 
-What's the problem here? Well, there are a lot of other things that are **correlated** to watching TV that may have their own effect on the Y variable (mortality).
+- **$X_2$ -- Sex**
 
-**Confounding factors -- an X-variable that is correlated with the X-variable of interest that has its own effect on Y**
+The Pill reduces reproductive output of females to zero, but it does not influence the reproductive output of males. This is an interactions!
 
-What is correlated with watching TV?
+**interactions -- the effect (beta) of one X-variable depends on the value of another X-variable**
 
-- You aren't being active (e.g., exercising)!
-- You might be snacking, and your snacks might not be something healthy. You probably aren't eating carrots if you are watching TV. I like eating chocolate covered pretzels!
-- You aren't working, which might relate to your socioeconomic status.
-- You may be less likely to have healthcare.
-- Et cetera, et cetera, et cetera.
+Sometimes people will implicitly assume there is an interaction, and separate out their data to analyze the effect of the pill on two groups separately: males and females. This is okay! BUT...
 
-These features might all be correlated to how much an individual watches TV, and all might have their own effects on mortality. 
+1. You are implicitly assuming there is an interaction, and,
+2. if there is a difference, you cannot say the difference is statistically significant or not, because you did not test that.
 
-**Q:** Here's the key idea If we really want to know what the true effect of TV watching on mortality is, what would would we do?
+Let's say that we find that the effect of the pill on males is some very small number close to ~0 (e.g., beta = 0.001), and then we get a large beta for the effect of the pill on females. How would we know that these effects are statistically different? Well, we can't know that if we analyzed these effects separately.
 
-**A MANIPULATIVE EXPERIMENT**. In an ideal world, we would do a manipulative experiment, which is the only true way to show causation.
+If you want to know if the effect is different between two groups (sexes, species, etc.), you need to test for an interaction.
 
-- Option 1: We would try to control for all of the above factors: everyone has the same job, goes to the gym the same amount of time, no smoking, etc. Let's assume this class is our sample! We would assign half of the class to watch TV for 1 hour a day, while the other half of the class watches for 10 hours per day.
-- Option 2: We wouldn't try to control for any of those factors, but we would randomly assign for 1 vs. 10 hours of TV per day. This is a lower-quality experiment, because all of those other factors may *swamp out* our ability to detect an effect of watching TV. We are not controlling for anything, so all of these other factors may create *noise*.
-  - But, we could collect data on those factors, and include those data in the models, and then we could avoid the swamping issue.
-  - Of course, this experimental design is super impractical... There's no way we could get our sample to watch TV for 10 hours a day -- or probably even 1 hour per day in many cases. 
-  
-So what do we do? Researchers often resort to performing an **observational study**, where theyn collect data on all of these other features that might also influence the response variable. Diet, exercise, socioeconomic status, smoking, alcohol, and maybe a whole slew of other things that we might hypothesize also influence the response variable (mortality). We could then put all those variables into the model and *statistically control* for those other variables. When we include correlated variables in a model, it statistically controls for them -- and we'll demonstrate this today.
+## Example
 
-We may not be able to show causation, because there may be some other confounding variable(s) in the world that we did not measure and collect data.
+Let's again consider an example we have seen before, that I like, because it is easy...
 
-**Important takehome message:** When you are conducting studies and experiments for your thesis or your careeer, you need to *think carefully* about what are the potential confounding factors -- the other variables -- that may be correlated to the X-variable you are interested in and that might influence your results.
+- **Y -- Size**
+- **$X_1$ -- Age**
+- **$X_2$ -- Sex**'
 
-- This is less of a concern in a well-designed manipulative study, where random assignment of treatment removes collinearity. For example, if I randomly assign to the class who watches 1 vs. 10 hours of TV, then there won't be any collinearity between exercise and TV watching. Presumably people that go the gym often will be randomly assigned to 10 hours of TV, and people who never go to the gym will be made to watch 1 hour of TV. This random assignment removes potential collinearity between these variables.
-- Again, manipulative experiments are the strongest approach to inference in science, but can be impractical and many of us resort to observational studies.
+Previously we ran this multi-variable model: $Size = \beta_0 + \beta_1 * Age + \beta_2 * Sex + \epsilon \sim N(0, \sigma)$
 
-My goal with this lecture today is to demonstrate to you all that: if you have confounding variables and you don't include them in your model/analysis, the estimates from your analysis will be biased (incorrect)!
+This model is implicitly assuming that lines for each group are parallel -- they have the same slope:
 
-**If confounding variables are not included in model/analysis --> biased (incorrect) estimates ($\beta$s)**
+```{r echo=FALSE, fig.height=4, fig.width=4.5}
+# Specify plot margins
+par(mar=c(4,4,0,0))
 
-People kind of understand this... but I want you to really understand it. If there are variables that are correlated to your X-variable of interest and you don't collect those data and include them, then your estimates are biased. This is scary!! That's why this is one of the more important topics we will cover this semester.
-
-Let's see how this works.
-
-## Biased estimates without confounding variables
-
-Let's reconsider an example that we examined in the last class.
-
-- **Y = size**
-- **$X_1$ = age**
-- **$X_2$ = sex**
-
-However, this time around when you were sampling the animals of interest, for some reason you had a hard time collecting data on young females.
-
-```{r example_1, echo=FALSE, message=FALSE, warning=FALSE, fig.height=4, fig.width=4.5}
-# Set the seed for reproducibility & set graphing parameter
-set.seed(123); par(mar=c(4,4,0,0))
-
-# Load in the data
+# Read in the size ~ age + sex data
 datum <- read.csv("lecture_12_dataset1.csv")
 
-# Get rid of old animals for this example
-datum <- subset(datum, Age < 7)
+# Model for females
+results <- lm(Size ~ Age, data = subset(datum, datum$Sex == "Female"))
 
-# Subset to just older females
-females <- subset(datum, Sex == "Female" & Age > 4)
+# Model for males
+results2 <- lm(Size ~ Age, data = subset(datum, datum$Sex == "Male"))
 
-# Plot the data
-plot(Size ~ Age, data = females,
-     xlim=c(0,max(datum$Age)), ylim=c(8, max(datum$Size)), pch = 1)
+# Determine the range of the x and y axes
+xlim <- range(datum$Age)
+ylim <- range(datum$Size)
 
-```
+# Make an empty plot with defined x and y limits
+plot(xlim, ylim, type = "n", xlab = "Age", ylab = "Size")
 
-And you also had a really hard time catching old males...
+# Add regression lines for females and males
+abline(results, col = "red", lwd = 2) # Red line for females
+abline(results2, col = "blue", lwd = 2) # Blue line for males
 
-```{r example_2, echo=FALSE, message=FALSE, warning=FALSE, fig.height=4, fig.width=4.5}
-# Set the seed for reproducibility & set graphing parameter
-set.seed(123); par(mar=c(4,4,0,0))
-
-# Subset to just older females
-males <- subset(datum, Sex == "Male" & Age < 4)
-males$Size <- males$Size + 4
-
-# Plot the data
-plot(Size ~ Age, data = females,
-     xlim=c(0,max(datum$Age)), ylim=c(8, max(datum$Size)), pch = 1)
-points(males$Age, males$Size, pch=2)
+# Optionally, add a legend to distinguish between the two lines
+legend("topleft", legend = c("Females", "Males"), col = c("red", "blue"), lwd = 2)
 
 ```
 
-Let's say I run this model:
+The effect of sex is the same for all ages, and the effect of age is the same for both sexes. This is an assumption that we have made. But this is *not* an assumption that we *have* to make...
 
-**$Y = \beta_0 + \beta_1 Age$**
+What if we assume that these effects are different...?
 
-Sex is not included in this model... but Sex is correlated with age! Our sample only includes old females and young males. (A T-test comparing age between females and males would be different.)
+```{r echo=FALSE, fig.height=4, fig.width=4.5}
+# Specify plot margins
+par(mar=c(4,4,0,0))
 
-**Q:** If I ran a regression, where would the line go? 
+# Read in the size ~ age + sex + age*sex data
+datum <- read.csv("lecture_13_dataset1.csv")
 
-```{r example_3, echo=FALSE, message=FALSE, warning=FALSE, fig.height=4, fig.width=4.5}
-# Set the seed for reproducibility & set graphing parameter
-set.seed(123); par(mar=c(4,4,0,0))
+# Model for females
+results <- lm(Size ~ Age, data = subset(datum, datum$Sex == "Female"))
 
-# Plot the data
-plot(Size ~ Age, data = females,
-     xlim=c(0,max(datum$Age)), ylim=c(8, max(datum$Size)), pch = 1)
-points(males$Age, males$Size, pch=2)
+# Model for males
+results2 <- lm(Size ~ Age, data = subset(datum, datum$Sex == "Male"))
 
-# Bind data and run simple lm()
-datum <- rbind(females, males)
-results <- lm(Size ~ Age, data = datum)
-abline(results)
+# Determine the range of the x and y axes
+xlim <- c(0, max(datum$Age))
+ylim <- c(0, max(datum$Size))
 
-```
+# Make an empty plot with defined x and y limits
+plot(xlim, ylim, type = "n", xlab = "Age", ylab = "Size")
 
-For these data, it would be ~horizontal across the data. This is a biased estimate. This estimate incorrectly estimates the effect of age on size of these animals.
+# Add regression lines for females and males
+abline(results, col = "red", lwd = 2) # Red line for females
+abline(results2, col = "blue", lwd = 2) # Blue line for males
 
-However, if we run this model:
-
-**$Y = \beta_0 + \beta_1 Age + \beta_2 Sex$**
-
-We get two lines! And these lines will look like:
-
-```{r example_4, echo=FALSE, message=FALSE, warning=FALSE, fig.height=4, fig.width=4.5}
-# Set the seed for reproducibility & set graphing parameter
-set.seed(123); par(mar=c(4,4,0,0))
-
-# Plot the data
-plot(Size ~ Age, data = females,
-     xlim=c(0,max(datum$Age)), ylim=c(8, max(datum$Size)), pch = 1)
-points(males$Age, males$Size, pch=2)
-
-# Bind data and run simple lm()
-datum <- rbind(females, males)
-results <- lm(Size ~ Age, data = datum)
-
-# lm() for males
-results2 <- lm(Size ~ Age, data = males)
-abline(results2, lty=2)
-
-# lm() for females
-results3 <- lm(Size ~ Age, data = females)
-abline(results3, lty=2)
+# Optionally, add a legend to distinguish between the two lines
+legend("topleft", legend = c("Females", "Males"), col = c("red", "blue"), lwd = 2)
 
 ```
 
-Now, we get *unbiased* estimates of the effect of Age on Size for each Sex.
+All individuals start out at about the same size, but then males grow faster and reach a larger size at an earlier age than females.
 
-If we leave out Sex in the first model, some of that Sex effect is being transmitted to the effect of Age.
+This is an interaction! The effect of age depends on sex. We get a different beta (slope) for the age-size relationship for males then we do for females.
 
-- Females are smaller than males, and it's biasing that effect on Size.
-- The difference in size is transmitted to the effect of Age.
+Another interesting thing I want to point out is that for interactions, perspective does not matter:
 
-The same thing might be happening in the TV-effect on mortality study. There were many other variables that were correlated to watching TV that were really influencing mortality. Their effects, which were left out of the statistical model, were being transmitted to the effect of watching TV.
+- The effect of age depends on sex.
+- The difference between the sexes also depends on age.
 
-**Q:** Does that make sense? Questions?
+For example:
 
-Reiterating the important point: if we leave confounding variables out of our model, we get biased estimates of the variables that we do leave in the model.
+```{r echo=FALSE, fig.height=4, fig.width=4.5}
+# Specify plot margins
+par(mar=c(4,4,0,0))
 
-- So, we want to collect data on confounding variables and include them in the model.
-- And we want to do this even if they are not statistically significant. We'll talk about model building later in the class and when you should/should not remove variables from models.
+# Make an empty plot with defined x and y limits
+plot(xlim, ylim, type = "n", xlab = "Age", ylab = "Size")
 
-In general though, we want to leave variables in to statistically control for confounding effects.
+# Add regression lines for females and males
+abline(results, col = "red", lwd = 2) # Red line for females
+abline(results2, col = "blue", lwd = 2) # Blue line for males
 
-### Tradeoff
+# Optionally, add a legend to distinguish between the two lines
+legend("topleft", legend = c("Females", "Males"), col = c("red", "blue"), lwd = 2)
 
-**If confounding variables *are* included in model --> Variance Inflation**
+# Define ages for vertical lines (e.g., young age = 5, old age = 20)
+young_age <- 3
+old_age <- 8
 
-When we run a model with multiple X-variables, the computer package is trying to figure out which of the two variables are having an effect on Y. But they are correlated to eachother, which makes it tough for the software to figure out out which X-variable is having what effect. And the more strongly they are associated with eachother, it becomes more difficult for the software to disentangle these effects.
-
-A consequence of this is that more variables cause greater uncertainty in the effects ($\beta$s). Increased uncertainty is reflected in:
-
-- **increased SE**
-- **increased CI**
-- **increased P-values**
-
-This can lead to problematic results.
-
-I mentioned during the last class that, generally, if we add a variable to a model, the p-values for the variables in a model go down. <u>However, collinearity is the one exception to that rule!</u> And in fact, it's a red flag.
-
-My recommendation is that, before you even start your analysis, you need to know what the collinearity is between your X-variables! Plot your X-variables, run some linear models (e.g., between Age and Sex), and learn about what the collinearity is.
-
-- Some people fail to do this and problems occur. For example, they might build a model where Age was significant... and then they add Sex, and Age is no longer significant...
-- If the P-value goes up a lot when you add a variable to a model, this is a symptom of collinearity! This is happening because of collinearity between X-variables.
-
-## Symptoms of collinearity
-
-1) Collinearity between independent variables
-  - High $r^2$ values
-  - Statistically-significant relationships between X-variables
-2) High variance inflation factors (VIF) of variables in model
-3) Variables significant in simple regression, but not in multi-variable regression
-4) Individual variables not significant in multi-variable regression model, but the overall multi-variable regression model is significant
-5) Large changes in coefficient estimates between full and reduced models
-6) Large SE in multi-variable regresion models, despite high power
-
-Breaking this list down a bit...
-
-1) The easiest way to know if you have collinearity is to examine fit a linear model between your two independent variables and see if they have **high $r^2$ values** or if there is a **statistically-significant relationship** between them.
-
-2) High variance inflation factors (VIF) of variables in model. Next class I will show you how to examine VIF for variables in a model.
-
-3) As I said before, if you have significant variables in a simple linear regression, but then you add another variable(s) to create a multi-variable regression and the individual variable(s) is no longer significant, then you have collinearity. 
-
-4) If you build a multi-variable model where (i) none of the individuals variables are significant, but (ii) the overall whole model is significant (the p-value at the bottom of the model0), then you have collinearity. The whole model is significant, but none of the individual variables is significant.
-
-- How does that happen? All of the X-variables are explaining a lot of the Y-variable, but the software is having a hard-time figure out which X-variable is explaining the response. And the collinearity causes the p-values for individual variables to go up.
-
-5) Generally, when you add variables to a model, the betas *should not change too much*. What do I mean by 'too much'? E.g., when you have a simple model with beta and CI, and then you add another X-variable to the model to create a multi-variable model, then the new estimate for your beta should be within the 95% CI of the original estimate. If it moves to be outside of the 95% CI of the original estimate, that's a considerable change and is a symptom of collinearity of the X-variables.
-
-6) What if you have 25,000 samples, and you have huge standard errors. Why are the SE so big, when we have such a large sample size? Collinearity in the system can increase SE, increase CI, and decrease p-values.
-
-**Questions?**
-
-## Simulation Exercise 1
-
-When confronted with collinearity, a common approach taken by many folks in our field is to <u>take variables out of the model</u>. However, this has a consequence that they do not understand -- it biases our estimates! -- so this is not the approach I recommend.
-
-I'm going to show you a simulation exercise that demonstrates:
-
-1) Collinearity influences parameter **estimates**, **uncertainty**, and **p-values** when confounding variables are not included in the model, and
-2) When all the necessary confounding variables are included, collinearity increases uncertainty and p-values but <u>does not bias estimates</u>.
-
-### Truth
-
-$\beta_1 = 3$
-$\beta_2 = 3$
-$z = U[0.5,20]$ -- an estimate of how much correlation (collinearity) there is between $X_1$ and $X_2$
-
-For the simulation exercise, I simulated 1,000 datasets with varying degrees of collinearity (correlation) between two X-variables. Here is truth:
-
-- Simulations: $n = 1,000$
-- $y = 10 + 3X_1 + 3X_2 + \epsilon \sim N(0, 2)$
-- $X_1 = U[0,10]$
-- $X_2 = X_1 + N(0, z)$
-- For each simulation, I used a different value of *z* from a uniform distribution: $z = U[0.5, 20]$.
-
-```{r simulation_1, echo=FALSE, message=FALSE, warning=FALSE, fig.height=4, fig.width=4.5}
-# Set the seed for reproducibility & set graphing parameter
-set.seed(123); par(mar=c(4,4,0,0))
-
-# Number of simulations
-s <- 1000
-
-# Empty vectors to save results from each simulation
-simple_beta1 <- numeric(s)
-simple_se1 <- numeric(s)
-simple_p1 <- numeric(s)
-multi_beta1 <- numeric(s)
-multi_se1 <- numeric(s)
-multi_p1 <- numeric(s)
-r2 <- numeric(s)
-vif <- numeric(s)
-
-# x2 = x1 + error(0, z), where
-# z can range from 0.5 (highly correlated to x1) to 20 (not correlated at ~all)
-z_values <- seq(0.5, 20, length.out = s)
-
-# Loop through each simulation replicate to measure everything
-for (i in 1:s){
-  
-  # Number of datapoints per simulation
-  n <- 100
-
-  # x1
-  x1 <- runif(n, 0, 10) # Random, uniform variable; only simulated once
-
-  # error for y; only simulated once
-  error <- rnorm(n, 0, 2)
-  
-  # X2 for each simulation
-  x2 <- x1 + rnorm(n, 0, z_values[i])
-  
-  # Y for each
-  y <- 10 + 3 * x1 + 3 * x2 + error
-
-  # Simple model
-  results1 <- lm(y ~ x1)
-  simple_beta1[i] <- summary(results1)$coefficients[2,1]
-  simple_se1[i] <- summary(results1)$coefficients[2,2]
-  simple_p1[i] <- summary(results1)$coefficients[2,4]
-
-  # Multi-variable model
-  results2 <- lm(y ~ x1 + x2)
-  multi_beta1[i] <- summary(results2)$coefficients[2,1]
-  multi_se1[i] <- summary(results2)$coefficients[2,2]
-  multi_p1[i] <- summary(results2)$coefficients[2,4]
-
-  # R^2 between X-variables
-  model_x12 <- lm(x2 ~ x1)
-  r2[i] <- summary(model_x12)$r.squared
-  
-  # VIF for multi-variable model
-  vif[i] <- car::vif(results2)["x1"]
-}
+# Add vertical lines at the chosen ages
+segments(young_age, 8.5, young_age, 14, col = "black", lty = 2, lwd = 2)
+segments(old_age, 16, old_age, 26.5, col = "black", lty = 2, lwd = 2)
 
 ```
 
-Low values of *z* (e.g., *z* = 0.5) caused high collinearity between the X-variables, because only a little bit of noise gets added to $X_1$ to calculate $X_2$. Alternatively, high values of *z* (e.g., *z* = 20) had low collinearity, because large noise was added to $X_1$ to calculate $X_2$. In other words, the low values of *z* caused very little noise (and high collinearity) between $X_1$ and $X_2$, while the high values caused great noise (and low collinearity) between the variables.
+At a young age, the difference between sexes is small; at an older age, the difference is larger.
 
-For each simulation, I did a few things:
+You can take whatever perspective is most valid for you, and it depends on the questions you are asking. A little open to interpretation.
 
-- Fit a simple model ($Y ~ X_1$) and measured the estimate, SE, and p-value for $\beta1$
-- Fit a multi-variable model ($Y ~ X_1 + X_2$) that included both of the collinear, confounding variables, and measured the effect, SE, and p-value for $\beta1$.
+## Interactions in the linear model
 
-Most importantly, I measured how collinearity between $X_1$ and $X_2$ (i.e., $r^2$) influenced the the Variance Inflation Factor from the multi-variable model.
+How do we add an interaction into the linear model?
 
-I'm going to show a number of graphs, and for all of these graphs the X-axis is a measure of collinearity (correlation; $r^2$) between $X_1$ and $X_2$. If it's collinearity equals 1, then the variables are perfectly correlated, whereas low values show weak/no correlation.
+1) Like I said before, you could just do this analysis separately: one regression for males, one for females. But you will get two betas and you won't know if they are statistically significant.
+2) Add in another effect to our linear model ($\beta_3$) and then multiply the two X-variables by eachother (times eachother).
 
-The first graph I am going to show you describes how the **Variance Inflation Factor** score is influenced by collinearity. The **Variance Inflation Factor** is a metric used to diagnose whether there may be collinearity between X-variables in a multiple-variable model.
+So now the linear model looks like:
 
-**Variance Inflation Factor (VIF) -- the amount (in *times*) that the variance ($SE^2$) in the $\beta$ increases due to collinearity**
+$Size = \beta_0 + \beta_1Size + \beta_2Sex + \beta_3 Age*Sex  + \epsilon \sim N(0, \sigma)$
 
-- E.g., if VIF = 4, then the variance is 4 times what it would be if you didn't have collinearity -- and the SE would be doubled ($SE = \sqrt4 = 2$).
+As we have done before, let's break this down for what the interaction does for both males and females! Let's consider females as the reference group (0) and males as the treatment group (1)
 
-First, let's see how the VIF is influenced by collinearity:
+**Female = 0**
 
-```{r simulation_2, echo=FALSE, message=FALSE, warning=FALSE, fig.height=4, fig.width=8}
-# Set the seed for reproducibility & set graphing parameter
-set.seed(123); par(mar=c(4,4,0.5,1))
+**Male = 1**
 
-# Plotting VIF against collinearity values
-plot(r2, vif, xlab = expression("Collinearity ("~ r^2 ~") between" ~ X[1] ~ "and" ~ X[2]), ylab = "VIF")
+$Size(female) = \beta_0 + \beta_1Age + \cancel{\beta_2*0} + \cancel{\beta_3 Age* 0} + \epsilon \sim N(0, \sigma)$
 
-# Add horizontal line for when VIF = 2
-abline(h = 2, lty = 2)
+The effect of beta2 disappears, and so does the effect of beta3! So the female line is simply: the intercept (beta0) plus the effect of age (beta1)!
 
-```
+```{r echo=FALSE, fig.height=4, fig.width=4.5}
+# Specify plot margins
+par(mar=c(4,4,0,0))
 
-This graph shows how VIF scores increase with increasing collinearity. 
+# Make an empty plot with defined x and y limits
+plot(xlim, ylim, type = "n", xlab = "Age", ylab = "Size")
 
-Some people say that if the VIF > 10, you need to worry about collinearity. In this case, the SE would be triple what it would otherwise be without collinearity. This happens when $r^2 = 0.9$, and the two X-variables are almost perfectly correlated. This is too high, in my opinion.
+# Add regression lines for females and males
+abline(results, col = "red", lwd = 2) # Red line for females
+abline(results2, col = "blue", lwd = 2) # Blue line for males
 
-Rule-of-thumb: **VIF > 2, recognize that you have collinearity in your data.**
+# Optionally, add a legend to distinguish between the two lines
+legend("topleft", legend = c("Females", "Males"), col = c("red", "blue"), lwd = 2)
 
-VIF = 2 ~ $r^2$ = 0.6 -- so another rule of thumb is that an $r^2 > 0.6$ may also indicate collinearity.
+# Define ages for vertical lines (e.g., young age = 5, old age = 20)
+young_age <- 3
+old_age <- 8
 
-### Simple regression model: $Y \sim X_1$
+# Add vertical lines at the chosen ages
+segments(young_age, 8.5, young_age, 14, col = "black", lty = 2, lwd = 2)
+segments(old_age, 16, old_age, 26.5, col = "black", lty = 2, lwd = 2)
 
-Now, let's consider results from the simple model ($Y \sim X_1$) across the simulations.
+# Store some effects from the female and male models
+# Extract the coefficients from the female model
+coeffs <- coef(results)
+beta0 <- coeffs[1]
+beta1 <- coeffs[2]
 
-The most important thing I want to emphasize to you all is in this first graph. How is the **beta for $X_1$** influenced by collinearity in the simple model?
+# Add vertical line from origin to regression line for beta0
+segments(x0 = 0, y0 = 0, x1 = 0, y1 = beta0, col = "Orange", lty = 2, lwd = 3)
 
-```{r simulation_3, echo=FALSE, message=FALSE, warning=FALSE, fig.height=4, fig.width=8}
-# Set the seed for reproducibility & set graphing parameter
-set.seed(123); par(mar=c(4,4,0.5,1))
+# Add labels for Beta0 (intercept) and Beta1 (slope)
+text(x = 0, y = beta0/3, labels = expression(beta[0]), pos = 4, col = "Orange", font = 2, cex = 2)
+text(x = max(datum$Age)/2, y = beta0 + beta1 * (max(datum$Age)/5), labels = expression(beta[1]), pos = 4, col = "Red", font = 2, cex = 2)
 
-# Plot beta1 estimate by collinearity values from the simple model
-plot(r2, simple_beta1, xlab = expression("Collinearity ("~ r^2 ~") between" ~ X[1] ~ "and" ~ X[2]), ylab = expression("Estimate of " ~ beta[1]))
+# Define points to illustrate rise over run for slope beta1
+x1 <- 2
+x2 <- 5
+y1 <- beta0 + beta1 * x1
+y2 <- beta0 + beta1 * x2
 
-```
-
-This graph shows, again, the $r^2$ between $X_1$ and $X_2$ (how correlated they are) on the X-axis, and the Y-axis shows the estimate for the beta for $X_1$. If there is no collinearity, the estimate is 3 -- which is truth! Bottom-left-hand side of the graph.
-
-However, even with a very little bit of collinearity ($r^2 < 0.2$), the parameter estimate is biased! As collinearity increases, the parameter estimate jumps pretty quickly up to 6!
-
-**Q:** Why 6? 6 = 3 + 3. Because the two X-variables are correlated, the estimation model starts to assign the effect of $X_2$ onto $X_1$. 
-
-Not including the confounding variable introduces bias in our estimates and negatively influences our inference.
-
-Now, often in this class we ask: how do different approaches influence betas, uncertainty, and p-values. Next we might ask ourselves: how is **standard error (SE)** influenced by collinearity in the simple model?
-
-```{r simulation_4, echo=FALSE, message=FALSE, warning=FALSE, fig.height=4, fig.width=8}
-# Set the seed for reproducibility & set graphing parameter
-set.seed(123); par(mar=c(4,4,0.5,1))
-
-# Plot SE estimate by collinearity values from the simple model
-plot(r2, simple_se1,
-     xlab = expression("Collinearity ("~ r^2 ~") between" ~ X[1] ~ "and" ~ X[2]),
-    ylab = expression("SE of estimate of" ~ X[1]))
+# Add horizontal and vertical lines to represent rise over run
+segments(x0 = x1, y0 = y1, x1 = x2, y1 = y1, col = "red", lty = 2, lwd = 3) # Run
+segments(x0 = x2, y0 = y1, x1 = x2, y1 = y2, col = "red", lty = 2, lwd = 3) # Rise
 
 ```
 
-This is where it gets a little scary. 
+Now let's examine this for males.
 
-Not only is the parameter estimate biased, the standard error gets smaller and smaller. As collinearity increases, your estimates are getting more and more precise...
+Intercept, plus effect of age, then sex gets a 1, and then sex * age gets a 1...
 
-How are **p-values** influenced by collinearity in the simple model?
+We can rearrange this to make it less messy:
 
-```{r simulation_5, echo=FALSE, message=FALSE, warning=FALSE, fig.height=4.5, fig.width=8}
-# Set the seed for reproducibility & set graphing parameter
-set.seed(123); par(mar=c(4,4,0.5,1))
+$Size(male) = \beta_0 + \beta_1Age + \beta_2*1 + \beta_3Age*1 + \epsilon \sim N(0, \sigma)$, or:
 
-# Plot p-values by collinearity values from the simple model
-plot(r2, log(simple_p1),
-     xlab = expression("Collinearity ("~ r^2 ~") between" ~ X[1] ~ "and" ~ X[2]),
-     ylab = expression("P-values of estimate of" ~ X[1] ~ " (log-transformed)"))
+$Size(male) = \beta_0 + \beta_1Age + \beta_2*1 + \beta_3Age*1 + \epsilon \sim N(0, \sigma)$
+
+$Size(male) = (\beta_0 + \beta_2) + (\beta_1 + \beta_3)Age + \epsilon \sim N(0, \sigma)$
+
+So now our new intercept is $\beta0 + \beta2$, and our our new slope is $\beta1 + \beta3$:
+
+```{r echo=FALSE, fig.height=4, fig.width=4.5}
+# Specify plot margins
+par(mar=c(4,4,0,0))
+
+# Make an empty plot with defined x and y limits
+plot(xlim, ylim, type = "n", xlab = "Age", ylab = "Size")
+
+# Add regression lines for females and males
+abline(results, col = "red", lwd = 2) # Red line for females
+abline(results2, col = "blue", lwd = 2) # Blue line for males
+
+# Optionally, add a legend to distinguish between the two lines
+legend("topleft", legend = c("Females", "Males"), col = c("red", "blue"), lwd = 2)
+
+# Define ages for vertical lines (e.g., young age = 5, old age = 20)
+young_age <- 3
+old_age <- 8
+
+# Add vertical lines at the chosen ages
+segments(young_age, 8.5, young_age, 14, col = "black", lty = 2, lwd = 2)
+segments(old_age, 16, old_age, 26.5, col = "black", lty = 2, lwd = 2)
+
+# Females: visualize female parameters on graph
+# Extract the coefficients from the female model
+coeffs <- coef(results)
+beta0 <- coeffs[1]
+beta1 <- coeffs[2]
+
+# Add vertical line from origin to regression line for beta0
+segments(x0 = 0, y0 = 0, x1 = 0, y1 = beta0, col = "Orange", lty = 2, lwd = 3)
+
+# Add labels for Beta0 (intercept) and Beta1 (slope)
+text(x = 0, y = beta0/3, labels = expression(beta[0]), pos = 4, col = "Orange", font = 2, cex = 2)
+text(x = max(datum$Age)/2, y = beta0 + beta1 * (max(datum$Age)/5), labels = expression(beta[1]), pos = 4, col = "Red", font = 2, cex = 2)
+
+# Define points to illustrate rise over run for slope beta1
+x1 <- 2
+x2 <- 5
+y1 <- beta0 + beta1 * x1
+y2 <- beta0 + beta1 * x2
+
+# Add horizontal and vertical lines to represent rise over run
+segments(x0 = x1, y0 = y1, x1 = x2, y1 = y1, col = "red", lty = 2, lwd = 3) # Run
+segments(x0 = x2, y0 = y1, x1 = x2, y1 = y2, col = "red", lty = 2, lwd = 3) # Rise
+
+
+# Males: Visualize male parameters on graph
+# Extract the coefficients from the female model
+coeffs <- coef(results2)
+beta0male <- coeffs[1]
+beta1 <- coeffs[2]
+
+# Add vertical line from origin to regression line for beta0
+segments(x0 = 0, y0 = beta0, x1 = 0, y1 = beta0male, col = "brown", lty = 1, lwd = 3)
+
+# Add labels for Beta0 (intercept) and Beta1 (slope)
+text(x = 0, y = beta0male, labels = expression(beta[2]), pos = 4, col = "brown", font = 2, cex = 1.5)
+text(x = max(datum$Age)/2.5, y = beta0male + beta1 * (max(datum$Age)/3), labels = expression(beta[1] + beta[3]), pos = 4, col = "green", font = 2, cex = 1.5)
+
+# Define points to illustrate rise over run for slope beta1
+x1 <- 4
+x2 <- 6
+y1 <- beta0male + beta1 * x1
+y2 <- beta0male + beta1 * x2
+
+# Add horizontal and vertical lines to represent rise over run
+segments(x0 = x1, y0 = y1, x1 = x2, y1 = y1, col = "green", lty = 2, lwd = 3) # Run
+segments(x0 = x2, y0 = y1, x1 = x2, y1 = y2, col = "green", lty = 2, lwd = 3) # Rise
 
 ```
 
-As uncertainty gets smaller and samller, our p-values also get smaller and smaller, because the effect of collinearity gets bigger and bigger...
+**Q:** Questions?
 
-So, collinearity is **really dangerous**! If you have collinearity in your data, and you leave out some confounding variable, you are going to get biased estimates, and it's going to seem like it's a really precise estimate with a clear result. Unless...
+Let's break this down and look at the meaning of our individual betas.
 
-**Q:** What if the effect of $X_2$ was -3? The two effects might cancel eachother out, and our estimate would be zero, with a small SE, and *false confidence that there is no effect*.
+Before, $\beta_0$ was the intercept of the female line. This remains unchanged; it is the average Y-value when all other X-variables are zero! **The average size of females at the age of zero.** 
 
-If the effect of the unaccounted confounding variable, $X_2$, has an effect in the opposite direction, the collinear effects may partially or wholly cancel eachother out, and you may fail to observe any true effect of X on Y.
+What is $\beta_2$? **The difference in average size of males and females at age = 0.** Graphically, it's that little distance between males and females at age zero.
 
-### Multi-variable model: $Y \sim X_1 + X_2$
+If we didn't have the interaction, what would $beta_2$ mean? It would simply be the difference between males and females at all ages. With the interaction, it restricts this meaning of this parameter to be at zero for the continuous X-variable.
 
-Now, let's consider results from the multi-variable model ($Y \sim X_1 + X_2$) across the simulations. This is the model where we have *statistically controlled* for that collinearity. 
+What is $\beta_1$? Before it was the effect of age for all individuals, everybody. Now, it is **the effect of age for females.**
 
-Let's start here by asking: how does collinearity influence the **beta for $X_1$** in the multi-variable model?
+Finally, what is $\beta_3$? This is a little more *tricky*. It is not the effect of age for males. Instead, it is the *difference* in the effect of age between females and males. The difference in the slope.
 
-```{r simulation_6, echo=FALSE, message=FALSE, warning=FALSE, fig.height=4, fig.width=8}
-# Set the seed for reproducibility & set graphing parameter
-set.seed(123); par(mar=c(4,4,0.5,1))
+So, if we want to know if the slopes are different for males and females, that's what $\beta_3$ tells us!
 
-# Plot beta1 estimate by collinearity values from the multi-variable model
-plot(r2, multi_beta1, xlab = expression("Collinearity ("~ r^2 ~") between" ~ X[1] ~ "and" ~ X[2]), ylab = expression("Estimate of " ~ beta[1]))
+If $\beta_3$ is zero, what does that mean? ...There is no interaction, there is no differnece in the slopes for females and males, and the slopes are the same.
 
-# Add a horizontal line for when r^2 = 0.6
-abline(v = 0.6, lty=2)
+For this reason, I argue that if you get a non-significant interaction, it would be best to take this parameter out of the model. The main reason is that:
+
+- By leaving the insignificant interaction in, it changes the meaning of the other betas, and makes this more confusing and messy. If it's not significant, you are justified to **take it out** for your results to be more simple and clear.
+
+Alternatively, you might want to leave it in: 
+
+- If you have a small sample size and your interaction beta is large, maybe you might leave it in to report it so that maybe will encourage future researchers to collect more data to potentially report that effect.
+- And if you are specifically testing for this interaction, you would **not want to take it out** -- you would want to leave it in to **report it**! "I hypothesized this to be different, but I didn't find support for that -- but here are the results."
+
+The reason why we test for interactions this way, rather than having a separate slope for males, is that:
+
+- If $\beta3 = 0$, there is no interaction, and the slopes are the same.
+- If $\beta3 \neq 0$, there is an interaaction, the slopes are different, and this equation accompanies that.
+
+**Q:** As I've drawn this here, would $\beta3$ be positive or negative?
+
+Positive! It causes the slope to increase for males relative to females.
+
+Alternatively, $\beta3$ could be negative. Let's assume we have a positive $\beta2$ and a negative $\beta3$:
+
+```{r echo=FALSE, fig.height=4, fig.width=4.5}
+# Specify plot margins
+par(mar=c(4,4,0,0))
+
+# Read in the size ~ age + sex + age*sex data with a negative interaction effect
+datum <- read.csv("lecture_13_dataset2.csv")
+
+# Model for females
+results <- lm(Size ~ Age, data = subset(datum, datum$Sex == "Female"))
+
+# Model for males
+results2 <- lm(Size ~ Age, data = subset(datum, datum$Sex == "Male"))
+
+# Determine the range of the x and y axes
+xlim <- c(0, max(datum$Age))
+ylim <- c(0, max(datum$Size))
+
+# Make an empty plot with defined x and y limits
+plot(xlim, ylim, type = "n", xlab = "Age", ylab = "Size")
+
+# Add regression lines for females and males
+abline(results, col = "red", lwd = 2) # Red line for females
+abline(results2, col = "blue", lwd = 2) # Blue line for males
+
+# Optionally, add a legend to distinguish between the two lines
+legend("topleft", legend = c("Females", "Males"), col = c("red", "blue"), lwd = 2)
 
 ```
 
-On the Y-axis, we have the coefficient estimate for $\beta_1$, and the X-axis is again the correlation between the two X-variables.
+In this case, the negative $\beta3$ causes the slope of the male line to be flat -- or zero. If we did the male analysis separate from females, there would probably be no statistically significant effect here. However, the full model with the interaction effect **would recover a statistically significant interaction term**! In this case, $\beta3$ would probably be pretty close to $\beta1$, but just negative as such, canceling eachother out.
 
-The estimate is good, right around 3 (truth)!! But as collinearity increases, the estimate can be more variable. So by including the confounding variables, your estimate is good, but the bad news is that due to the collinearity, you have less certainty in your estimate. But at least the estimate is unbiased, which is the most important thing.
+There is no hard-and-fast rule for (1) whether to test for an interaction or not, or (2) whether to leave a non-significant interaction term in your model or not. It depends on your **needs**. The purpose of statistics is not to tell you the answer. Rather, it is a tool to support or reject hypotheses that you have about the world. Statistics are a way to test hypotheses. You should only test for an interaction if you have a specific hypothesis suggesting that there might be an interaction effect.
 
-Remember the rule of thumb about $r^2$ indicating collinearity? Previously I said that when $r^2 = 0.6$, collinearity should be on your radar. In this graph, we can see that simulations with collinearity greater than 0.6 start to have parameter estimates that are more variable. However, the mean is still centered on ~3 (Truth) after this rule-of-thumb. So no matter how much collinearity there is, on average we will continue to get an unbiased estimate of the effect of X-variables in the model. In statistics, any one estimate may be bad -- but on average, for this multi-variable model, the estimates will be unbiased.
+Note: this is a simple interaction model, a two-way interaction. What if we had another X-variable that might also interact with age and sex... e.g., Mother Size? That will get very complicated, very fast. And it will be very difficult to explain what those effects mean. So while you could start testing for three- or four-way interactions, it will be impossible to explain what those results mean! Point is: think about what your interactions are before putting them in the model. 
 
-Another thing that we can see from this graph is the **variance inflation** itself! As collinearity increases along the X-axis, the cone of simulation results gets bigger, because there is more and more uncertainty in what the parameter estimate really is.
+## Reporting results
 
-```{r simulation_7, echo=FALSE, message=FALSE, warning=FALSE, fig.height=4, fig.width=8}
-# Set the seed for reproducibility & set graphing parameter
-set.seed(123); par(mar=c(4,4,0.5,1))
+Without interactions, we learned to report results with two sentences:
 
-# Plot beta1 estimate by collinearity values from the multi-variable model
-plot(r2, multi_se1, xlab = expression("Collinearity ("~ r^2 ~") between" ~ X[1] ~ "and" ~ X[2]), ylab = expression("SE of estimate of " ~ beta[1]))
+- For the continuous variable, age: "For each unit increase in age, we observed [beta] increase in size."
+- For the categorical variable, sex: "We found that males were [beta] more/less than females."
+
+We now need to modify the sentence for the continuous variable. Our sentences will be:
+
+- Continuous variable: "We found that, *in females*, for each one unit increase in age, we observed a [beta] increase in size."
+- Categorical variable: "We found that males were [beta] units larger than males *at age zero*."
+- Interaction variable sentence is a bit tricker: "We found a significant interaction, such that for males, the difference in the age-size relationship was [beta] [Y-units per X-units]."
+
+We have to add in these *qualifiers* when we have an interaction, which makes it clunkier.
+
+This third sentence for the interaction ~works, but it is clunky, ugly, and not exactly elegant!
+
+Before I said that I didn't like analyzing males separate from females because you couldn't do a test to demonstrate that the male and female slopes were significantly different. However, describing the interaction effect is one situation where I will support (1) splitting your data, (2) re-running the simple model (e.g., males-only), and then (3) reporting that more simple beta to your readers. You can justify this approach by saying: 
+
+- "We found a significant interaction between males and females ($\beta_3$ = [...]; [p-value]). Therefore, we analyzed males and females separately. We found that, for females, for each one unit increase in age, we observed a [beta] unit (95% CI) increase in size (P-value). We also found that for males, for each one unit increase in age, we observed a [beta] increase in size."
+
+This all works when you have a categorical variable in the model. If you have a categorical variabel in the model, it is often easiest to figure a way to break them apart.
+
+If you have two continuous variables, it becomes more confusing, and I recommend using a graph -- specifically a three-dimensional one.
+
+Here, size is the Y-variable, elevation and latitude are the X-variables. There is no interaction between elevation and latitude.
+
+```{r echo=FALSE, fig.height=6, fig.width=8.5}
+# Specify plot margins
+par(mar=c(4,4,0,0))
+
+# Read in size ~ elevation + latitude
+datum <- read.csv("lecture_13_dataset3.csv")
+
+# Load necessary library
+library(plotly)
+
+# Fit a linear model to predict Size based on Latitude and Elevation
+model <- lm(Size ~ Latitude + Elevation, data = datum)
+
+# Create a grid of points for plotting the plane
+grid <- expand.grid(
+  Latitude = seq(min(datum$Latitude), max(datum$Latitude), length.out = 30),
+  Elevation = seq(min(datum$Elevation), max(datum$Elevation), length.out = 30)
+)
+
+# Predict Size values on the grid
+grid$Size <- predict(model, newdata = grid)
+
+# Create a 3D plot with plotly
+plot_ly(
+  x = ~grid$Latitude, 
+  y = ~grid$Elevation, 
+  z = ~grid$Size, 
+  colorscale = "Viridis",
+  type = "mesh3d",
+  intensity = ~grid$Size,  # Color the plane based on Size values
+  showscale = FALSE,        # Show the color scale
+  opacity = 0.8            # Set plane opacity
+) %>%
+  layout(
+    scene = list(
+      camera = list(eye = list(x = -1.6, y = -1.6, z = 0.3)),
+      xaxis = list(title = 'Latitude', range = c(0, max(datum$Latitude))),
+      yaxis = list(title = 'Elevation', range = c(0, max(datum$Elevation))),
+      zaxis = list(title = 'Size')
+    ),
+    width = 666,   # Set the desired width in pixels
+    height = 500   # You can adjust the height as well if needed
+  )
 
 ```
 
-And we see this here as well with the SE estimates. As collinearity increases, SE of the estimate increases, again suggesting increasing uncertainty due to collinearity.
+**Q:** How do we know there is no interaction between the X-variables?
 
-```{r simulation_8, echo=FALSE, message=FALSE, warning=FALSE, fig.height=4, fig.width=8}
-# Set the seed for reproducibility & set graphing parameter
-set.seed(123); par(mar=c(4,4,0.5,1))
+- It's a flat plane
+- The lines are parallel!
 
-# Plot beta1 estimate by collinearity values from the multi-variable model
-plot(r2, log(multi_p1), xlab = expression("Collinearity ("~ r^2 ~") between" ~ X[1] ~ "and" ~ X[2]), ylab = expression("P-value of estimate of " ~ beta[1] ~ "(log-transformed)"))
+An interaction between latitude and elevation would look like this:
+
+```{r echo=FALSE, fig.height=5, fig.width=8.5}
+# Specify plot margins
+par(mar=c(4,4,0,0))
+
+# Read in size ~ elevation + latitude
+datum <- read.csv("lecture_13_dataset4.csv")
+
+# Load necessary library
+library(plotly)
+
+# Fit a linear model to predict Size based on Latitude and Elevation
+model <- lm(Size ~ Latitude + Elevation + Latitude*Elevation, data = datum)
+
+# Create a grid of points for plotting the plane
+grid <- expand.grid(
+  Latitude = seq(min(datum$Latitude), max(datum$Latitude), length.out = 30),
+  Elevation = seq(min(datum$Elevation), max(datum$Elevation), length.out = 30)
+)
+
+# Predict Size values on the grid
+grid$Size <- predict(model, newdata = grid)
+
+# Create a 3D plot with plotly
+plot_ly(
+  x = ~grid$Latitude, 
+  y = ~grid$Elevation, 
+  z = ~grid$Size, 
+  colorscale = "Viridis",
+  type = "mesh3d",
+  intensity = ~grid$Size,  # Color the plane based on Size values
+  showscale = FALSE,       # Show the color scale
+  opacity = 0.8            # Set plane opacity
+) %>%
+  layout(
+    scene = list(
+      camera = list(eye = list(x = -1.6, y = -1.6, z = 0.3)),
+      aspectmode = "manual",
+      aspectratio = list(x=1, y=1, z=1),
+      xaxis = list(title = 'Latitude', range = c(min(datum$Latitude), max(datum$Latitude))),
+      yaxis = list(title = 'Elevation', range = c(min(datum$Elevation), max(datum$Elevation))),
+      zaxis = list(title = 'Size', range = c(min(datum$Size), max(datum$Size)))
+    ),
+    selectdirection = "v",
+    width = 666,  # Set the desired width in pixels
+    height = 500   # You can adjust the height as well if needed
+  )
 
 ```
 
-And again, as uncertainty increases, p-values increase as well.
-
-But hopefully the takehome message is clear. Failing to account for confounding variables in a model will bias estimates. Accounting for those confounding variables will produce unbiased estimates, although the uncertainty may increase.
-
-### Confounding variables
-
-**Confounding variable -- a variable that will bias results if you leave it out**. There are two key features for confounding variables:
-
-- Correlated with another X-variable
-- Has it's own effect on Y
-
-To avoid negative effects of confounding variables, I recommend:
-
-1) Sample in a manner that eliminates collinearity. Collinearity may be real, or it may be due to sampling artifact. E.g., in the first example above, collinearity was introduced due to non-random sampling of the different sexes. Collect your data in a way that eliminates collinearity. 
-
-2) Use multi-variable regression. If you have collinear X-variables, it may cause your SE to be large, but <u>your estimates will be unbiased</u>. If you fail to include confounding variables, then estimates will be biased.
-
-3) Include confounding variables, even if they are non-significant.
-
-Scenarios: two collinear variables (Age and Sex), and you run the full model. VIF is really high (e.g., 10). SE and CI are very inflated, but everything is still significant. Do you do anything? No.
-
-- Your estimates are unbiased, because you ran the full model.
-- Your CI are large, but still statistically significant.
-- You have identified that you have collinearity, which caused the large CI. But the betas are unbiased.
-
-But sometimes you run the analysis but X-variables are not significant. What do you do then?
-
-4) Get more data! This decreases SE and VIF.
-
-Most problems in statistics can be improved by getting more data. Increasing N decreases SE, CI, and P-values... If none of your data are significant due to collinearity, maybe you just need to collect more data.
-
-5) There are statistical techniques that can eliminate collinearity. One of those is Principal Component's Analysis, which we may talk about in this class. Popular analysis. What this analysis does is it creates *new variables* that are orthogonal -- which means they have zero collinearity.
-
-### Redundant variables
-
-If collinearity between X-variables results in biased estimates, why do so many people throw out their variables in favor of reduced models that will suffer from collinearity and thus have biased estimates?
-
-Well, you can do this <u>*sometimes*</u> -- primarily when your collinear X-variables <u>don't have an effect on Y</u>.
-
-These are sometimes called **redundant variables -- collinear X-variables that don't have an effect on the Y-variable**.
-
-1) Correlated to another X-variable, but
-2) Do not have an effect on Y
-
-They are similar to confounding variables by being correlated to another X-variable, but the key difference is that they do not have an effect on Y.
-
-- If they don't really have an effect (i.e., $\beta$ = 0), there is no problem when you take them out. Leaving out a redundant variable does not cause bias, because it does not have an effect to add onto another variable included in the model!
-- If you leave out a confounding variable, it assigns it's effect to the other collinear variable you left in. In the case of redundant variables, leaving them out assigns the effect to the other X-variable -- but that effect was zero!
-- If you include a redundant variable, it will cause **variance inflation**.
-
-In truth, there are no confounding or redundant variables, but rather it's a continuum depending on the $\beta$.
-
-- If the $\beta \neq 0$, it's a confounding variable.
-- If the $\beta = 0$, it's a redundant variable. 
-
-You don't need to leave in redundant variables, and leaving them in will generate variance inflation.
-
-What's an example of a redundant variable? Watching TV and it's effect on mortality. If you leave this in your analysis, you will measure a $\beta = 0$ after you include all of the other important things that truly do influence mortality. And by leaving it in the model you will increase SE, CI, and p-values of all of the other important variables.
-
-## Redundant vs. Confounding Variables
-
-Like I said before, many scientists tend to throw out correlated X-variables because they are afraid of 'collinearity', and they want to reduce the model to avoid variance inflation.
-
-This is fine -- <u>if you are 100% certain that those variables are redundant</u>.
-
-If they are confounding variables, they must be included -- because removing them will cause biased betas, reduced uncertainty, and small p-values. 
-
-So, how do we know whether variables are **redundant** or **confounding** variables?
-
-**Redundant vs. Confounding Variable**
-
-### 1. Logic!
-
-Put some thought into your variables. Statistics is a thinking exercise and should involve critical thinking. Is it likely that your X-variable has it's own effect on Y? If so, include it.
-
-![](pictures/pic_gopher_tortoise.jpg){width=50%}
-
-Example: Gopher Tortoises. The gopher tortoise is a burrow-digging turtle species in the southeastern United States that is a species of conservation concern. Reproduction is important for populations to grow and persist, and researchers are interested in what causes reproduction in tortoise populations. Male tortoises are known to compete with eachother for access to females, and they often get in wrestling matches for access to females. Males sometimes have large shell extensions under their neck called 'gular scutes' that are used to flip other males during male-male combat. People have wondered what are the factors that influence reproductive success of tortoises: age, body size, or gular scute size? These factors are all correlated: older tortoises get larger bodies and may grow larger gular scutes. However, there is likely variation in growth rates such that sometimes younger tortoises may be larger and/or have larger gular scutes than older tortoises. The question is: are these variables redundant or confounding variables?
-
-There may be an argument that they all of these variables are measures of age, and shell size and gular scute size are redundant variables. Alternatively, it could be that they each have their own effect, where age, size, and gular scute length have different effects on reproductive success. Maybe: (1) older tortoise are more experienced at winning wrestling matches, (2) larger animals are better at winning wrestling matches, and (3) animals with larger gular scutes are better at winning wrestling matches or provides a signal of fitness to females. So each one could have a different mechanism, such that you might have an instance where a young, small animal but with big gular scutes performs well at reproducing.
-
-So, think about mechanisms for how different X-variables might influence Y. If those mechanisms are different, then they may have different effects on Y, and thus may be **confounding variables**.
-
-A helpful way to do this is to build a <u>conceptual model</u> describing hypotheses for how all variables might be related in your system and then use that model to guide what variables you might want to measure. I recommend this to most students and collaborators I work with!
-
-### 2. **What happens between 'full' and 'reduced' models?**
-
-A full model has all of the X-variables, whereas a reduced model has a subset of X-variables. How does <u>reducing</u> the model influence the betas and p-values? If you reduce the model and the betas change a lot, this is an indication of collinearity.
-
-- **Confounding variable -- removing it changes the betas for the other variables**
-- **Redundant variable -- removing it does not change other betas**
-
-('Change' is a subjective term, but our usual rule of thumb would be that it caused effect to move outside of the original confidence limits.)
-
-Conversely, we can think about this in terms of <u>adding</u> variables to a model.
-
-**When adding other variables, redundant $\beta$s tend to go to zero**
-
-A good example of this is the 'watching TV study'! It looks like watching TV has an effect when it's all by itself in the model. But when you add the confounding variables that truly have an effect on Y, the effect of TV will probably go to zero, because it is a redundant variable. So, when you add other variables to a model, the beta for the redundant variable will tend to go to zero.
-
-In other words, if a variable had an effect but then you added in a bunch of other variables and the effect disappeared -- then it probably never had an effect to begin with, it was just a redundant variable.
-
-**When adding other variables, confounding $\beta$s will still be 'substantial'**. They may not still be statistically significant because we have added more variables and contributed to variance inflation. However, if we look at the beta and it still looks like a biologically-significant effect, then it may be a confounding variable that lost significance due to variance inflation.
-
-In general, betas should not change when you add additional variables to a model. If they do, you have collinearity.
-
-This is a point in the class where things are starting to get pretty nuanced and we need to be pretty strategic and careful about how we approach our work.
-
-### 3. **$r^2$ between variables**
-
-This is not a rule, but rather a guideline. If you examine the correlation between two X-variables and see an extremely high $r^2$ value, it's most likely that those variables are redundant. Very, very strong collinearity tends to imply redundancy.
-
-Rule-of-thumb: high $r^2$ tends to suggest redundancy.
-
-### 4. **Not sure? Treat as confounding.**
-
-If you are not sure, treat it as confounding. 
-
-**Q:** Why?
-
-Because then you will include it in your model, account for its statistical effect, if one exists. If it's actually a redundant variable, then there is no effect! Your parameter estimates will be unbiased and the only consequence will be a little bit of variance inflation and reduced uncertainty. This is much better than leaving out an important, confounding variable and having consequences on your betas! 
-
-<u>General takeaway here</u>: if adding variable(s) causes the beta of a variable to change to zero, then it's probably a redundant variable, and this should be pretty obvious.
-
-## Simulation Exercise 2
-
-This simulation exercise is similar as before, but now only $X_1$ has an effect, and $X_2$ is a redundant variable.
-
-```{r sim_exercise_2_1, echo=FALSE, message=FALSE, warning=FALSE, fig.height=4, fig.width=4.5}
-# Set the seed for reproducibility & set graphing parameter
-set.seed(123); par(mar=c(4,4,0,0))
-
-# Number of simulations
-s <- 1000
-
-# Empty vectors to save results from each simulation
-simple_beta1 <- numeric(s)
-simple_se1 <- numeric(s)
-simple_p1 <- numeric(s)
-simple_beta2 <- numeric(s)
-multi_beta1 <- numeric(s)
-multi_beta2 <- numeric(s)
-multi_se1 <- numeric(s)
-multi_p1 <- numeric(s)
-r2 <- numeric(s)
-vif <- numeric(s)
-
-# x2 = x1 + error(0, z), where
-# z can range from 0.5 (highly correlated to x1) to 20 (not correlated at ~all)
-z_values <- seq(0.5, 20, length.out = s)
-
-# Loop through each simulation replicate to measure everything
-for (i in 1:s){
-  
-  # Number of datapoints per simulation
-  n <- 100
-
-  # x1
-  x1 <- runif(n, 0, 10) # Random, uniform variable; only simulated once
-
-  # error for y; only simulated once
-  error <- rnorm(n, 0, 2)
-  
-  # X2 for each simulation
-  x2 <- x1 + rnorm(n, 0, z_values[i])
-  
-  # Y for each
-  y <- 10 + 3 * x1 + error
-
-  # Simple model of X1
-  results1 <- lm(y ~ x1)
-  simple_beta1[i] <- summary(results1)$coefficients[2,1]
-  simple_se1[i] <- summary(results1)$coefficients[2,2]
-  simple_p1[i] <- summary(results1)$coefficients[2,4]
-  
-  # Simple model of X2
-  results2 <- lm(y ~ x2)
-  simple_beta2[i] <- summary(results2)$coefficients[2,1]
-
-  # Multi-variable model
-  results3 <- lm(y ~ x1 + x2)
-  multi_beta1[i] <- summary(results3)$coefficients[2,1]
-  multi_beta2[i] <- summary(results3)$coefficients[3,1]
-  multi_se1[i] <- summary(results3)$coefficients[2,2]
-  multi_p1[i] <- summary(results3)$coefficients[2,4]
-
-  # R^2 between X-variables
-  model_x12 <- lm(x2 ~ x1)
-  r2[i] <- summary(model_x12)$r.squared
-  
-  # VIF for multi-variable model
-  vif[i] <- car::vif(results3)["x1"]
-}
-
-```
-
-Let's look at how correlation between $X_1$ and $X_2$ influences the Variance Inflation Factor.
-
-```{r sim_exercise_2_2, echo=FALSE, message=FALSE, warning=FALSE, fig.height=4, fig.width=8}
-# Set the seed for reproducibility & set graphing parameter
-set.seed(123); par(mar=c(4,4,0.5,1))
-
-# Plotting VIF against collinearity values
-plot(r2, vif, xlab = expression("Collinearity ("~ r^2 ~") between" ~ X[1] ~ "and" ~ X[2]), ylab = "VIF")
-
-# Add horizontal line for when VIF = 2
-abline(h = 2, lty = 2)
-
-```
-
-The relationship between collinearity and Variance Inflation does not change if it's a confounding or redundant variable. Adding a redundant variable will still cause Variance Inflation, as I mentioned before.
-
-### Simple regression model: $Y \sim X_1$
-
-Now, we see that the existence of a redundant variable does not influence our estimation of $\beta_1$ using a simple linear model! This is good.
-
-```{r sim_exercise_2_3, echo=FALSE, message=FALSE, warning=FALSE, fig.height=4, fig.width=8}
-# Set the seed for reproducibility & set graphing parameter
-set.seed(123); par(mar=c(4,4,0.5,1))
-
-# Plot beta1 estimate by collinearity values from the simple model
-plot(r2, simple_beta1, xlab = expression("Collinearity ("~ r^2 ~") between" ~ X[1] ~ "and" ~ X[2]), ylab = expression("Estimate of " ~ beta[1]))
-
-```
-
-There is some variation in the parameter estimates due to random chance, but the estimates are unbiased along the gradation of correlation with the redundant, collinear variable.
-
-```{r sim_exercise_2_4, echo=FALSE, message=FALSE, warning=FALSE, fig.height=4, fig.width=8}
-# Set the seed for reproducibility & set graphing parameter
-set.seed(123); par(mar=c(4,4,0.5,1))
-
-# Plot SE estimate by collinearity values from the simple model
-plot(r2, simple_se1,
-     xlab = expression("Collinearity ("~ r^2 ~") between" ~ X[1] ~ "and" ~ X[2]),
-    ylab = expression("SE of estimate of" ~ X[1]))
-
-```
-
-SE estimates are also unbiased and do not change due to the existence of the redundant variable.
-
-```{r sim_exercise_2_5, echo=FALSE, message=FALSE, warning=FALSE, fig.height=4.5, fig.width=8}
-# Set the seed for reproducibility & set graphing parameter
-set.seed(123); par(mar=c(4,4,0.5,1))
-
-# Plot p-values by collinearity values from the simple model
-plot(r2, log(simple_p1),
-     xlab = expression("Collinearity ("~ r^2 ~") between" ~ X[1] ~ "and" ~ X[2]),
-     ylab = expression("P-values of estimate of" ~ X[1] ~ " (log-transformed)"))
-
-```
-
-Nor are p-values influenced!
-
-This simulation supports my previous suggestion that: redundant variables do not influence estimation, error, or p-values in our simple linear model.
-
-### Simple linear model w/ redundant var: $Y \sim X_2$
-
-What if I now run a simple linear model but with $X_2$ as the only X-variable? Remember, $X_2$ is collinear with $X_1$ -- <u>but does not have an effect on Y</u>.
-
-```{r sim_exercise_2_6, echo=FALSE, message=FALSE, warning=FALSE, fig.height=4, fig.width=8}
-# Set the seed for reproducibility & set graphing parameter
-set.seed(123); par(mar=c(4,4,0.5,1))
-
-# Plot beta1 estimate by collinearity values from the simple model
-plot(r2, simple_beta2, xlab = expression("Collinearity ("~ r^2 ~") between" ~ X[1] ~ "and" ~ X[2]), ylab = expression("Estimate of " ~ beta[2]))
-
-```
-
-So this is interesting. When $X_2$ has low correlation with $X_1$, the effect is measured as zero -- because the two variables are not collinear, and $X_2$ truly does not have an effect. However, when correlation between $X_2$ and $X_1$ increases, all of the sudden the true effect of $X_1$ (the variable not included in the model), is now assigned to $X_2$! The stronger the relationship between X1 and X2, the more the effect of X1 is assigned to X2.
-
-This is what is happening in the TV-mortality study. A redundant, collinear variable is being assigned the effect(s) of other true, confounding variables. 
-
-### Multi-variable model: $Y \sim X_1 + X_2$
-
-Now, what happens with the multi-variable model?
-
-Estimates of $X_1$:
-
-```{r sim_exercise_2_7, echo=FALSE, message=FALSE, warning=FALSE, fig.height=4, fig.width=8}
-# Set the seed for reproducibility & set graphing parameter
-set.seed(123); par(mar=c(4,4,0.5,1))
-
-# Plot beta1 estimate by collinearity values from the simple model
-plot(r2, multi_beta1, xlab = expression("Collinearity ("~ r^2 ~") between" ~ X[1] ~ "and" ~ X[2]), ylab = expression("Estimate of " ~ beta[1]))
-
-# Add line to indicate the start of variance inflation
-abline(v = 0.6, lty = 2)
-
-```
-
-Our estimate of $X_1$ is unbiased and close to truth! But the variance increases due to the presence of the collinear, redundant variable in the model. The cone shape suggests more uncertainty due to the variance inflation and the presence of the redundant variable. With two collinear variables in the model, R has a harder time figuring out which was has the effect.
-
-Let's see what it estimates for $X_2$:
-
-```{r sim_exercise_2_8, echo=FALSE, message=FALSE, warning=FALSE, fig.height=4, fig.width=8}
-# Set the seed for reproducibility & set graphing parameter
-set.seed(123); par(mar=c(4,4,0.5,1))
-
-# Plot beta1 estimate by collinearity values from the simple model
-plot(r2, multi_beta2, xlab = expression("Collinearity ("~ r^2 ~") between" ~ X[1] ~ "and" ~ X[2]), ylab = expression("Estimate of " ~ beta[2]))
-
-# Add line to indicate the start of variance inflation
-abline(v = 0.6, lty = 2)
-
-```
-
-It estimates the effect of the redundant variable to be zero! As collinearity increases, the estimate remains unbiased and correct at around zero -- although the variance inflation again causes less certainty in the estimate, on average. 
-
-## Practical guidance for examining and dealing with collinearity
-
-These lists mostly review what I have talked about during class so far today - quite a bit of content! [**Show these lists on the projector**]
-
-Do you have collinearity in your data or system?
-
-1) Be careful to identify potential confounding variables prior to data collection. Use logic and try to identify all confounding variables and measure these.
-2) Calculate collinearity and VIF among independent variables -- before you start your analysis. High collinearity between X-variables tends to imply redundancy.
-3) Pay attention to how coefficient estimates and variable significance change as variables are removed or added.
-
-Is a variable redundant or confounding?
-
-1) Think! Use logic.
-2) If there is extreme collinearity
-  - Likely **redundant**
-3) Large changes in coefficient estimates of both variables between full and reduced models
-  - **Confounding**
-4) Large changes in coefficient estimates of one variable between full and reduced models
-  - **Redundant** -- full model estimate close to zero
-4) Not sure whether it's redundant or confounding? Assume confounding & include it.
-  - Multi-variable regression also produces unbiased estimates (on average) regardless of the type of collinearity
-  
-What to do with **redundant variables**?
-
-1) Determine which variable best explains the response using P-values from regression and changes in coefficient estimates with variable addition and removal
-2) Do not include redundant variable in final model (to reduce VIF)
-3) Try a variable reduction technique (e.g., PCA)
-
-What to do with **confounding variables**?
-
-1) Sample in a manner that eliminates collinearity, which can be due to real collinearity or sampling artifact
-2) Use multiple regression; may hvae large SE if collinearity is strong
-3) Include confounding variables, even if non-significant.
-4) Get more data! Decrease SE due to variance inflation.
+The plane is not flat! The effect of latitude is *steeper* at low elevations than it is at high elevations. Conversely, the effect of elevation is *steeper* at low latitudes than it is at high latitudes. You might describe these features qualitatively to your readers.
 
 ## Analysis in R
 
-Let's examine some data I simulated in R. The dataset is located [here](lecture_13_dataset1.csv).
+Let's analyze some data that we simulated in R. Here is truth:
 
-These data are similar to the Age, Sex, and Size data we simulated for last class. There is no collinearity between Age and Sex. However, now there are two additional X-variables, MotherSize and FatherSize, and both of those variables are a function of Age. All of these variables influence size, so they are all examples of <u>confounding variables</u>.
+```{r echo=TRUE}
+### Dataset 1: age + sex + age*sex
+# This is similar to the Age, Sex, and Size data we simulated for in Lecture 12.
+# There is no collinearity between Age and Sex, but now there is an interaction
+# between Sex and Age.
 
-```{r fig.height=4.5, fig.width=4.5}
-par(mar=c(4,4,0,0))
+# First dataset
+# X variable
+n <- 50
+x1 <- c(rep("Female", n), rep("Male", n))
+x2 <- runif(n * 2, 1, 10)
+dummy <- data.frame(model.matrix(~ x1 - 1))
+colnames(dummy) <- c("Female", "Male")
 
-# Read in the data
-datum <- read.csv("lecture_13_dataset1.csv")
+# Simulate error
+Error <- rnorm(n * 2, 0, 0.8)
 
-# Examine the data
-head(datum, 10)
+# Predict Y
+Response <- 1 + 2 * x2 + 4 * dummy$Male + 1 * x2 * dummy$Male + Error
+
+# Dataframe
+datum <- data.frame(Age = x2, Sex = x1, Male = dummy$Male, Size = Response)
+
+# These data were saved as 'lecture_13_dataset5.csv'
+
+```
+
+What is **Truth** for these data -- and what do the effects mean?
+
+- **beta0 = 1** -- average size of females at age 0
+- **beta1 = 2** -- effect of age in females
+- **beta2 = 4** -- difference between males and females at age 0
+- **beta3 = 1** -- difference in slope between males and females
+
+**Q:** Given these numbers, what is the slope of the age-size relationship for males?
+
+3! $\beta_1 + \beta_3$ = 2 + 1 = 3
+
+Let's do the analysis in R.
+
+```{r echo=TRUE, fig.width = 5}
+# Load the data
+datum <- read.csv("lecture_13_dataset5.csv")
+head(datum)
 
 # Plot the data
 plot(Size ~ Age, data = datum)
 
 ```
 
-It's useful to write Truth up on the white board so that we can refer back to that while running the analysis in R...
+If your data look like this, you likely have an interaction!!
 
-Truth:
-
-- Age = 1.5
-- Sex = 2.5
-- MotherSize = 0.2
-- FatherSize = 0.2
-- $\sigma = 1.2$
-
-We want to start by testing if there is collinearity among our data. The easiest way to do this is by running linear models among our X-variables.
-
-```{r fig.height=4.5, fig.width=4.5}
-# Run lm() for different pairs of X-variables
-results <- lm(Age ~ Sex, data = datum)
+```{r echo=TRUE, fig.width = 5}
+# Fit a lm() without the interaction
+results <- lm(Size ~ Age + Sex, data = datum)
 summary(results)
-
 ```
 
-The p-value is high (non-significant) and $r^2$ value is low, suggesting there is no collinearity. (And there isn't, because I didn't simulate there to be any.)
+Is there any indication that we missed an interaction? Nope. There are symptoms of collinearity, but there aren't symptoms of interactions.
 
-```{r fig.height=4.5, fig.width=4.5}
-# Run lm() for different pairs of X-variables
-results <- lm(Age ~ MotherSize, data = datum)
+The effect of age is ~2.5, which is basically the average of the male and female slopes. Which, isn't too bad.
+
+The difference between males and females is ~9.5. However, for our data, the difference between males and females at young ages is smaller, and at old ages is larger. So this is again an average. It's not bad... But we are missing an opportunity to learn about interesting information in our data.
+
+```{r echo=TRUE, fig.width = 5}
+# Fit a lm() without the interaction
+results <- lm(Size ~ Age + Sex + Age:Sex, data = datum)
 summary(results)
-
 ```
 
-$r^2$ is now 0.874 -- definitely collinearity here! (And we know this to be the case.)
+The age-size relationship for females is 2! The effect of being male is 3.79, and truth (4) is contained within the confidence interval. The difference in slope between male line and female line is 1.03 -- very close to truth. 
 
-And we can do this for other pair of X-variables as well, as much as we want or need to.
+You could report your results using these results. "We found that for each one year increase in age, females had a 2.00 cm increase in size." -- with p-values and confidence intervals. Same sentence as before, but we have the qualifiers *in females*. "We found that males were 3.79 [CI] cm larger at age 0 [P]." Again, need the qualifier of male. "We found that the slope of the age-size relationship was 1.03 [CI] cm per year larger in males than females [P]."
 
-However, an alternative way to do this is to create a 'correlation matrix' using the function 'cor()', which calculates the correlation among all pairs of continuous X-variables your provide to the function.
+Or, you could state that you found a significant interaction between the X-variables: "We found a significant age-sex relationship (P < 2e-16); therefore, we analyzed males and females separately."
 
-- 'cor()' won't work for our dataframe, because it requires all continuous variables and Sex is a categorical variable. So drop Sex and Size.
-- This will run a simple 'lm()' between all pairs of X-variables and calculate *r* value for each pair (measure of correlation)
+How do you do that?
 
-```{r fig.height=4.5, fig.width=4.5}
-# Create new dataframe without categorical Sex
-datum2 <- subset(datum, select = -Sex)
-datum2 <- subset(datum2, select = -Size)
-
-# Examine new subsetted data
-head(datum2)
-
-# Correlation matrix - runs a simple 'lm()' between each pair of X-variables
-cor(datum2)
-
+```{r echo=TRUE, fig.width = 5}
+# Fit a lm() for males only
+resultsMale <- lm(Size ~ Age, data = subset(datum, datum$Sex == "Male"))
+summary(resultsMale)
 ```
 
-[Squaring this would produce the usual $r^2$ metric we are familiar with.]
+When we run that, we get a slope of 3.03 -- which is equal to the sum of the age effect and the age:sex effect from our interaction model. Just adding them together and getting the same result -- but now we have a confidence interval for our simple slope also:
 
-This is a quick-and-easy way to assess correlation between X-variables.
-
-Another way is to run a full linear model with all of the X-variables and ask for the Variance Inflation Factors! The VIF function exists in the package 'car', which you will have to download to your computer one time. It has a lot of 'dependencies' (other necessary R packages) that will have to be downloaded...
-
-```{r fig.height=4.5, fig.width=4.5}
-# Download 'car' by uncommenting this next line and running it through your console
-# install.packages("car", dependencies=TRUE)
-
+```{r echo=TRUE, fig.width = 5}
+# Confint for males
+confint(resultsMale)
 ```
 
-Now we can fit a linear model with all X-variables and then run the VIF function.
+And we can do this for females also:
 
-```{r fig.height=4.5, fig.width=4.5}
-# Full linear model with all X-variables
-results <- lm(Size ~ Age + Sex + MotherSize + FatherSize, data = datum)
-
-# Use the VIF function from 'car'
-# using 'car::vif()' will tell R to call the function 'vif()' from the package 'car' specifically
-car::vif(results)
-
+```{r echo=TRUE, fig.width = 5}
+# Fit a lm() for females only
+resultsFemale <- lm(Size ~ Age, data = subset(datum, datum$Sex == "Female"))
+summary(resultsFemale)
+confint(resultsFemale)
 ```
 
-These are the Variance Inflation Factors for each X-variable. These effects describe how much (in *times*) the variance of each variable increased due to collinearity. So, the variance of Age was 17 times increased what it would have been in the absence of collinearity...
+This will slightly influence your confidence intervals, but that's okay.
 
-```{r fig.height=4.5, fig.width=4.5}
-# Square-root this to get VIF in terms of Standard Error
-car::vif(results)^0.5
+## Using the *
 
-```
+Here's some other stuff to know about:
 
-SE of Age is 4 times larger than what it would have been without collinearity. Sex is not influenced (times ~1), but the SE and 95% CI are 4 or 3 times larger than what would happen without collinearity. 
-
-Note: the VIF is the variance inflation due to collinearity of all other variables combined. So collinearity with multiple other X-variables can contribute to variance inflation of each variable.
-
-```{r fig.height=4.5, fig.width=4.5}
-# Simple linear model of Size ~ Age
-results <- lm(Size ~ Age, data = datum)
+```{r echo=TRUE, fig.width = 5}
+# Fit a lm() with interactions using a *
+results <- lm(Size ~ Age*Sex, data = datum)
 summary(results)
-
 ```
 
-This estimate is wrong -- not close to truth -- and the confidence intervals are small.The effect size and confidence intervals were misleading because we did not account for confounding variables!
-
-```{r fig.height=4.5, fig.width=4.5}
-# Simple linear model of Size ~ MotherSize
-results <- lm(Size ~ MotherSize, data = datum)
-summary(results)
-
-```
-
-Again, same problem here.
-
-```{r fig.height=4.5, fig.width=4.5}
-# Simple linear model of Size ~ MotherSize
-results <- lm(Size ~ Age + MotherSize, data = datum)
-summary(results)
-
-```
-
-Truth for Age is 1.5, so this is closer -- but the 95% CI around this estimate of age still do not overlap truth. And MotherSize is not significant, which it should be.
-
-Last, the full model with all of the confounding variables:
-
-```{r fig.height=4.5, fig.width=4.5}
-# Simple linear model of Size ~ MotherSize
-results <- lm(Size ~ Age + Sex + MotherSize + FatherSize, data = datum)
-summary(results)
-
-
-
-```
-
-We now get unbiased estimates that overlap with truth, and all estimates are ~significant. MotherSize is narrowly insigificant, but it's CI overlap truth. And the p-value for the whole model is highly significant.
+The * will fit all possible combinations of effects between the variables included in the term. This can be a useful shortcut. BUT, it might be a little sloppy and might not clearly convey what is going on. I prefer to be <u>explicit</u> and spell out the terms individually.
 
 ## Summary
 
-- If you add variables to a model, p-values should go down due to swamping.
-- Multivariable models are generally good because they eliminate issues related to swamping & collinearity.
+Interactions are not that complicated! An interaction means that your betas for a given variable change depending on another variable. If you have groups, the beta depends on the group; different betas for each group. If you have interactions between continuous variables, the effect of each variable depends on the other variable, and you can change perspective depending on either variable (e.g., the second 3-D plot above).
+
+I encourage you to always tests for interactions, rather than splitting your data and running separate tests for your groups. That way you can get an explicit test that your data are different, according to that interaction term! However, once you find that significant interaction term, I then *do* encourage you to break those groups apart, so that the explanation is much more simple.
 
 <br>
 
 ## Truth
 
 ```{r}
-################################ 'Truth' ################################### 
-### Lecture 13: code to simulate collinear data and to demonstrate how
-### failing to account for collinearity influences estimates and uncertainty
-
-## Simulation Exercise 1
+################### 'Truth' #################### 
+### Lecture 13: code to simulate data for class
 
 # Set the seed for reproducibility
 set.seed(123)
 
-# Number of simulations
-s <- 1000
+### Dataset 1: age + sex + age*sex
+# This is similar to the Age, Sex, and Size data we simulated for in Lecture 12.
+# There is no collinearity between Age and Sex, but now there is an interaction
+# between Sex and Age.
 
-# Empty vectors to save results from each simulation
-simple_beta1 <- numeric(s)
-simple_se1 <- numeric(s)
-simple_p1 <- numeric(s)
-multi_beta1 <- numeric(s)
-multi_se1 <- numeric(s)
-multi_p1 <- numeric(s)
-r2 <- numeric(s)
-vif <- numeric(s)
-
-# x2 = x1 + error(0, z), where
-# z can range from 0.5 (highly correlated to x1) to 20 (not correlated at ~all)
-z_values <- seq(0.5, 20, length.out = s)
-
-# Loop through each simulation replicate to measure everything
-for (i in 1:s){
-  
-  # Number of datapoints per simulation
-  n <- 100
-
-  # x1
-  x1 <- runif(n, 0, 10) # Random, uniform variable; only simulated once
-
-  # error for y; only simulated once
-  error <- rnorm(n, 0, 2)
-  
-  # X2 for each simulation
-  x2 <- x1 + rnorm(n, 0, z_values[i])
-  
-  # Y for each
-  y <- 10 + 3 * x1 + 3 * x2 + error
-
-  # Simple model
-  results1 <- lm(y ~ x1)
-  simple_beta1[i] <- summary(results1)$coefficients[2,1]
-  simple_se1[i] <- summary(results1)$coefficients[2,2]
-  simple_p1[i] <- summary(results1)$coefficients[2,4]
-
-  # Multi-variable model
-  results2 <- lm(y ~ x1 + x2)
-  multi_beta1[i] <- summary(results2)$coefficients[2,1]
-  multi_se1[i] <- summary(results2)$coefficients[2,2]
-  multi_p1[i] <- summary(results2)$coefficients[2,4]
-
-  # R^2 between X-variables
-  model_x12 <- lm(x2 ~ x1)
-  r2[i] <- summary(model_x12)$r.squared
-  
-  # VIF for multi-variable model
-  vif[i] <- car::vif(results2)["x1"]
-}
-
-## Simulation Exercise 2
-
-# Set seed
-set.seed(123)
-
-# Number of simulations
-s <- 1000
-
-# Empty vectors to save results from each simulation
-simple_beta1 <- numeric(s)
-simple_se1 <- numeric(s)
-simple_p1 <- numeric(s)
-simple_beta2 <- numeric(s)
-multi_beta1 <- numeric(s)
-multi_beta2 <- numeric(s)
-multi_se1 <- numeric(s)
-multi_p1 <- numeric(s)
-r2 <- numeric(s)
-vif <- numeric(s)
-
-# x2 = x1 + error(0, z), where
-# z can range from 0.5 (highly correlated to x1) to 20 (not correlated at ~all)
-z_values <- seq(0.5, 20, length.out = s)
-
-# Loop through each simulation replicate to measure everything
-for (i in 1:s){
-  
-  # Number of datapoints per simulation
-  n <- 100
-
-  # x1
-  x1 <- runif(n, 0, 10) # Random, uniform variable; only simulated once
-
-  # error for y; only simulated once
-  error <- rnorm(n, 0, 2)
-  
-  # X2 for each simulation
-  x2 <- x1 + rnorm(n, 0, z_values[i])
-  
-  # Y for each
-  y <- 10 + 3 * x1 + error
-
-  # Simple model of X1
-  results1 <- lm(y ~ x1)
-  simple_beta1[i] <- summary(results1)$coefficients[2,1]
-  simple_se1[i] <- summary(results1)$coefficients[2,2]
-  simple_p1[i] <- summary(results1)$coefficients[2,4]
-  
-  # Simple model of X2
-  results2 <- lm(y ~ x2)
-  simple_beta2[i] <- summary(results2)$coefficients[2,1]
-
-  # Multi-variable model
-  results3 <- lm(y ~ x1 + x2)
-  multi_beta1[i] <- summary(results3)$coefficients[2,1]
-  multi_beta2[i] <- summary(results3)$coefficients[3,1]
-  multi_se1[i] <- summary(results3)$coefficients[2,2]
-  multi_p1[i] <- summary(results3)$coefficients[2,4]
-
-  # R^2 between X-variables
-  model_x12 <- lm(x2 ~ x1)
-  r2[i] <- summary(model_x12)$r.squared
-  
-  # VIF for multi-variable model
-  vif[i] <- car::vif(results3)["x1"]
-}
-
-## Data for analysis in class
-# Set the seed for reproducibility & set graphing parameter
-set.seed(123)
-
-# This is similar to the Age, Sex, and Size data we simulated for last class.
-# There is no collinearity between Age and Sex.
-
-# X-variables
+# First dataset
+# X variable
 n <- 50
-Sex <- c(rep("Female", n), rep("Male", n))
-Age <- runif(n * 2, 1, 10)
-dummy <- data.frame(model.matrix(~ Sex - 1))
+x1 <- c(rep("Female", n), rep("Male", n))
+x2 <- runif(n * 2, 1, 10)
+dummy <- data.frame(model.matrix(~ x1 - 1))
 colnames(dummy) <- c("Female", "Male")
 
-# However, there are now two additional X-variables: MotherSize and FatherSize
-# And both of those variables are a function of Age
-MotherSize <- rnorm(n * 2, Age - 5, 1)
-FatherSize <- rnorm(n * 2, Age, 1)
-
-# All of these variables influence size, so they are all examples of confounding variables.
-
 # Simulate error
-Error <- rnorm(n * 2, 0, 1.2)
+Error <- rnorm(n * 2, 0, 0.8)
 
 # Predict Y
-Response <- 4 + 1.5 * Age + 2.5 * dummy$Male + 0.2 * MotherSize + 0.2 * FatherSize + Error
+Response <- 4 + 1.5 * x2 + 2.5 * dummy$Male + 1 * x2 * dummy$Male + Error
 
 # Dataframe
-datum <- data.frame(Age = Age, Sex = Sex, Male = dummy$Male, MotherSize = MotherSize, FatherSize = FatherSize, Size = Response)
+datum <- data.frame(Age = x2, Sex = x1, Male = dummy$Male, Size = Response)
 
 # Save the data
 write.csv(datum, "lecture_13_dataset1.csv", row.names = FALSE)
+
+
+### Dataset 2: age + sex + age*sex, with a negative interaction effect
+# First dataset
+# X variable
+n <- 50
+x1 <- c(rep("Female", n), rep("Male", n))
+x2 <- runif(n * 2, 1, 10)
+dummy <- data.frame(model.matrix(~ x1 - 1))
+colnames(dummy) <- c("Female", "Male")
+
+# Simulate error
+Error <- rnorm(n * 2, 0, 0.8)
+
+# Predict Y
+Response <- 4 + 1.5 * x2 + 5 * dummy$Male + -1.5 * x2 * dummy$Male + Error
+
+# Dataframe
+datum <- data.frame(Age = x2, Sex = x1, Male = dummy$Male, Size = Response)
+
+# Save the data
+write.csv(datum, "lecture_13_dataset2.csv", row.names = FALSE)
+
+
+### Dataset 3: 
+# Set the seed for reproducibility
+set.seed(123)
+
+# Sample size
+n <- 90
+
+# Simulate X-variables
+# Continuous variables: Latitude and Elevation
+Latitude <- runif(n, 0, 1) * 30
+Elevation <- runif(n, 0, 1) * 30
+
+# Response variable: Size
+Size <- 3.33*Latitude + 1.6*Elevation
+
+# Create dataframe
+datum <- data.frame(Latitude=Latitude, Elevation=Elevation, Size=Size)
+
+# Save the CSV file
+write.csv(datum, "lecture_13_dataset3.csv")
+
+
+### Dataset 4: size ~ latitude + elevation + latitude*elevation
+# Set the seed for reproducibility
+set.seed(123)
+
+## Dataset 4
+# Sample size
+n <- 90
+
+# Simulate X-variables
+# Continuous variables: Latitude and Elevation
+Latitude <- runif(n, 0, 1) * 30
+Elevation <- runif(n, 0, 1) * 30
+
+# Response variable: Size
+Size <- 3.33*Latitude + 1.6*Elevation - 0.08 * Latitude * Elevation 
+
+# Create dataframe
+datum <- data.frame(Latitude=Latitude, Elevation=Elevation, Size=Size)
+
+# Save the CSV file
+write.csv(datum, "lecture_13_dataset4.csv", row.names = FALSE)
+
+
+### Dataset 5: age + sex + age*sex
+# This is similar to the Age, Sex, and Size data we simulated for in Lecture 12.
+# There is no collinearity between Age and Sex, but now there is an interaction
+# between Sex and Age.
+
+# First dataset
+# X variable
+n <- 50
+x1 <- c(rep("Female", n), rep("Male", n))
+x2 <- runif(n * 2, 1, 10)
+dummy <- data.frame(model.matrix(~ x1 - 1))
+colnames(dummy) <- c("Female", "Male")
+
+# Simulate error
+Error <- rnorm(n * 2, 0, 0.8)
+
+# Predict Y
+Response <- 1 + 2 * x2 + 4 * dummy$Male + 1 * x2 * dummy$Male + Error
+
+# Dataframe
+datum <- data.frame(Age = x2, Sex = x1, Male = dummy$Male, Size = Response)
+
+# Save as CSV
+write.csv(datum, "lecture_13_dataset5.csv")
 ```
-
-## Footnote
-
-TV-effect on mortality study: Wijndaele et al. 2011 *International Journal of Epidemiology*.
 
 [--go to next lecture--](lecture_14.html)

@@ -1,5 +1,5 @@
 ---
-title: "Exercise 2: Linear Regression"
+title: "Exercise 3: Linear Regression (cont.)"
 author: "NRES 710"
 date: "Last compiled: `r Sys.Date()`"
 output: 
@@ -19,109 +19,143 @@ knitr::opts_chunk$set(
 )
 ```
 
-## Linear Regression Analysis in R
+## Exercise 3 -- Regression Assumptions
 
-For each of the following datasets, run a regression analysis in R using the 'lm()' function. Report your results in a Word Document using the following template, which we discussed in class:
+For each of the following datasets, import the data into R and analyze the data using regression. Then, provide the following information in a Microsoft Word document:
 
-**For each 1 [x-unit] increase in [x], we observed a [slope][y-unit](+/-[95% C.I.], +/-95% C.I.) [increase/decrease] in [y] (p = [p-value]; r^2 = [r^2]).**
+- Using the statement we discussed in class, describe the relationship between X and Y, and be sure to include the p-value. Describe the relationship even if it isn't 'significant' (you fail to reject the null), but be sure to state that the relationship isn't significant, if that's the case.
 
-If your results are not statistically significant, be sure to say so in your results sentence. Also, be sure to report the exact p-value; don't use p < 0.0001. Finally, plot the data and the best-fit line to the data.
+- What assumption(s) of regression is violated with this dataset? Cut and paste the graph that visually informed you that an assumption was violated. Note: only one assumption has truly been violated; if more than one assumption appears to be violated, choose the one that appears to be the strongest violation.
 
-Compile all of your results in a Word document. This will be one sentence and one graph for each of the three problems; I don't need anything else. Load this into the WebCampus assignment portal and submit it by the due date indicated in the course schedule.
+Compile all of your results in a Word document. Load this into the WebCampus assignment portal and submit it by the due date indicated in the course schedule.
 
-### [Dataset 1](exercise_2_dataset1.csv)
+## Problems 
 
-In this dataset, you are interested in examining the relationship between the density of *Ctenus* sp. (wandering spiders; y-variable -- spiders / sq. meter) as a function of the density of small frogs (x-variable; frogs / sq. meter). For those that are interested, in many tropical rainforests these wandering spiders are major predators of small, terrestrial frogs. Assume that you were in Costa Rica and you captured all of the spiders and frogs you could find in independent rainforest plots (10 $m^2$). You calculated the density of each type of spider (spiders/sq. meter area). What is the relationship between frog and spider density?
+**[Dataset 1](exercise_2_dataset1.csv)** -- the relationship between prey density (X; prey/ha) and predation rate (Y; prey killed per predator per day).
 
-![](pictures/pic_spider_frog.png){width=50%}
+**[Dataset 2](exercise_2_dataset2.csv)** -- the relationship between tree basal area (Y; m2) and stand age (X; years).
 
-Picture: Witold Lapinski
+**[Dataset 3](exercise_2_dataset3.csv)** -- the relationship between prey density (X; prey/ha) and black bear litter size (Y; pups); Note: litter size is not continuous, but that's not the assumption that has been violated.
 
-<br>
+**[Dataset 4](exercise_2_dataset4.csv)** -- the relationship between road density (X; roads/km2) and probability of habitat use by sage grouse (Y; %).
 
-### [Dataset 2](exercise_2_dataset2.csv)
+**[Dataset 5](exercise_2_dataset5.csv)** -- the relationship between native deer (X; deer/ha) and number of domestic livestock killed by wolves (Y; livestock/km2).
 
-In this dataset, you are testing the relationship between the size of a particular orchid flower (y-variable; diameter in cm) as a function of the elevation it is growing in the Andes Mountains in Peru (x-variable; meters). You've hiked from the lowland Amazon rainforest (50 m asl) and scaled up the treeline (3000 m), and along the way you collected almost 500 flowers. Note: in this dataset, the slope is very small. For reporting purposes, it is entirely acceptable to *scale* the slope that you report. Just multiply the change in X (in the standard sentence, it's just 1), the slope, and the confidence intervals all by the scaling factor that you choose to use.
+- For this problem, describe the relationship between X and Y using the standard statements, but also use prediction to report what the expected number of livestock killed by tigers is at 20.0 deer/ha with prediction intervals. Finally, generate a graph of the y predictions and the prediction intervals, like we saw in class.
 
-![](pictures/pic_orchid.png){width=50%}
+![](pictures/pic_grouse.png){width=50%}
 
-Picture: Chen Shu (iNaturalist)
-
-<br>
-
-### [Dataset 3](exercise_2_dataset3.csv)
-
-Palmer's chipmunks (*Neotamias palmeria*) is an endemic species of chipmunk that occurs in sky-island habitats in southern Nevada. In this dataset, you are interested in the relationship between the amount of time spent foraging by *N. palmeria* (y-variable; minutes/day) as a function of number of predatory birds observed in the area on the preceding day (x-variable; predators/day). You recorded the amount of time spent outside the burrow by each of ten squirrels over the course of two weeks, as well as the number of birds of prey that flew over that colony. Note: be careful with which variable is X and which is Y.
-
-![](pictures/pic_chipmunk.png){width=50%}
-
-Picture: Jason M Crockwell (iNaturalist)
+Picture: Bert Filemyr
 
 <br>
 
 ## Truth
 
-If you would like to know the values used to create these datasets (i.e., 'truth'), examine the R code here:
+If you would like to know the values used to create these datasets (i.e., 'truth'), examine the code below:
 
-```{r}
-### Exercise 2: code to simulate datasets 
+```{r datasets, echo=TRUE, message=FALSE, warning=FALSE}
+### Exercise 3: code to simulate datasets 
 
 # Set the seed for reproducibility
 set.seed(123)
 
 ## Dataset 1
-
 # Simulate X-variable
-n <- 40
-x <- runif(n, 0, 1) * 0.5
+n <- 150
+x <- runif(n, 0, 10)
 
 # Simulate error
-error <- rnorm(n, mean = 0, sd = 0.4)
+error <- rep(NA, n)
+for (i in 1:n){
+  error[i] <- rnorm(1, mean = 0, sd = 0.5 * x[i])
+}
 
 # Calculate Y-variable
-y <- abs(0.1 + 2 * x + error) # abs() gets rid of negative numbers drawn by chance
+y <- abs(2 + 0.5 * x + error) # abs() gets rid of negative numbers drawn by chance
 
 # Create dataframe
-datum <- data.frame(PreyFrogs = x, Spiders = y)
+datum <- data.frame(PreyDens = x, PredRate = y)
 
 # Save the CSV file
 write.csv(datum, "exercise_2_dataset1.csv")
 
-## Dataset 2
 
-# Simulate X-variable
-n <- 480
-x <- round(runif(n, 50, 3000), 0)
+## Dataset 2
+# Simulate x-variable
+n <- 70
+x <- seq(0, n, by = 1)
 
 # Simulate error
-error <- rnorm(n, mean = 0, sd = 5)
+error <- rep(NA, n + 1)
+error[1] <- 0
+for (i in 2:(n + 1)){
+  error[i] <- rnorm(1, mean = error[i-1], 2)
+}
 
-# Calculate Y-variable
-y <- abs(20 - 0.001 * x + error) # abs() gets rid of negative numbers drawn by chance
+# Calculate y
+y <- 2 + 2 * x + error
 
 # Create dataframe
-datum <- data.frame(Elevation = x, Size = y)
+datum <- data.frame(Age = x, BasalArea = y)
 
 # Save the CSV file
 write.csv(datum, "exercise_2_dataset2.csv")
 
+
 ## Dataset 3
+# Simulate x-variable
+n <- 100
+x <- runif(n, 0, 10)
 
-# Simulate the X-variable
-n <- 140
-Predators <- runif(n, 0, 1) * 20
+# Error
+error <- rnorm(n, mean = 0, 1)
 
-# Simulate the error
-error <- rnorm(n, mean = 0, sd = 120)
-
-# Simulate Y-variable
-Time <- round(rep(360, n) + error, 0)
-
-# Create dataframe
-datum <- data.frame(Predators = Predators, Time = Time)
+# Y variable
+y <- round(1 + 0.5 * x + error^2, 0)
+  
+# Dataframe
+datum <- data.frame(PreyDensity = x, LitterSize = y)
 
 # Save the CSV file
 write.csv(datum, "exercise_2_dataset3.csv")
+
+
+## Dataset 4
+# Simulate x-variable
+n <- 100
+x <- runif(n, 0, 10)
+
+# Error
+error <- rnorm(n, mean = 0, 0.05)
+
+# Y variable
+y <- 0.2 + 0.1 * x - 0.01 * x^2 + error
+
+# Dataframe
+datum <- data.frame(RoadDensity = x, ProbUse = y)
+
+# Save the CSV file
+write.csv(datum, "exercise_2_dataset4.csv")
+
+
+## Dataset 5
+# Simulate x-variable
+n <- 50
+
+# X variable
+x <- runif(n, 0, 5)
+
+# error
+error <- rnorm(n, 0, 2)
+
+# Y variable
+y <- abs(8 - 1*x + error)
+
+# Create dataframe
+datum <- data.frame(DeerDensity = x, CowsKilled = y)
+
+# Save the CSV file
+write.csv(datum, "exercise_2_dataset5.csv")
 ```
 
 [--go to next exercise--](exercise_3.html)

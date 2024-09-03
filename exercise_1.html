@@ -12,7 +12,7 @@
 <meta name="author" content="NRES 710" />
 
 
-<title>Exercise 1: Data Summary Functions in R</title>
+<title>Exercise 2: Linear Regression</title>
 
 <script src="site_libs/header-attrs-2.27/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
@@ -383,135 +383,141 @@ div.tocify {
 
 
 
-<h1 class="title toc-ignore">Exercise 1: Data Summary Functions in
-R</h1>
+<h1 class="title toc-ignore">Exercise 2: Linear Regression</h1>
 <h4 class="author">NRES 710</h4>
-<h4 class="date">Last compiled: 2024-08-30</h4>
+<h4 class="date">Last compiled: 2024-09-02</h4>
 
 </div>
 
 
-<div id="exercise-1-data-summaries-and-custom-functions"
-class="section level2">
-<h2>EXERCISE 1: Data summaries and custom functions</h2>
-<p>If you are new to R or would like a refresher, some university
-faculty held an R workshop last spring. The material is all hosted <a
-href="https://kevintshoemaker.github.io/R-Bootcamp/">here</a>. You can
-work through the modules at your own pace:</p>
-<ul>
-<li><a
-href="https://kevintshoemaker.github.io/R-Bootcamp/module1_1.html">Working
-with data objects</a><br />
-</li>
-<li><a
-href="https://kevintshoemaker.github.io/R-Bootcamp/module1_2.html">Managing
-data</a><br />
-</li>
-<li><a
-href="https://kevintshoemaker.github.io/R-Bootcamp/module2_2.html">Programming</a></li>
-</ul>
-<p>This material would help you gain more capacity at working in R;
-review at your own pace.</p>
-<div id="background-custom-functions" class="section level3">
-<h3>Background: custom functions</h3>
-<p>Let’s look at the syntax of a custom R function:</p>
-<pre><code>f &lt;- function( &lt;arguments&gt;){ 
-  ## Do something interesting 
-}</code></pre>
-<p>The argument are passed to the function when it is called and can
-specify default values (using equals sign). The value returned by a
-function is the last expression in the body of the function to be
-evaluated, or else can be specified using the <code>return()</code>
-function.</p>
-<p>For example, the <code>lm()</code> function comes with base R and is
-used for simple linear regression. Type the following in your R console
-to see what the arguments of that function are:</p>
-<pre><code>args(lm)</code></pre>
-<p>Here is a simple custom function for calculating any number cubed,
-with example applications:</p>
-<pre><code>Cube.me &lt;- function ( x= 1) {
-  x * x * x
-}
-Cube.me()
-Cube.me(3)
+<div id="linear-regression-analysis-in-r" class="section level2">
+<h2>Linear Regression Analysis in R</h2>
+<p>For each of the following datasets, run a regression analysis in R
+using the ‘lm()’ function. Report your results in a Word Document using
+the following template, which we discussed in class:</p>
+<p><strong>For each 1 [x-unit] increase in [x], we observed a
+[slope][y-unit](+/-[95% C.I.], +/-95% C.I.) [increase/decrease] in [y]
+(p = [p-value]; r^2 = [r^2]).</strong></p>
+<p>If your results are not statistically significant, be sure to say so
+in your results sentence. Also, be sure to report the exact p-value;
+don’t use p &lt; 0.0001. Finally, plot the data and the best-fit line to
+the data.</p>
+<p>Compile all of your results in a Word document. This will be one
+sentence and one graph for each of the three problems; I don’t need
+anything else. Load this into the WebCampus assignment portal and submit
+it by the due date indicated in the course schedule.</p>
+<div id="dataset-1" class="section level3">
+<h3><a href="exercise_1_dataset1.csv">Dataset 1</a></h3>
+<p>In this dataset, you are interested in examining the relationship
+between the density of <em>Ctenus</em> sp. (wandering spiders;
+y-variable – spiders / sq. meter) as a function of the density of small
+frogs (x-variable; frogs / sq. meter). For those that are interested, in
+many tropical rainforests these wandering spiders are major predators of
+small, terrestrial frogs. Assume that you were in Costa Rica and you
+captured all of the spiders and frogs you could find in independent
+rainforest plots (10 <span class="math inline">\(m^2\)</span>). You
+calculated the density of each type of spider (spiders/sq. meter area).
+What is the relationship between frog and spider density?</p>
+<p><img src="pictures/pic_spider_frog.png" style="width:50.0%" /></p>
+<p>Picture: Witold Lapinski</p>
+<p><br></p>
+</div>
+<div id="dataset-2" class="section level3">
+<h3><a href="exercise_1_dataset2.csv">Dataset 2</a></h3>
+<p>In this dataset, you are testing the relationship between the size of
+a particular orchid flower (y-variable; diameter in cm) as a function of
+the elevation it is growing in the Andes Mountains in Peru (x-variable;
+meters). You’ve hiked from the lowland Amazon rainforest (50 m asl) and
+scaled up the treeline (3000 m), and along the way you collected almost
+500 flowers. Note: in this dataset, the slope is very small. For
+reporting purposes, it is entirely acceptable to <em>scale</em> the
+slope that you report. Just multiply the change in X (in the standard
+sentence, it’s just 1), the slope, and the confidence intervals all by
+the scaling factor that you choose to use.</p>
+<p><img src="pictures/pic_orchid.png" style="width:50.0%" /></p>
+<p>Picture: Chen Shu (iNaturalist)</p>
+<p><br></p>
+</div>
+<div id="dataset-3" class="section level3">
+<h3><a href="exercise_1_dataset3.csv">Dataset 3</a></h3>
+<p>Palmer’s chipmunks (<em>Neotamias palmeria</em>) is an endemic
+species of chipmunk that occurs in sky-island habitats in southern
+Nevada. In this dataset, you are interested in the relationship between
+the amount of time spent foraging by <em>N. palmeria</em> (y-variable;
+minutes/day) as a function of number of predatory birds observed in the
+area on the preceding day (x-variable; predators/day). You recorded the
+amount of time spent outside the burrow by each of ten squirrels over
+the course of two weeks, as well as the number of birds of prey that
+flew over that colony. Note: be careful with which variable is X and
+which is Y.</p>
+<p><img src="pictures/pic_chipmunk.png" style="width:50.0%" /></p>
+<p>Picture: Jason M Crockwell (iNaturalist)</p>
+<p><br></p>
+</div>
+</div>
+<div id="truth" class="section level2">
+<h2>Truth</h2>
+<p>If you would like to know the values used to create these datasets
+(i.e., ‘truth’), examine the R code here:</p>
+<pre class="r"><code>### Exercise 2: code to simulate datasets 
 
-x.vec &lt;- c(2, 19, 99)
-Cube.me(x.vec)
-</code></pre>
-<p>Try it in R!</p>
-<p>When you’re ready, follow the instructions below and write four
-functions. Apply them and testing them as indicated.</p>
-<p>Please submit all responses (answers to all questions) in a single
-text box submission via the assignment link posted in WebCampus by the
-indicated date/time (on WebCampus). All answers should include readable,
-<strong>well-commented</strong> R code along with with any requested
-code for testing your functions. Please make sure your submission is as
-clear and legible as possible!</p>
-<p>Please note that these assignments are not formal exams – you are
-encouraged to ask for help as needed! You may also work in groups, but
-please submit your own assignment to demonstrate that you completed the
-Exercise and so you get credit.</p>
-</div>
-<div id="part-1-sample-variance" class="section level3">
-<h3>Part 1: Sample variance</h3>
-<p>Using the formula below, write a function that computes the
-<strong>sample variance</strong> of any arbitrary data vector. Use this
-function to compute the sample variance for the “height” column in the
-“trees” dataset built into base R. Compare your answer with the results
-from using the <code>var()</code> function – a built-in function from
-base R. Your submission should include (1) the function code, (2) a
-command (line of code) using your function to compute the sample
-variance of the “height” column, and (3) a test using the
-<code>var()</code> function to compute the same thing.</p>
-<p>Here’s the formula: <span class="math inline">\(s^2 =
-\sum_{n=1}^{i}{\frac{(x_i-\bar{x})^2}{(N-1)}}\)</span></p>
-</div>
-<div id="part-2-population-standard-deviation" class="section level3">
-<h3>Part 2: Population standard deviation</h3>
-<p>Using the formula <a href="LECTURE2.html">here</a> (see “summary
-metrics” section), write a function that computes the <strong>population
-standard deviation</strong> (standard deviation for a complete
-population rather than an incomplete sample) for any arbitrary data
-vector. Use this function to compute the standard deviation for the
-“height” column in the “trees” dataset built into base R. Compare your
-answer with the results from using the <code>sd()</code> function.
-<strong>Note that the result should not be exactly the same</strong>!
-Your submission should include (1) the function code, (2) a command
-(line of code) using your function to compute the population SD for the
-“height” column, and (3) a test using the <code>sd()</code> function to
-compute the sample SD.</p>
-<p>Here’s the formula: <span class="math inline">\(\sigma =
-\sqrt{\sum_{n=1}^{i}{\frac{(x_i-\mu)^2}{N}}}\)</span></p>
-</div>
-<div id="part-3-coefficient-of-variation-cv" class="section level3">
-<h3>Part 3: Coefficient of Variation (CV)</h3>
-<p>Write a function to compute the CV for any data vector and apply this
-to the “height” column in the “trees” dataset. The Coefficient of
-Variation (CV) is the ratio of the (sample) standard deviation to the
-mean. Use the formula for the sample standard deviation (not the
-population standard deviation) to compute the CV. You are welcome to use
-the <code>sd()</code> function in base R within your function if you’d
-like. Your submission should include (1) the function code and (2) a
-command (line of code) using your function to compute the CV of the
-“height” column in the ‘trees’ dataset.</p>
-</div>
-<div id="part-4-drawing-a-regression-line-through-a-scatter-plot"
-class="section level3">
-<h3>Part 4: Drawing a regression line through a scatter plot</h3>
-<p>Write a function for drawing a regression line through a scatter
-plot. Hint: Within your custom function, you will use the existing
-<code>plot()</code>, <code>lm()</code>, and <code>abline()</code>
-functions. You will need to include at least two arguments in your
-function, specifying the response vector and the predictor vector].
-Apply this function to the “height” (predictor) and “volume” (response)
-columns in the “trees” dataset, and then to the “waiting” (predictor)
-and “eruptions” (response) columns in the “faithful” dataset. Your
-submission should include (1) the function code, (2) a command (line of
-code) using your function on the “trees” dataset as specified, and (3) a
-command (line of code) using your function on the “faithful” dataset as
-specified.</p>
-<p>— End of Exercise 1 —</p>
-</div>
+# Set the seed for reproducibility
+set.seed(123)
+
+## Dataset 1
+
+# Simulate X-variable
+n &lt;- 40
+x &lt;- runif(n, 0, 1) * 0.5
+
+# Simulate error
+error &lt;- rnorm(n, mean = 0, sd = 0.4)
+
+# Calculate Y-variable
+y &lt;- abs(0.1 + 2 * x + error) # abs() gets rid of negative numbers drawn by chance
+
+# Create dataframe
+datum &lt;- data.frame(PreyFrogs = x, Spiders = y)
+
+# Save the CSV file
+write.csv(datum, &quot;exercise_1_dataset1.csv&quot;)
+
+## Dataset 2
+
+# Simulate X-variable
+n &lt;- 480
+x &lt;- round(runif(n, 50, 3000), 0)
+
+# Simulate error
+error &lt;- rnorm(n, mean = 0, sd = 5)
+
+# Calculate Y-variable
+y &lt;- abs(20 - 0.001 * x + error) # abs() gets rid of negative numbers drawn by chance
+
+# Create dataframe
+datum &lt;- data.frame(Elevation = x, Size = y)
+
+# Save the CSV file
+write.csv(datum, &quot;exercise_1_dataset2.csv&quot;)
+
+## Dataset 3
+
+# Simulate the X-variable
+n &lt;- 140
+Predators &lt;- runif(n, 0, 1) * 20
+
+# Simulate the error
+error &lt;- rnorm(n, mean = 0, sd = 120)
+
+# Simulate Y-variable
+Time &lt;- round(rep(360, n) + error, 0)
+
+# Create dataframe
+datum &lt;- data.frame(Predators = Predators, Time = Time)
+
+# Save the CSV file
+write.csv(datum, &quot;exercise_1_dataset3.csv&quot;)</code></pre>
+<p><a href="exercise_2.html">–go to next exercise–</a></p>
 </div>
 
 

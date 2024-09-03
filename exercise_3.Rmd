@@ -1,5 +1,5 @@
 ---
-title: "Exercise 3: Linear Regression (cont.)"
+title: "Exercise 4: Analysis of Categorical Data"
 author: "NRES 710"
 date: "Last compiled: `r Sys.Date()`"
 output: 
@@ -19,143 +19,145 @@ knitr::opts_chunk$set(
 )
 ```
 
-## Exercise 3 -- Regression Assumptions
+## Exercise 4 -- Analysis of Categorical Data
 
-For each of the following datasets, import the data into R and analyze the data using regression. Then, provide the following information in a Microsoft Word document:
+## Problems
 
-- Using the statement we discussed in class, describe the relationship between X and Y, and be sure to include the p-value. Describe the relationship even if it isn't 'significant' (you fail to reject the null), but be sure to state that the relationship isn't significant, if that's the case.
+**[Dataset 1](exercise_3_dataset1.csv)** -- For this dataset, you are conducting an experiment to see if there is a difference in deer density (Y; deer/ha) between predator exclusion plots and control plots (X; groups). Technically, this could be analyzed with a 't-test'. However, for consistency with our general approach toward statistics, please use the 'lm()' function to do the analysis -- not the 't.test()' function. Report your results using the standard sentence.
 
-- What assumption(s) of regression is violated with this dataset? Cut and paste the graph that visually informed you that an assumption was violated. Note: only one assumption has truly been violated; if more than one assumption appears to be violated, choose the one that appears to be the strongest violation.
+![](pictures/pic_deer.png){width=50%}
 
-Compile all of your results in a Word document. Load this into the WebCampus assignment portal and submit it by the due date indicated in the course schedule.
+Picture: James Stewart
 
-## Problems 
+**[Dataset 2](exercise_3_dataset2.csv)** -- For this dataset, you are conducting an experiment to see if the density of California quail (*Callipepla californica*) (Y; quail/hectare) varies among four habitat types (X): open pine, closed pine, sagebrush, and agriculture. Answer the following questions:
 
-**[Dataset 1](exercise_3_dataset1.csv)** -- the relationship between prey density (X; prey/ha) and predation rate (Y; prey killed per predator per day).
+1. Run an Analysis of Variance (ANOVA) in R. Write a sentence describing the results (i.e., p-value). Typically, this sentence is something like "ANOVA indicated that at least two of the [x-variable] were significantly different from each other (p = [p-value])."
 
-**[Dataset 2](exercise_3_dataset2.csv)** -- the relationship between tree basal area (Y; m2) and stand age (X; years).
+2. Plot the relationship between quail density and habitat types in R and paste the graph in your Word document.
 
-**[Dataset 3](exercise_3_dataset3.csv)** -- the relationship between prey density (X; prey/ha) and black bear litter size (Y; pups); Note: litter size is not continuous, but that's not the assumption that has been violated.
+3. Run a Tukey's HSD Post-hoc test in R. Using the standard language we have been using throughout the class, describe the estimated differences between Closed Pine and Agriculture and between Open Pine and Agriculture. Be sure to include confidence intervals and p-values.
 
-**[Dataset 4](exercise_3_dataset4.csv)** -- the relationship between road density (X; roads/km2) and probability of habitat use by sage grouse (Y; %).
+![](pictures/pic_quail.png){width=50%}
 
-**[Dataset 5](exercise_3_dataset5.csv)** -- the relationship between native deer (X; deer/ha) and number of domestic livestock killed by wolves (Y; livestock/km2).
+Picture: uzun (iNaturalist)
 
-- For this problem, describe the relationship between X and Y using the standard statements, but also use prediction to report what the expected number of livestock killed by tigers is at 20.0 deer/ha with prediction intervals. Finally, generate a graph of the y predictions and the prediction intervals, like we saw in class.
+**[Dataset 3](exercise_3_dataset3.csv)** -- For this dataset, you are examining how pronghorn (*Antilocapra americana*) hunter success rate (Y; pronghorn killed / hunter) is related to hunting method (X; the variable is called 'Method'). Types of hunting methods considered in this study include bow, muzzleloader, and rifle. Answer the following questions:
 
-![](pictures/pic_grouse.png){width=50%}
+1. Run an Analysis of Variance (ANOVA) in R and write a sentence (like we discussed in class) describing the results (i.e., p-value).
 
-Picture: Bert Filemyr
+2. Plot the relationship between hunting method and hunter success rates in R and paste the graph in your Word document.
+
+3. Run a Tukey's HSD post-hoc test in R. Using the standard language we have been using throughout the class, describe the estimated differences among all hunting methods. Include confidence intervals and p-values.
+
+4. Dummy code the data. Make 3 new columns - one for each hunting method - and assign 0s and 1s as appropriate. You can do this in Excel or in R. Use a linear model to test for differences between group and describe with 1-2 sentences how those results compare to the results from the Tukey's HSD post-hoc test.
+
+![](pictures/pic_pronghorn.png){width=50%}
+
+Picture: Ted Floyd
+
+**[Dataset 4](exercise_3_dataset4.csv)** -- For this dataset, you are examining how fertilizer (X; grams) influences biomass production (Y; kg/ha) in restored sagebrush plots. Fertilizer has been applied at 0 (control), 2, 4, 6, 8, 10 grams in each of 5 plots. Run the following analyses:
+
+1. Run an analysis to determine the relationship between biomass and fertilizer, where fertilizer is treated as a categorical variable. Because we won't be conducting a post-hoc test, use the 'lm()' function for this analysis. Report the difference in biomass between 2 grams and 0 grams of fertilizer using the standard sentence.
+
+2. Continued from the last question, report the difference in biomass between 2 grams and 4 grams of fertilizer using the standard sentence. As with the last question, use the 'lm()' function, rather than Tukey's HSD Test.
+
+3. Run an analysis to determine the relationship between Biomass and Fertilizer; however, in this case, treat Fertilizer as a continuous variable. Report the results using the standard sentence.
+
+4. Run an F-drop test to compare the models where Fertilizer was treated as categorical (from questions 1 and 2) to the model where fertilizer was treated as continuous (from question 3). What is the F-statistic and p-value from the F-drop test?
+
+5. Based on the results from 4, which model is preferred: the one where Fertilizer is continuous or the one where Fertilizer is categorical? Briefly explain.
+
+6. Continued from 5: what does that mean about the nature of the relationship between Biomass and Fertilizer?
+
+![](pictures/pic_sagebrush.png){width=50%}
 
 <br>
 
 ## Truth
 
-If you would like to know the values used to create these datasets (i.e., 'truth'), examine the code below:
+If you would like to know the values used to create these datasets (i.e., 'truth'), see the code here:
 
 ```{r datasets, echo=TRUE, message=FALSE, warning=FALSE}
-### Exercise 3: code to simulate datasets 
+### 'Truth'
+### Exercise 4: code to simulate datasets 
 
 # Set the seed for reproducibility
 set.seed(123)
 
 ## Dataset 1
 # Simulate X-variable
-n <- 150
-x <- runif(n, 0, 10)
+n <- 50
+Group <- factor(c(rep("Control", n/2), rep("Exclusion", n/2)))
+Exclusion <- c(rep(0, n/2), rep(1, n/2))
 
 # Simulate error
-error <- rep(NA, n)
-for (i in 1:n){
-  error[i] <- rnorm(1, mean = 0, sd = 0.5 * x[i])
-}
+error <- rnorm(n, mean = 0, sd = 1)
 
 # Calculate Y-variable
-y <- abs(2 + 0.5 * x + error) # abs() gets rid of negative numbers drawn by chance
+Density <- 5 + 2.5 * Exclusion + error
 
 # Create dataframe
-datum <- data.frame(PreyDens = x, PredRate = y)
+datum <- data.frame(Group, Exclusion, Density)
 
 # Save the CSV file
 write.csv(datum, "exercise_3_dataset1.csv")
 
 
 ## Dataset 2
-# Simulate x-variable
-n <- 70
-x <- seq(0, n, by = 1)
+# Simulate X-variable
+Habitat <- c(rep("Agriculture", 10), rep("ClosedPine", 10), rep("OpenPine", 10), rep("Sagebrush", 10))
+dummy <- data.frame(model.matrix(~ Habitat - 1))
+colnames(dummy) <- c("Agriculture", "ClosedPine", "OpenPine", "Sagebrush")
 
 # Simulate error
-error <- rep(NA, n + 1)
-error[1] <- 0
-for (i in 2:(n + 1)){
-  error[i] <- rnorm(1, mean = error[i-1], 2)
-}
+Error <- rnorm(length(Habitat), 0, 0.1)
 
-# Calculate y
-y <- 2 + 2 * x + error
+# Predict Y
+QuailDensity <- 0.85 - 0.25 * dummy$ClosedPine - 0.35 * dummy$OpenPine - 0.15 * dummy$Sagebrush + Error
 
-# Create dataframe
-datum <- data.frame(Age = x, BasalArea = y)
+# Dataframe
+datum <- data.frame(Habitat, QuailDensity)
 
 # Save the CSV file
 write.csv(datum, "exercise_3_dataset2.csv")
 
 
 ## Dataset 3
-# Simulate x-variable
-n <- 100
-x <- runif(n, 0, 10)
+# Simulate X-variable
+Hunt <- as.factor(c(rep("Archery", 15), rep("Muzzleloader", 15), rep("Rifle", 15)))
+dummy <- data.frame(model.matrix(~ Hunt - 1))
+colnames(dummy) <- c("Archery", "Muzzleloader", "Rifle")
 
 # Error
-error <- rnorm(n, mean = 0, 1)
+error <- rnorm(length(Hunt), 0, 0.1)
 
-# Y variable
-y <- round(1 + 0.5 * x + error^2, 0)
-  
+# Success
+Success <- abs(0.12 + 0.45 * dummy$Muzzleloader + 0.6 * dummy$Rifle + error)
+
 # Dataframe
-datum <- data.frame(PreyDensity = x, LitterSize = y)
+datum <- data.frame(Hunt, Success)
 
 # Save the CSV file
 write.csv(datum, "exercise_3_dataset3.csv")
 
 
 ## Dataset 4
-# Simulate x-variable
-n <- 100
-x <- runif(n, 0, 10)
+# x-variable
+Fertilizer <- factor(sort(rep((0:5)*2, 5)))
+dummy <- data.frame(model.matrix(~ Fertilizer - 1))
+colnames(dummy) = c("Zero", "Two", "Four", "Six", "Eight", "Ten")
 
 # Error
-error <- rnorm(n, mean = 0, 0.05)
+Error <- rnorm(length(Fertilizer), mean = 0, sd = 1)
 
-# Y variable
-y <- 0.2 + 0.1 * x - 0.01 * x^2 + error
+# y-variable
+Biomass <- 1.5 + 3.5 * dummy$Two + 5.25 * dummy$Four + 5.25 * dummy$Six + 4 * dummy$Eight + 0.25 * dummy$Ten + Error
 
 # Dataframe
-datum <- data.frame(RoadDensity = x, ProbUse = y)
+datum <- data.frame(Fertilizer, Biomass)
 
-# Save the CSV file
+# Save only the first two columns in the CSV file
 write.csv(datum, "exercise_3_dataset4.csv")
-
-
-## Dataset 5
-# Simulate x-variable
-n <- 50
-
-# X variable
-x <- runif(n, 0, 5)
-
-# error
-error <- rnorm(n, 0, 2)
-
-# Y variable
-y <- abs(8 - 1*x + error)
-
-# Create dataframe
-datum <- data.frame(DeerDensity = x, CowsKilled = y)
-
-# Save the CSV file
-write.csv(datum, "exercise_3_dataset5.csv")
 ```
 
 [--go to next exercise--](exercise_4.html)

@@ -1,5 +1,5 @@
 ---
-title: "Linear Regression - presenting results"
+title: "Linear Regression - assumptions"
 author: "NRES 710"
 date: "Last compiled: `r Sys.Date()`"
 output: 
@@ -22,372 +22,59 @@ knitr::opts_chunk$set(
 
 ```{r echo=FALSE}
 
-#  NRES 710, Linear Regression 2 
+#  NRES 710, Linear Regression (3)
 #     University of Nevada, Reno
-#     Presenting results of linear regression   
+#     Assumptions of linear regression   
 
 ```
 
 ## Review
 
-Today we will discuss how to present results from linear regression. I am going to describe an approach that uses a few concise sentences to distill down all of the relevant information from the analysis you ran. But first, a brief review from last class.
+This week we will continue to explore linear regression by talking about **assumptions of regression** -- and in fact these are important assumptions of many other statistical tests. And then we will discuss how to use linear regression models to make **predictions**.
 
-**The equation for the general linear model: $Y = \beta0 + \beta1X + \epsilon \sim N(0, \sigma)$**
+**Most important thing we have learned so far**: 
 
-- We will use this throughout the class!
-- Y is equal to beta0 (intercept) plus beta1 (slope) times X plus error, which is normally distributed with a mean of zero and a standard deviation (sigma).
-- The error term indicates that we have a bunch of noise that is centered on the line (mean of zero), standard deviation has to be estimated and determines how close to the line the points are.
-- We determine this lining by ensuring the average error is zero and minimize the sum of squares error (the distance from every point to that line).
-- To calculate p-values, we partition the total variation in Y (Total Sum of Squares; TSS) into Sum of Squared Error (SSE) and the Sum of Squares due to Regression (SSR). **TSS = SSE + SSR.**
-- Three things that influence p-values in regression: sample size, effect size, and noise.
+- $Y_i = \beta_0 + \beta_1x_i + \epsilon \sim N(0, \sigma)$
 
-## Presenting results from regression
+There are many assumptions that this regression test makes! But we will focus on what are considered the five most important of these assumptions.
 
-Today we will discuss how to report results when you run regression. By spending time discussing how to report the results, I am hoping this will help all of the material in this class make more sense.
+## Five Regression Assumptions
 
-In class exercise, I will expect you to report your results using this format, which is the format that you would be expected to report results in your thesis, dissertation, and scientific papers that you publish. This approach has **four elements**:
+What are the assumptions of statistical test and how do they influence your results?
 
-1) **Slope**
-2) **P-value** (And you should report a slope whether or not the p-value is significant or not!)
-3) **Confidence interval**
-4) **$r^2$**
+The first thing you need to know about assumptions of statistical tests (regression, t-test, ANOVA, other tests we will cover...) is that the tests are **robust to violations of assumptions**.
 
-We have discussed slopes and p-values in the previous few classes, but today we will introduce confidence intervals and $r^2$ values at greater detail.
+- Robust means that: if an assumption is violated, it very rarely influences the results we get from the analysis (e.g., slope).
+- We'll talk about which of the assumptions influence different parameters...
+- But for most parameters, if the assumptions are violated it does not influence the slope.
+- Assumption violation may influence the standard deviation, but this is not often reported.
+- **Violations cause the p-value to increase.** This means that violations are likely to be conservative. Since we want to avoid committing Type I error (rejecting the null when in fact it is true), then if assumption violation causes p-values to increase then we are less likely to commit Type I error.
 
-## Confidence intervals
+A general rule (*axiom*) in statistics is that: **the more assumptions a test makes, the more powerful it is (power = p-values).**
 
-**95% confidence intervals (95% CI) -- a measure of uncertainty** around our estimate
+We often use statistical tests that make assumptions. Often, these assumptions are true. And since we make more assumptions, we are more likely to detect a significant effect. **If these assumptions are valid.**
 
-- Often, **95% CI ~ 2 * SE**, although the exact formula depends on the sample size.
+I often don't care too much about assumptions -- because they are often met due to our **study design**, the specific analysis we chose, and **most analyses are robust to violations of assumptions**. But, **reviewers do**. Reviewers will try to find something wrong with your paper. They will try to find something wrong and jam up the process. So it can be useful to carefully document how you examined for violations of assumptions in your analysis. This gets tedious, but is part of the 'statistical ritual' of our field... (Or maybe it shouldn't be. Johnson [1999] made suggestions that our statistical ritual leads to bad practices, and we will read another paper to this effect at the end of the semester.)
 
-- We have given our reader an estimate of the p-value, but it is unlikely to be a perfect estimate of truth.
-- On average, it is unbiased. If we collect some data 1,000 different times and fit a regression each time, the average slope from among each of those regressions will approximate truth. But any one regression on a single dataset may not be very close to truth... due to the nature of data, noise, process error, and sampling error.
-- Thus, we need to give our readers some measure of how certain we think our slope really is.
+But as for me, again, I don't care too much about these assumptions, because **most analyses are robust to violations of assumptions**.
 
-Definition of 95% confidence interval: **95% of all such intervals contain truth.**
+There are **5 assumptions** to linear regression. I put the equation up on the board again because most of these assumptions are indicated in the equation, either explicitly or implicitly. 
 
-- It might be tempting to think about CI by saying that: there's a 95% chance that truth is within the interval.
-- However, this is **wrong**, because of the idea of the coinflip from the first day of class. Truth is either inside the interval, or it isn't. Just because we don't know that does not mean there is an underlying probability.
-- This is a nice way of thinking about confidence intervals, but it's not technically correct.
-- Does this make sense? I personally find this topic confusing.
+### Continuous Y
 
-Here's how we might visualize this. I simulated 100 random datasets, each with a mean $\mu$ = 5, and then I measured the mean and 95% confidence intervals for each of the 100 datasets. I then plotted each individual datasets on the y-axis (1 to 100) and the 95% confidence intervals around the mean on the x-axis.
+- Should be continuous; not a count, like a number. But... if it is a count, that's potentially okay, because regression/ANOVA are robust to violations of assumptions. We don't really need a test for this -- if you collected the data, you should know whether it is continuous or not!
 
-```{r simulate-ci-plot, echo=FALSE, message=FALSE, warning=FALSE, fig.width=10, fig.height=7}
-# Set the seed for reproducibility
-set.seed(123)
+- Note: linear regression also assumes that your X-variable is continuous... but we can relax this assumption, and we will do so next week when we explore t-tests! More on this soon.
 
-# Parameters
-mu <- 5
-n_simulations <- 100
-n_samples <- 30
-alpha <- 0.05
+- If you Y is not continuous, it will not influence your slope, but it might increase your p-value.
 
-# Function to calculate 95% CI
-calculate_ci <- function(data, alpha) {
-  mean_val <- mean(data)
-  se <- sd(data) / sqrt(length(data))
-  error <- qt(1 - alpha/2, df=length(data) - 1) * se
-  ci_lower <- mean_val - error
-  ci_upper <- mean_val + error
-  return(c(ci_lower, ci_upper))
-}
+### Error is normally distributed
 
-# Simulate data and calculate CIs
-ci_list <- matrix(NA, nrow=n_simulations, ncol=2)
-for (i in 1:n_simulations) {
-  sample_data <- rnorm(n_samples, mean=mu, sd=1)
-  ci_list[i, ] <- calculate_ci(sample_data, alpha)
-}
+- Very clearly indicated in the equation! Important and something that a lot of people get wrong. Some folks say that X-variable has to be normally distributed, continuous, etc. -- but nope. Others assume that your Y-variable has to be normally distributed. Nope! This assumption relates to the **error** around the Y-variable. 
 
-# Create a data frame for plotting
-ci_df <- data.frame(
-  Sample = 1:n_simulations,
-  CI_Lower = ci_list[, 1],
-  CI_Upper = ci_list[, 2],
-  Contains_Mu = (ci_list[, 1] <= mu & ci_list[, 2] >= mu)
-)
+For example: consider the data in the left graph. There is a gap in values for the middle-range of X-values. If we examine this as a frequency histogram (middle graph), this is not a normally-distributed y-variable; it is bimodally distributed! This is okay.  When we run this regression, we have not violated any assumptions, because the error is normally distributed around the line.
 
-# Plotting the CIs
-library(ggplot2)
-ggplot(ci_df, aes(y = Sample, x = CI_Lower, xend = CI_Upper)) +
-  geom_segment(aes(yend = Sample, color = Contains_Mu), size = 1.2) +
-  scale_color_manual(values = c("TRUE" = "black", "FALSE" = "red")) +
-  geom_vline(xintercept = mu, linetype = "dashed") +
-  labs(x = "Confidence Interval",
-       y = "Sample Number",
-       color = "Contains Mean") +
-  theme_minimal() +
-  theme(legend.position = "top")
-
-```
-
-The red intervals are situations where the 95% confidence intervals do not include the true known mean!
-
-Unfortunately, we have no idea if our particular confidence interval is one that includes 'truth' for the parameter!
-
-Don't worry if you find this difficult -- I think most people do! And practically speaking, just about everyone interprets a 95% confidence interval as having a 95% probability of including the true parameter -- and it doesn't really matter that much!
-
-### 95% CI and significance testing
-
-Here's another useful way to think about this *graphically*.
-
-Let's create a frequency distribution (y-axis) of our slope (x-axis). We run 1000 regressions, and get 1000 estimates of slope. The mean of all these estimates is 'truth' -- the true slope. The distribution of estimates would be a normally-distributed bell curve. A noisy system has a wide bell curve and a wide confidence interval; a less noisy system (or a large sample sizes) would have a more narrow confidence interval. See below:
-
-```{r normal-curve-plot-base-r, echo=FALSE, message=FALSE, warning=FALSE, fig.width=7.5, fig.height=4.5}
-# Set parameters for the normal distribution
-mean_slope <- 0  # Mean labeled as "Slope"
-sd_slope <- 1    # Standard deviation
-
-# Create a sequence of x values
-x_values <- seq(mean_slope - 4 * sd_slope, mean_slope + 4 * sd_slope, length.out = 1000)
-
-# Calculate the density values and normalize them
-density_values <- dnorm(x_values, mean = mean_slope, sd = sd_slope)
-density_values_less_noisy <- dnorm(x_values, mean = mean_slope, sd = sd_slope / 2)
-
-# Normalize the density values so that their peaks are the same
-density_values <- density_values / max(density_values)
-density_values_less_noisy <- density_values_less_noisy / max(density_values_less_noisy)
-
-# Reduce outer margins
-par(mar = c(4, 6, 0, 0), mgp = c(2, 0.5, 0))  # bottom, left, top, right
-
-# Plot the normal distribution
-plot(x_values, density_values, type = "l", col = "blue", lwd = 4,
-     xlab = expression("True slope (or " * beta[1] * ")"), ylab = "Frequency", cex.lab = 1.5,
-     ylim = c(0, 1.1), axes = FALSE)
-
-# Add the second normal distribution
-lines(x_values, density_values_less_noisy, col = "green", lwd = 4)
-
-# Add vertical line for the mean
-abline(v = mean_slope, lty = 2, lwd = 4, col = "orange")
-
-# Add box around the plot
-box()
-
-# Add legend
-legend("topright", legend = c("Noisy data", "Less noisy data"), 
-       col = c("blue", "green"), lwd = 2, bty = "n", cex = 1.2)
-```
-
-The confidence interval in our regression takes this distribution and instead of centering it on 'truth', it centers it on our estimated slope ($\beta_1$). If we assume this is the true slope, this bell curve represents the range of $\beta_1$ estimates we would get when we run regression.
-
-95% of the time we will get a slope estimate that is within the central area under the curve that contains 95% of this distribution. This is the 95% confidence interval. We can add two lines to the above graph to indicate this range of values around the true slope:
-
-```{r normal-curve-2, echo=FALSE, message=FALSE, warning=FALSE, fig.width=7.5, fig.height=4.5}
-# Set parameters for the normal distribution
-mean_slope <- 0  # Mean labeled as "Slope"
-sd_slope <- 1    # Standard deviation
-ci_level <- 0.95  # Confidence level
-
-# Calculate the 95% CI boundaries
-z_score <- qnorm((1 + ci_level) / 2)
-ci_lower <- mean_slope - z_score * sd_slope
-ci_upper <- mean_slope + z_score * sd_slope
-
-# Create a sequence of x values
-x_values <- seq(mean_slope - 4 * sd_slope, mean_slope + 4 * sd_slope, length.out = 1000)
-
-# Calculate the density values and normalize them
-density_values <- dnorm(x_values, mean = mean_slope, sd = sd_slope)
-
-# Normalize the density values so that their peaks are the same
-density_values <- density_values / max(density_values)
-
-# Reduce outer margins
-par(mar = c(4, 6, 0, 0), mgp = c(2, 0.5, 0))  # bottom, left, top, right
-
-# Plot the normal distribution
-plot(x_values, density_values, type = "l", col = "blue", lwd = 4,
-     xlab = expression("True slope"), ylab = "Frequency", cex.lab = 1.5,
-     ylim = c(0, 1.1), axes = FALSE)
-
-# Add vertical line for the mean
-abline(v = mean_slope, lty = 2, lwd = 4, col = "orange")
-
-# Add vertical lines for the 95% CI
-abline(v = ci_lower, col = "purple", lwd = 2, lty = 2)
-abline(v = ci_upper, col = "purple", lwd = 2, lty = 2)
-
-# Add box around the plot
-box()
-
-# Add legend
-legend("topright", legend = c("Data", "Mean", "95% CI"), 
-       col = c("blue", "orange", "purple"), lwd = 4, lty = c(1, 2, 2), bty = "n", cex = 1.2)
-```
-
-This same bell curve is also used in the calculation of **p-values**. Instead of centering on slope of mean = 'truth', it centers the distribution on a slope = 0, and it says: if we assume that slope = 0 (the null hypothesis; $H_0$), what is the probability of getting our observed data that produced $\beta_1$?
-
-```{r normal-curve-3, echo=FALSE, message=FALSE, warning=FALSE, fig.width=7.5, fig.height=4.5}
-# Set parameters for the normal distribution
-mean_slope <- 0  # Mean labeled as "Slope"
-sd_slope <- 1    # Standard deviation
-ci_level <- 0.95  # Confidence level
-
-# Calculate the 95% CI boundaries
-z_score <- qnorm((1 + ci_level) / 2)
-ci_lower <- mean_slope - z_score * sd_slope
-ci_upper <- mean_slope + z_score * sd_slope
-
-# Create a sequence of x values
-x_values <- seq(mean_slope - 4 * sd_slope, mean_slope + 4 * sd_slope, length.out = 1000)
-
-# Calculate the density values and normalize them
-density_values <- dnorm(x_values, mean = mean_slope, sd = sd_slope)
-
-# Normalize the density values so that their peaks are the same
-density_values <- density_values / max(density_values)
-
-# Reduce outer margins
-par(mar = c(4, 6, 0, 0), mgp = c(2, 0.5, 0))  # bottom, left, top, right
-
-# Plot the normal distribution
-plot(x_values, density_values, type = "l", col = "blue", lwd = 4,
-     xlab = expression("Slope = 0 (" * H[0] * ")"), ylab = "Frequency", cex.lab = 1.5,
-     ylim = c(0, 1.1), axes = FALSE)
-
-# Add vertical line for the mean
-abline(v = mean_slope, lty = 2, lwd = 4, col = "orange")
-
-# Add vertical lines for the 95% CI
-abline(v = ci_lower, col = "purple", lwd = 2, lty = 2)
-abline(v = ci_upper, col = "purple", lwd = 2, lty = 2)
-
-# Add a dot in the bottom right tail and label it as "Beta1"
-dot_x <- mean_slope + 2.4 * sd_slope  # Position of the dot
-dot_y <- dnorm(dot_x, mean = mean_slope, sd = sd_slope) / max(density_values) * 0.1  # Adjust y position
-points(dot_x, dot_y, pch = 19, col = "red", cex = 1.5)
-text(dot_x, dot_y, labels = expression(beta[1]), pos = 2, col = "red", cex = 1.2)
-
-# Add box around the plot
-box()
-
-# Add legend
-legend("topright", legend = c("Data", "Mean", "95% CI"), 
-       col = c("blue", "orange", "purple"), lwd = 4, lty = c(1, 2, 2), bty = "n", cex = 1.2)
-```
-
-If our $\beta_1$ is out in the tail of this distribution (or, outside of the 95% confidence interval), then we would get a small p-value, and then **reject** $H_0$.
-
-**What this means is that we technically don't need a p-value!** Our confidence interval can tell us whether our slope estimate is statistically significant or not.
-
-All we need to know is whether 0 (zero) is within the 95% confidence interval of $\beta$ or not.
-
-```{r normal-curve-4, echo=FALSE, message=FALSE, warning=FALSE, fig.width=7.5, fig.height=4.5}
-# Set parameters for the normal distribution
-mean_slope <- 0  # Mean labeled as "Slope"
-sd_slope <- 1    # Standard deviation
-ci_level <- 0.95  # Confidence level
-
-# Calculate the 95% CI boundaries
-z_score <- qnorm((1 + ci_level) / 2)
-ci_lower <- mean_slope - z_score * sd_slope
-ci_upper <- mean_slope + z_score * sd_slope
-
-# Create a sequence of x values
-x_values <- seq(mean_slope - 4 * sd_slope, mean_slope + 4 * sd_slope, length.out = 1000)
-
-# Calculate the density values and normalize them
-density_values <- dnorm(x_values, mean = mean_slope, sd = sd_slope)
-
-# Normalize the density values so that their peaks are the same
-density_values <- density_values / max(density_values)
-
-# Reduce outer margins
-par(mar = c(4, 6, 0, 0), mgp = c(2, 0.5, 0))  # bottom, left, top, right
-
-# Plot the normal distribution
-plot(x_values, density_values, type = "l", col = "blue", lwd = 4,
-     xlab = expression(beta[1]), ylab = "Frequency", cex.lab = 1.5,
-     ylim = c(0, 1.1), axes = FALSE)
-
-# Add vertical line for the mean
-abline(v = mean_slope, lty = 2, lwd = 4, col = "orange")
-
-# Add vertical lines for the 95% CI
-abline(v = ci_lower, col = "purple", lwd = 2, lty = 2)
-abline(v = ci_upper, col = "purple", lwd = 2, lty = 2)
-
-#  Add vertical line to the right of the 95% CI and label it zero
-zero_line <- ci_lower - 1.5
-abline(v = zero_line, col = "red", lwd = 2, lty = 1)
-
-# Add x-axis with a single tick for zero
-axis(1, at = -3.46, labels = "0", las = 1)
-
-# Add box around the plot
-box()
-
-# Add legend
-legend("topright", legend = c("Data", "Mean", "95% CI", "Zero"), 
-       col = c("blue", "orange", "purple", "red"), lwd = 4, lty = c(1, 2, 2, 1), bty = "n", cex = 1.2)
-
-```
-
-- If 0 is **outside** the 95% CI for $\beta$, then $\beta$ **is** a real, statistically significant effect!
-- If 0 is **inside** the 95% CI for $\beta$, then $\beta$ **is not** a real, statistically significant effect.
-
-Confidence interval terms:
-
-- **Confidence limits:** the values for the upper and lower edges of 95% CI.
-- **Confidence interval:** the distance between the $\beta$ and each confidence limit.
-
-If we get a p-value = 0.05, that means zero will be at one of our confidence limits (i.e., significant).
-
-If we zero is outside of our confidence limits, the p-value will be < 0.05 (i.e., significant).
-
-If zero is within one of our confidence limits, the p-value will be > 0.5 (i.e., not significant).
-
-### Reporting confidence intervals
-
-**$\beta_1$ +/- 95% CI**
-
-Since the CI are symmetric, we can use plus/minus to report the CI.
-
-- Note: why use +/i? Journals made this rule up to save space...
-
-### What you need to know:
-
-1. The technical definition of a 95% confidence interval: 95% of all such intervals contain 'truth'.
-2. The relationship between confidence intervals and p-values. They are the flip-side of the same coin.
-
-Easy red flag: something is significant, but the 95% CI include zero.
-
-## $r^2$
-
-### What is $r^2$
-
-The technical definition of **$r^2$ is the *proportion* of variation in Y that is explained by X.** This definition will be on quizes, etc. Keyword: *proportion*.
-
-- This is **not** the absolute amount of variation in Y explained by X -- which is the Sum of Squares due to Regression (SSR).
-- How do you estimate the *proportion*...? Divide by the TOTAL.. the Total Sum of Squares (TSS).
-- Also known as: coefficient of determination.
-
-**Thus: $r^2 = \frac{SSR}{TSS}$**
-
-Since it is a proportion, 0 < $r^2$ < 1.
-
-If $r^2$ = 0, then no variation in Y is explained by X, and the slope is zero. Points at random, with no slope.
-
-If $r^2$ = 1, then all variation in Y is explained by X -- and no variation in Y is due to error. All your points are right on the line!
-
-This doesn't really ever happen in environmental sciences... There is so much noise and other processes driving relationpships that $r^2$ values never approach 1! Some have said that an $r^2$ of 0.1 is a good results in ecology (!).
-
-**r** is the **correlation coefficient**
-
-- $r = \sqrt{r^2}$
-- This can be positive or negative and anywhere from -1 to 1; it can describe negative relationships or positive relationships.
-
-### Why report $r^2$?
-
-Why report $r^2$, when I have previously said the main goal of regression was to measure the slope...?
-
-Let's assume you graduate and get a job as a habitat manager. Your new supervisor wants you to increase Greater Sage-grouse density in central Nevada, and they want you to do it by manipulating some variable (e.g, native grass density). You go out and collect data to estimate the relationship between grouse and grasses. Which of the following two scenarios would you rather have?
-
-```{r simulate-plot-4, echo=FALSE, message=FALSE, warning=FALSE, fig.width=9, fig.height=4}
+```{r example-1, echo=FALSE, message=FALSE, warning=FALSE, fig.width=6, fig.height=4}
 # Set the seed for reproducibility
 set.seed(123)
 
@@ -395,150 +82,1072 @@ set.seed(123)
 par(mfrow = c(1, 2))
 
 # Simulate data for the shallow slope
-n <- 40
+n <- 50
 x1 <- rnorm(n, mean = 20, sd = 10)
-y1 <- round(10 + 3 * x1 + rnorm(n, mean = 0, sd = 16), 1)
+y1 <- 5 + 4 * x1 + rnorm(n, mean = 0, sd = 8)
 
-# Create a data frame for the shallow slope
+# Remove observations in the middle of x to create bimodal y
+middle_range <- c(15, 25)
 datum1 <- data.frame(x = x1, y = y1)
+datum1 <- subset(datum1, x < middle_range[1] | x > middle_range[2])
 
 # Plot the data with the shallow slope
 plot(y ~ x, data = datum1,
-     ylim=c(0, 100), xlab = "Grass density", ylab = "Grouse abundance")
+     ylim=c(0, max(datum1$y)), xlab = "Predictor variable", ylab = "Response variable")
 
 # Add a line to the plot for the shallow slope
 results1 <- lm(y ~ x, data = datum1)
 abline(results1)
 
-# Simulate data for the steep slope
-x2 <- rnorm(n, mean = 20, sd = 10)
-y2 <- round(10 + 1 * x2 + rnorm(n, mean = 0, sd = 2), 1)
+# Plot the density of y
+plot(density(datum1$y), col = "skyblue", xlab = "Response variable", ylab = "Density", main = "", lwd = 2)
 
-# Create a data frame for the steep slope
-datum2 <- data.frame(x = x2, y = y2)
-
-# Plot the data with the steep slope
-plot(y ~ x, data = datum2,
-     ylim=c(0, 100), xlab = "Grass density", ylab = "Grouse abundance")
-
-# Add a line to the plot for the steep slope
-results2 <- lm(y ~ x, data = datum2)
-abline(results2)
+# Examine normality of residuals
+residuals <- resid(results1)
+plot(density(residuals), xlab = "Residuals", main = "")
 ```
 
-Left graph has a steeper slope, but right graph has less error.
+Then why are people always asking if the Y-variable is normally distributed...? This is because if you look at the distribution of the y-data and it appears normal, the residuals will almost always be normal when you run the analysis.
 
-**Q:** Anybody want to make an argument for the left situation being better?
+But, if you run a histogram and your y-data are not normal, this does not necessarily mean that your error will also not be normal. To really know if the assumption is violated, you need to run the regression and examine whether the residuals are normal (third graph).
 
-- Left graph: a small change in X makes a larger increase in Y, because the effect size is big.
+If your error is not normally distributed, it's not going to influence your slope -- but it might increase your p-values a little bit. 
 
-**Q:** Anybody want to make an argument for the right situation being better?
+### Linear relationship between X and Y
 
-- Right graph: we may have to make a bigger change in X to make the same change in Y, but we **know** that we will achieve that change in Y. 
+This one is important. This is implicit in our linear model equation.
 
-- Left graph: There is a lot of uncertainty, and an increase in X could actually cause a decreased outcome in Y.
+It assumes that there is a single parameter -- the slope -- describing the relationship between X and Y.
 
-It's not enough to report the slope... we can also benefit from reporting $r^2$ because it **describes the strength of the relationship and how closely X and Y are related.**
+The reason why I think this is important is because so often in ecology/natural resource management I see people obtaining two continuous variables and immediately running a regression model -- without ever considering whether their data have a linear relationship. They don't even think about it.
 
-## Reporting results
+This is a problem, because in ecology... many processes of interest are non-linear!
 
-**For each 1 [X-units] increase in [X], we observed a [slope / $\beta_1$] [Y-units] (+/- [95% CI]; +/- 95% CI) [increase/decrease] in [Y] (p = [p-value]; [$r^2$]).**
+Example: mesocosm experiment. We want to understand the effect of crayfish predators on prey fish. Does fish abundance decrease and predatory crayfish increases?
 
-**If p > 0.05, then add: "; however, our results are not statistically significant."**
-
-Let's try this with our results from last class.
-
-```{r}
+```{r predator-prey-simulation, echo=FALSE, message=FALSE, warning=FALSE, fig.width=8, fig.height=6}
 # Set the seed for reproducibility
 set.seed(123)
 
-# Simulate a continuous predictor variable, precipitation
-n <- 30
-precip <- runif(n, min = 0, max = 10)
+# Simulate non-linear data
+n <- 100
+time <- seq(1, n)
+prey_abundance <- 100 * exp(-0.05 * time) + rnorm(n, mean = 0, sd = 5)
+predator_abundance <- 50 * (1 - exp(-0.01 * time)) + rnorm(n, mean = 0, sd = 5)
 
-# Simulate the true, predicted response of biomass to precip (y-hat)
-y_hat <- 2 + 3 * precip
+# Plot the data
+plot(predator_abundance, prey_abundance, pch = 16, col = "blue",
+     xlab = "Predator abundance", ylab = "Prey abundance")
 
-# Simulate error for the response variable
-error <- rnorm(n, mean = 0, sd = 2)
+# Fit a linear model
+results <- lm(prey_abundance ~ predator_abundance)
+abline(results)
+```
 
-# Create the response variable, biomass
-# biomass = beta0 + beta1 * precip + epsilon
-biomass <- y_hat + error
+This very clearly violates the assumption of linearity! We can fit a better statistical model -- one that does not assume linearity -- which can better help us measure this relationship and explain it to the scientific community! 
+
+So, don't assume there is a linear relationship between X and Y -- examine this, verify, and adjust your model as needed.
+
+If the relationship is not linear, **this will alter your slope**! We are measuring something that is not linear an
+
+### Homoscedasticity
+
+*homo* = same; *scedasticity* = variance, noise, error, etc.
+
+Implicit in our equation: - $\epsilon \sim N(0, \sigma)$
+
+Constant variance: *error does not change not matter what the X and Y values are.*
+ 
+```{r example-3, echo=FALSE, message=FALSE, warning=FALSE, fig.width=6, fig.height=6}
+# Set the seed for reproducibility
+set.seed(123)
+
+# Simulate data for the shallow slope
+n <- 50
+x1 <- rnorm(n, mean = 20, sd = 10)
+y1 <- 5 + 4 * x1 + rnorm(n, mean = 0, sd = 12)
+
+# Remove observations in the middle of x to create bimodal y
+datum1 <- data.frame(x = x1, y = y1)
+
+# Plot the data with the shallow slope
+plot(y ~ x, data = datum1,
+     ylim=c(0, max(datum1$y)), xlab = "Predictor variable", ylab = "Response variable")
+
+# Add a line to the plot for the shallow slope
+results1 <- lm(y ~ x, data = datum1)
+abline(results1)
+```
+
+We can visualize homoscedasticity by imagining/drawing normally distributed bell curves amidst our data along the regression line...
+
+An example of **heteroscedasticity** is any case where your variance changes. This commonly occurs in ecology when we count animals. For example, when we are electofishing for fish in a river, areas with no fish have little variance; areas with many fish have high variance! It creates this cone-shaped data.
+
+```{r example-4, echo=FALSE, message=FALSE, warning=FALSE, fig.width=6, fig.height=6}
+# Set the seed for reproducibility
+set.seed(100)
+
+# Simulate data with increasing variance (heteroscedasticity)
+n <- 50
+x1 <- runif(n, 0, 100)
+y1 <- 20 + 25 * x1 + rnorm(n, mean = 0, sd = 10 * x1)
 
 # Create a data frame
-datum <- data.frame(precip = precip, y_hat = y_hat, error = error, biomass = biomass)
+datum1 <- abs(data.frame(x = x1, y = y1))
 
-# Fit the linear model
-results <- lm(biomass ~ precip, data = datum)
+# Fit a linear model
+results1 <- lm(y ~ x, data = datum1)
 
-# Examine the results
-summary(results)
+# Predict values and calculate confidence intervals
+predictions <- predict(results1, interval = "confidence", level = 0.95)
+datum1 <- cbind(datum1, predictions)
 
-# Print the confidence intervals
-confint(results)
-# These are actually the confidence limits! Annoying
-# How do we calculate the confidence intervals
+# Plot the data
+plot(datum1$x, datum1$y, ylim=c(0, max(datum1$y)), xlab = "Predictor variable", ylab = "Response variable", pch = 16)
+
+# Add the regression line
+abline(results1, col = "red")
+```
+
+We can visualize *heteroscedasticity* by imagining/drawing normally distributed bell curves amidst our data along the regression line, and the bell curves get wider as we increase along X.
+
+*Heteroscedasticity* could also happen in a non-linear way. 
+
+**Q:** Will heteroscedasticity influence your slope? No.
+
+We can account for *heteroscedasticity* in our model by adding a weighting paramter to the error component: $\epsilon \sim N(0, \sigma * y)$ would allow for error to increase with $y$!
+
+### Independent samples
+
+When people say that the x-variable is the 'independent variable', this is what they really mean! Your samples should be independent of eachother and there should be **no autocorrelation**. 
+
+Example: measuring pollution in water samples every 10 m down the middle of a river from a chemical plant. These data will have autocorrelation, because pollution can't change that much from sample to sample.
+
+**Q:** How might you eliminate or minimize autocorrelation? Maybe by increasing distance between samples -- measure every kilometer. This decreases autocorrelation, but also decreases sample size. Tradeoff...
+
+I personally don't worry too much about autocorrelation, because often when you fix it/account for it, nothing changes. If you had a strong slope and p-value with one test, you will likely get a strong slope and p-value with another test.
+
+Consider these autocorrelated data:
+
+```{r example-5, echo=FALSE, message=FALSE, warning=FALSE, fig.width=6, fig.height=6}
+# Set the seed for reproducibility
+set.seed(100)
+
+# # Simulate data with autocorrelation
+# n <- 100
+# x <- seq(1, n)
+# phi <- 0.99  # Autoregressive parameter
+# epsilon <- rnorm(n, mean = 0, sd = 5)  # Reduced noise term to make the autocorrelation more prominent
+# y <- numeric(n)
+# y[1] <- 5 + 2 * x[1] + epsilon[1]
+# for (i in 2:n) {
+#   y[i] <- 5 + 2 * x[i] + phi * (y[i-1] - (5 + 2 * x[i-1])) + epsilon[i]
+# }
+# 
+# # Create a data frame
+# data <- data.frame(x = x, y = y)
+
+# Simulate data that are autocorrelated
+n <- 500
+x1 <- runif(n, 0, 100)
+
+# Sort x1 from low to high
+x1 <- sort(x1)
+
+# Simulate error for each value using the mean of the previous value
+error <- matrix(NA, length(x1), 1)
+error[1,1] <- rnorm(1, mean = 0, sd = 1)
+for (i in 2:length(x1)){
+  error[i,1] <- rnorm(1, mean = error[i-1, 1], sd = 1)
+}
+
+# Create y values
+y1 <- 3 + 2 * x1 + error
+
+# Create dataframe
+datum <- data.frame(x = x1, error = error, y = y1)
+
+# Plot the data
+plot(datum$x, datum$y, xlab = "Predictor variable", ylab = "Response variable", pch = 16, col = "blue")
+
+# Fit a linear model
+model <- lm(y ~ x, data = datum)
+
+# Add the regression line to the graph
+abline(model, col = "red")
+```
+
+Instead of our points bouncing around the line, they tend to follow eachother.
+
+This will not affect our slope, and it probably won't affect the p-value too much (would only increase). So again, linear regression is robust to violation of this assumption.
+
+Two types of autocorrelation issues: spatial and temporal autocorrelation. We will discuss how to deal with this down the road. But again, it's not too big of a concern.
+
+Many things are autocorrelated in nature. Animal movements, for example! Is this a problem?
+
+Maybe not. This is what animals do -- they move! Try to get big sample sizes.
+
+## Evaluating assumptions w/ graphs
+
+Statistical tests exist to statistically test for these assumptions. These are p-value generating tests. There are some consequences of this.
+
+- If you have a small sample size, the assumption will never be violated! Because of the relationship between sample size and p-values that we have identified in previous classes.
+- Conversely, if you have a really large sample, the assumption will always be violated!
+
+So, for these reasons, I don't like these tests, and I don't recommend using these tests.
+
+Instead, what I do I look at my data graphically! And I will teach you to do this also. We will visually examine our data to identify whether our data meet these assumptions or not. If it has been violated, we will see this. If we can see the assumption has been violated, then we now know this.
+
+Useful rule of thumb:
+
+- If you can't see it, it doesn't exist, and you assume there isn't one.
+- If you can see it, then an assumption may be violated, and then it's our decision to do something about it or not.
+
+We have four main assumptions, and we will use four graphical approaches to examine whether these assumptions are met.
+
+```{r, echo=FALSE, message=FALSE}
+# Load necessary libraries
+library(knitr)
+library(kableExtra)
+
+# Create the data frame
+data <- data.frame(
+  Group = c("Normality", "Linearity", "Homoscedasticity", "No autocorrelation"),
+  `X-Y Scatterplot` = c("", "", "", ""),
+  `Residuals Scatterplot` = c("", "", "", ""),
+  `Histogram of Residuals` = c("", "", "", ""),
+  `Autocorrelation Function (ACF)` = c("", "", "", "")
+)
+
+# Create the table
+kable(data, col.names = c("Assumption", "X-Y Scatterplot", "Residuals Scatterplot", "Histogram of Residuals", "Autocorrelation Function (ACF)")) %>%
+  kable_styling(full_width = FALSE)
 
 ```
 
-**For each 1 cm increase in precipitation, we observed a 2.81 kg/ha ...** -- but where are the confidence intervals??
+### X-Y Scatterplots
 
-**Note:** I recommend simply using two significant digits after the decimal. In the above case, you would avoid saying "a 3 unit increase" or "a 2.8 unit increase".
+This first graph shows data where **none of the assumptions are violated**.
 
-- (Sidenote: technically, usual scientific convention involved reporting significant digits according to precision in the sampling... Maybe you remember this from chemistry class? But we often don't know that in ecology, so we can be more relaxed about this here.)
+```{r no-violations-1, echo=FALSE, message=FALSE, warning=FALSE, fig.width=4.5, fig.height=4.5}
+# Set the seed for reproducibility
+set.seed(123)
 
-```{r}
-# Print the confidence intervals
-confint(results)
-# These are actually the confidence limits! Annoying
+# Adjust margins: bottom, left, top, right
+par(mar = c(4, 4, 2, 1))
+
+# First, simulate data with no assumption violations
+n <- 100
+x1 <- rnorm(n, mean = 20, sd = 10)
+y1 <- 5 + 4 * x1 + rnorm(n, mean = 0, sd = 8)
+
+# Create dataframe
+datum <- data.frame(x = x1, y = y1)
+
+# Plot the data
+plot(y ~ x, data = datum,
+     ylim=c(0, max(datum$y)), xlab = "", ylab = "",
+     main = "No violations")
+```
+
+- Data are very clearly linear.
+- Data appear to be normally distributed around the line. Most are close to the line, but some are out in the tails.
+- Does not appear to be any autocorrelation.
+- Does not appear to be any heteroscedasticity.
+
+**This is how your data should look!**
+
+This second graph shows data were the assumption of error normality is violated.
+
+```{r error-violated, echo=FALSE, message=FALSE, warning=FALSE, fig.width=4.5, fig.height=4.5}
+# Set the seed for reproducibility
+set.seed(123)
+
+# Adjust graph margins: bottom, left, top, right
+par(mar = c(4, 4, 2, 1))
+
+# Second, simulate data with a violation of normality
+n <- 100
+x <- rnorm(n, mean = 20, sd = 3)
+y <- 10 + 25 * x + rnorm(n, mean = 0, sd = 8)^2
+
+# Create dataframe
+datum <- data.frame(x = x, y = y)
+
+# Plot the data
+plot(y ~ x, data = datum,
+     ylim=c(0, max(datum$y)), xlab = "", ylab = "",
+     main = "Not normal")
+```
+
+We can see that normality is violated because there are no tails below the line!
+
+**Q:** Has this influenced the slope? No. It would influence the intercept (but nobody reports that ever, so no big deal).
+
+This third graph shows data where the assumption of **linearity** is violated.
+
+```{r nonlinear, echo=FALSE, message=FALSE, warning=FALSE, fig.width=4.5, fig.height=4.5}
+# Set the seed for reproducibility
+set.seed(123)
+
+# Adjust graph margins: bottom, left, top, right
+par(mar = c(4, 4, 2, 1))
+
+# Simulate data with a violation of linearity
+n <- 100
+x <- runif(n, 0, 10)
+y <- 3 + 2 * x - 0.18 * x^2 + rnorm(n, mean = 0, sd = 1)
+
+# Create dataframe
+datum <- data.frame(x = x, y = y)
+
+# Plot the data
+plot(y ~ x, data = datum,
+     ylim=c(0, max(datum$y)), xlab = "", ylab = "",
+     main = "Non-linear")
+```
+
+- A linear regression model would not fit these data well, so we would want to seek an alternative approach.
+- Note: Some might say that these data are not normally distributed, but it is. Most points are centered on the line, with some out on the tails.
+
+This fourth graph shows data where the assumption of **homoscedasticity** is violated.
+
+```{r heteroscedasticity, echo=FALSE, message=FALSE, warning=FALSE, fig.width=4.5, fig.height=4.5}
+# Set the seed for reproducibility
+set.seed(123)
+
+# Adjust graph margins: bottom, left, top, right
+par(mar = c(4, 4, 2, 1))
+
+# Simulate data that are heteroscedastic
+n <- 100
+x1 <- runif(n, 0, 10)
+y1 <- 5 + 4 * x1 + rnorm(n, mean = 0, sd = 1 * x1)
+
+# Create dataframe
+datum <- data.frame(x = x1, y = y1)
+
+# Plot the data
+plot(y ~ x, data = datum,
+     ylim=c(0, max(datum$y)), xlab = "", ylab = "",
+     main = "Heteroscedasticity")
+```
+
+These data are **heteroscedastic**; as X increases, error increases.
+
+We don't need a statistical test to know that these data are heteroscedastic.
+
+This last graph shows when the data are not independent and autocorrelation is present in the data.
+
+```{r autocorrelation, echo=FALSE, message=FALSE, warning=FALSE, fig.width=4.5, fig.height=4.5}
+# Set the seed for reproducibility
+set.seed(123)
+
+# Adjust graph margins: bottom, left, top, right
+par(mar = c(4, 4, 2, 1))
+
+# Simulate data that are autocorrelated
+n <- 100
+x1 <- runif(n, 0, 10)
+
+# Sort x1 from low to high
+x1 <- sort(x1)
+
+# Simulate error for each value using the mean of the previous value
+error <- matrix(NA, length(x1), 1)
+error[1,1] <- rnorm(1, mean = 0, sd = 1)
+for (i in 2:length(x1)){
+  error[i,1] <- rnorm(1, mean = error[i-1, 1], sd = 1)
+}
+
+# Create y values
+y1 <- 3 + 2 * x1 + error
+
+# Create dataframe
+datum <- data.frame(x = x1, error = error, y = y1)
+
+# Plot the data
+plot(y ~ x, data = datum,
+     ylim=c(0, max(datum$y)), xlab = "", ylab = "",
+     main = "Autocorrelation")
+
+# Examine autocorrelation in the error term
+print(datum[10:20,])
+```
+
+What do we see here...?
+
+- The errors are similar to each other; i.e., they are correlated to one another.
+- The error is not centered on the line, but rather *follows itself*.
+- Two types of autocorrelation; we'll discuss this in a future lecture when discuss how to fix or model autocorrelation (which requires more complicated models, no ready for this just yet).
+
+### Residuals Scatterplot
+
+Residuals scatterplot involve making a graph of:
+
+- **X-variable --> X data**
+- **Y-variable --> residual (error)**
+
+```{r residual_plot, echo=FALSE, message=FALSE, warning=FALSE, fig.width=9, fig.height=4.5}
+# Set the seed for reproducibility
+set.seed(123)
+
+# Set up the plotting area to display two plots side by side
+par(mfrow = c(1, 2))
+
+# Simulate data for the shallow slope
+n <- 50
+x1 <- rnorm(n, mean = 20, sd = 10)
+y1 <- 5 + 4 * x1 + rnorm(n, mean = 0, sd = 8)
+
+# Create dataframe
+datum1 <- data.frame(x = x1, y = y1)
+
+# Plot the data
+plot(y ~ x, data = datum1,
+     ylim=c(0, max(datum1$y)), xlab = "Predictor variable", ylab = "Response variable")
+
+# Add a line to the plot for the shallow slope
+results1 <- lm(y ~ x, data = datum1)
+abline(results1)
+
+# Calculate residuals
+residuals1 <- residuals(results1)
+
+# Plot the residuals
+plot(datum1$x, residuals1, xlab = "Predictor variable", ylab = "Residuals")
+abline(h = 0, col = "red", lty = 2)
+```
+
+Assuming we had a pretty usual data with X and Y and we fit a regression line (above), we can revisualize that graph with the same X-variable but now with the residuals of Y on the y-axis. We sort of flip that graph, make the regression line be at 0, and then residuals above and below that line are visualized with the Y-variable. This is a 'residuals plot'.
+
+For example, the residuals plot can be useful when you have a large range of X and Y, and your error is very small:
+
+```{r residual_plot_2, echo=FALSE, message=FALSE, warning=FALSE, fig.width=9, fig.height=4.5}
+# Set the seed for reproducibility
+set.seed(111)
+
+# Set up the plotting area to display two plots side by side
+par(mfrow = c(1, 2))
+
+# Simulate data for the shallow slope
+n <- 100
+x1 <- runif(n, 0, 50)
+y1 <- 5 + 4 * x1 + rnorm(n, mean = 0, sd = 0.15 * x1)
+
+# Create dataframe
+datum1 <- data.frame(x = x1, y = y1)
+
+# Plot the data
+plot(y ~ x, data = datum1,
+     ylim=c(0, max(datum1$y)), xlab = "Predictor variable", ylab = "Response variable")
+
+# Add a line to the plot for the shallow slope
+results1 <- lm(y ~ x, data = datum1)
+abline(results1)
+
+# Calculate residuals
+residuals1 <- residuals(results1)
+
+# Plot the residuals
+plot(datum1$x, residuals1, xlab = "Predictor variable", ylab = "Residuals")
+abline(h = 0, col = "red", lty = 2)
+```
+
+The data look pretty tight around the line in the X-Y scatterplot, but when we look at the residual plot, we see something else. This is common when we have low error -- small noise.
+
+**Q:** What is happening here -- what assumption has been violated?
+
+**Residuals scatterplots** are useful for all four of these assumptions. Here are the four simulated datasets we used for X-Y scatterplots but not visualized using residual scatterplots:
+
+```{r residual_plot_examples, echo=FALSE, message=FALSE, warning=FALSE, fig.width=9, fig.height=9}
+# Set the seed for reproducibility
+set.seed(111)
+
+# Set up the plotting area to display two plots side by side
+par(mfrow = c(2, 2))
+
+# Simulate data with non-normally distributed error
+n <- 100
+x <- rnorm(n, mean = 20, sd = 3)
+y <- 10 + 25 * x + rnorm(n, mean = 0, sd = 8)^2
+
+# Create dataframe
+datum <- data.frame(x = x, y = y)
+
+# Simple linear model
+results1 <- lm(y ~ x, data = datum)
+
+# Calculate residuals
+residuals1 <- residuals(results1)
+
+# Plot the residuals
+plot(datum$x, residuals1, xlab = "", ylab = "", main = "Non-normal error")
+abline(h = 0, col = "red", lty = 2)
+
+
+### Simulate nonlinear data
+n <- 100
+x <- runif(n, 0, 10)
+y <- 3 + 2 * x - 0.18 * x^2 + rnorm(n, mean = 0, sd = 1)
+
+# Create dataframe
+datum <- data.frame(x = x, y = y)
+
+# Simple linear model
+results1 <- lm(y ~ x, data = datum)
+
+# Calculate residuals
+residuals1 <- residuals(results1)
+
+# Plot the residuals
+plot(datum$x, residuals1, xlab = "", ylab = "", main = "Nonlinearity")
+abline(h = 0, col = "red", lty = 2)
+
+
+### Simulate data that are autocorrelated
+n <- 100
+x1 <- runif(n, 0, 10)
+
+# Sort x1 from low to high
+x1 <- sort(x1)
+
+# Simulate error for each value using the mean of the previous value
+error <- matrix(NA, length(x1), 1)
+error[1,1] <- rnorm(1, mean = 0, sd = 1)
+for (i in 2:length(x1)){
+  error[i,1] <- rnorm(1, mean = error[i-1, 1], sd = 1)
+}
+
+# Create y values
+y1 <- 3 + 2 * x1 + error
+
+# Create dataframe
+datum <- data.frame(x = x1, error = error, y = y1)
+
+# Simple linear model
+results1 <- lm(y ~ x, data = datum)
+
+# Calculate residuals
+residuals1 <- residuals(results1)
+
+# Plot the residuals
+plot(datum$x, residuals1, xlab = "", ylab = "", main = "Autocorrelation")
+abline(h = 0, col = "red", lty = 2)
+
+
+### Simulate heteroscedastic data
+n <- 100
+x1 <- runif(n, 0, 50)
+y1 <- 5 + 4 * x1 + rnorm(n, mean = 0, sd = 0.15 * x1)
+
+# Create dataframe
+datum1 <- data.frame(x = x1, y = y1)
+
+# Simple linear model
+results1 <- lm(y ~ x, data = datum1)
+
+# Calculate residuals
+residuals1 <- residuals(results1)
+
+# Plot the residuals
+plot(datum1$x, residuals1, xlab = "", ylab = "", main = "Heteroscedasticity")
+abline(h = 0, col = "red", lty = 2)
+```
+
+### Histogram of Residuals
+
+This is a way to look at the residuals from a global perspective, so it is most useful for looking at normality. Not useful for the others. You can see heteroscedasticity with it (kirtosis), but most useful for checking for normality.
+
+```{r histogram_of_residuals, echo=FALSE, message=FALSE, warning=FALSE, fig.width=9, fig.height=4.5}
+# Set the seed for reproducibility
+set.seed(123)
+
+# Set up the plotting area to display two plots side by side
+par(mfrow = c(1, 2))
+
+### Simulate data with normally distributed error
+n <- 100
+x1 <- rnorm(n, mean = 20, sd = 10)
+y1 <- 5 + 4 * x1 + rnorm(n, mean = 0, sd = 8)
+
+# Create dataframe
+datum <- data.frame(x = x1, y = y1)
+
+# Simple linear model
+results1 <- lm(y ~ x, data = datum)
+
+# Calculate residuals
+residuals1 <- residuals(results1)
+
+# Plot the residuals
+hist(residuals1, xlab = "", ylab = "Frequency", main = "Normal error")
+
+### Simulate data with non-normally distributed error
+n <- 100
+x <- rnorm(n, mean = 20, sd = 3)
+y <- 10 + 25 * x + rnorm(n, mean = 0, sd = 8)^2
+
+# Create dataframe
+datum <- data.frame(x = x, y = y)
+
+# Simple linear model
+results1 <- lm(y ~ x, data = datum)
+
+# Calculate residuals
+residuals1 <- residuals(results1)
+
+# Plot the residuals
+hist(residuals1, xlab = "", ylab = "Frequency", main = "Non-normal error")
+```
+
+### Autocorrelation Function (ACF)
+
+The autocorrelation function (**ACF**) shows us the correlation for the residuals. It teaches us about the probability that:
+
+- If one point is above the line, what is the chance that the next point will also be above the line?
+- Alternatively, if another point is below the line, what is the chance that the next point will also be below the line?
+
+As you might expect, it is best for teaching us whether our data are **autocorrelated**. But it can also tell us if our data may be **nonlinear**. A quick example:
+
+For example:
+
+```{r nonlinear_2, echo=FALSE, message=FALSE, warning=FALSE, fig.width=9, fig.height=4.5}
+# Set the seed for reproducibility
+set.seed(123)
+
+# Adjust graph margins: bottom, left, top, right
+par(mar = c(4, 4, 2, 1))
+par(mfrow = c(1, 2))
+
+# Simulate data with a violation of linearity
+n <- 100
+x <- runif(n, 0, 10)
+x <- sort(x)
+y <- 3 + 2 * x - 0.18 * x^2 + rnorm(n, mean = 0, sd = 1)
+
+# Create dataframe
+datum <- data.frame(x = x, y = y)
+
+# Plot the data
+plot(y ~ x, data = datum,
+     ylim=c(0, max(datum$y)), xlab = "", ylab = "",
+     main = "Non-linear")
+
+# Linear regression
+results <- lm(y ~ x, data = datum)
+
+# Plot the line
+abline(results)
+
+# ACF
+acf(y, ylab = "Autocorrelation function (ACF)", main = "")
+```
+
+So, if we use an ACF and it shows autocorrelation, we should make sure we don't have a non-linearity issue.
+
+
+### Summary
+
+```{r, echo=FALSE, message=FALSE}
+# Load necessary libraries
+library(knitr)
+library(kableExtra)
+
+# Create the data frame
+data <- data.frame(
+  Group = c("Normality", "Linearity", "Homoscedasticity", "No autocorrelation"),
+  `X-Y Scatterplot` = c("X", "X", "X", "X"),
+  `Residuals Scatterplot` = c("X", "X", "X", "X"),
+  `Histogram of Residuals` = c("!!", "", "", ""),
+  `Autocorrelation Function (ACF)` = c("", "**", "", "!!")
+)
+
+# Create the table
+kable(data, col.names = c("Assumption", "X-Y Scatterplot", "Residuals Scatterplot", "Histogram of Residuals", "Autocorrelation Function (ACF)")) %>%
+  kable_styling(full_width = FALSE)
+```
+
+## Graphical Assumption Tests
+
+We described graphical approaches to evaluating whether your data meet assumptions of linear regression. We discussed five assumptions:
+
+- **Continuous Y** -- your Y-variable is continuous; only an eye-ball test is needed for this
+- **Linearity** -- a linear relationship between X and Y
+- **Normality residuals** -- residuals (error) are normally distributed
+- **Homoscedasticity** -- constant variance; noise around regression is constant across all values of X
+- **No autocorrelation** -- your data are independent of eachother
+
+We can use different graphs to test these assumptions (**see above table**).
+
+**I am going to move to R** and we will learn how to easily make these plots in R!
+
+Save code and data for this lecture in your working directory:
+
+- Click [here](lecture_5_assumptions_code.R) to download code. This is general code to help make these graphs.
+
+- Click on these links to download and save the data: [good data](lecture_5_good_data.csv), [nonlinear data](lecture_5_nonlinear_data.csv), [nonnormal data](lecture_5_nonnormal_data.csv), [heteroscedastic data](lecture_5_heteroscedastic_data.csv), and [autocorrelated data](lecture_5_autocorrelated_data.csv).
+  - Note: all of these datafiles were simulated using code at the end of this lecture; see that code if you are interested in understanding 'truth'.
+
+### X-Y Scatterplots
+
+Let's start by examining a dataset that has no issues with it!
+
+```{r fig.width=4.5, fig.height=4.5}
+# Load the data
+datum <- read.csv("lecture_5_good_data.csv")
+
+# Plot the data
+plot(y ~ x, data = datum)
 
 ```
 
-These are actually the confidence limits! This is annoying.
+Y is continuous, definitely linear, the residuals appear normally distributed (most close to the line), variance seems constant, does not appear to have any autocorrelation (but it's possible).
 
-**Q:** How would we calculate the 95% CI? There are a few ways...
+```{r fig.width=4.5, fig.height=4.5}
+# Load the data
+nonlinear <- read.csv("lecture_5_nonlinear_data.csv")
 
-- 1) Upper limit minus estimate
-- 2) Estimate minus lower limit
-- 3) Upper limit minus lower limit divided by two
-- Use whichever one makes most sense to you. I frequently use (3), but don't forget to divide by two! Also, be careful with negative values...
-
-```{r}
-(3.071 - 2.556) / 2
-3.071 - 2.814
+# Plot the data
+plot(y ~ x, data = nonlinear)
 
 ```
 
-**For each 1 cm increase in precipitation, we observed a 2.81 kg/ha (+/-0.25; 95% CI) increase in biomass, which was statistically significant (p < 2x10^-16; $r^2$ = 0.95).**
+Very clearly nonlinear!
 
-95% of the variation is explained by precipitation, while 5% is driven by noise!
+```{r fig.width=4.5, fig.height=4.5}
+# Load the data
+norm <- read.csv("lecture_5_nonnormal_data.csv")
 
-Notes:
+# Plot the data
+plot(y ~ x, data = norm)
 
-- When p < 2x10^-16, the p-value is so small that Program R won't even give you the exact value.
-- Report the exact p-value with scientific notation in this class.
-- Two $r^2$ values! Generally, we want to always use the multiple $r^2$ -- ignore the adjusted. $r^2$ values often go up when we add more variables, and the adjusted $r^2$ tries to account for that. We may talk about this later, but just use the 'Multiple r-sqared' value.
+```
 
-### Minor adjustments
+These data have a heavy tail about the line, but don't really have any tail below the line. The residuals are likely not normally distributed.
 
-**Q:** What if the effect (slope) is negative? Don't include the negative in the sentence, just change **increase to decrease**.
+```{r fig.width=4.5, fig.height=4.5}
+# Load the data
+hetero <- read.csv("lecture_5_heteroscedastic_data.csv")
 
-Sometimes when the way we measure things makes our $\beta$ values a little... strange. For example, elevational gradients influence species richness in strong ways. However, the unit change for elevation is meters (meter), and a 1 unit increase in meters will only have a tiny effect on species richness -- although highly significant. We can **re-scale** the metrics at ecologically relevant scales to make the effects make more sense. For elevation, we might multiple the X value, the effect, and the 95% CI times 1000, so that everything is expressed in terms of kilometers, rather than meters. You can do this with your raw data or with your results.
+# Plot the data
+plot(y ~ x, data = hetero)
 
-When you are trying to compare two different effects and trying to infer which has a stronger biological effect, you cannot compare one beta to another. 
+```
 
-- Which is more important in driving biomass: precipitation or fertilizer?
-- We can't make that comparison.
-- If you want to compare betas directly, you have to standardize your variables first, before fitting the model.
-  - 'Mean transformation': subtract each value by the mean and divide by the standard deviation.
+As the X-variable increases, noise/error in Y increases. This is clearly heteroscedastic.
+
+```{r fig.width=4.5, fig.height=4.5}
+# Load the data
+auto <- read.csv("lecture_5_autocorrelated_data.csv")
+
+# Plot the data
+plot(y ~ x, data = auto)
+
+```
+
+Pretty easy to see the autocorrelation in these data. Most observations of Y at X are similar to the observation of Y at X-1. **The data follow eachother!** But, if autocorrelation isn't strong, it can be difficult to see.
+
+### Residual Plots
+
+Before we can run a residual plots, we have to generate the residuals! Which means we have to first fit a regression. X-Y Scatterplots use the raw data, but the other three graphs we use require a regression to be run for us to then make these plots. Let's run a few analyses:
+
+```{r fig.width=4.5, fig.height=4.5}
+# Fit linear regression models to the five datasets
+results <- lm(y ~ x, data = datum)
+resultsNonlinear <- lm(y ~ x, data = nonlinear)
+resultsNorm <- lm(y ~ x, data = norm)
+resultsHetero <- lm(y ~ x, data = hetero)
+resultsAuto <- lm(y ~ x, data = auto)
+
+```
+
+I'm not going to look up the summaries for each of the models. We could use these to look at summaries and maybe infer how much violations influence slopes, p-values, etc. It's tricky to compare these different datasets because I simulated them all using different slopes, intercepts, etc. So we can't quite compare them directly. However, we have already talked about those 'rules of thumb' and instead we should just keep them in mind.
+
+The code to extract residuals is called 'residuals()'. This tells us the distance from each point in our dataset to the line of best fit identified by the regression analysis. E.g.,
+
+```{r fig.width=4.5, fig.height=4.5}
+# Examine the residuals (just the first ~20)
+residuals(results)[1:20]
+
+```
+
+These data are used to calculate the **standard deviation of the error** around our line -- simply by calculating the standard deviation of these data. The mean of these data should be ~ 0.
+
+But we want to examine these residuals graphically. It may be tempting to plot these residuals very simply using:
+
+```{r fig.width=4.5, fig.height=4.5}
+# Simple way
+plot(residuals(results))
+
+```
+
+However, note that the X-axis title is "Index". This means that the X-values here are in the order of the data, from 1 to *n* -- the sample size. We actually want to make sure that the X-axis in this plot is our actual X-variable, so we can look at how residuals change along the continuous nature of our X-variable.
+
+We are drawing the residuals from the 'results' object, so we can't reference the 'datum' object like we usually do. Instead we have to explicitly call the raw X-variable data. We can call an individual variable from an object in R using the money sign command: 'datum$x''. We can call'. E.g.,
+
+```{r fig.width=4.5, fig.height=4.5}
+# Correct way to examine residuals plot
+plot(residuals(results) ~ datum$x)
+
+# Add a horizontal line at y = 0
+abline(a = 0, b = 0)
+
+```
+
+So what have we done...? We have taken our scatterplot of data and:
+
+- flattened it out so that it now fills the whole plot,
+- the regression line is now also flattened and at y = 0,
+- visualized the degree to which each point is above or below that line.
+
+We can see that (1) most of our residual points are close to the line, few are far away, (2) there's no heteroscedasticity, (3) doesn't appear to be any autocorrelation, and things appear linear.
+
+Let's examine this for nonlinear data:
+
+```{r fig.width=4.5, fig.height=4.5}
+# Correct way to examine residuals plot
+plot(residuals(resultsNonlinear) ~ nonlinear$x)
+
+# Add a horizontal line at y = 0
+abline(a = 0, b = 0)
+
+```
+
+Clearly this is nonlinear: bunch of points below the line, then a bunch above, and then more below. This would be much better fit with a curvilinear line, which we will discuss in a couple weeks.
+
+Non-normal data:
+
+```{r fig.width=4.5, fig.height=4.5}
+# Correct way to examine residuals plot
+plot(residuals(resultsNorm) ~ norm$x)
+
+# Add a horizontal line at y = 0
+abline(a = 0, b = 0)
+
+```
+
+Notice where the regression line is! It's way down at the bottom of the graph, rather than being in the middle. This is a red flag. And then most of the noise is above the line. This suggests non-normality.
+
+```{r fig.width=4.5, fig.height=4.5}
+# Correct way to examine residuals plot
+plot(residuals(resultsHetero) ~ hetero$x)
+
+# Add a horizontal line at y = 0
+abline(a = 0, b = 0)
+
+```
+
+Pretty easy to see the heteroscedasticity: small variance with small X-values, and then larger variance with larger X-values.
+
+```{r fig.width=4.5, fig.height=4.5}
+# Correct way to examine residuals plot
+plot(residuals(resultsAuto) ~ auto$x)
+
+# Add a horizontal line at y = 0
+abline(a = 0, b = 0)
+
+```
+
+The points (residual error) are following each other! This path is a good indication of autocorrelation. The data are not independent of one another.
+
+### Histogram of residuals
+
+The histogram of residuals will make a simple bar chart that examines '*global*' normality across all of your data. What I mean by 'global' is that it does examine normality as the X-variable increases, but lumps all the error across all X-values into a single chart.
+
+```{r fig.width=4.5, fig.height=4.5}
+# Correct way to examine residuals plot
+hist(residuals(results))
+
+```
+
+We have taken all of the residuals and examined the distribution of residuals across all the X-values.
+
+**Q:** Can anyone think of a negative consequence of lumping in this histogram? Can you think of another assumption that we can we no longer test for with this graph?
+
+**Q:** Does this look perfectly normal?
+
+Nah, not really. It never will. But what we are looking for is obvious, egregious violations of the assumption of normal error. For example, let's make this graph for the non-normal data:
+
+```{r fig.width=4.5, fig.height=4.5}
+# Correct way to examine residuals plot
+hist(residuals(resultsNorm))
+
+```
+
+This is pretty bad! This is a case where we would say "Our data are not normal!"
+
+This might be a time where you would use a 'log transformation' to fix this issue. I don't really like log-transformations because it screws with how we interpret our results -- makes the story less clear -- but that would be an option here.
+
+Let's examine the heteroscedastic data:
+
+```{r fig.width=4.5, fig.height=4.5}
+# Correct way to examine residuals plot
+hist(residuals(resultsHetero))
+
+```
+
+**Q:** Does anything seem off about these data? (Kind of hard to say.)
+
+If you don't like the appearance of your histogram and want to adjust it, you can change the appearance of it using the 'breaks' command:
+
+```{r fig.width=9, fig.height=4.5}
+# Make two graphs side-by-side
+par(mfrow = c(1, 2))
+
+# Default setting
+hist(residuals(resultsHetero))
+
+# Revisualizing with more breaks
+hist(residuals(resultsHetero), breaks = 10)
+
+```
+
+This second graph suggests that the bell curve might be a bit 'skinny' -- which is called **kurtosis**. Kurosis is when the shape of your distribution is not-normal. It may have *skew* in one direction (a tail), more observations in the middle (bulge), or be 'skinny' and have longer tails on both sides. This is a rare problem for you to have to deal with, but you can do 'weighted regression' in 'lm()' to account for uneven variance in the model itself.
+
+### Autocorrelation functions (ACF)
+
+The **autocorrelation function** measures how similar each datapoint is to the other datapoints that are behind it in the dataframe. It compares residuals at different *lags* in the dataframe.
+
+- At a lag of zero, we expect high correlation, because we compare each point to itself.
+- At lags of 1 or more, if there is autocorrelation, then the ACF metric will be high and positive (> 0.2) when comparing each a datapoint to points lagged behind it (i.e., high correlation to nearby data in the dataset).
+- If there is no autocorrelation, then the ACF metric will randomly be positive and negative and usually within 0.2 of 0.
+
+```{r fig.width=4.5, fig.height=4.5}
+# Autocorrelation function for normal data
+acf(residuals(results)[order(datum$x)])
+
+```
+
+When we run this, we have to make sure our ACF function operates using the order of the X-variable. This might reflect the biological mechanism with which we might expect autocorrelation to happen. For example, if we were measuring how a powerplant causes pollution in a river, we would order our data using the X-variable 'distance from plant'. So we will index the ACF using the 'order' of the X-variable.
+
+Let's examine the ACF graph a bit more. On the X-axis, we have a 'lag' in comparing the residuals in our data.
+
+- At a lag of 0, we are comparing each point to itself. At a lag of 1, we are comparing each point to the point next to it. At a lag of 2, we compare each point to the point two points away. Etc.
+- The vertical bar at each lag is the mean estimate of the ACF function. The length of the bar indicates how correlated each value is to it's lagged comparison. This estimates how correlated they are to eachother (i.e., an $r^2$ value). At a lag of 0, we are comparing each point to itself, so the correlation is 1 (perfect correlation). This is meaningless to us but provides contextual reference.
+- The **dotted blue line** is basically a p-value line. If any of your vertical bars cross this blue line, it indicates that you have significant autocorrelation at that lag.
+- For example, note the ACF estimate at a lag = 7 was above the line! But, be careful here. If you randomly have autocorrelation at one lag, think about whether this makes biological sense. Instead, we are looking for **obvious and egregious** evidence of autocorrelation.
+
+What does obvious autocorrelation look like...?
+
+```{r fig.width=4.5, fig.height=4.5}
+# Autocorrelation function for normal data
+acf(residuals(resultsAuto)[order(auto$x)])
+
+```
+
+This is obvious autocorrelation. We see that each point is highly correlated with the value next to it! E.g., $r^2$ values are high: greater than 0.8! It isn't until a lag of ~8 that we see the ACF values dip below the blue line. And then eventually the have negative autocorrelation at a lag of 15 and beyond.
+
+- In ecology, this behavior in data is pretty uncommon. However, one notable example where it might appear involves predator-prey population cycles, like the famous population dynamics between snowshoe hare-lynx in boreal forests of North America.
+
+This chart is best for testing for autocorrelation. But, I mentioned last class, that sometimes these charts can indicate autocorrelation *when data are nonlinear*:
+
+```{r fig.width=9, fig.height=4.5}
+# Two graphs
+par(mfrow=c(1,2))
+
+# Recall the scatterplot for the nonlinear data
+plot(y ~ x, data = nonlinear)
+
+# Autocorrelation function with correct order
+acf(residuals(resultsNonlinear)[order(nonlinear$x)])
+
+
+
+```
+
+Remember, the autocorrelation function is comparing residuals. Is one residual similar to the residuals next to it?
+
+Since a linear model was fit through these data, we have clusters of negative and positive residuals, and the ACF will pick up on this autocorrelation. However, this observed autocorrelation is not due to true autocorrelation in the system, but rather our use of linear model being fit to nonlinear data. Our line doesn't fit well! And here, the ACF is telling us that we should double-check whether our data are linear.
+
+If a nonlinear line was fit through these data, the residuals would be normal and the ACF would not detect autocorrelation. We may learn how to do this in a few weeks.
 
 ## Concluding thoughts
 
-I really like this sentence structure for reporting results. This was what I was taught in graduate school, and I have taught this to many peers and students since then. I find that it makes clear sense to readers about cause and effect in ecology. You could read this to your dad and they will understand it. They may not care -- but they would understand it. That's powerful!
+I use these graphs to test the assumptions of linear regression model. You do have to run the regression first! It's part of your exploratory process. You should think about whether your data are linear or not before starting an analysis. I may make a 'field guide' for considerations when running an analysis, and/or maybe we will work on that together during the last class.
 
-**We want to communicate our science clearly to our scientific peers, natural resource managers, and policy makers, and the public.** This sentence structure is useful to do this. It is clear and it emphasizes biological effects, which helps us better understand and communicate cause and effect in nature.
+## Simulating data for this lecture
 
-This sentences are what you will report for the results of your exercise on linear regression! That's it -- report these sentences. I will not check your exact grammar, but it should follow this general pattern and be mindful of some of the details I mentioned above.
+Code to simulate the above datasets is included here:
+
+```{r}
+########################## 'Truth' ############################ 
+### Code for simulating data that were analyzed in this lecture
+
+# Set the seed for reproducibility
+set.seed(123)
+
+## Simulate data with no assumption violations
+n <- 100
+x1 <- rnorm(n, mean = 20, sd = 10)
+y1 <- 5 + 4 * x1 + rnorm(n, mean = 0, sd = 8)
+
+# Create dataframe
+datum <- data.frame(x = x1, y = y1)
+
+# Save the CSV file
+write.csv(datum, "lecture_5_good_data.csv")
+
+
+## Simulate data with a violation of normality
+n <- 100
+x <- rnorm(n, mean = 20, sd = 3)
+y <- 10 + 25 * x + rnorm(n, mean = 0, sd = 8)^2
+
+# Create dataframe
+datum <- data.frame(x = x, y = y)
+
+# Save the CSV file
+write.csv(datum, "lecture_5_nonnormal_data.csv")
+
+
+## Simulate data with a violation of linearity
+n <- 100
+x <- runif(n, 0, 10)
+#x <- sort(x)
+y <- 3 + 2 * x - 0.18 * x^2 + rnorm(n, mean = 0, sd = 1)
+
+# Create dataframe
+datum <- data.frame(x = x, y = y)
+
+# Save the CSV file
+write.csv(datum, "lecture_5_nonlinear_data.csv")
+
+
+## Simulate data that are heteroscedastic
+n <- 100
+x1 <- runif(n, 0, 10)
+y1 <- 5 + 4 * x1 + rnorm(n, mean = 0, sd = 1 * x1)
+
+# Create dataframe
+datum <- data.frame(x = x1, y = y1)
+
+# Save the CSV file
+write.csv(datum, "lecture_5_heteroscedastic_data.csv")
+
+
+## Simulate data that are autocorrelated
+n <- 100
+x1 <- runif(n, 0, 10)
+
+# Sort x1 from low to high
+x1 <- sort(x1)
+
+# Simulate error for each value using the mean of the previous value
+error <- matrix(NA, length(x1), 1)
+error[1,1] <- rnorm(1, mean = 0, sd = 1)
+for (i in 2:length(x1)){
+  error[i,1] <- rnorm(1, mean = error[i-1, 1], sd = 1)
+}
+
+# Create y values
+y1 <- 3 + 2 * x1 + error
+
+# Create dataframe
+datum <- data.frame(x = x1, error = error, y = y1)
+
+# Save the CSV file
+write.csv(datum, "lecture_5_autocorrelated_data.csv")
+```
 
 [--go to next lecture--](lecture_6.html)

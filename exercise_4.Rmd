@@ -1,5 +1,5 @@
 ---
-title: "Exercise 4: Analysis of Categorical Data"
+title: "Exercise 5: Multivariable Analysis - Collinearity"
 author: "NRES 710"
 date: "Last compiled: `r Sys.Date()`"
 output: 
@@ -19,145 +19,164 @@ knitr::opts_chunk$set(
 )
 ```
 
-## Exercise 4 -- Analysis of Categorical Data
+## Problem 1
 
-## Problems
+**[Dataset 1](exercise_4_dataset1.csv)** -- For this dataset, you are studying how body size (kg) of dusky grouse (*Dendragapus obscurus*) (response variable) is influenced by two continuous factors, elevation (meters above sea level) and latitude (degrees north of the equator), and one categorical variable with three groups (state; Colorado, Nevada, Utah). There is no collinearity between variables.
 
-**[Dataset 1](exercise_4_dataset1.csv)** -- For this dataset, you are conducting an experiment to see if there is a difference in deer density (Y; deer/ha) between predator exclusion plots and control plots (X; groups). Technically, this could be analyzed with a 't-test'. However, for consistency with our general approach toward statistics, please use the 'lm()' function to do the analysis -- not the 't.test()' function. Report your results using the standard sentence.
+1. Write a linear (statistical) model that describes a single multi-variable system containing all of the X-variables; be sure to specify what each X-variable represents.
+2. What do the various $\beta$s mean in this model?
+3. Analyze the data using a single multi-variable model [i.e., with 'lm()' in R]. Write example sentences that you might include in a manuscript you are submitting for publication that describes the observed results. Note: you will need a total of five sentences here; be sure to include a sentence comparing each pair of countries.
+4. *Optional*: For an extra learning experience, try running a post-hoc test of your multi-variable model to determine the difference between the three countries. Note: you would have to convert your model to an analysis of variance ('AOV') object before you could run a post-hoc test, and will have to specify the variable you want to run the post-hoc test for. While it may ~run, are there any red flags that indicate it didn't do quite what you intended it to?
 
-![](pictures/pic_deer.png){width=50%}
+![](pictures/pic_duskygrouse.png){width=50%}
 
-Picture: James Stewart
+Picture: Hannah Floyd, iNaturalist
 
-**[Dataset 2](exercise_4_dataset2.csv)** -- For this dataset, you are conducting an experiment to see if the density of California quail (*Callipepla californica*) (Y; quail/hectare) varies among four habitat types (X): open pine, closed pine, sagebrush, and agriculture. Answer the following questions:
+<br>
 
-1. Run an Analysis of Variance (ANOVA) in R. Write a sentence describing the results (i.e., p-value). Typically, this sentence is something like "ANOVA indicated that at least two of the [x-variable] were significantly different from each other (p = [p-value])."
+## Problem 2
 
-2. Plot the relationship between quail density and habitat types in R and paste the graph in your Word document.
+**[Dataset 2](exercise_4_dataset2.csv)** -- For this dataset, you are studying how the population density of yellow-bellied marmots (*Marmota flaviventris*) (response variable) is influenced by two continuous variables, plant food abundance and understory cover. These two continuous variables are collinear and are potentially confounding: more plant food abundance can cause more marmots, but more understory cover can also cause more marmots also because it provides protection from predators. The data were created such that marmot density is truly affected by both of the continuous variables. Understory cover ranges from 0 to 1 (percent of a density board seen from 15 meters away); food is kg of browse per square meter and is collinear with understory density (marmots eat their cover). The response variable is marmots per hectare. Examine the code used to simulate the data to get the values of 'Truth'. 
 
-3. Run a Tukey's HSD Post-hoc test in R. Using the standard language we have been using throughout the class, describe the estimated differences between Closed Pine and Agriculture and between Open Pine and Agriculture. Be sure to include confidence intervals and p-values.
+1. Load the data into Rstudio.
+2. Plot the relationship between understory cover (X) and plant food (Y). Copy and paste this graph into a Word document with all of your results.
+3. Calculate the $r^2$ between understory cover and food. Report this value in your results document.
+4. Plot the relationship between marmot density (Y) and understory cover (X). Paste this graph in your results document.
+5. Plot the relationship between marmot density (Y) and food (X). Paste the graph in your results document.
+6. Run a simple regression between marmot density and food. Report your results in your document using the standard sentence.
+7. Run a simple regression between marmot density and cover. Report your results in your results document using the standard sentence.
+8. Run a multiple regression between marmot density (Y) and both cover (X) and food (X). Report your results in your results document using the standard sentence (or in this case, two sentences; one for each X-variable).
+9. Calculate the variance inflation factor (VIF) for both plant food and understory cover density. Report the VIFs in your results document.
+10. In your results document, describe what happened in 6, 7, and 8 above. Be sure to discuss:
+    - The coefficient estimates of the explanatory X-variable(s) relative to 'Truth' and other models you ran.
+    - What your final model would be in this analysis (be sure to explain why) and how you would deal with the collinearity among variables.
+    - What you've learned from the exercise.
 
-![](pictures/pic_quail.png){width=50%}
+![](pictures/pic_marmot.png){width=50%}
 
-Picture: uzun (iNaturalist)
+Picture: Hannah Floyd, iNaturalist
 
-**[Dataset 3](exercise_4_dataset3.csv)** -- For this dataset, you are examining how pronghorn (*Antilocapra americana*) hunter success rate (Y; pronghorn killed / hunter) is related to hunting method (X; the variable is called 'Method'). Types of hunting methods considered in this study include bow, muzzleloader, and rifle. Answer the following questions:
+<br>
 
-1. Run an Analysis of Variance (ANOVA) in R and write a sentence (like we discussed in class) describing the results (i.e., p-value).
+## Problem 3
 
-2. Plot the relationship between hunting method and hunter success rates in R and paste the graph in your Word document.
+**[Dataset 3](exercise_4_dataset3.csv)** -- For this dataset, you are studying how water clarity (response variable) is influenced by two continuous variables, sediment load and amount of organic material. Here, the two continuous variables are collinear, but are potentially redundant: both are basically indicators of run-off, which is really driving water clarity. The data were created such that water clarity is actually a function of a third explanatory X-variable, run-off. The run-off data are included in the R code used to generate the data, but are not included in the CSV file you are analyzing; pretend that you didn't collect data on run-off and thus you don't have any data describing that variable. Sediment and organic material are both correlated with run-off, but sediment is much more closely related to run-off and thus is a better index of run-off. Sediment and organic matter might be grams per cubic meter, run-off might be cubic-feet / minute, and clarity might be depth (centimeters) a secchi disk can be seen from -- although the relationships or numbers might not be realistic. Examine the equations in the R script for 'truth' to see how the data were made and get the values of truth.
 
-3. Run a Tukey's HSD post-hoc test in R. Using the standard language we have been using throughout the class, describe the estimated differences among all hunting methods. Include confidence intervals and p-values.
+1. Load the data into Rstudio.
+2. Plot the relationship between sediment (X) and organic matter (Y). Copy and paste this graph into a Word document with all of your results.
+3. Calculate the $r^2$ between sediment and organic matter. Report this value in your results document.
+4. Plot the relationship between clarity (Y) and sediment (X). Paste this graph in your results document.
+5. Plot the relationship between clarity (Y) and organic matter (X). Paste the graph in your results document.
+6. Run a simple regression between clarity (Y) and sediment (X). Report your results in your document using the standard sentence.
+7. Run a simple regression between clarity (Y) and organic matter (X). Report your results in your results document using the standard sentence.
+8. Run a multiple regression between clarity (Y) both sediment (X) and organic matter (X). Report your results in your results document using the standard sentence (or in this case, two sentences; one for each X-variable).
+9. Calculate the variance inflation factor (VIF) for both sediment and organic matter. Report the VIFs in your results document.
+10. In your results document, describe what happened in 6, 7, and 8 above. Be sure to discuss:
+    - The coefficient estimates of the explanatory X-variable(s) and how they changed throughout the analysis (and why).
+    - What your final model would be in this analysis (be sure to explain why) and how you would deal with the collinearity among variables.
+    - What you've learned from the exercise.
+    
+![](pictures/pic_waterclarity.png){width=50%}
 
-4. Dummy code the data. Make 3 new columns - one for each hunting method - and assign 0s and 1s as appropriate. You can do this in Excel or in R. Use a linear model to test for differences between group and describe with 1-2 sentences how those results compare to the results from the Tukey's HSD post-hoc test.
-
-![](pictures/pic_pronghorn.png){width=50%}
-
-Picture: Ted Floyd
-
-**[Dataset 4](exercise_4_dataset4.csv)** -- For this dataset, you are examining how fertilizer (X; grams) influences biomass production (Y; kg/ha) in restored sagebrush plots. Fertilizer has been applied at 0 (control), 2, 4, 6, 8, 10 grams in each of 5 plots. Run the following analyses:
-
-1. Run an analysis to determine the relationship between biomass and fertilizer, where fertilizer is treated as a categorical variable. Because we won't be conducting a post-hoc test, use the 'lm()' function for this analysis. Report the difference in biomass between 2 grams and 0 grams of fertilizer using the standard sentence.
-
-2. Continued from the last question, report the difference in biomass between 2 grams and 4 grams of fertilizer using the standard sentence. As with the last question, use the 'lm()' function, rather than Tukey's HSD Test.
-
-3. Run an analysis to determine the relationship between Biomass and Fertilizer; however, in this case, treat Fertilizer as a continuous variable. Report the results using the standard sentence.
-
-4. Run an F-drop test to compare the models where Fertilizer was treated as categorical (from questions 1 and 2) to the model where fertilizer was treated as continuous (from question 3). What is the F-statistic and p-value from the F-drop test?
-
-5. Based on the results from 4, which model is preferred: the one where Fertilizer is continuous or the one where Fertilizer is categorical? Briefly explain.
-
-6. Continued from 5: what does that mean about the nature of the relationship between Biomass and Fertilizer?
-
-![](pictures/pic_sagebrush.png){width=50%}
+Tough fishing conditions in Hermosa Creek, Colorado (Picture: Jason Folt).
 
 <br>
 
 ## Truth
 
-If you would like to know the values used to create these datasets (i.e., 'truth'), see the code here:
+If you would like to know the values used to create these datasets (i.e., 'truth'), examine the code here:
 
-```{r datasets, echo=TRUE, message=FALSE, warning=FALSE}
-### 'Truth'
-### Exercise 4: code to simulate datasets 
+```{r}
+########################## 'Truth' ############################# 
+### Exercise 5: code to simulate datasets for the exploration of
+### collinearity in multi-variable analysis
 
 # Set the seed for reproducibility
 set.seed(123)
 
 ## Dataset 1
-# Simulate X-variable
-n <- 50
-Group <- factor(c(rep("Control", n/2), rep("Exclusion", n/2)))
-Exclusion <- c(rep(0, n/2), rep(1, n/2))
+# Sample size
+n <- 90
 
-# Simulate error
-error <- rnorm(n, mean = 0, sd = 1)
+# Simulate X-variables
+# Continuous variables: Latitude and Elevation
+Latitude <- runif(n, 0, 1) * 5 + 37
+Elevation <- runif(n, 0, 1) * 1000 + 2000
 
-# Calculate Y-variable
-Density <- 5 + 2.5 * Exclusion + error
+# Categorical variable: State
+g <- 3 # number of groups
+State <- factor(c(rep("Colorado", n/g), rep("Nevada", n/g), rep("Utah", n/g)))
+
+# Dummy-code the States
+dummy <- data.frame(model.matrix(~ State - 1))
+colnames(dummy) <- c("Colorado", "Nevada", "Utah")
+
+# Error
+Error <- rnorm(n, mean = 0, sd = 1)
+
+# Response variable: Size
+Size <- 45 - 0.95*Latitude - 0.00167*Elevation + 2*dummy$Nevada + 1*dummy$Utah + Error
 
 # Create dataframe
-datum <- data.frame(Group, Exclusion, Density)
+datum <- data.frame(Latitude=Latitude, Elevation=Elevation, Nevada=dummy$Nevada,
+                    Utah=dummy$Utah, Size=Size)
 
 # Save the CSV file
 write.csv(datum, "exercise_4_dataset1.csv")
 
 
 ## Dataset 2
-# Simulate X-variable
-Habitat <- c(rep("Agriculture", 10), rep("ClosedPine", 10), rep("OpenPine", 10), rep("Sagebrush", 10))
-dummy <- data.frame(model.matrix(~ Habitat - 1))
-colnames(dummy) <- c("Agriculture", "ClosedPine", "OpenPine", "Sagebrush")
+# Sample size
+n <- 100
 
-# Simulate error
-Error <- rnorm(length(Habitat), 0, 0.1)
+# Simulate two continuous X-variables
+Cover <- runif(n, 0, 1)
+Food <- 3 + 3*Cover + rnorm(n, 0, 0.5)
 
-# Predict Y
-QuailDensity <- 0.85 - 0.25 * dummy$ClosedPine - 0.35 * dummy$OpenPine - 0.15 * dummy$Sagebrush + Error
+# Error
+Error <- rnorm(n, mean = 0, sd = 0.1)
 
-# Dataframe
-datum <- data.frame(Habitat, QuailDensity)
+# Response variable: Density
+MarmotDensity <- 0.01 + 3*Cover + 2*Food + Error
+
+# Create dataframe
+datum <- data.frame(Cover = Cover, Food = Food, MarmotDensity = MarmotDensity)
 
 # Save the CSV file
 write.csv(datum, "exercise_4_dataset2.csv")
 
 
 ## Dataset 3
-# Simulate X-variable
-Hunt <- as.factor(c(rep("Archery", 15), rep("Muzzleloader", 15), rep("Rifle", 15)))
-dummy <- data.frame(model.matrix(~ Hunt - 1))
-colnames(dummy) <- c("Archery", "Muzzleloader", "Rifle")
+# Sample size
+n <- 100
+
+# X-variables
+# The 'true' X-variable: RunOff
+RunOff <- runif(n, 0, 100)
+
+# Collinear X-variables
+Sediment <- matrix(NA, n, 1)
+for (i in 1:n){
+  # Each sediment value is simulated using the mean of the RunOff value with a bit of noise (3)
+  Sediment[i] <- rnorm(1, RunOff[i], 3)
+}
+Organic <- matrix(NA, n, 1)
+for (i in 1:n){
+  # Each organic matter value is simulated using the mean of RunOff with a lot of noise (15)
+  Organic[i] <- rnorm(1, RunOff[i], 15)
+}
 
 # Error
-error <- rnorm(length(Hunt), 0, 0.1)
+Error <- rnorm(n, 0, 2)
 
-# Success
-Success <- abs(0.12 + 0.45 * dummy$Muzzleloader + 0.6 * dummy$Rifle + error)
+# Response variable
+Clarity <- 50 - 0.4 * RunOff + Error
 
 # Dataframe
-datum <- data.frame(Hunt, Success)
+datum <- data.frame(Sediment, Organic, Clarity)
 
 # Save the CSV file
 write.csv(datum, "exercise_4_dataset3.csv")
-
-
-## Dataset 4
-# x-variable
-Fertilizer <- factor(sort(rep((0:5)*2, 5)))
-dummy <- data.frame(model.matrix(~ Fertilizer - 1))
-colnames(dummy) = c("Zero", "Two", "Four", "Six", "Eight", "Ten")
-
-# Error
-Error <- rnorm(length(Fertilizer), mean = 0, sd = 1)
-
-# y-variable
-Biomass <- 1.5 + 3.5 * dummy$Two + 5.25 * dummy$Four + 5.25 * dummy$Six + 4 * dummy$Eight + 0.25 * dummy$Ten + Error
-
-# Dataframe
-datum <- data.frame(Fertilizer, Biomass)
-
-# Save only the first two columns in the CSV file
-write.csv(datum, "exercise_4_dataset4.csv")
 ```
 
 [--go to next exercise--](exercise_5.html)
