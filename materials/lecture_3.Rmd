@@ -28,12 +28,15 @@ knitr::opts_chunk$set(
 
 ```
 
+We will spend ~3 weeks learning about linear regression. This is an important topic! That is foundational to everything we will do this semester. 
+
 ## Linear regression
 
-Linear regression is a common statistical analysis when you have both a **continuous x-variable and a continuous y-variable**. The idea is that the x-variable is meant to cause changes in the y-variable. X is the 'predictor variable', and y is the 'response variable'.
+**Regression -- Continuous X; Continuous Y**
 
-- **The purpose of regression is to fit a line to the data and determine the slope of the line.**
-- Linear regression is **not** meant to determine if the relationship is 'significant' -- although that is something that we can do.
+Linear regression is a common statistical analysis when you have both a **continuous x-variable and a continuous y-variable**. The idea is that the <u>x-variable is meant to cause changes in the y-variable</u>. X is the 'predictor variable', and y is the 'response variable'. X causes changes in Y. (Although, again, we can't demonstrate causation without an experiment.)
+
+Graphically, this looks like:
 
 ```{r simulate-plot, echo=FALSE, message=FALSE, warning=FALSE}
 # Set the seed for reproducibility & adjust plot margins
@@ -49,23 +52,32 @@ datum <- data.frame(x = x, y = y)
 
 # Plot the data
 plot(y ~ x, data = datum,
-     ylim=c(0, max(datum$y)), xlab = "Predictor variable", ylab = "Response variable")
+     ylim=c(0, max(datum$y)), xlab = "Y", ylab = "X")
 
 # Add a line to the plot
 results <- lm(y ~ x, data = datum)
 abline(results)
 ```
 
+- The purpose of regression is to <u>fit a line to the data and determine the slope of the line</u>.
+- Linear regression is **not** meant to determine if the relationship is 'significant' -- although that is something that we can do.
+
 **Q:** Thinking back to algebra class from high school: what is the 'equation' for this line?
 
 **y = mx + b**
 
-- **M = slope = rise over run = $\frac{\Delta Y}{\Delta X}$**
+- **M = slope = $\frac{Rise}{Run}$ = $\frac{\Delta Y}{\Delta X}$**
 - **b = the y-intercept**
 
 In statistics class, we change this equation a bit:
 
-- **$\hat{Y} = \beta_0 + \beta_1X$, where $\beta_0$ is the y-intercept and $\beta_1$ is the slope.** The carrot-hat on top of Y ($\hat{Y}$) mean 'predicted Y'. This equation makes predictions for Y, given values of X.
+**$\hat{Y} = \beta_0 + \beta_1X$, where:
+
+- $\beta_0$ is the y-intercept
+- $\beta_1$ is the slope.
+- The carrot-hat on top of Y ($\hat{Y}$) means it refers to an equation.
+
+Graphically, this looks like:
 
 ```{r simulate-plot-2, echo=FALSE, message=FALSE, warning=FALSE}
 # Set the seed for reproducibility & adjust plot margins
@@ -111,43 +123,117 @@ segments(x0 = x1, y0 = y1, x1 = x2, y1 = y1, col = "blue", lty = 2, lwd = 2) # R
 segments(x0 = x2, y0 = y1, x1 = x2, y1 = y2, col = "blue", lty = 2, lwd = 2) # Rise
 ```
 
-This formula isn’t exactly right for statistics. What we want to do is to associate every single X value with every single Y value.
+This formula is good for the regression line, but it isn't exactly right for statistics. What we want to do is to *associate every single X value with every single Y value*. We can adjust the equation slightly:
 
-- $Y_i = \beta_0 + \beta_1x_i + \epsilon$, where $\epsilon$ is error.
--	$\epsilon \sim N(0, \sigma)$
+- $Y_i = \beta_0 + \beta_1x_i + \epsilon \sim N(0, \sigma)$
 
-This means that (1) we have a line that we are trying to estimate, and (2) there is error around this line as well. The error is normally distributed. 
+where the Greek letter $\epsilon$ is error, that is normally distributed, with a mean of 0 and a standard deviation of $\sigma$.
+
+This means that (1) we have a line that we are trying to estimate, and (2) there is error around this line as well. The error is normally distributed.
 
 **How might we visualize that?**
 
+This formula explains the relationship between all X values and all Y values. It tells us that we have a *line* that we are trying to estimate, and around this line is some *noise* (error). That error is normally distributed with a mean of 0 and standard deviation of $\sigma$.
+
+**Draw bell curves around points on graph**
+
+The error can be visualized with <u>bell curves</u> around the line. Most of the points will be close the line, but some will be farther away -- out on the tails of these bell curves.
+
+**Draw vertical lines between points and regression line on the graph**
+
 The distance between every point and the line on our graph is our **error**. Some people call this deviance, other people call it residuals -- but it is error. The mean of the residuals will be zero, and the standard deviation will be $\sigma$.
 
-We use linear regression to estimate three parameters: an intercept, a slope, and a standard deviation. If $\sigma$ is small, all the points will be close to the line. If $\sigma$ is large, the points will be far from the line.
+We use linear regression to estimate three parameters:
+
+1) an intercept
+2) a slope
+3) a standard deviation.
+
+If $\sigma$ is small, all the points will be close to the line. If $\sigma$ is large, the points will be far from the line.
 
 ### Plotting a regression line
 
-How does one plot or 'fit' a regression line to data?
+**How does one plot or 'fit' a regression line to data?**
 
 Let's plot two continuous variables on the board again, similar to above, and have a student draw what they think is a best-fit line to the data.
+
+```{r echo=FALSE, message=FALSE, warning=FALSE, fig.width=4.5, fig.height=4}
+# Set the seed for reproducibility & adjust plot margins
+set.seed(123); par(mar = c(4, 4, 0.5, 0))
+
+# Simulate two continuous variables
+n <- 40
+x <- rnorm(n, mean = 20, sd = 10)
+y <- 20 + 2 * x + rnorm(n, mean = 0, sd = 8)
+
+# Create a data frame
+datum <- data.frame(x = x, y = y)
+
+# Plot the data
+plot(y ~ x, data = datum,
+     ylim=c(0, max(datum$y)), xlab = "X", ylab = "Y")
+abline(lm(y~x))
+
+# Add a line to the plot
+results <- lm(y ~ x, data = datum)
+abline(results)
+
+# Calculate the predicted values and residuals
+datum$y_hat <- predict(results)
+datum$residuals <- datum$y - datum$y_hat
+
+# Add vertical lines to show residuals for a subset of points
+# Choose a subset of points for better visualization
+subset_indices <- seq(1, 10, length.out = 10)
+
+for (i in subset_indices) {
+  segments(x0 = datum$x[i], y0 = datum$y[i], x1 = datum$x[i], y1 = datum$y_hat[i], col = "blue", lty = 2, lwd = 4)
+}
+```
 
 What is it that makes that the 'best-fit line'?
 
 - Does it... approximately go through the middle of the data?
 - Are half of the points above and below the line?
-  - If so, then $\bar{\epsilon} \sim 0$ and residuals above the line are positive errors, and vice versa.
 
-What if we have the same data, but we fit a horizontal line?
+If half of the points are above and below the line, then the average error is approximately zero. 
 
-- This creates $\bar{\epsilon} \sim 0$ here also!
+$\bar{\epsilon} \sim 0$
 
-When we fit a regression line, we want two things:
+However, the average error rule alone can fail us. Here's another example: 
 
-1) \bar{\epsilon} \sim 0$
-2) **Minimize** the **sum of squared error**.
+```{r echo=FALSE, message=FALSE, warning=FALSE, fig.width=4.5, fig.height=4}
+# Set the seed for reproducibility & adjust plot margins
+set.seed(123); par(mar = c(4, 4, 0.5, 0))
+
+# Simulate two continuous variables
+n <- 40
+x <- rnorm(n, mean = 20, sd = 10)
+y <- 20 + 2 * x + rnorm(n, mean = 0, sd = 8)
+
+# Create a data frame
+datum <- data.frame(x = x, y = y)
+
+# Plot the data
+plot(y ~ x, data = datum,
+     ylim=c(0, max(datum$y)), xlab = "X", ylab = "Y")
+
+# Add a horizontal line to the plot
+abline(h=60)
+
+```
+
+We have the same data as before, but now we have fit a horizontal line?
+
+**Q:** What's the average error for this case? **This creates $\bar{\epsilon} \sim 0$ here also!**
+
+So it's not enough to just say the line creates *global* average error of zero... we also want to create *local* average error of zero.
+
+When we fit a regression line, we want to **minimize** the **sum of squared error**.
 
 **Sum of Squared Error (SSE) = $\sum_{i=1}^n (y_i - \hat{y})^2$** is the sum of squared error across all points! Or, the sum of squared residuals.
 
-```{r simulate-plot-3, echo=FALSE, message=FALSE, warning=FALSE}
+```{r simulate-plot-3, echo=FALSE, message=FALSE, warning=FALSE, fig.width=4.5, fig.height=4}
 # Set the seed for reproducibility & adjust plot margins
 set.seed(123); par(mar = c(4, 4, 0, 0))
 
@@ -181,23 +267,34 @@ for (i in subset_indices) {
 
 ```
 
-**Linear regression seeks to minimize SSE**, and the above regression line has the smallest sum of all of the blue residual lines possible.
+**Linear regression seeks to minimize SSE**, and the below regression line has the smallest sum of all of the blue residual lines possible.
+
+Take-home message -- the best fit line will have two attributes:
+
+1) $\bar{\epsilon} \sim 0$
+2) Minimize SSE.
 
 ## Significance testing
 
-The goal of regression is to estimate $\beta_0$ and $\beta_1$, so we can infer how changes in X influence changes in Y. But we also want to know if this is 'real' relationship -- this linear relationship is statistically significant.
+The goal of regression is to estimate $\beta_0$ and $\beta_1$, so we can understand how changes in X influence changes in Y. How much does each change in X cause change in Y?
+
+But we also want to know if this is 'real' relationship -- this linear relationship is statistically significant.
 
 To put this another way: if we assume there is no relationship between X and Y (i.e., the null hypothesis, $H_0$, is true), what is the chance of getting the observed relationship, given that assumption and the data we have? This is what the p-value captures. If this p-value is really small (less than 0.05), then we can reject the null hypothesis and support the idea that there is a real relationship between X and Y.
 
-### Scenarios
+### General Rules of Regression
 
-Let's consider the following null hypothesis, $H_0$: there is no relationship between two continuous variables, X and Y.
+I want to emphasize a few general rules about significance testing using regression. 
+
+Let's consider some **scenarios** given the null hypothesis, $H_0$: there is no relationship between two continuous variables, X and Y.
 
 **$H_0$: no slope, or slope = 0.**
 
 #### Scenario 1
 
-In which of these two cases would you be more likely to reject the null?
+*Brian make two large empty graphs, that will be re-used three times*
+
+In which of these two cases would you be more likely to <u>reject the null</u>?
 
 ```{r simulate-plot-4, echo=FALSE, message=FALSE, warning=FALSE, fig.width=9, fig.height=4}
 # Set the seed for reproducibility
@@ -302,11 +399,15 @@ abline(results4)
 
 **Q:** Why are we less likely to reject the null in the case of the left graph? Small sample size!
 
+There are so few data in the left graph, it's possible the slope might be zero (horizontal line). For the right graph, it's unlikely that these data would give a horizontal line 
+
 These two plots have the same slope, but one has much more data than the other.
 
 **As sample sizes increase, p-values decrease.**
 
-So the first two scenarios we have considered reinforce the patterns we talked about last week: p-values are driven by (1) effect size ($\beta$) and (2) sample size (*n*). But there is actually one more important feature influencing p-values in regression.
+So the first two scenarios we have considered reinforce the patterns we talked about last week: p-values are driven by (1) effect size ($\beta$) and (2) sample size (*n*).
+
+But there is actually one more important feature influencing p-values in regression.
 
 #### Scenario 3
 
@@ -357,7 +458,7 @@ abline(results2)
 **Q:** These graphs have the same slope. For which one would you be more likely to say the slope ‘definitely is not zero’?
 
 -	Left! The error on the left graph is quite small, which makes it very *clear* what the relationship is. The right graph is also statistically significant, but it has much more noise and is not not as ‘clear’. 
--	**As error increases, p-values increase.**
+-	**As error increases, p-values increases**
 
 So we have learned three 'rules of thumb' about our ability to detect statistically significant effects using linear regression:
 
@@ -373,13 +474,151 @@ The error in the data is partitioned into a few categories.
 
 **Total Sum of Squares** = $\sum_{i=1}^{n} (y_i - \bar{y})^2$ = the total variability in the response (Y) variable.
 
+```{r echo=FALSE, message=FALSE, warning=FALSE, fig.width=4.5, fig.height=4.5}
+# Set the seed for reproducibility & plot margins
+set.seed(123); par(mar = c(4, 4, 0.5, 1))
+
+# Simulate data
+n <- 50  # Number of observations
+x <- rnorm(n, mean = 5, sd = 2)  # Predictor variable
+y <- 2 + 3 * x + rnorm(n, mean = 0, sd = 5)  # Response variable
+
+# Calculate the mean of y
+y_mean <- mean(y)
+
+# Plot the data
+plot(x, y, xlab = "X", ylab = "Y",
+     pch = 19, col = "black")
+
+# Add a horizontal line at the mean of y
+abline(h = y_mean, col = "red", lwd = 2)
+
+# Add vertical lines for TSS
+for (i in 1:n) {
+  segments(x[i], y[i], x[i], y_mean, col = "red", lwd = 1)
+}
+
+# Add annotation for Y-bar (mean of Y)
+text(x = max(x) - 1, y = y_mean - 5, labels = expression(bar(Y)), 
+     pos = 3, col = "red", cex = 1.2)
+
+```
+
 This can be partitioned into two other variables...
 
-We already discussed **Sum of Squared Error (SSE)** = $\sum_{i=1}^n (y_i - \hat{y} )^2$ = the sum of the distance from each point to the regression line.
+We already discussed **SSE = Sum of Squared Error (SSE)** = $\sum_{i=1}^n (y_i - \hat{y} )^2$ = the sum of the distance from each point to the regression line. We already covered this.
 
-**Sum of squares due to regression** = $\sum_{i=1}^n (\hat{y_i} - \bar{y})^2$ = the sum of the distance from each predicted y-value for the regression line to the average y-value.
+Add a line to the graph and a few blue lines for residuals:
+
+```{r echo=FALSE, message=FALSE, warning=FALSE, fig.width=4.5, fig.height=4.5}
+# Set the seed for reproducibility & plot margins
+set.seed(123); par(mar = c(4, 4, 0.5, 1))
+
+# Simulate data
+n <- 50  # Number of observations
+x <- rnorm(n, mean = 5, sd = 2)  # Predictor variable
+y <- 2 + 3 * x + rnorm(n, mean = 0, sd = 5)  # Response variable
+datum <- data.frame(x = x, y = y)
+
+# Calculate the mean of y
+y_mean <- mean(y)
+
+# Plot the data
+plot(x, y, xlab = "X", ylab = "Y",
+     pch = 19, col = "black")
+
+# Add a horizontal line at the mean of y
+abline(h = y_mean, col = "red", lwd = 2)
+
+# Add vertical lines for TSS
+for (i in 1:n) {
+  segments(x[i], y[i], x[i], y_mean, col = "red", lwd = 1)
+}
+
+# Add annotation for Y-bar (mean of Y)
+text(x = max(x) - 1, y = y_mean - 5, labels = expression(bar(Y)), 
+     pos = 3, col = "red", cex = 1.2)
+
+# Add a regression line
+abline(lm(y ~ x), lwd=3)
+
+# Calculate the predicted values and residuals
+results <- lm(y ~ x, data = datum)
+datum$y_hat <- predict(results)
+datum$residuals <- datum$y - datum$y_hat
+
+# Add vertical lines to show residuals for a subset of points
+# Choose a subset of points for better visualization
+subset_indices <- seq(1, n, length.out = n)
+
+for (i in subset_indices) {
+  segments(x0 = datum$x[i], y0 = datum$y[i], x1 = datum$x[i], y1 = datum$y_hat[i], col = "blue", lty = 2, lwd = 4)
+}
+```
+
+**SSR = Sum of squares due to regression** = $\sum_{i=1}^n (\hat{y_i} - \bar{y})^2$ = the sum of the distance from each predicted y-value for the regression line to the average y-value.
+
+```{r echo=FALSE, message=FALSE, warning=FALSE, fig.width=4.5, fig.height=4.5}
+# Set the seed for reproducibility & plot margins
+set.seed(123); par(mar = c(4, 4, 0.5, 1))
+
+# Simulate data
+n <- 50  # Number of observations
+x <- rnorm(n, mean = 5, sd = 2)  # Predictor variable
+y <- 2 + 3 * x + rnorm(n, mean = 0, sd = 5)  # Response variable
+datum <- data.frame(x = x, y = y)
+
+# Calculate the mean of y
+y_mean <- mean(y)
+
+# Plot the data
+plot(x, y, xlab = "X", ylab = "Y",
+     pch = 19, col = "black")
+
+## Total Sum of Squares
+
+# Add a horizontal line at the mean of y
+abline(h = y_mean, col = "red", lwd = 2)
+
+# Add vertical lines for TSS
+for (i in 1:n) {
+  segments(x[i], y[i], x[i], y_mean, col = "red", lwd = 1)
+}
+
+# Add annotation for Y-bar (mean of Y)
+text(x = max(x) - 1, y = y_mean - 5, labels = expression(bar(Y)), 
+     pos = 3, col = "red", cex = 1.2)
+
+## Sum of Squared Error
+
+# Add a regression line
+abline(lm(y ~ x), lwd=3)
+
+# Calculate the predicted values and residuals
+results <- lm(y ~ x, data = datum)
+datum$y_hat <- predict(results)
+datum$residuals <- datum$y - datum$y_hat
+
+# Add vertical lines to show residuals for a subset of points
+# Choose a subset of points for better visualization
+subset_indices <- seq(1, n, length.out = n)
+
+for (i in subset_indices) {
+  segments(x0 = datum$x[i], y0 = datum$y[i], x1 = datum$x[i], y1 = datum$y_hat[i], col = "blue", lty = 2, lwd = 4)
+}
+
+## Sum of Squares due to Regression
+
+# Add green lines to show distances from predicted values to mean (SSR)
+for (i in 1:n) {
+  segments(x0 = datum$x[i], y0 = datum$y_hat[i], x1 = datum$x[i], y1 = y_mean, col = "green", lwd = 2)
+}
+
+```
 
 **TSS = SSE + SSR**
+
+Takeway: The smaller the error in the SSE, the smaller the p-value.
 
 P-values are calculated by partitioning the **Total Sum of Squares** into the constituent **Sum of Squared Errors** and **Sum of Squared Errors due to Regression**. A ratio of SSE and SSR gives us the mean squared error, which gives us an 'F-statistic', we then check a table in a book, which gives us a p-value. But computers calculate this for us now, which is a vast improvement. Onward!
 
@@ -404,7 +643,12 @@ Let's consider two continuous variables, precipitation and biomass. Our hypothes
 
 **Q:** Which is the predictor variable, and which is the response variable?
 
+**X - Precipitation**
+**Y - Biomass**
+
 Let's now simulate data, so that we know what 'Truth' is.
+
+**Truth: $\hat{y} = 2 = 3X$**
 
 ```{r}
 ### To learn regression in R, let's simulate data so we know what 'Truth' is
@@ -422,7 +666,16 @@ y_hat <- 2 + 3 * precip
 # What does this look like?
 plot(y_hat ~ precip)
 
+```
+
+There is no error or noise in y-hat... but biomass is influenced by many things in nature! What are some things that might influence biomass? Sunlight, soil type, aspect, predators, etc.
+
+```{r}
 # Simulate error for the response variable
+# Let's say the standard deviation = 2, which means that around our line there
+# is a 2 kg/ha standard deviation.
+# Rule of thumb: 66% of samples within 1 SD, 95% of samples within 2 SD, 99% within SD
+# With a SD of 2, 66% of samples will be within 2 units of the line, etc.
 error <- rnorm(n, mean = 0, sd = 2)
 
 # Create the response variable, biomass
@@ -435,7 +688,11 @@ datum <- data.frame(precip = precip, y_hat = y_hat, error = error, biomass = bio
 # Save this dataset
 write.csv(datum, "lecture_3_dataset1.csv")
 
+```
 
+We have now simulated and saved our data. Let's shift over to analyze it!
+
+```{r}
 ### Analyze the data
 
 # Read in the dataset
