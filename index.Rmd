@@ -71,7 +71,7 @@ Students will be graded on **Participation** (20%). As this is a graduate-level 
 
 Last, an extra-credit opportunity is available to students by participating in '[StatsChats](https://guides.library.unr.edu/StatsChats)'. StatsChats is an informal weekly gathering to discuss any quantitative questions you may have related to your research (statistics, experimental design, model simulation, analysis, debugging R code, etc.). This is open to any students and faculty that want to improve their their quantitative skills and/or share their knowledge and experience. StatsChats will be weekly on Tuesdays (starting September 3) from 12-1PM in the Lilli Brant reading room in the DeLaMare Science and Engineering Library (third floor). Students will gain **+10%** credit to their overall class grade **if they attend four (4) out of the ten total StatsChats sessions during the semester**.
 
-There will be no **final** exam for the class.
+There will be no **final exam** for the class.
 
 ### Grading
 
