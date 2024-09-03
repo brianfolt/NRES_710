@@ -218,7 +218,7 @@ rmd2rscript <- function(infile="LECTURE2.Rmd"){
 ```{r echo=FALSE, eval=FALSE}
 ## Manually run these lines through console to turn the RMD to R scripts
 rmd2rscript("materials/lecture_2.Rmd")
-#rmd2rscript("materials/lecture_3.Rmd") # no R code
+rmd2rscript("materials/lecture_3.Rmd")
 rmd2rscript("materials/lecture_4.Rmd")
 rmd2rscript("materials/lecture_5.Rmd")
 rmd2rscript("materials/lecture_6.Rmd")

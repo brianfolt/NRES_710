@@ -706,6 +706,8 @@ plot(biomass ~ precip, data = datum)
 
 ```
 
+Does it look like there is a relationship? Yea! It passes my eyeball test.
+
 The function we will be using for the rest of the semester to fit linear regression and many other statistical tests is... the linear model, 'lm()'!
 
 You can learn more about 'lm()' in R by reviewing the help files:
@@ -724,6 +726,7 @@ Let's examine the 'lm()' documentation in R. Take a look at that.
 R will automatically put an intercept into your model, so you don't have to specify this as an extra variable in your formula.
 
 - Note: you can take the intercept out with Y ~ X - 1, or you can ask for the intercept specifically with Y~1.
+- In general, specifying Y ~ X gives you the equation: beta0 + beta1X + error
 
 Since we have defined all of our variables in R using code, we can fit the model just by calling those variable objects:
 
@@ -738,14 +741,24 @@ summary(results)
 
 In this class, I will refer to analysis outputs as 'results' and analysis data as 'datum'. I do this to be consistent, avoid confusion with code in our analysis, and avoid confusion with other functions in R (e.g., the 'data()' function).
 
-### The intercept
+### The call
+
+This describes the formula that we specified to R
+
+### Residuals
+
+Information that nobody ever looks at that describes the distribution of residuals around the line.
+
+### Coefficients
+
+#### The intercept
 
 **Q:** What parameter from our statistical model does the 'intercept' represent, and how does it compare to 'Truth'?
 
 - **Rule of thumb:** truth should be within 2 standard errors of the estimate. 95% of all data is within two standard errors. Confidence intervals is basically two standard errors in either direction from the mean.
 - We are given a 't-statistic' and 'p-value' for the intercept. We don't really care about these; they don't tell us anything ecologically relevant about our system. We leave it in the model because it makes the line fit better, which we use to estimate slope.
 
-### The effect
+#### The effect
 
 **Q:** How does the estimate of the effect of precipitation on biomass compare to truth?
 
@@ -773,5 +786,7 @@ anova(results)
 
 # This should look similar to the bottom line from our regression output
 ```
+
+Question?!
 
 [--go to next lecture--](lecture_4.html)
