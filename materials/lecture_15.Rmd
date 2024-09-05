@@ -57,11 +57,15 @@ We have talked about the **advantages** of multi-variable models: eliminates swa
 
 When we build models with interactions, we should generally include the 'main effects' as well (i.e., the individual effects of $X_1$ or $X_2$).
 
-## Moving forward
+## Random-effects Models
 
-Let's take a step back and temporarily remove interactions from our brain. Interactions are confusing! Instead, let's again consider more simple models without interactions -- and focus on our linear model without interactions.
+My main goal today is to introduce the concept of 'random-effects models'. 
 
-But now let's make things a little more complicated again, in a different way.
+Before we do that, let's take a step back and temporarily remove interactions from our brain. Interactions are confusing! Instead, let's again consider more simple models without interactions -- and focus on our linear model without interactions.
+
+But now let's make things a little more complicated again, in a different way. Let's start with an example.
+
+### Example: Fish Density
 
 Let's say that we have three variables: 
 
@@ -95,7 +99,7 @@ The problem with the second model is we are assuming that there is a linear rela
 
 Graphically, our study design and data might look like:
 
-```{r echo=FALSE, fig.height=4, fig.width=4.5}
+```{r echo=FALSE, fig.height=4, fig.width=4}
 # Specify plot margins & set random seed
 par(mar = c(4,4,0,0))
 set.seed(123)
@@ -109,7 +113,7 @@ n_stretches <- 8
 stretch <- 1:8
 
 # Mean density within each year (assumed values)
-density_mu <- c(11.3, 7, 3, 6.2, 9, 6, 2, 12, 8, 3.2, 2, 7, 13.1, 8, 4.5)
+density_mu <- rnorm(n_years, 8, 2)
 
 # Expand grid to simulate combinations of years and stretches
 datum <- expand.grid(year = years, stretch = stretch)
@@ -132,43 +136,127 @@ plot(datum$year, datum$FishDensity, xlab = "Year", ylab = "Fish Density")
 
 ```
 
+In this example, the fish abundance bounces all over the place. It's not going to be a linearly increasing or decreasing relationship. Most of the variation is explained by year in a categorical sense.
+
+**Q:** What do you think of the first model?
+
+It's LONG and UGLY. It's not very elegant. And do we really care if... 2013 is different from 2019? Or 2017 is different from 2024?
+
+My point is: there would be a ton of comparisons you would have to do! How many pairwise comparisons would a post-hoc test have to do?
+
+A post-hoc test would make `13 + 12 + 11 + 10 + 9 + 8 + 7 + 6 + 5 + 4 + 3 + 2 + 1` interannual comparisons, which equals `r sum(13:1)` pairwise comparisons!
+
+What we really want to do by including **Year** in the model is to account for  variation that occurs from year to year -- and we can do that in a different way than the way described here with the long model.
+
+Here's how we do that. Instead, we would run this model (I'm not going to include **Flow** just yet)...
+
+$FishDensity = \beta_0 + \epsilon_{year} \sim N(0, \sigma_{year}) + \epsilon_{residual} \sim N(0,  \sigma_{residual}))$
+
+So now we have an equation with two error terms: annual yearly error and residual error.
+
+Let's think about what this means...
+
+#### Annual error
+
+The variation in fish density from year to year can be described by some normal probability distribution with some standard deviation, \sigma. We can think about this as: the <u>**between-year variation**</u>. 
+
+Graphically, this might be:
+
+```{r echo=FALSE, fig.height=4, fig.width=8}
+# Specify plot margins & set random seed
+par(mfrow = c(1, 2), mar = c(4, 4, 2, 2))
+set.seed(123)
+
+# Simulate data
+years <- 2010:2024
+n_years <- length(years)
+
+# Number of stretches
+n_stretches <- 8
+stretch <- 1:8
+
+# Mean density within each year (assumed values)
+beta_0 <- 8
+density_mu <- rnorm(n_years, beta_0, 2)
+
+# Expand grid to simulate combinations of years and stretches
+datum <- expand.grid(year = years, stretch = stretch)
+
+# Sort the dataframe by year (low to high)
+datum <- datum[order(datum$year), ]
+
+# Add a fish density column
+datum$FishDensity <- rep(NA, n_stretches * n_years)
+
+# Use the density_mu to simulate fish density for each year-stretch combination
+for (i in 1:n_years){
+  for (j in 1:n_stretches){
+    datum$FishDensity[(i - 1) * n_stretches + j] <- rnorm(1, mean = density_mu[i], sd = 0.5)
+  }
+}
+
+# First plot: Fish Density over Years
+plot(datum$year, datum$FishDensity, xlab = "Year", ylab = "Fish Density")
+
+# Add solid filled circles for each year's mean density
+points(years, density_mu, pch = 16, col = "blue", cex = 1.5)  # pch = 16 for filled circles, col for color, cex for size
+
+# Add horizontal line for average fish density
+abline(h = beta_0, lty = 2, lwd = 4, col = "blue")
+# text(x = max(y_vals) * 0.2, y = beta_0 - 0.9, labels = expression(beta[0]), cex = 1.2)
+
+# Second plot: Normal distribution curve on its side
+x_vals <- seq(0, 16, length = 100)
+y_vals <- dnorm(x_vals, mean = beta_0, sd = 2)
+
+# Rotate the curve by flipping axes
+plot(y_vals, x_vals, type = "l", xlab = "Density", ylab = "", ylim = c(0, 16), xlim = c(0, max(y_vals)), axes = FALSE, lwd = 3)
+abline(h = beta_0, lty = 2, lwd = 4, col = "blue")
+text(x = max(y_vals) * 0.2, y = beta_0 - 0.9, labels = expression(beta[0]), cex = 1.2, col = "blue")
+```
+
+The average fish density among all years is $\beta_0$ (**horizontal blue line**). Within each year, there is also an average fish density (**solid blue dots**), and this varies from year to year. The **between-year variation** is normally distributed, which we can visualize with a bell curve that is centered on a mean of $\beta_0$.
+
+#### Residual error
+
+The residual variation is the **within-year variation**. *We can visualize this by drawing little bell curves on the data within each year*. It's the amount of variation we have from stretch-to-stretch within any given year. We assume that it's the same among years. 
+
+#### Total model
+
+So now we have a model for how average fish density varies both among years ($\epsilon_{year}$) and within years ($\epsilon_{residual}$). We have an overall average fish density that can vary each year and also vary within years.
+
+What are the advantages of the model with between-year variation compared to the model with many annual effects?
+
+- The model with year as X-variables has a ton of variables that have to be estimated by the model. 14 betas plus residual error. 
+- The model with between-year variation only has 3 parameters! Average fish density, the standard deviation in variation due to year (i.e., between-year variation), and the standard deviation due to error (i.e., residual standard deviation).
+
+### Nomenclature
+
+These two models have names! 
+
+The model with many X-variables and one residual error term is called a '**fixed-effects models**'. Up to this point in class, we have been dealing exclusively with fixed-effects models. This is generally an implicit assumption of any model that someone is talking about (regression, t-test, ANOVA, ANCOVA, whatever) -- when they say they did one of those analyses, they typically mean they built a fixed-effects version of that. The model with the many effects of years is a fixed-effect model; <u>year is treated as a fixed-effect</u>.
+
+The model with the two error terms is called a '**random-effects model**'. Year as an error term that is treated as <u>a random effect</u>. Since the second model does not have any fixed effects, it is called a random-effects model. Random effects models have no X-variables -- they just have random error terms.
+
+If we added in a fixed effect (e.g., flow), this would become a '**mixed-effects model** -- it has both fixed and random effects -- both X-variables and random error terms.
+
+### Fixed or random effects?
+
+How do you determine whether variables should be considered as fixed or random effects? No hard-and-fast rules about this. Up to you!
+
+But, depending on your variable, there are advantages to treating them as random or fixed. Here are some guidelines: 
+
+**Fixed vs. Random**
+
+Mean of Y      
+
+
+
+
 
 <br>
 
-```{r echo=FALSE, fig.height=4, fig.width=4.5}
-# Specify plot margins
-par(mar=c(4,4,0,0))
-
-# Read in the size ~ age + sex data
-datum <- read.csv("lecture_12_dataset1.csv")
-
-# Model for females
-results <- lm(Size ~ Age, data = subset(datum, datum$Sex == "Female"))
-
-# Model for males
-results2 <- lm(Size ~ Age, data = subset(datum, datum$Sex == "Male"))
-
-# Determine the range of the x and y axes
-xlim <- range(datum$Age)
-ylim <- range(datum$Size)
-
-# Make an empty plot with defined x and y limits
-plot(xlim, ylim, type = "n", xlab = "Age", ylab = "Size")
-
-# Add regression lines for females and males
-abline(results, col = "red", lwd = 2) # Red line for females
-abline(results2, col = "blue", lwd = 2) # Blue line for males
-
-# Optionally, add a legend to distinguish between the two lines
-legend("topleft", legend = c("Females", "Males"), col = c("red", "blue"), lwd = 2)
-
-```
-
-
-
 ## Summary
-
-
 
 
 <br>
