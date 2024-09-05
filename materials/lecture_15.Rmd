@@ -47,8 +47,6 @@ We have been learning about **multi-variable models** using a generic model:
 
 $Y = \beta_0 + \beta_1X_1 + \beta_2X_2 +... + \beta_nX_n + \epsilon \sim N(0, \sigma)$
 
-<span style="background-color: lightgreen;">$Y = \beta_0 + \beta_1X_1 + \beta_2X_2 +... + \beta_nX_n + \epsilon \sim N(0, \sigma)$</span>
-
 In theory, you could have unlimited number of X-variables... but in practice, you might get 8 or 10 before it gets nonsensically complicated.
 
 We can have **interactions** (e.g., $\beta_m * X_1 * X_2$).
@@ -61,8 +59,81 @@ When we build models with interactions, we should generally include the 'main ef
 
 ## Moving forward
 
-Let's take a step back and temporarily remove interactions from our brain. Interactions are confusing! Instead, let's again consider more simple models without interactions.
+Let's take a step back and temporarily remove interactions from our brain. Interactions are confusing! Instead, let's again consider more simple models without interactions -- and focus on our linear model without interactions.
 
+But now let's make things a little more complicated again, in a different way.
+
+Let's say that we have three variables: 
+
+**Y -- fish density**   
+**$X_1$ -- flow**   
+**$X_2$ -- year**   
+
+We have gone into a particular stream and measured the abundance of fish at ~eight different stretches in the stream. We have measured flow rate, because we are interested in understanding how flow rates influence abundance of fish.
+
+But then we repeated the study over a multiple-year period, and we went back measured fish density and flow rate over a 14-year period!
+
+**2010--2024**
+
+**Q:** does anybody have any idea whether fish populations tend to vary from year to year? Yes, they do: fish density can be quite sensitive to rainfall, flowrate, stream disturbance, whatever. We might want to test whether fish density varies from year-to-year.
+
+How would we include 'year' in our model...?
+
+$FishDens = \beta_0 + \beta_12011 + \beta_22012 + ... + \beta_{14}2016 + \epsilon \sim N(0, \sigma)$ -- lots of terms here
+
+Alternatively, we could have written the model like this:
+
+$FishDens = \beta_0 + \beta_1Year + \epsilon \sim N(0, \sigma)$
+
+**Q:** What do you think about this second model -- is it a good model?
+
+No, because it's a categorical variable...?
+
+But it's a number, why can't we treat this as continuous?
+
+The problem with the second model is we are assuming that there is a linear relationship between year and fish density, where fish density will always be going up or always going down through time. This *might* be an okay assumption... if we have a specific hypothesis suggesting that there might be a linear effect of time on fish abundance.
+
+Graphically, our study design and data might look like:
+
+```{r echo=FALSE, fig.height=4, fig.width=4.5}
+# Specify plot margins & set random seed
+par(mar = c(4,4,0,0))
+set.seed(123)
+
+# Simulate data
+years <- 2010:2024
+n_years <- length(years)
+
+# Number of stretches
+n_stretches <- 8
+stretch <- 1:8
+
+# Mean density within each year (assumed values)
+density_mu <- c(11.3, 7, 3, 6.2, 9, 6, 2, 12, 8, 3.2, 2, 7, 13.1, 8, 4.5)
+
+# Expand grid to simulate combinations of years and stretches
+datum <- expand.grid(year = years, stretch = stretch)
+
+# Sort the dataframe by year (low to high)
+datum <- datum[order(datum$year), ]
+
+# Add a fish density column
+datum$FishDensity <- rep(NA, n_stretches * n_years)
+
+# Use the density_mu to simulate fish density for each year-stretch combination
+for (i in 1:n_years){
+  for (j in 1:n_stretches){
+    datum$FishDensity[(i - 1) * n_stretches + j] <- rnorm(1, mean = density_mu[i], sd = 0.5)
+  }
+}
+
+# Plot Fish Density over Years
+plot(datum$year, datum$FishDensity, xlab = "Year", ylab = "Fish Density")
+
+```
+
+
+<br>
 
 ```{r echo=FALSE, fig.height=4, fig.width=4.5}
 # Specify plot margins
