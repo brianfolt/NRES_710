@@ -1,5 +1,5 @@
 ---
-title: "Multi-Variable Modeling - Interactions (continued)"
+title: "Random Effect Models"
 author: "NRES 710"
 date: "Last compiled: `r Sys.Date()`"
 output: 
@@ -33,91 +33,109 @@ knitr::opts_chunk$set(
 
 ```{r echo=FALSE}
 
-#  NRES 710, Multi-Variable Modeling - Interactions (continued)
+#  NRES 710, Random Effect Models
 #     University of Nevada, Reno
-#     Paper discussion of interactions
+#     Multi-variable models with random effects
 
 ```
 
-Any questions before we begin?
+Review quiz for interactions.
 
-## Discussion of the Odadi *et al*. 2011 paper
+## Review of recent material
 
-1. What was the response (Y-variable) the researchers studied? **Cattle weight gain**
+We have been learning about **multi-variable models** using a generic model:
 
-2. What two x-variables interacted to influence that response? **competitors and season**
+$Y = \beta_0 + \beta_1X_1 + \beta_2X_2 +... + \beta_nX_n + \epsilon \sim N(0, \sigma)$
 
-Explanation: The most important part of this paper – all you really had to do was study this figure! They studied cattle weight gain in control plots, in plots with competitors, and in the plots with mega-competitors (really big herbivores). The effect of competitors was different in the dry seasons than it was in the wet season.
+<span style="background-color: lightgreen;">$Y = \beta_0 + \beta_1X_1 + \beta_2X_2 +... + \beta_nX_n + \epsilon \sim N(0, \sigma)$</span>
 
-3. How many betas would be in the general linear model with the interactions? (I asked you all to think about this at the end of last class.) **6**
+In theory, you could have unlimited number of X-variables... but in practice, you might get 8 or 10 before it gets nonsensically complicated.
 
-Explanation: Let’s describe what that linear model would actually be. 
+We can have **interactions** (e.g., $\beta_m * X_1 * X_2$).
 
-Odadi et al. 2011 *Science*. How would we write a single statistical describing all of the effects in Figure 1?
+- Note: Sometimes other fields refer to this in other ways (e.g., 'effect modification'; where one effect modifies another effect).
 
-$weight gain = \beta_0 + \beta_*wc + \beta_*mhc + \beta_*wet + \beta_*wc*wet + \beta_*mwc*wet + error \sim N(0, sigma)$
+We have talked about the **advantages** of multi-variable models: eliminates swamping, eliminates bias associated with collinearity (but inflates variance), and allows us to look for interactions.
 
-4. In the linear model written on the board, what is the meaning of beta1? Look carefully at all the answers. **“Effect” or herbivore competitors in dry season**
+When we build models with interactions, we should generally include the 'main effects' as well (i.e., the individual effects of $X_1$ or $X_2$).
 
-Explanation: if we didn’t have an interaction, beta1 would be the effect of herbivore competitors. But since we have an interaction, we have to quality it with in the dry season. In Fig.1, beta1 is the difference between C and WC in the leftpanel graph.
+## Moving forward
 
-5. In the linear model written on the board, what is the meaning of beta2? **“Effect” of mega-herbivore competitors in dry season**
+Let's take a step back and temporarily remove interactions from our brain. Interactions are confusing! Instead, let's again consider more simple models without interactions.
 
-Explanation: Same logic as last question! In the dry season qualifier needed because of interaction.
 
-6. In the linear model written on the board, what is the meaning of beta3? **“Effect” of season in control plots**
+```{r echo=FALSE, fig.height=4, fig.width=4.5}
+# Specify plot margins
+par(mar=c(4,4,0,0))
 
-Explanation: Because we have the interaction, it’s not just the effect of season, it’s the effect of season *in control plots*. This is the difference between the first bar in the left plot and the first bar in the right plot. If we did not have an interaction, all of the other right-panel boxes would be decreased with the same effect; all season-groups would be shifted down by the same amount. However, cattle-weight gain goes up in the presence of competitors in the wet season due to the interaction, so those boxes actually go up.
+# Read in the size ~ age + sex data
+datum <- read.csv("lecture_12_dataset1.csv")
 
-7. In the linear model written on the board, what is the meaning of beta0? **Average weight gain in control plots during dry season**
+# Model for females
+results <- lm(Size ~ Age, data = subset(datum, datum$Sex == "Female"))
 
-Explanation: lots of qualifiers here! The average Y when all other X-variables are zero. Graphically, Beta0 is the height of the first bar in the left plot. 
+# Model for males
+results2 <- lm(Size ~ Age, data = subset(datum, datum$Sex == "Male"))
 
-8. In the linear model written on the board, what is the meaning of beta4? Two answers: **-	Difference in “effect” of herbivore competitors between seasons** or **Difference in “effect” of season between herbivore and control plots**
+# Determine the range of the x and y axes
+xlim <- range(datum$Age)
+ylim <- range(datum$Size)
 
-Explanation: both of those two answers are correct! With interactions, our perspective is open, and we can look at the interaction either way: the difference in the effect of herbivore competitors between seasons, or the difference in the effect of season between herbivore and control plots.
+# Make an empty plot with defined x and y limits
+plot(xlim, ylim, type = "n", xlab = "Age", ylab = "Size")
 
-Graphically, it is the difference between what we would expect to happen if there was no interaction (beta3) and what we observe (an additional effect on top of beta3, which is the interaction, beta4). The difference between (1) what we would expect if there was no interaction and (2) what we actually observed.
+# Add regression lines for females and males
+abline(results, col = "red", lwd = 2) # Red line for females
+abline(results2, col = "blue", lwd = 2) # Blue line for males
 
-9. In the linear model written on the board, what is the meaning of beta5? **Difference in “effect” of megaherbivore competitors between seasons**
+# Optionally, add a legend to distinguish between the two lines
+legend("topleft", legend = c("Females", "Males"), col = c("red", "blue"), lwd = 2)
 
-Explanation: only one correct answer here. One thing I want to point out is that this is called a ‘multi-factor ANOVA with interactions’. I just call it a general linear model with two X-variables that interact, which is fine. When you have something like this though, you basically need a BETA for everyone of your BARS. 
+```
 
--	Beta0 describes the first bar (beta0)
--	Beta1 creates the second bar (beta0 + beta1 = bar2) 
--	Beta2 creates the third bar (beta0 + beta2 = bar3)
--	Beta3 creates the fourth bar (beta0 + beta3 = bar4) 
--	Beta4 creates the fifth bar (beta0 + beta1 + beta3 + beta4 = bar5) 
--	Beta5 creates the sixth bar (beta0 + beta2 + beta3 + beta5 = bar6)
 
-Let’s look at another graph for ‘cover’, which is now the Y-variable.
 
-10. In looking at the effect of season and competitors on ‘Cover’ (Y-variable), is there an interaction? **NO**
+## Summary
 
-It’s pretty clear there is no interaction, and probably not even an effect of season, on cover; there is just an effect of competitors.
 
-One critique I have of this paper is that they did not actually test for an interaction! They just split their data a part by season and ran a simple model (beta0 + beta1 + beta2) to test for competitor effects within each season. There’s nothing wrong with this, but I think it would have been easy, elegant, and more scientifically informative – better science – if they would have included all there data in a single analysis that included an interaction term.
 
-Question 11 has to do with this idea, and there are two possible answers to this question.
 
-11. How could you test for significant interactions? **lm()** or **f-drop test**
+<br>
 
-Explanation: you could either extract your results from your ‘lm()’ OR you could use F-drop tests
-If we were to run this model in R, we would get something that looked like this:
+## Truth
 
-(intercept)
-CompetitorWC
-CompetitorMWC
-SeasonWet
-CompetitorWC*SeasonWet
-CompetitorMWC*SeasonWet
+```{r}
+################### 'Truth' #################### 
+### Lecture 15: code to simulate data for class
 
-We can look at the p-values for each row, and if either of the interaction terms are significant, we have a significant interaction.
+# Set the seed for reproducibility
+set.seed(123)
 
-BUT, there is a limitation here, that we should be aware of. If neither of these are significant, does that mean there is no significant interaction?
+### Dataset 1: age + sex + age*sex
+# This is similar to the Age, Sex, and Size data we simulated for in Lecture 12.
+# There is no collinearity between Age and Sex, but now there is an interaction
+# between Sex and Age.
 
-It goes back to this idea that… we have to switch our reference and check to see if there are effects between the two non-reference groups! Just because we don’t have significance in our LM does not mean there isn’t a significant interaction.
+# First dataset
+# X variable
+n <- 50
+x1 <- c(rep("Female", n), rep("Male", n))
+x2 <- runif(n * 2, 1, 10)
+dummy <- data.frame(model.matrix(~ x1 - 1))
+colnames(dummy) <- c("Female", "Male")
 
-One way to do this is to run the FULL MODEL with all terms and then run a REDUCED MODEL without interactions and then use an F-drop test anova(results1, results2) to test for interactions.
+# Simulate error
+Error <- rnorm(n * 2, 0, 0.8)
+
+# Predict Y
+Response <- 4 + 1.5 * x2 + 2.5 * dummy$Male + 1 * x2 * dummy$Male + Error
+
+# Dataframe
+datum <- data.frame(Age = x2, Sex = x1, Male = dummy$Male, Size = Response)
+
+# Save the data
+write.csv(datum, "lecture_15_dataset1.csv", row.names = FALSE)
+
+```
 
 [--go to next lecture--](lecture_16.html)
