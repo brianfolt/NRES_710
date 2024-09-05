@@ -28,11 +28,15 @@ knitr::opts_chunk$set(
 
 ```
 
+Questions from last class? We covered a lot; don't hesitate to reach out if I can help you understand anything better.
+
+Schedule: our first Exercise is next class! You will need a computer, so please bring one.
+
 ## Review
 
 Today we will discuss how to present results from linear regression. I am going to describe an approach that uses a few concise sentences to distill down all of the relevant information from the analysis you ran. But first, a brief review from last class.
 
-Most important thing to have learned from last class:
+Most important thing to have learned from last class so far:
 
 **The equation for the general linear model: $Y = \beta_0 + \beta_1X + \epsilon \sim N(0, \sigma)$**
 
