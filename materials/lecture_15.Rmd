@@ -246,13 +246,39 @@ How do you determine whether variables should be considered as fixed or random e
 
 But, depending on your variable, there are advantages to treating them as random or fixed. Here are some guidelines: 
 
-**Fixed vs. Random**
+```{r echo=FALSE}
+# Load necessary libraries
+library(knitr)
 
-Mean of Y      
+# Create the data frame
+data <- t(data.frame(
+  `1` = c("Mean of Y", "Variation in Y"),
+  `2` = c("Understand effects", "Account for variation"),
+  `3` = c("Groups or values are chosen", "Values are a sample of what's possible"),
+  `4` = c("Limited groups", "Many, many groups")
+))
 
+# Create the table
+kable(data, col.names = c("Fixed Effects", "Random Effects"))
 
+```
 
+Fixed effects influence the *mean* of the Y-value within groups, whereas random effects influence the *variation* in Y. This has important implications in your decision.
 
+- If you are interested in understanding what an effect is, you should use a fixed-effects, to understand the effects of the X-variable.
+- If you just want to account for variation, you are better off treating a variable as a random effect.
+
+If you chose the treatment levels or treatment groups (i.e., ran an experiment), then better to treat the variable as a fixed-effect. However, if the values are just a sample of what's possible, then maybe treat the variable as a random-effect.
+
+If you have a limited number of groups (e.g., treatment vs. control), then probably treat it as a fixed effect. If you have many, many groups (e.g., years in a long-term study), then better to treat as a random-variable.
+
+- It's hard to estimate a standard deviation among a limited number of groups (e.g., two groups), whereas it's easier to estimate a standard deviation among many group (e.g., 14 years of a study).
+
+But the most important reason is: are you interested in how the *X-variable influences the mean*, or *how it influences variation*.
+
+## Analysis in R
+
+We can briefly look at 'Truth' to see how the data were analyzed.
 
 <br>
 
@@ -270,27 +296,20 @@ Mean of Y
 # Set the seed for reproducibility
 set.seed(123)
 
-### Dataset 1: age + sex + age*sex
-# This is similar to the Age, Sex, and Size data we simulated for in Lecture 12.
-# There is no collinearity between Age and Sex, but now there is an interaction
-# between Sex and Age.
+# Simulate data
+Years <- rep(1:10, each = 10)
 
-# First dataset
-# X variable
-n <- 50
-x1 <- c(rep("Female", n), rep("Male", n))
-x2 <- runif(n * 2, 1, 10)
-dummy <- data.frame(model.matrix(~ x1 - 1))
-colnames(dummy) <- c("Female", "Male")
+# Between-year error
+MeanYear <- rep(rnorm(10, 0, 10), each = 10)
 
-# Simulate error
-Error <- rnorm(n * 2, 0, 0.8)
+# Within-year error
+Error <- rnorm(length(Years), 0, 1)
 
-# Predict Y
-Response <- 4 + 1.5 * x2 + 2.5 * dummy$Male + 1 * x2 * dummy$Male + Error
+# Response variable
+Abundance <- 50 + Error + MeanYear
 
-# Dataframe
-datum <- data.frame(Age = x2, Sex = x1, Male = dummy$Male, Size = Response)
+# Save the data
+datum <- data.frame(Years = Years, Error = Error, MeanYear = MeanYear, Abundance = Abundance)
 
 # Save the data
 write.csv(datum, "lecture_15_dataset1.csv", row.names = FALSE)
