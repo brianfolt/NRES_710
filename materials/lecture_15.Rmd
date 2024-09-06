@@ -280,14 +280,275 @@ But the most important reason is: are you interested in how the *X-variable infl
 
 We can briefly look at 'Truth' to see how the data were analyzed.
 
-<br>
+### Truth
 
-## Summary
+```{r echo=TRUE}
+################### 'Truth' #################### 
+### Lecture 15: code to simulate data for class
 
+# Set the seed for reproducibility
+set.seed(123)
+
+# Simulate data
+Year <- rep(1:10, each = 10)
+
+# Between-year error
+MeanYear <- rep(rnorm(10, 0, 10), each = 10)
+
+# Within-year error
+Error <- rnorm(length(Year), 0, 1)
+
+# Response variable
+Abundance <- 50 + MeanYear + Error
+
+# Save the data
+datum <- data.frame(Year = Year, Error = Error, MeanYear = MeanYear, Abundance = Abundance)
+
+# Save the data
+write.csv(datum, "lecture_15_dataset1.csv", row.names = FALSE)
+
+```
+
+If we look at truth (the response variable), the average predicted abundance of fish for any given year is 50!
+
+But within any given year, the MeanYear effect has a standard deviation of 10. Since 95% of all data fall within 2 standard deviations, then any given year could be 50 minus 20 or 50 plus 20. So we might expect annual averages to be between 30 and 70.
+
+The term 'Error' is random variation for each observation within each year, which is just usual random error with a standard deviation of 1, so that within each year we might see some random error that is 2 units in either direction.
+
+### Code
+
+Let's look at the data and plot it.
+
+```{r echo=TRUE}
+# Read in the data
+datum <- read.csv("lecture_15_dataset1.csv")
+
+# Examine it
+head(datum, 15)
+
+# Plot it!
+plot(Abundance ~ Year, data = datum)
+
+```
+
+When we look at the scatterplot, we can see that the overall average is about 50. For any year, the average varies: it can be increased or decreased by up to 20 fish. And then within the year, the abudnance for any sample can vary by 2-3 in either direction.
+
+We obviously don't want to run a linear model on this. Year does not have a linear effect! Year does have an effect on abundance, but it's not a linear effect.
+
+Let's run a 'lm()' but with Year as a fixed, categorical effect.
+
+```{r echo=TRUE}
+# Year as a categorical, fixed effect
+results <- lm(Abundance ~ as.factor(Year), data = datum)
+summary(results)
+
+```
+
+This code forces Year to be a factor in a fixed-effect model. This is ugly! All it really tells us is whether each year is significantly different than year 1. Not super useful for telling us about relationships between different years...
+
+What if we were to use a post-hoc test? Which will adjust our p-values to 'correct' them...
+
+```{r echo=TRUE}
+# Year as a categorical, fixed effect
+results2 <- aov(results)
+TukeyHSD(results2)
+
+```
+
+These p-values are inflated! Dislike. Buuut... we don't care about this -- because we are actually interested in how year influences *variation*...
+
+I've got some bad news... We can't use 'lm()' anymore!! It's gotten us all the way through two months of class, but we have hit it's limits. It cannot handle random effects! 
+
+We have to move onto a new model called an 'lme()' which is in the 'nlme' package.
+
+```{r echo=TRUE}
+# We don't have to install this package - it now comes defaul in R!
+library(nlme)
+
+# Examine the help file
+
+```
+
+'nlme' -- non-linear mixed effects
+
+```{r echo=TRUE}
+# Examine the help file
+help(lme)
+```
+
+"A generic function that fits a linear fixed effects model..."
+
+Requires a fixed model -- which we are used to using. 
+
+Data = datum
+
+Random variables! We have to specify what the random variables are now.
+
+Rest of the stuff you can mostly ignore.
+
+```{r echo=TRUE}
+# Fit the model
+results <- lme(Abundance ~ 1, data = datum, random = ~1|Year)
+summary(results)
+```
+
+We don't have any fixed effects for our model! No X-variables with fixed effects so far. So we can just specify 1 to tell the model we want to know what the average fish abundance is -- and how it varies in response to the random effect.
+
+What the tilde means is that... we want a random change in the *intercept* due to year. 
+
+Let's discuss the output.
+
+**Linear mixed-effects model fit by REML.** These models are no longer fit by the sum of squared error (SSE). We have now moved into the realm of Maximum Likelihood ('restricted maximum likelihood'; the default). This is ~distinct from SSE models and gives us distinct metrics (AIC, BIC, etc.).
+
+The **coefficients table** that we are used to is the ~same. This model is super simple, so it just gives us the intercept (in this case, fish abundance), including the estimate, SE, t-value, and p-value.
+
+The **random effects** information tells us about our two error terms -- the two sigma terms.
+
+- The intercept (poorly termed) is the **random year effect** ($\epsilon_{year}$). Truth was 10; it estimated 9.53.
+- The residual error term is our **residual error** ($\epsilon_{residual}$). Truth was 1; it estimated 0.89.
+
+I wish it labeled the random intercept as "year", but instead it just says (Intercept). Not super useful...
+
+Questions?
+
+## Another Example
+
+### Field experiment
+
+Let's assume we have 15 fields where we are doing a good, old-fashioned, classic agricultural experiment! Within each plot, we have a treatment and a control.
+
+*Brian draw this on the board: field 1, field 2, field 3, ... , field 15: each field with a C and T plot within it that are randomly top or bottom of field*
+
+**Q:** How many samples do we have? **30**: a treatment and a control within each of 15 plots.
+
+We could run this model:
+
+$Biomass = \beta_0 + \beta_1Treatment + \epsilon \sim N(0, \sigma)$
+
+**Q:** What's do normal people call this? **T-test!**
+
+Is there anything we should be worried about for this? What about swamping?
+
+Swamping -- when the effect of one X-variable is masked out by another effect.
+
+Should we be worried about swamping here?
+
+What if things that are different in each field (drainage, sunlight, deer abundance, etc.) influence biomass and thus prevent us from learning about our effect of interest: treatment vs. control. If so, we then we should deal with swamping.
+
+**Q:** How do we normally deal with swamping? We include field in the model! But that requires us to add 14 field effects!! That's impractical and not elegant. Plus we don't care about how fields influence biomass, we mostly want to control for that variation while examining the effect of treatment.
+
+The answer to this problem is to run a **mixed-effects model**:
+
+$Biomass = \beta_0 + \beta_1Treatment + \epsilon_{field} \sim N(0, \sigma_{field}) + \epsilon_{residual} \sim N(0, \sigma_{residual})$
+
+Here, $\epsilon_{field} \sim N(0, \sigma_{field})$ is the *between-field variation*, while $\epsilon_{residual} \sim N(0, \sigma_{residual})$ is the *within-field variation*.
+
+We can partition the treatment effect from random, noise effects among plots. 
+
+The first model has a fancy name: t-test. This second, more complicated model also has a fancy name: <u>**paired t-test**</u>! By including the field effect, we have tied each pair of treatment and control samples within each field together. Without that field effect, we lump all of our samples into giant pools of treatment and control and then compare them. 
+
+This second model is **much more powerful**! We have mathematically eliminated a lot of residual, eliminated swamping, and accounted for residual variation due to field by only adding one parameter: sigma. 
+
+This experimental design also has a fancy term: <u>**randomized block design**</u>. The fields are blocks; we have 'blocked' by field. And within each field, we have randomized treatment assignment. Randomized block designs are very, very powerful!! By eliminating swamping.
+
+We could included field-effect as an X-variable, but it's much better to do it this way!!
+
+Let's look at another dataset.
+
+### Truth
+
+Here is how the data were simulated:
+
+```{r echo=TRUE}
+### Dataset 2
+# Set the seed for reproducibility
+set.seed(123)
+
+# Simulate data
+Field <- rep(1:15, each = 2)
+Treatment <- rep(0:1, 15)
+
+# Field error
+FieldError <- rep(rnorm(15, 0, 5), each = 2)
+
+# Within-year error
+Error <- rnorm(length(Field), 0, 1)
+
+# Response variable
+Biomass <- 25 + 10*Treatment + FieldError + Error
+
+# Save the data
+datum <- data.frame(Field = Field, Treatment = Treatment, FieldError = FieldError, Error = Error, Biomass = Biomass)
+
+# Save the data
+write.csv(datum, "lecture_15_dataset2.csv", row.names = FALSE)
+
+```
+
+There are 2 samples from 15 fields, Treatment is dummy-coded, Field Error has a standard deviation of 5, residual error has a standard deviation of 1, and Biomass is 25 + 10*treatment + the two error terms.
+
+Truth:
+
+- $\beta_0 = 25$ -- average biomass in control
+- $\beta_1 = 10$ -- difference in treatment and control
+- $\sigma_{field} = 5$ -- error associated with fields
+- $\sigma_{residual} = 1$ -- residual error
+
+### Analysis
+
+Load it into R:
+
+```{r echo=TRUE}
+# Load the data
+datum <- read.csv("lecture_15_dataset2.csv")
+
+# Examine
+head(datum)
+
+# Plot
+plot(Biomass ~ Treatment, data = datum)
+
+```
+
+Now remember, our observations within each field are *paired*. Some researchers will connect the dots in each field to indicate this -- or change the pixels to be paired by plot.
+
+Let's run a t-test:
+
+```{r echo=TRUE}
+# T-test
+results <- lm(Biomass ~ Treatment, data = datum)
+summary(results)
+
+```
+
+We are done! Or we could say that. This is sufficient. It is statistically significant. But we are leaving a lot of variation unexplained that we can easily explain with a better model.
+
+Estimate is 9.9, and confidence intervals are about ~3, which overlaps with Truth (10). But that's a pretty big confidence interval. Residual standard error: 6.87. All of the error is being chalked up as residual error. 
+
+There is nothing wrong with this, but our power is low due to the large confidence intervals.
+
+Let's try a LME.
+
+```{r echo=TRUE}
+# LME; i.e., paired T-test
+results2 <- lme(Biomass ~ Treatment, data = datum, random = ~1|Field)
+summary(results2)
+
+```
+
+Examine the field effect between the two analyses. Mostly unchanged!! Zero effect on our effect estimates. But the SE and 95% CI are much reduced now. Confidence intervals went from 3 to 0.6! Big reduction. And our p-values are drastically smaller.
+
+We have now split the error into the two error terms: error due to field, and error due to randomness in observations. Residual error reduced from ~4 to ~1 (Truth), by assigning that error to the field (intercept: 3.8).
+
+No p-value associated with the effect of field! We did not test for this as a fixed-effect, we did not estimate a beta for field, so it doesn't get a statistical test with a p-value. We are mostly interested in effect of treatment, not an effect of field.
+
+If we wanted to test for an effect of field, we could run an F-drop test! We'll do that during the next class.
 
 <br>
 
 ## Truth
+
+Again, here is Truth, which we always have at the end of each lecture.
 
 ```{r}
 ################### 'Truth' #################### 
@@ -297,19 +558,19 @@ We can briefly look at 'Truth' to see how the data were analyzed.
 set.seed(123)
 
 # Simulate data
-Years <- rep(1:10, each = 10)
+Year <- rep(1:10, each = 10)
 
 # Between-year error
 MeanYear <- rep(rnorm(10, 0, 10), each = 10)
 
 # Within-year error
-Error <- rnorm(length(Years), 0, 1)
+Error <- rnorm(length(Year), 0, 1)
 
 # Response variable
-Abundance <- 50 + Error + MeanYear
+Abundance <- 50 + MeanYear + Error
 
 # Save the data
-datum <- data.frame(Years = Years, Error = Error, MeanYear = MeanYear, Abundance = Abundance)
+datum <- data.frame(Year = Year, MeanYear = MeanYear, Error = Error, Abundance = Abundance)
 
 # Save the data
 write.csv(datum, "lecture_15_dataset1.csv", row.names = FALSE)
