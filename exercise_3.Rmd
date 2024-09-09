@@ -1,5 +1,5 @@
 ---
-title: "Exercise 4: Analysis of Categorical Data"
+title: "Exercise 3: Analysis of Categorical Data"
 author: "NRES 710"
 date: "Last compiled: `r Sys.Date()`"
 output: 
@@ -19,7 +19,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-## Exercise 4 -- Analysis of Categorical Data
+## Exercise 3 -- Analysis of Categorical Data
 
 ## Problems
 
@@ -79,7 +79,7 @@ If you would like to know the values used to create these datasets (i.e., 'truth
 
 ```{r datasets, echo=TRUE, message=FALSE, warning=FALSE}
 ### 'Truth'
-### Exercise 4: code to simulate datasets 
+### Exercise 3: code to simulate datasets 
 
 # Set the seed for reproducibility
 set.seed(123)

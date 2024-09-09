@@ -1,5 +1,5 @@
 ---
-title: "Exercise 6: Multivariable Analysis - Interactions"
+title: "Exercise 5: Multivariable Analysis - Interactions"
 author: "NRES 710"
 date: "Last compiled: `r Sys.Date()`"
 output: 
@@ -69,7 +69,7 @@ If you would like to know the values used to create these datasets (i.e., 'truth
 
 ```{r}
 ########################## 'Truth' ############################# 
-### Exercise 6: code to simulate datasets for the exploration of
+### Exercise 5: code to simulate datasets for the exploration of
 ### interactions in multi-variable analysis
 
 # Set the seed for reproducibility

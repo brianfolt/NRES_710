@@ -1,5 +1,5 @@
 ---
-title: "Exercise 5: Multivariable Analysis - Collinearity"
+title: "Exercise 4: Multivariable Analysis - Collinearity"
 author: "NRES 710"
 date: "Last compiled: `r Sys.Date()`"
 output: 
@@ -88,7 +88,7 @@ If you would like to know the values used to create these datasets (i.e., 'truth
 
 ```{r}
 ########################## 'Truth' ############################# 
-### Exercise 5: code to simulate datasets for the exploration of
+### Exercise 4: code to simulate datasets for the exploration of
 ### collinearity in multi-variable analysis
 
 # Set the seed for reproducibility

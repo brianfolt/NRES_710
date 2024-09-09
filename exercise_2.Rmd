@@ -1,5 +1,5 @@
 ---
-title: "Exercise 3: Linear Regression (cont.)"
+title: "Exercise 2: Linear Regression (cont.)"
 author: "NRES 710"
 date: "Last compiled: `r Sys.Date()`"
 output: 
@@ -19,7 +19,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-## Exercise 3 -- Regression Assumptions
+## Exercise 2 -- Regression Assumptions
 
 For each of the following datasets, import the data into R and analyze the data using regression. Then, provide the following information in a Microsoft Word document:
 
@@ -54,7 +54,7 @@ Picture: Bert Filemyr
 If you would like to know the values used to create these datasets (i.e., 'truth'), examine the code below:
 
 ```{r datasets, echo=TRUE, message=FALSE, warning=FALSE}
-### Exercise 3: code to simulate datasets 
+### Exercise 2: code to simulate datasets 
 
 # Set the seed for reproducibility
 set.seed(123)
