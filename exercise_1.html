@@ -334,28 +334,25 @@ div.tocify {
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="exercise_1.html">Exercise 1 - Data Summary Functions</a>
+      <a href="exercise_1.html">Exercise 1 - Linear Regression</a>
     </li>
     <li>
-      <a href="exercise_2.html">Exercise 2 - Linear Regression</a>
+      <a href="exercise_2.html">Exercise 2 - Linear Regression (cont.)</a>
     </li>
     <li>
-      <a href="exercise_3.html">Exercise 3 - Linear Regression (cont.)</a>
+      <a href="exercise_3.html">Exercise 3 - Analysis of Categorical Data</a>
     </li>
     <li>
-      <a href="exercise_4.html">Exercise 4 - Analysis of Categorical Data</a>
+      <a href="exercise_4.html">Exercise 4 - Multi-variable Analysis - Collinearity</a>
     </li>
     <li>
-      <a href="exercise_5.html">Exercise 5 - Multi-variable Analysis - Collinearity</a>
+      <a href="exercise_5.html">Exercise 5 - Multi-variable Analysis - Interactions</a>
     </li>
     <li>
-      <a href="exercise_6.html">Exercise 6 - Multi-variable Analysis - Interactions</a>
+      <a href="exercise_6.html">Exercise 6 - TBD</a>
     </li>
     <li>
       <a href="exercise_7.html">Exercise 7 - TBD</a>
-    </li>
-    <li>
-      <a href="exercise_8.html">Exercise 8 - TBD</a>
     </li>
   </ul>
 </li>
@@ -385,7 +382,7 @@ div.tocify {
 
 <h1 class="title toc-ignore">Exercise 2: Linear Regression</h1>
 <h4 class="author">NRES 710</h4>
-<h4 class="date">Last compiled: 2024-09-02</h4>
+<h4 class="date">Last compiled: 2024-09-09</h4>
 
 </div>
 
@@ -393,8 +390,9 @@ div.tocify {
 <div id="linear-regression-analysis-in-r" class="section level2">
 <h2>Linear Regression Analysis in R</h2>
 <p>For each of the following datasets, run a regression analysis in R
-using the ‘lm()’ function. Report your results in a Word Document using
-the following template, which we discussed in class:</p>
+using the ‘lm()’ function. Report your results in a document (e.g., Word
+document, Google Doc, etc.) using the following template, which we
+discussed in class:</p>
 <p><strong>For each 1 [x-unit] increase in [x], we observed a
 [slope][y-unit](+/-[95% C.I.], +/-95% C.I.) [increase/decrease] in [y]
 (p = [p-value]; r^2 = [r^2]).</strong></p>
@@ -402,54 +400,60 @@ the following template, which we discussed in class:</p>
 in your results sentence. Also, be sure to report the exact p-value;
 don’t use p &lt; 0.0001. Finally, plot the data and the best-fit line to
 the data.</p>
-<p>Compile all of your results in a Word document. This will be one
-sentence and one graph for each of the three problems; I don’t need
-anything else. Load this into the WebCampus assignment portal and submit
-it by the due date indicated in the course schedule.</p>
+<p>Compile all of your results in a document. This will be one sentence
+and one graph for each of the three problems; I don’t need anything
+else. Show your results to me during class and I will give you feedback
+and/or credit for it. If you are unable to make class, load the document
+into the WebCampus assignment portal and submit it by the due date
+indicated in the course schedule.</p>
 <div id="dataset-1" class="section level3">
-<h3><a href="exercise_1_dataset1.csv">Dataset 1</a></h3>
-<p>In this dataset, you are interested in examining the relationship
-between the density of <em>Ctenus</em> sp. (wandering spiders;
-y-variable – spiders / sq. meter) as a function of the density of small
-frogs (x-variable; frogs / sq. meter). For those that are interested, in
-many tropical rainforests these wandering spiders are major predators of
-small, terrestrial frogs. Assume that you were in Costa Rica and you
-captured all of the spiders and frogs you could find in independent
-rainforest plots (10 <span class="math inline">\(m^2\)</span>). You
-calculated the density of each type of spider (spiders/sq. meter area).
-What is the relationship between frog and spider density?</p>
+<h3>Dataset 1</h3>
+<p>In <a href="exercise_1_dataset1.csv">Dataset 1</a>, you are
+interested in examining the relationship between the density of
+<em>Ctenus</em> sp. (wandering spiders; y-variable – spiders / sq.
+meter) as a function of the density of small frogs (x-variable; frogs /
+sq. meter). For those that are interested, in many tropical rainforests
+these wandering spiders are major predators of small, terrestrial frogs.
+Assume that you were in Costa Rica and you captured all of the spiders
+and frogs you could find in independent rainforest plots (10 <span
+class="math inline">\(m^2\)</span>), and you calculated the density of
+both frogs and spiders (individuals/sq. meter area). What is the
+relationship between frog and spider density?</p>
 <p><img src="pictures/pic_spider_frog.png" style="width:50.0%" /></p>
 <p>Picture: Witold Lapinski</p>
 <p><br></p>
 </div>
 <div id="dataset-2" class="section level3">
-<h3><a href="exercise_1_dataset2.csv">Dataset 2</a></h3>
-<p>In this dataset, you are testing the relationship between the size of
-a particular orchid flower (y-variable; diameter in cm) as a function of
-the elevation it is growing in the Andes Mountains in Peru (x-variable;
-meters). You’ve hiked from the lowland Amazon rainforest (50 m asl) and
-scaled up the treeline (3000 m), and along the way you collected almost
-500 flowers. Note: in this dataset, the slope is very small. For
-reporting purposes, it is entirely acceptable to <em>scale</em> the
-slope that you report. Just multiply the change in X (in the standard
-sentence, it’s just 1), the slope, and the confidence intervals all by
-the scaling factor that you choose to use.</p>
+<h3>Dataset 2</h3>
+<p>Orchid plants captivate horticulturists by producing some of the most
+beautiful flowers in the world. In <a
+href="exercise_1_dataset2.csv">Dataset 2</a>, you want to test whether
+there is a relationship between the size of a particular orchid flower
+(y-variable; diameter in cm) and the elevation the plant grows at in the
+Andes Mountains in Peru (x-variable; meters). You’ve hiked from the
+lowland Amazon rainforest (50 m asl) and scaled up the treeline (3000
+m), and along the way you collected almost 500 flowers. Note: in this
+dataset, the slope is very small. For reporting purposes, it is entirely
+acceptable to <em>scale</em> the slope that you report. Just multiply
+the change in X (in the standard sentence, it’s just 1 unit), the slope,
+and the confidence intervals all by the scaling factor that you choose
+to use.</p>
 <p><img src="pictures/pic_orchid.png" style="width:50.0%" /></p>
 <p>Picture: Chen Shu (iNaturalist)</p>
 <p><br></p>
 </div>
 <div id="dataset-3" class="section level3">
-<h3><a href="exercise_1_dataset3.csv">Dataset 3</a></h3>
+<h3>Dataset 3</h3>
 <p>Palmer’s chipmunks (<em>Neotamias palmeria</em>) is an endemic
 species of chipmunk that occurs in sky-island habitats in southern
-Nevada. In this dataset, you are interested in the relationship between
-the amount of time spent foraging by <em>N. palmeria</em> (y-variable;
-minutes/day) as a function of number of predatory birds observed in the
-area on the preceding day (x-variable; predators/day). You recorded the
-amount of time spent outside the burrow by each of ten squirrels over
-the course of two weeks, as well as the number of birds of prey that
-flew over that colony. Note: be careful with which variable is X and
-which is Y.</p>
+Nevada. In <a href="exercise_1_dataset3.csv">Dataset 3</a>, you are
+interested in the relationship between the amount of time spent foraging
+by <em>N. palmeria</em> (y-variable; minutes/day) as a function of
+number of predatory birds observed in the area on the preceding day
+(x-variable; predators/day). You recorded the amount of time spent
+outside the burrow by each of ten squirrels over the course of two
+weeks, as well as the number of birds of prey that flew over that
+colony. Note: be careful with which variable is X and which is Y.</p>
 <p><img src="pictures/pic_chipmunk.png" style="width:50.0%" /></p>
 <p>Picture: Jason M Crockwell (iNaturalist)</p>
 <p><br></p>
@@ -459,7 +463,7 @@ which is Y.</p>
 <h2>Truth</h2>
 <p>If you would like to know the values used to create these datasets
 (i.e., ‘truth’), examine the R code here:</p>
-<pre class="r"><code>### Exercise 2: code to simulate datasets 
+<pre class="r"><code>### Exercise 1: code to simulate datasets 
 
 # Set the seed for reproducibility
 set.seed(123)
