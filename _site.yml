@@ -19,7 +19,7 @@ navbar:
       href: exercise_4.html 
     - text: Exercise 5 - Multi-variable Analysis - Interactions
       href: exercise_5.html
-    - text: Exercise 6 - TBD
+    - text: Exercise 6 - Mixed Effects Models
       href: exercise_6.html
     - text: Exercise 7 - TBD
       href: exercise_7.html
