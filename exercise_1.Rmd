@@ -23,7 +23,7 @@ knitr::opts_chunk$set(
 
 For each of the following datasets, run a regression analysis in R using the 'lm()' function. Report your results in a document (e.g., Word document, Google Doc, etc.) using the following template, which we discussed in class:
 
-**For each 1 [x-unit] increase in [x], we observed a [slope][y-unit](+/-[95% C.I.], +/-95% C.I.) [increase/decrease] in [y] (p = [p-value]; r^2 = [r^2]).**
+**For each 1 [x-unit] increase in [x], we observed a [slope][y-unit](±[95% C.I.], ±95% C.I.) [increase/decrease] in [y] (p = [p-value]; $r^2$ = [$r^2$]).**
 
 If your results are not statistically significant, be sure to say so in your results sentence. Also, be sure to report the exact p-value; don't use p < 0.0001. Finally, plot the data and the best-fit line to the data.
 
