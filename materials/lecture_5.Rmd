@@ -42,37 +42,40 @@ There are many assumptions that this regression test makes! But we will focus on
 
 What are the assumptions of statistical test and how do they influence your results?
 
-The first thing you need to know about assumptions of statistical tests (regression, t-test, ANOVA, other tests we will cover...) is that the tests are **robust to violations of assumptions**.
+The first thing you need to know about assumptions of common, parameteric statistical tests (regression, t-test, ANOVA, other tests we will cover...) is that the tests are <u>**robust to violations of assumptions**</u>.
 
-- Robust means that: if an assumption is violated, it very rarely influences the results we get from the analysis (e.g., slope).
+- Robust means that: if an assumption is violated, it very rarely influences the results we get from the analysis (e.g., slope estimate; $\beta_1$).
 - We'll talk about which of the assumptions influence different parameters...
-- But for most parameters, if the assumptions are violated it does not influence the slope.
-- Assumption violation may influence the standard deviation, but this is not often reported.
-- **Violations cause the p-value to increase.** This means that violations are likely to be conservative. Since we want to avoid committing Type I error (rejecting the null when in fact it is true), then if assumption violation causes p-values to increase then we are less likely to commit Type I error.
+- But for most parameters, if the assumptions are violated, it does not influence the slope.
+- Assumption violation may influence the standard deviation -- but this is not often reported, so no big deal?
+- **Violations cause the p-value to increase.** This means that violations are likely to be <u>*conservative</u>*. Since we want to avoid committing Type I error (rejecting the null when in fact it is true), then if assumption violation causes p-values to increase then we are less likely to commit Type I error.
 
 A general rule (*axiom*) in statistics is that: **the more assumptions a test makes, the more powerful it is (power = p-values).**
 
-We often use statistical tests that make assumptions. Often, these assumptions are true. And since we make more assumptions, we are more likely to detect a significant effect. **If these assumptions are valid.**
+We often use statistical tests that make assumptions. Often, these assumptions are true. And since we make more assumptions, we are more likely to detect a significant effect. **If these assumptions are valid.** If the assumptions are invalid, then we will have larger p-values and be less likely to detect significant results.
 
-I often don't care too much about assumptions -- because they are often met due to our **study design**, the specific analysis we chose, and **most analyses are robust to violations of assumptions**. But, **reviewers do**. Reviewers will try to find something wrong with your paper. They will try to find something wrong and jam up the process. So it can be useful to carefully document how you examined for violations of assumptions in your analysis. This gets tedious, but is part of the 'statistical ritual' of our field... (Or maybe it shouldn't be. Johnson [1999] made suggestions that our statistical ritual leads to bad practices, and we will read another paper to this effect at the end of the semester.)
+I was taught to not care too much about assumptions -- because they are often met due to our **study design**, the specific analysis we chose, and **most analyses are robust to violations of assumptions**.
+
+But, **reviewers do**. Reviewers will try to find something wrong with your paper. They will try to find something wrong and jam up the process. So it can be useful to carefully document how you examined for violations of assumptions in your analysis. This gets tedious, but is part of the 'statistical ritual' of our field... (Or maybe it shouldn't be. Johnson [1999] made suggestions that our statistical ritual leads to bad practices, and we will read another paper to this effect at the end of the semester.)
 
 But as for me, again, I don't care too much about these assumptions, because **most analyses are robust to violations of assumptions**.
 
-There are **5 assumptions** to linear regression. I put the equation up on the board again because most of these assumptions are indicated in the equation, either explicitly or implicitly. 
+There are **5 assumptions** to linear regression. I put the equation up on the board again because most of these assumptions are indicated in the equation, either explicitly or implicitly.
 
-### Continuous Y
+### 1) Continuous Y
 
-- Should be continuous; not a count, like a number. But... if it is a count, that's potentially okay, because regression/ANOVA are robust to violations of assumptions. We don't really need a test for this -- if you collected the data, you should know whether it is continuous or not!
+- Should be <u>continuous</u>; not a count, like a number. But... if it is a count, that's potentially okay, because regression/ANOVA are robust to violations of assumptions. We don't really need a test for this -- <u>if you collected the data, you should know whether it is continuous or not</u>!
 
-- Note: linear regression also assumes that your X-variable is continuous... but we can relax this assumption, and we will do so next week when we explore t-tests! More on this soon.
+- Note: linear regression also assumes that your <u>X-variable is continuous</u>... but we can relax this assumption, and we will do so next week when we explore t-tests! More on this soon.
 
-- If you Y is not continuous, it will not influence your slope, but it might increase your p-value.
+- **Consequences:** If your Y-variable is not continuous, it will not influence your slope, but it *might increase your p-value*.
 
-### Error is normally distributed
+### 2) Error is normally distributed
 
-- Very clearly indicated in the equation! Important and something that a lot of people get wrong. Some folks say that X-variable has to be normally distributed, continuous, etc. -- but nope. Others assume that your Y-variable has to be normally distributed. Nope! This assumption relates to the **error** around the Y-variable. 
-
-For example: consider the data in the left graph. There is a gap in values for the middle-range of X-values. If we examine this as a frequency histogram (middle graph), this is not a normally-distributed y-variable; it is bimodally distributed! This is okay.  When we run this regression, we have not violated any assumptions, because the error is normally distributed around the line.
+- <u>Very clearly indicated in the equation</u>! Important and something that a lot of people get wrong.
+- Some folks say that X-variable has to be normally distributed, continuous, etc. -- but nope.
+- Others assume that your Y-variable has to be normally distributed. Nope! This assumption relates to the <u>**error** around the Y-variable</u>. 
+- For example: consider the data in the left graph. There is a gap in values for the middle-range of X-values. If we examine this as a frequency histogram (middle graph), this is not a normally-distributed y-variable; it is bimodally distributed! This is okay.  When we run this regression, we have not violated any assumptions, because the error is normally distributed around the line.
 
 ```{r example-1, echo=FALSE, message=FALSE, warning=FALSE, fig.width=6, fig.height=4}
 # Set the seed for reproducibility
@@ -107,13 +110,11 @@ residuals <- resid(results1)
 plot(density(residuals), xlab = "Residuals", main = "")
 ```
 
-Then why are people always asking if the Y-variable is normally distributed...? This is because if you look at the distribution of the y-data and it appears normal, the residuals will almost always be normal when you run the analysis.
+- To really know if the assumption is violated, you need to <u>run the regression</u> and examine whether the <u>residuals are normal</u> (third graph).
 
-But, if you run a histogram and your y-data are not normal, this does not necessarily mean that your error will also not be normal. To really know if the assumption is violated, you need to run the regression and examine whether the residuals are normal (third graph).
+- **Consequences:** If your error is not normally distributed, it's not going to influence your slope -- but it might increase your p-values a little bit. 
 
-If your error is not normally distributed, it's not going to influence your slope -- but it might increase your p-values a little bit. 
-
-### Linear relationship between X and Y
+### 3) Linear relationship between X and Y
 
 This one is important. This is implicit in our linear model equation.
 
@@ -121,9 +122,9 @@ It assumes that there is a single parameter -- the slope -- describing the relat
 
 The reason why I think this is important is because so often in ecology/natural resource management I see people obtaining two continuous variables and immediately running a regression model -- without ever considering whether their data have a linear relationship. They don't even think about it.
 
-This is a problem, because in ecology... many processes of interest are non-linear!
+This is a problem, because in the environmental sciences, many processes of interest are non-linear!
 
-Example: mesocosm experiment. We want to understand the effect of crayfish predators on prey fish. Does fish abundance decrease and predatory crayfish increases?
+Example: mesocosm experiment. We want to understand the effect of crayfish predators on prey fish. Does fish abundance decrease as predatory crayfish increases?
 
 ```{r predator-prey-simulation, echo=FALSE, message=FALSE, warning=FALSE, fig.width=7.5, fig.height=3.5}
 # Set the seed for reproducibility
@@ -144,19 +145,19 @@ results <- lm(prey_abundance ~ predator_abundance)
 abline(results)
 ```
 
-This very clearly violates the assumption of linearity! We can fit a better statistical model -- one that does not assume linearity -- which can better help us measure this relationship and explain it to the scientific community! 
+<u>These data very clearly violate the assumption of linearity</u>! We can fit a better statistical model -- one that does not assume linearity -- which can better help us measure this relationship and explain it to the scientific community! 
 
-So, don't assume there is a linear relationship between X and Y -- examine this, verify, and adjust your model as needed.
+So, don't assume there is a linear relationship between X and Y: Examine your data with a **plot**, verify that the relationship is **linear**, and adjust your model if needed.
 
-If the relationship is not linear, **this will alter your slope**! We are measuring something that is not linear an
+**Consequences:** If the relationship is not linear, **this will alter your slope**! We are measuring something that is not linear as a linear effect. This is bad! This is the one assumption that I tend to truly worry about. Violating it is egregious. 
 
-### Homoscedasticity
+### 4) Homoscedasticity
 
 *homo* = same; *scedasticity* = variance, noise, error, etc.
 
 Implicit in our equation: - $\epsilon \sim N(0, \sigma)$
 
-Constant variance: *error does not change not matter what the X and Y values are.*
+Constant variance: *error does not change, no matter what the X and Y values are.* In other words, error in Y is the same for all values of X. 
  
 ```{r example-3, echo=FALSE, message=FALSE, warning=FALSE, fig.width=7.5, fig.height=3.5}
 # Set the seed for reproducibility
@@ -181,7 +182,7 @@ abline(results1)
 
 We can visualize homoscedasticity by imagining/drawing normally distributed bell curves amidst our data along the regression line...
 
-An example of **heteroscedasticity** is any case where your variance changes. This commonly occurs in ecology when we count animals. For example, when we are electofishing for fish in a river, areas with no fish have little variance; areas with many fish have high variance! It creates this cone-shaped data.
+An example of **heteroscedasticity** is any case where your variance changes. This commonly occurs in ecology when we count animals. For example, when we are **electrofishing for fish** in a river, areas with no fish have little variance; areas with many fish have high variance! It creates this cone-shaped data.
 
 ```{r example-4, echo=FALSE, message=FALSE, warning=FALSE, fig.width=7.5, fig.height=3.5}
 # Set the seed for reproducibility
@@ -211,19 +212,24 @@ abline(results1, col = "red")
 
 We can visualize *heteroscedasticity* by imagining/drawing normally distributed bell curves amidst our data along the regression line, and the bell curves get wider as we increase along X.
 
-*Heteroscedasticity* could also happen in a non-linear way. 
+*Brian draw bell curves with increasing size along the data*
 
-**Q:** Will heteroscedasticity influence your slope? No.
+Note: *Heteroscedasticity* could also happen in a non-linear way. 
 
-We can account for *heteroscedasticity* in our model by adding a weighting paramter to the error component: $\epsilon \sim N(0, \sigma * y)$ would allow for error to increase with $y$!
+**Consequences:** Will heteroscedasticity influence your slope?? No. But it will increase $\sigma$ estimates and thus cause increased p-values.
 
-### Independent samples
+We can account for *heteroscedasticity* in our model by adding a weighting parameter to the error component: $\epsilon \sim N(0, \sigma * y)$ would allow for error to increase with $y$!
+
+### 5) Independent samples
 
 When people say that the x-variable is the 'independent variable', this is what they really mean! Your samples should be independent of eachother and there should be **no autocorrelation**. 
 
 Example: measuring pollution in water samples every 10 m down the middle of a river from a chemical plant. These data will have autocorrelation, because pollution can't change that much from sample to sample.
 
-**Q:** How might you eliminate or minimize autocorrelation? Maybe by increasing distance between samples -- measure every kilometer. This decreases autocorrelation, but also decreases sample size. Tradeoff...
+**Q:** How might you eliminate or minimize autocorrelation? Maybe by:
+
+- increasing distance between samples -- measure every kilometer. This decreases autocorrelation, but also decreases sample size.
+- different points across the river
 
 I personally don't worry too much about autocorrelation, because often when you fix it/account for it, nothing changes. If you had a strong slope and p-value with one test, you will likely get a strong slope and p-value with another test.
 
@@ -279,9 +285,9 @@ abline(model, col = "red")
 
 Instead of our points bouncing around the line, they tend to follow eachother.
 
-This will not affect our slope, and it probably won't affect the p-value too much (would only increase). So again, linear regression is robust to violation of this assumption.
+This will not affect our slope, and it probably won't affect the p-value too much (would only increase). So again, <u>linear regression is robust to violation of this assumption</u>.
 
-Two types of autocorrelation issues: spatial and temporal autocorrelation. We will discuss how to deal with this down the road. But again, it's not too big of a concern.
+Two types of autocorrelation issues: *spatial* and *temporal* autocorrelation. We will discuss how to deal with this down the road. But again, it's not too big of a concern.
 
 Many things are autocorrelated in nature. Animal movements, for example! Is this a problem?
 
@@ -289,19 +295,19 @@ Maybe not. This is what animals do -- they move! Try to get big sample sizes.
 
 ## Evaluating assumptions w/ graphs
 
-Statistical tests exist to statistically test for these assumptions. These are p-value generating tests. There are some consequences of this.
+There are statistical tests that exist to statistically test these assumptions. These are <u>p-value generating tests</u>. There are some consequences of this.
 
 - If you have a small sample size, the assumption will never be violated! Because of the relationship between sample size and p-values that we have identified in previous classes.
 - Conversely, if you have a really large sample, the assumption will always be violated!
 
-So, for these reasons, I don't like these tests, and I don't recommend using these tests.
+So, for these reasons, <u>I don't like these tests</u>, and I don't recommend using these tests.
 
-Instead, what I do I look at my data graphically! And I will teach you to do this also. We will visually examine our data to identify whether our data meet these assumptions or not. If it has been violated, we will see this. If we can see the assumption has been violated, then we now know this.
+Instead, what I do I look at my data <u>graphically</u>! And I will teach you to do this also. We will visually examine our data to identify whether our data meet these assumptions or not. If it has been violated, we will see this. If we can see the assumption has been violated, then we now know this.
 
-Useful rule of thumb:
+<u>Useful rule of thumb</u>:
 
-- If you can't see it, it doesn't exist, and you assume there isn't one.
-- If you can see it, then an assumption may be violated, and then it's our decision to do something about it or not.
+- If you can't see a violation, it doesn't exist, and you assume there isn't one.
+- If you can see a violation, then an assumption may be violated, and then it's our decision to do something about it or not.
 
 We have four main assumptions, and we will use four graphical approaches to examine whether these assumptions are met.
 
@@ -324,6 +330,8 @@ kable(data, col.names = c("Assumption", "X-Y Scatterplot", "Residuals Scatterplo
 ```
 
 ### X-Y Scatterplots
+
+#### Graph 1
 
 This first graph shows data where **none of the assumptions are violated**.
 
@@ -349,14 +357,16 @@ plot(y ~ x, data = datum,
 
 ```
 
-- Data are very clearly linear.
+- Data are very clearly <u>linear</u>.
 - Data appear to be normally distributed around the line. Most are close to the line, but some are out in the tails.
 - Does not appear to be any autocorrelation.
 - Does not appear to be any heteroscedasticity.
 
 **This is how your data should look!**
 
-This second graph shows data were the assumption of error normality is violated.
+#### Graph 2
+
+This second graph shows data were the assumption of <u>error normality</u> is violated.
 
 ```{r error-violated, echo=FALSE, message=FALSE, warning=FALSE, fig.width=7.5, fig.height=3.5}
 # Set the seed for reproducibility
@@ -380,9 +390,11 @@ plot(y ~ x, data = datum,
 
 ```
 
-We can see that normality is violated because there are no tails below the line!
+We can see that normality is violated because there is no tail below the line!
 
-**Q:** Has this influenced the slope? No. It would influence the intercept (but nobody reports that ever, so no big deal).
+**Q:** Has this influenced the slope? **No**, but it would influence the intercept. However, nobody reports the intercept, so this isn't a big deal.
+
+#### Graph 3
 
 This third graph shows data where the assumption of **linearity** is violated.
 
@@ -411,6 +423,8 @@ plot(y ~ x, data = datum,
 - A linear regression model would not fit these data well, so we would want to seek an alternative approach.
 - Note: Some might say that these data are not normally distributed, but it is. Most points are centered on the line, with some out on the tails.
 
+#### Graph 4
+
 This fourth graph shows data where the assumption of **homoscedasticity** is violated.
 
 ```{r heteroscedasticity, echo=FALSE, message=FALSE, warning=FALSE, fig.width=7.5, fig.height=3.5}
@@ -437,9 +451,11 @@ plot(y ~ x, data = datum,
 
 These data are **heteroscedastic**; as X increases, error increases.
 
-We don't need a statistical test to know that these data are heteroscedastic.
+We don't need a statistical test to know that these data are heteroscedastic. We can eyeball it.
 
-This last graph shows when the data are not independent and autocorrelation is present in the data.
+#### Graph 5
+
+This last graph shows when the data are not independent, and autocorrelation is present in the data.
 
 ```{r autocorrelation, echo=FALSE, message=FALSE, warning=FALSE, fig.width=7.5, fig.height=3.5}
 # Set the seed for reproducibility
@@ -468,10 +484,32 @@ y1 <- 3 + 2 * x1 + error
 # Create dataframe
 datum <- data.frame(x = x1, error = error, y = y1)
 
-# Plot the data
-plot(y ~ x, data = datum,
-     ylim=c(0, max(datum$y)), xlab = "", ylab = "",
-     main = "Autocorrelation")
+# Fit a linear model to the data
+model <- lm(y1 ~ x1, data = datum)
+
+# Get predicted values and residuals from the model
+datum$predicted <- predict(model)
+datum$residuals <- resid(model)
+
+# Set up two side-by-side plots
+par(mfrow = c(1, 2))
+
+# First plot: Original data with regression line
+plot(y1 ~ x1, data = datum,
+     xlab = "x", ylab = "y")
+
+# Second plot: Same graph with residual lines
+plot(y1 ~ x1, data = datum,
+     xlab = "x", ylab = "y",
+     main = "Residuals (Lines to Regression Line)")
+abline(model, col = "blue", lwd = 2)
+
+# Add lines connecting points to the regression line (visualizing residuals)
+for (i in 1:n) {
+  segments(x0 = datum$x[i], y0 = datum$y[i], 
+           x1 = datum$x[i], y1 = datum$predicted[i], 
+           col = "red")
+}
 
 # Examine autocorrelation in the error term
 print(datum[10:20,])
@@ -480,8 +518,8 @@ print(datum[10:20,])
 
 What do we see here...?
 
-- The errors are similar to each other; i.e., they are correlated to one another.
-- The error is not centered on the line, but rather *follows itself*.
+- The errors are *similar* to each other; i.e., they are correlated to one another.
+- The error is *not* centered on the line, but rather *follows itself*.
 - Two types of autocorrelation; we'll discuss this in a future lecture when discuss how to fix or model autocorrelation (which requires more complicated models, no ready for this just yet).
 
 ### Residuals Scatterplot
@@ -489,7 +527,7 @@ What do we see here...?
 Residuals scatterplot involve making a graph of:
 
 - **X-variable --> X data**
-- **Y-variable --> residual (error)**
+- **Y-variable --> residual (error)**; i.e., distance between each point and the regression line
 
 ```{r residual_plot, echo=FALSE, message=FALSE, warning=FALSE, fig.width=9, fig.height=4.5}
 # Set the seed for reproducibility
@@ -523,7 +561,7 @@ abline(h = 0, col = "red", lty = 2)
 
 ```
 
-Assuming we had a pretty usual data with X and Y and we fit a regression line (above), we can revisualize that graph with the same X-variable but now with the residuals of Y on the y-axis. We sort of flip that graph, make the regression line be at 0, and then residuals above and below that line are visualized with the Y-variable. This is a 'residuals plot'.
+Assuming we had a pretty usual data with X and Y and we fit a regression line (above), we can revisualize that graph with the same X-variable but now with the residuals of Y on the y-axis. We sort of flip that graph, make the regression line be at Y = 0, and then error distance above and below that line are visualized with the Y-variable. This is a 'residuals plot', and these distances are called 'residuals'.
 
 For example, the residuals plot can be useful when you have a large range of X and Y, and your error is very small:
 
@@ -559,7 +597,7 @@ abline(h = 0, col = "red", lty = 2)
 
 ```
 
-The data look pretty tight around the line in the X-Y scatterplot, but when we look at the residual plot, we see something else. This is common when we have low error -- small noise.
+The X-Y plot make these look pretty tight around the line. But when we look at the residual plot, we see something else. This is common when we have low error -- small noise.
 
 **Q:** What is happening here -- what assumption has been violated?
 
@@ -774,17 +812,7 @@ kable(data, col.names = c("Assumption", "X-Y Scatterplot", "Residuals Scatterplo
 
 ```
 
-## Graphical Assumption Tests
-
-We described graphical approaches to evaluating whether your data meet assumptions of linear regression. We discussed five assumptions:
-
-- **Continuous Y** -- your Y-variable is continuous; only an eye-ball test is needed for this
-- **Linearity** -- a linear relationship between X and Y
-- **Normality residuals** -- residuals (error) are normally distributed
-- **Homoscedasticity** -- constant variance; noise around regression is constant across all values of X
-- **No autocorrelation** -- your data are independent of eachother
-
-We can use different graphs to test these assumptions (**see above table**).
+## Graphical Assumption Tests in R
 
 **I am going to move to R** and we will learn how to easily make these plots in R!
 
@@ -807,7 +835,13 @@ plot(y ~ x, data = datum)
 
 ```
 
-Y is continuous, definitely linear, the residuals appear normally distributed (most close to the line), variance seems constant, does not appear to have any autocorrelation (but it's possible).
+Y is:
+
+- continuous
+- definitely linear
+- residuals appear normally distributed (most close to the line)
+- variance seems constant
+- does not appear to have any autocorrelation (but it's possible).
 
 ```{r fig.width=4, fig.height=4}
 # Load the data
@@ -855,7 +889,9 @@ Pretty easy to see the autocorrelation in these data. Most observations of Y at 
 
 ### Residual Plots
 
-Before we can run a residual plots, we have to generate the residuals! Which means we have to first fit a regression. X-Y Scatterplots use the raw data, but the other three graphs we use require a regression to be run for us to then make these plots. Let's run a few analyses:
+Before we can run a residual plots, we have to generate the residuals! Which means we have to first fit a regression. X-Y Scatterplots use the raw data, but the other three graphs we use <u>require a regression to be run</u> for us to then make these plots.
+
+Let's run a few analyses:
 
 ```{r fig.width=4, fig.height=4}
 # Fit linear regression models to the five datasets
@@ -878,6 +914,18 @@ residuals(results)[1:20]
 ```
 
 These data are used to calculate the **standard deviation of the error** around our line -- simply by calculating the standard deviation of these data. The mean of these data should be ~ 0.
+
+```{r fig.width=4, fig.height=4}
+# Mean of the error
+mean(residuals(results))
+
+# Standard deviation of the error
+sd(residuals(results))
+
+# This number is similar to the 'Residual standard error' from our lm() summary
+summary(results)
+
+```
 
 But we want to examine these residuals graphically. It may be tempting to plot these residuals very simply using:
 
