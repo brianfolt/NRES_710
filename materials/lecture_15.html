@@ -1518,7 +1518,7 @@ border-radius: 0px;
 
 <h1 class="title toc-ignore">Random Effect Models</h1>
 <h4 class="author">NRES 710</h4>
-<h4 class="date">Last compiled: 2024-09-05</h4>
+<h4 class="date">Last compiled: 2024-09-11</h4>
 
 </div>
 
@@ -2046,7 +2046,7 @@ of treatment and control and then compare them.</p>
 <p>This second model is <strong>much more powerful</strong>! We have
 mathematically eliminated a lot of residual, eliminated swamping, and
 accounted for residual variation due to field by only adding one
-parameter: sigma.</p>
+parameter: sigma (<span class="math inline">\(\sigma\)</span>).</p>
 <p>This experimental design also has a fancy term: <u><strong>randomized
 block design</strong></u>. The fields are blocks; we have ‘blocked’ by
 field. And within each field, we have randomized treatment assignment.
@@ -2070,7 +2070,7 @@ Treatment &lt;- rep(0:1, 15)
 # Field error
 FieldError &lt;- rep(rnorm(15, 0, 5), each = 2)
 
-# Within-year error
+# Residual error
 Error &lt;- rnorm(length(Field), 0, 1)
 
 # Response variable
@@ -2220,7 +2220,31 @@ Abundance &lt;- 50 + MeanYear + Error
 datum &lt;- data.frame(Year = Year, MeanYear = MeanYear, Error = Error, Abundance = Abundance)
 
 # Save the data
-write.csv(datum, &quot;lecture_15_dataset1.csv&quot;, row.names = FALSE)</code></pre>
+write.csv(datum, &quot;lecture_15_dataset1.csv&quot;, row.names = FALSE)
+
+
+### Dataset 2
+# Set the seed for reproducibility
+set.seed(123)
+
+# Simulate data
+Field &lt;- rep(1:15, each = 2)
+Treatment &lt;- rep(0:1, 15)
+
+# Field error
+FieldError &lt;- rep(rnorm(15, 0, 5), each = 2)
+
+# Residual error
+Error &lt;- rnorm(length(Field), 0, 1)
+
+# Response variable
+Biomass &lt;- 25 + 10*Treatment + FieldError + Error
+
+# Save the data
+datum &lt;- data.frame(Field = Field, Treatment = Treatment, FieldError = FieldError, Error = Error, Biomass = Biomass)
+
+# Save the data
+write.csv(datum, &quot;lecture_15_dataset2.csv&quot;, row.names = FALSE)</code></pre>
 <p><a href="lecture_16.html">–go to next lecture–</a></p>
 </div>
 

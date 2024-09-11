@@ -111,6 +111,7 @@ acf(residuals(resultsNonlinear)[order(nonlinear$x)])
 
 
 
+
 ########################## 'Truth' ############################ 
 ### Code for simulating data that were analyzed in this lecture
 
