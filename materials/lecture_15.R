@@ -1,7 +1,7 @@
 
 #  NRES 710, Random Effect Models
 #     University of Nevada, Reno
-#     Multi-variable models with random effects
+#     Simple models with random effects
 
 ################### 'Truth' #################### 
 ### Lecture 15: code to simulate data for class
@@ -26,4 +26,28 @@ datum <- data.frame(Year = Year, MeanYear = MeanYear, Error = Error, Abundance =
 
 # Save the data
 write.csv(datum, "lecture_15_dataset1.csv", row.names = FALSE)
+
+
+### Dataset 2
+# Set the seed for reproducibility
+set.seed(123)
+
+# Simulate data
+Field <- rep(1:15, each = 2)
+Treatment <- rep(0:1, 15)
+
+# Field error
+FieldError <- rep(rnorm(15, 0, 5), each = 2)
+
+# Residual error
+Error <- rnorm(length(Field), 0, 1)
+
+# Response variable
+Biomass <- 25 + 10*Treatment + FieldError + Error
+
+# Save the data
+datum <- data.frame(Field = Field, Treatment = Treatment, FieldError = FieldError, Error = Error, Biomass = Biomass)
+
+# Save the data
+write.csv(datum, "lecture_15_dataset2.csv", row.names = FALSE)
 
