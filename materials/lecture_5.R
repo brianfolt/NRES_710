@@ -5,32 +5,24 @@
 
 # Load the data
 datum <- read.csv("lecture_5_good_data.csv")
+nonlinear <- read.csv("lecture_5_nonlinear_data.csv")
+norm <- read.csv("lecture_5_nonnormal_data.csv")
+hetero <- read.csv("lecture_5_heteroscedastic_data.csv")
+auto <- read.csv("lecture_5_autocorrelated_data.csv")
 
-# Plot the data
+# Plot the good data
 plot(y ~ x, data = datum)
 
-# Load the data
-nonlinear <- read.csv("lecture_5_nonlinear_data.csv")
-
-# Plot the data
+# Plot the nonlinear data
 plot(y ~ x, data = nonlinear)
 
-# Load the data
-norm <- read.csv("lecture_5_nonnormal_data.csv")
-
-# Plot the data
+# Plot the nonnormal data
 plot(y ~ x, data = norm)
-
-# Load the data
-hetero <- read.csv("lecture_5_heteroscedastic_data.csv")
 
 # Plot the data
 plot(y ~ x, data = hetero)
 
-# Load the data
-auto <- read.csv("lecture_5_autocorrelated_data.csv")
-
-# Plot the data
+# Plot the autocorrelated data
 plot(y ~ x, data = auto)
 
 # Fit linear regression models to the five datasets
@@ -42,6 +34,15 @@ resultsAuto <- lm(y ~ x, data = auto)
 
 # Examine the residuals (just the first ~20)
 residuals(results)[1:20]
+
+# Mean of the error
+mean(residuals(results))
+
+# Standard deviation of the error
+sd(residuals(results))
+
+# This number is similar to the 'Residual standard error' from our lm() summary
+summary(results)
 
 # Simple way
 plot(residuals(results))
