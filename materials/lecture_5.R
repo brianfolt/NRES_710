@@ -3,6 +3,9 @@
 #     University of Nevada, Reno
 #     Assumptions of linear regression   
 
+# Clear the memory
+rm(list=ls())
+
 # Load the data
 datum <- read.csv("lecture_5_good_data.csv")
 nonlinear <- read.csv("lecture_5_nonlinear_data.csv")
@@ -77,13 +80,13 @@ plot(residuals(resultsAuto) ~ auto$x)
 # Add a horizontal line at y = 0
 abline(a = 0, b = 0)
 
-# Correct way to examine residuals plot
+# Histogram of residuals
 hist(residuals(results))
 
-# Correct way to examine residuals plot
+# Histogram of residuals
 hist(residuals(resultsNorm))
 
-# Correct way to examine residuals plot
+# Histogram of residuals
 hist(residuals(resultsHetero))
 
 # Make two graphs side-by-side
