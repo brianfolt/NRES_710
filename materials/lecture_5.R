@@ -89,9 +89,6 @@ hist(residuals(resultsNorm))
 # Histogram of residuals
 hist(residuals(resultsHetero))
 
-# Make two graphs side-by-side
-par(mfrow = c(1, 2))
-
 # Default setting
 hist(residuals(resultsHetero))
 
