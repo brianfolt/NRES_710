@@ -1051,9 +1051,6 @@ hist(residuals(resultsHetero))
 If you don't like the appearance of your histogram and want to adjust it, you can change the appearance of it using the 'breaks' command:
 
 ```{r fig.width=9, fig.height=4.5}
-# Make two graphs side-by-side
-par(mfrow = c(1, 2))
-
 # Default setting
 hist(residuals(resultsHetero))
 
