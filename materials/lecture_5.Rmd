@@ -836,6 +836,9 @@ Save code and data for this lecture in your working directory:
 Let's start by loading in each of the 5 data sets.
 
 ```{r fig.width=4, fig.height=4}
+# Clear the memory
+rm(list=ls())
+
 # Load the data
 datum <- read.csv("lecture_5_good_data.csv")
 nonlinear <- read.csv("lecture_5_nonlinear_data.csv")
@@ -936,7 +939,7 @@ plot(residuals(results))
 
 ```
 
-However, note that the X-axis title is "Index". This means that the X-values here are in the order of the data, from 1 to *n* -- the sample size. We actually want to make sure that the X-axis in this plot is our actual X-variable, so we can look at how residuals change along the continuous nature of our X-variable.
+However, note that the X-axis title is "Index". This means that the X-values here are in the order of the data, from 1 to *n* -- the sample size. <u>We actually want to make sure that the X-axis in this plot is our actual X-variable</u>, so we can look at how residuals change along the continuous nature of our X-variable.
 
 We are drawing the residuals from the 'results' object, so we can't reference the 'datum' object like we usually do. Instead we have to explicitly call the raw X-variable data. We can call an individual variable from an object in R using the money sign command: 'datum$x''. We can call'. E.g.,
 
@@ -1003,7 +1006,7 @@ abline(a = 0, b = 0)
 
 ```
 
-The points (residual error) are following each other! This path is a good indication of autocorrelation. The data are not independent of one another.
+The points (residual error) are following each other! This path is a good indication of autocorrelation. The data are not independent of one another. And it's easier to see here because we have *spread the residuals out* across the graph. 
 
 ### Histogram of residuals
 
@@ -1021,7 +1024,9 @@ We have taken all of the residuals and examined the distribution of residuals ac
 
 **Q:** Does this look perfectly normal?
 
-Nah, not really. It never will. But what we are looking for is obvious, egregious violations of the assumption of normal error. For example, let's make this graph for the non-normal data:
+Nah, not really. It never will. But what we are looking for is obvious, <u>**egregious violations**</u> of the assumption of normal error.
+
+For example, let's make this graph for the non-normal data:
 
 ```{r fig.width=4, fig.height=4}
 # Histogram of residuals
@@ -1029,9 +1034,9 @@ hist(residuals(resultsNorm))
 
 ```
 
-This is pretty bad! This is a case where we would say "Our data are not normal!"
+<u>This is pretty bad! This is a case where we would say "Our data are not normal!"</u> This is what the histogram of the residuals is meant to do: show us non-normal error.
 
-This might be a time where you would use a 'log transformation' to fix this issue. I don't really like log-transformations because it screws with how we interpret our results -- makes the story less clear -- but that would be an option here.
+There's is where you might use a log-transformation to fix this -- but it screws up our interpretation, which I don't like.
 
 Let's examine the heteroscedastic data:
 
@@ -1057,7 +1062,9 @@ hist(residuals(resultsHetero), breaks = 10)
 
 ```
 
-This second graph suggests that the bell curve might be a bit 'skinny' -- which is called **kurtosis**. Kurosis is when the shape of your distribution is not-normal. It may have *skew* in one direction (a tail), more observations in the middle (bulge), or be 'skinny' and have longer tails on both sides. This is a rare problem for you to have to deal with, but you can do 'weighted regression' in 'lm()' to account for uneven variance in the model itself.
+This second graph suggests that the bell curve might be a bit 'skinny' -- which is called **kurtosis**. <u>Kurtosis is when the shape of your distribution is not perfectly normal</u>. It may have *skew* in one direction (a tail), more observations in the middle (bulge), or be 'skinny' and have longer tails on both sides.
+
+This is a rare problem for you to have to deal with, but you can do 'weighted regression' in 'lm()' to account for uneven variance in the model itself (using the 'weights' argument).
 
 ### Autocorrelation functions (ACF)
 
@@ -1080,7 +1087,7 @@ Let's examine the ACF graph a bit more. On the X-axis, we have a 'lag' in compar
 - At a lag of 0, we are comparing each point to itself. At a lag of 1, we are comparing each point to the point next to it. At a lag of 2, we compare each point to the point two points away. Etc.
 - The vertical bar at each lag is the mean estimate of the ACF function. The length of the bar indicates how correlated each value is to it's lagged comparison. This estimates how correlated they are to eachother (i.e., an $r^2$ value). At a lag of 0, we are comparing each point to itself, so the correlation is 1 (perfect correlation). This is meaningless to us but provides contextual reference.
 - The **dotted blue line** is basically a p-value line. If any of your vertical bars cross this blue line, it indicates that you have significant autocorrelation at that lag.
-- For example, note the ACF estimate at a lag = 7 was above the line! But, be careful here. If you randomly have autocorrelation at one lag, think about whether this makes biological sense. Instead, we are looking for **obvious and egregious** evidence of autocorrelation.
+- For example, note the ACF estimate at a lag = 7 was above the line! But, be careful here. If you randomly have autocorrelation at one lag, think about whether this makes biological sense. Instead, we are looking for<u> **obvious and egregious**</u> evidence of autocorrelation.
 
 What does obvious autocorrelation look like...?
 
