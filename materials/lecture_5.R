@@ -104,9 +104,6 @@ acf(residuals(results)[order(datum$x)])
 # Autocorrelation function for normal data
 acf(residuals(resultsAuto)[order(auto$x)])
 
-# Two graphs
-par(mfrow=c(1,2))
-
 # Recall the scatterplot for the nonlinear data
 plot(y ~ x, data = nonlinear)
 

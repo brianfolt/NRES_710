@@ -1104,9 +1104,6 @@ This is obvious autocorrelation. We see that each point is highly correlated wit
 This chart is best for testing for autocorrelation. But, I mentioned last class, that sometimes these charts can indicate autocorrelation *when data are nonlinear*:
 
 ```{r fig.width=9, fig.height=4.5}
-# Two graphs
-par(mfrow=c(1,2))
-
 # Recall the scatterplot for the nonlinear data
 plot(y ~ x, data = nonlinear)
 
