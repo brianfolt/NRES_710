@@ -1010,7 +1010,7 @@ The points (residual error) are following each other! This path is a good indica
 The histogram of residuals will make a simple bar chart that examines '*global*' normality across all of your data. What I mean by 'global' is that it does examine normality as the X-variable increases, but lumps all the error across all X-values into a single chart.
 
 ```{r fig.width=4, fig.height=4}
-# Correct way to examine residuals plot
+# Histogram of residuals
 hist(residuals(results))
 
 ```
@@ -1024,7 +1024,7 @@ We have taken all of the residuals and examined the distribution of residuals ac
 Nah, not really. It never will. But what we are looking for is obvious, egregious violations of the assumption of normal error. For example, let's make this graph for the non-normal data:
 
 ```{r fig.width=4, fig.height=4}
-# Correct way to examine residuals plot
+# Histogram of residuals
 hist(residuals(resultsNorm))
 
 ```
@@ -1036,7 +1036,7 @@ This might be a time where you would use a 'log transformation' to fix this issu
 Let's examine the heteroscedastic data:
 
 ```{r fig.width=4, fig.height=4}
-# Correct way to examine residuals plot
+# Histogram of residuals
 hist(residuals(resultsHetero))
 
 ```
