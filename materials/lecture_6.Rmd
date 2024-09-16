@@ -38,7 +38,7 @@ Using our statistical models (i.e., our statistical analyses) to make prediction
 - Level 2: what is the difference between groups? Effect sizes. Next step up.
 - Level 3: measure effects and make predictions from them.
 
-For me personally, I am a conservation biologist who studies wildlife populations. I try to measure the demographic rates of populations: what are the survival and reproductive rate of turtles in a population each year, and how does survival and reproduction vary by age? I then try to use those models for age-structured demographic rates to make predictions about how populations will grow or decline in size. This is often called 'population viability analysis'. My ultimate goal is to generate models for whether populations will persist or not.
+For me personally, I am a conservation biologist who studies wildlife populations. I try to measure the demographic rates of populations: what are the survival and reproductive rate of animals in a population each year, and how does survival and reproduction vary by age? I then try to use those models for age-structured demographic rates to make predictions about how populations will grow or decline in size. This is often called 'population viability analysis'. My ultimate goal is to generate predictive models for whether populations will persist or not.
 
 ### Simple predictions
 
@@ -46,7 +46,7 @@ Ultimately, prediction comes back to our linear model:
 
 **$Y = \beta_0 + \beta_1 X_1 + \epsilon \sim N(0, \sigma)$**
 
-To make predictions, we can:
+We want to make predictions for what Y will be *for a given X*. To make predictions, we can:
 
 - Fit our regression model
 - Measure betas
@@ -55,13 +55,13 @@ To make predictions, we can:
 
 For example, let's say we have results from a regression model explaining how biomass (kg/ha) changes as a consequence of rainfall (cm). Our results are:
 
-- **beta0 = 3.87 and beta1 = 6.55**
-- We want to use the model to predict what biomass might be when rainfall = 5 cm.
+- **beta0 = 1.55 and beta1 = 2.05**
+- We want to use the model to predict what biomass might be when rainfall = 5 cm. We will ignore error, for now, because usually when we make predictions we want to know what the response will be *on average*.
 - **Y = 1.55 + 2.05 * 5**
 - **= 1.55 + 10.25**
 - **= 11.80 kg/ha --> 5 cm**
 
-We would predict to observe 11.80 kg/ha biomass when an area gets 5 cm of rain.
+We would predict to observe 11.80 kg/ha biomass, on average, when an area gets 5 cm of rain.
 
 ### When can we make predictions?
 
@@ -70,11 +70,8 @@ Let's examine the biomass example with a scatterplot:
 ```{r biomass, echo=FALSE, message=FALSE, warning=FALSE, fig.width=4.5, fig.height=3.5}
 ### Code for simulating data to be analyzed in this lecture
 
-# Set the seed for reproducibility
-set.seed(123)
-
-# Adjust margins
-par(mar = c(4, 4, 0, 0))
+# Set the seed, margins
+set.seed(111); par(mar = c(4, 4, 0, 0))
 
 ## Simulate data with no assumption violations
 n <- 15
@@ -99,11 +96,15 @@ head(datum)
 # Plot
 plot(biomass ~ rainfall, data = datum, xlab = "Rainfall (cm)", ylab = "Biomass (kg/ha)")
 
+# Linear model
+results <- lm(biomass ~ rainfall, data = datum)
+abline(results)
+
 # Vertical line
-abline(v = 2, lty = 2)
+abline(v = 3, lty = 2)
 ```
 
-We don't have any data around when rainfall ~ 2 cm. Let's say you want to know how much biomass you might expect at the vertical dashed line -- 2 cm rainfall. Can we do that? **Yes!**
+We don't have any data around when rainfall ~ 3 cm. Let's say you want to know how much biomass you might expect at the vertical dashed line -- 3 cm rainfall. Can we do that? **Yes!**
 
 **Interpolation (good) -- making predictions within the range of observed data.**
 
@@ -117,18 +118,20 @@ Let's say you want to know how much biomass you might expect when there is 15 cm
 
 Anytime we provide an estimate of truth with out statistical model, we provide a measure of uncertainty. If we estimate a slope, difference between groups, whatever -- we always provide estimates of confidence intervals. We always convey how certain we are of those estimates.
 
-We must do the same for predictions.
+We must do the same for predictions. Predictions tell us what the predicted value is for the average regression line. *But how certain are we about that line*?
 
 In the rainfall prediction example above, we aren't going to provide confidence intervals, but will instead provide **prediction intervals**.
 
-**Confidence intervals** -- 95% of all such intervals contain the true value; **a measure of uncertainty in the *estimate***.
+**Confidence intervals** -- 95% of all such intervals contain the true value; **a measure of uncertainty in the <u>*estimate*</u>**.
 
-- When we generate an estimate of biomass at 5 cm rainfall, we are making an average estimate and uncertainty.
+- The thing to know is that estimates deal with averages. 
+- For example, when we estimate biomass at 3 cm rainfall, we take an average.
+- Individual observations can deviate above and below this average, depending on the noise in our system. But the mean estimate is the regression line.
 - Confidence intervals usually fall inside the individual data.
 
 ```{r biomass-2, echo=FALSE, message=FALSE, warning=FALSE, fig.width=4.5, fig.height=4}
-# Adjust margins
-par(mar = c(4, 4, 1, 0))
+# Set the seed, margins
+set.seed(123); par(mar = c(4, 4, 0, 0))
 
 # Fit the linear regression model
 model <- lm(biomass ~ rainfall, data = datum)
@@ -149,12 +152,12 @@ lines(sort(datum$rainfall), predictions[, "upr"], col = "red", lty = 2)
 
 **Prediction intervals -- a measure of uncertainty in the individual outcomes**
 
-- When we make predictions, we make making predictions about individual outcomes, and there will be more uncertainty.
+- When we make predictions, we make making predictions about *individual outcomes*, and there will be more uncertainty.
 - Prediction intervals are outside of most data. For example:
 
 ```{r biomass-3, echo=FALSE, message=FALSE, warning=FALSE, fig.width=4.5, fig.height=4}
-# Adjust margins
-par(mar = c(4, 4, 1, 0))
+# Set the seed, margins
+set.seed(123); par(mar = c(4, 4, 0, 0))
 
 # Fit the linear regression model
 model <- lm(biomass ~ rainfall, data = datum)
@@ -175,9 +178,9 @@ lines(sort(datum$rainfall), predictions[, "upr"], col = "red", lty = 2)
 
 A prediction interval will capture most (95%) of the data.
 
-**Q:** What do you notice about the shape of how I drew the confidence intervals and aprediction intervals?
+**Q:** What do you notice about the shape of how I drew the confidence intervals and prediction intervals?
 
-They are somewhat pinched in the middle. This is because we have more data in the middle, we gives us more certainty about in what the true estimate is and individual outcomes are.
+They are somewhat **pinched** in the middle and they **flare** at the edges. This is because we have more data in the middle, we gives us more certainty about in what the true estimate is and individual outcomes are.
 
 However, at the tails we have less data, and thus we have less certainty about the estimate and individual outcomes. And if we **extrapolate**, the uncertainty will be larger.
 
@@ -191,7 +194,7 @@ However, at the tails we have less data, and thus we have less certainty about t
 
 Let's show you how to make predictions in R, including with **prediction intervals**. We will have R do this for us!
 
-Before we make predictions, we first have to run our analysis. Let's use the results from the biomass x rainfall data regression analysis.
+Before we make predictions, we first have to run our <u>linear regression analysis</u>. Let's use the results from the biomass x rainfall data regression analysis.
 
 ```{r fig.width=4.5, fig.height=4.5}
 # Read in the biomass data again, if necessary
@@ -214,12 +217,12 @@ Let's say we want to know what the biomass is predicted to be when rainfall = 5 
 # Examine the results 
 summary(results)
 
-# Make a prediction for when rainfall = 5 cm
-4.08 + 2.82 * 5
+# Make a prediction for when rainfall = 3 cm
+1.69 + 3.34 * 3
 
 ```
 
-18.18 kg/ha biomass when rainfall is 5 cm!
+12.5 kg/ha biomass when rainfall is 3 cm!
 
 The most common (and easy) way to make predictions in R is using the 'predict()' function. We will use 'predict.lm()'.
 
@@ -232,7 +235,9 @@ help(predict.lm)
 Things that 'predict.lm()' needs:
 
 - Your regression! Results from your regression.
-- 'newdata' -- these X-values that you want to make predictions for; interpolation, or extrapolation. This 'newdata' has to have an X-column that matches the X-column from your original data.
+- 'newdata' -- these X-values that you want to make predictions for; interpolation, or extrapolation.
+  - If you leave this out, it will make predictions for the X-values that were originally used. This may be fine. But if you want to do interpolation or extrapolation, your exisiting X-data won't be able to do those things.
+  - This 'newdata' has to have an X-column that matches the X-column from your original data.
 - Interval -- whether or not you want 'confidence' or 'prediction' intervals; you need to include *interval = "prediction"*.
 - Other stuff you can ignore.
 
@@ -240,7 +245,7 @@ Let's try to validate my prediction for biomass when rainfall = 5 cm.
 
 ```{r fig.width=4.5, fig.height=3.5}
 # Create predict data
-datumPredict <- data.frame(rainfall = 5)
+datumPredict <- data.frame(rainfall = 3)
 datumPredict
 
 # Create a new object called predictions
@@ -255,26 +260,33 @@ Three outputs: fit, lwr, and upr.
 - instead of intervals, we get limits:
   - lower prediction limit (lwr) -- 
   - upper prediction limit (upr) -- 
-- if we want the prediction interval, we need to do some math:
+- if we want the prediction interval, we need to do some math. (Upper - Lower)/2 or Upper - Fit:
 
 ```{r fig.width=4.5, fig.height=3.5}
 predictions[1,"upr"] - predictions[1,"fit"]
 
 ```
 
-The 95% prediction interval is +/-10.51.
+The 95% prediction interval is +/-6.62.
 
 ### Predictions for data
 
-Normally we will want to make predictions over a good interval range that encompasses our X-data. This might help us fill in some holes.
+Normally we will want to make predictions over a good interval range that encompasses our X-data. This might help us fill in some holes, like in the first example I did on the board.
 
 ```{r fig.width=4.5, fig.height=3.5}
-# Examine summary
+# Let's look at information about our data
 summary(datum)
-
+# Minimum rainfall was closer to 0, maximum was closer to 10. 
 # Let's make predictions between 0 -- 10 cm of rainfall
-# And let's try to make 20 predictions across this interval: 10cm/20predictions = a prediction every 0.5 cm
-datumPredict <- data.frame(rainfall = seq(from = 0, to = 10, by = 0.5))
+
+# And let's try to make 20 predictions across this interval:
+# 10 cm / 20 predictions = a prediction every 0.5 cm
+xSequence <- seq(from = 0, to = 10, by = 0.5)
+xSequence
+
+# Turn this into a dataframe with a column called 'rainfall'
+datumPredict <- data.frame(rainfall = xSequence)
+datumPredict
 
 # Make the predictions
 predictions <- predict(results, datumPredict, interval = "prediction")
@@ -292,17 +304,20 @@ An annoying feature here is that we don't really have X-value data in here; the 
 # Make it a dataframe to make it easier to add data to it.
 predictions <- as.data.frame(predictions)
 
-# Add a new column
-predictions$rainfall <- seq(from = 0, to = 10, by = 0.5)
+# Add a new column called 'rainfall'
+predictions$rainfall <- xSequence
 
 # Examine
-predictions
+head(predictions)
 
 ```
 
 Pretty cool!?
 
-Last thing I want to show you: plotting the prediction intervals over the range of X-values.
+Last thing I want to show you: plotting the prediction intervals over the range of X-values. I will show you two ways.
+
+1) using 'matplot', which plots multiple 'matrices' of data at the same time. Simple
+2) A more complicated way using 'base R' graphics 
 
 ```{r fig.width=4.5, fig.height=4.5}
 # Very simple way to plot the prediction intervals
@@ -324,15 +339,17 @@ plot(biomass ~ rainfall, data = datum, xlim = c(0, 10), ylim = c(0, 40), xlab = 
 par(new = TRUE)
 plot(fit ~ rainfall, data = predictions, type = "l", xlim = c(0, 10), ylim = c(0, 40), ylab = "", xlab = "")
 par(new = TRUE)
-plot(lwr ~ rainfall, data = predictions, type = "l", xlim = c(0, 10), ylim = c(0, 40), ylab = "", xlab = "")
+plot(lwr ~ rainfall, data = predictions, type = "l", xlim = c(0, 10), ylim = c(0, 40), ylab = "", xlab = "", lty=2)
 par(new = TRUE)
-plot(upr ~ rainfall, data = predictions, type = "l", xlim = c(0, 10), ylim = c(0, 40), ylab = "", xlab = "")
+plot(upr ~ rainfall, data = predictions, type = "l", xlim = c(0, 10), ylim = c(0, 40), ylab = "", xlab = "", lty=2)
 
 ```
 
 This is more useful, I would say!
 
 That being said, there are definitely better approaches to graphing predictions out there, likely using 'ggplot2' package.
+
+Note: the prediction intervals are *slightly* curved, although it may be hard to see.
 
 **Final thought**: This approach to prediction will be one that we can use for the rest of the semester with all of the more complicated analytical models we will learn!
 
