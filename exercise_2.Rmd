@@ -23,9 +23,9 @@ knitr::opts_chunk$set(
 
 For each of the following datasets, import the data into R and analyze the data using regression. Then, provide the following information in a Microsoft Word document:
 
-- Using the statement we discussed in class, describe the relationship between X and Y, and be sure to include the p-value. Describe the relationship even if it isn't 'significant' (you fail to reject the null), but be sure to state that the relationship isn't significant, if that's the case.
+- Using the statement we discussed in class, describe the relationship between X and Y, and be sure to include the p-value. <u>Describe the relationship even if it isn't 'significant' (you fail to reject the null), but be sure to state that the relationship isn't significant, if that's the case</u>.
 
-- What assumption(s) of regression is violated with the dataset? Cut and paste the graph(s) that visually informed you that an assumption was violated. Note: only one assumption has truly been violated for each dataset; if more than one assumption appears to be violated, choose the one that appears to be the strongest violation.
+- <u>What assumption(s) of regression is violated with the dataset</u>? Cut and paste the graph(s) that visually informed you that an assumption was violated. Note: only one assumption has truly been violated for each dataset; if more than one assumption appears to be violated, choose the one that appears to be the strongest violation. Something to think about is: <u>Did the violation of this assumption influence your estimation of truth</u>?
 
 Compile all of your results in a summary document. Show me your finished assignment in class or during office hours to get feedback and/or credit. Alternatively, load it into WebCampus assignment portal and submit it by the due date indicated in the course schedule.
 
