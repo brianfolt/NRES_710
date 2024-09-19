@@ -156,4 +156,4 @@ write.csv(datum, "exercise_5_dataset3.csv", row.names = FALSE)
 
 ```
 
-[--go to next exercise--](exercise_5.html)
+[--go to next exercise--](exercise_6.html)

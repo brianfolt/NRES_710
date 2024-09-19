@@ -12,7 +12,7 @@
 <meta name="author" content="NRES 710" />
 
 
-<title>Exercise 5: Multivariable Analysis - Interactions</title>
+<title>Exercise 6: Mixed Effects Models</title>
 
 <script src="site_libs/header-attrs-2.27/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
@@ -380,8 +380,7 @@ div.tocify {
 
 
 
-<h1 class="title toc-ignore">Exercise 5: Multivariable Analysis -
-Interactions</h1>
+<h1 class="title toc-ignore">Exercise 6: Mixed Effects Models</h1>
 <h4 class="author">NRES 710</h4>
 <h4 class="date">Last compiled: 2024-09-19</h4>
 
@@ -390,88 +389,15 @@ Interactions</h1>
 
 <div id="general-approach" class="section level2">
 <h2>General Approach</h2>
-<p>Put all your answers in a summary document and, as always, share that
-with me to get credit for the assignment. In general, while we should
-always report the betas and C.I. from our analyses on main effects, I
-believe that if interactions are non-significant that it is sufficient
-to say say (with the p-value) and then (1) remove the interaction from
-the model, (2) re-run the analysis, and (3) extracting and report the
-other betas from main effects. The main reason is because interactions
-make everything so much more complicated.</p>
+<p>…</p>
 </div>
 <div id="problem-1" class="section level2">
 <h2>Problem 1</h2>
-<p><strong><a href="exercise_5_dataset1.csv">Dataset 1</a></strong> –
-For this dataset, you have a continuous x-variable (e.g., road density
-[roads/sq. km]) and one categorical x-variable (hardwood forest vs. pine
-forest). You want to learn about the effects of road density and forest
-type on Eastern Grey Squirrel (<em>Sciurus carolinensis</em>) density
-(squirrels / hectare). In this system, there is an interaction between
-road density and forest type.</p>
+<p><strong><a href="exercise_6_dataset1.csv">Dataset 1</a></strong> –
+For this dataset, …</p>
 <ol style="list-style-type: decimal">
-<li>Write a linear (statistical) model that describes the system; be
-sure you specify what each <span
-class="math inline">\(X\)</span>-variable represents.</li>
-<li>What do the various <span class="math inline">\(\beta\)</span>s mean
-in this model?</li>
-<li>Run the full model in R. Report whether or not the interaction is
-significant or not (including p-value)</li>
-<li>Analyze data from the two forest types separately and describe the
-results using the standard sentences. Bonus: Note that the squirrel dens
-is higher in pine at low road density and lower in pine at high road
-density. At what road density is squirrel density the same between both
-forest types?</li>
+<li>…</li>
 </ol>
-<p><br></p>
-</div>
-<div id="problem-2" class="section level2">
-<h2>Problem 2</h2>
-<p><strong><a href="exercise_5_dataset2.csv">Dataset 2</a></strong> –
-For this dataset, you have two categorical factors (e.g., Sex and
-Treatment) and each factor has two levels [male + female, control
-(placebo) + hormone injection]. The dependent variable is adult body
-size. In this system, there is an interaction between sex and
-treatment.</p>
-<ol style="list-style-type: decimal">
-<li>Write a linear (statistical) model that describes the system; be
-sure you specify what each <span
-class="math inline">\(X\)</span>-variable represents.</li>
-<li>What do the various <span class="math inline">\(\beta\)</span>s mean
-in this model?</li>
-<li>Run the full model in R. Report whether or not the interaction is
-significant or not (including p-value)</li>
-<li>Analyze data from the two sexes separately and describe the results
-using the standard sentences.</li>
-</ol>
-<p><br></p>
-</div>
-<div id="problem-3" class="section level2">
-<h2>Problem 3</h2>
-<p><strong><a href="exercise_5_dataset3.csv">Dataset 3</a></strong> –
-For this dataset, you have two continuous variables (e.g., Elevation -
-meters asl; and Latitude - km). The dependent variable is Red-backed
-Salamander (<em>Plethodon cinereus</em>) body size (g). In this system,
-there is an interaction between elevation and latitude.</p>
-<ol style="list-style-type: decimal">
-<li>Write a linear (statistical) model that describes the system; be
-sure you specify what each <span
-class="math inline">\(X\)</span>-variable represents.</li>
-<li>What do the various <span class="math inline">\(\beta\)</span>s mean
-in this model?</li>
-<li>Run the full model in R. Report whether or not the interaction is
-significant or not (including p-value)</li>
-<li>Write example sentences that you might include in a manuscript for
-publication that describes the observed results. First describe the
-effect of elevation (at zero latitude). Then describe the effect of
-latitude (at zero elevation). Finally, describe how the effect of
-elevation changes as latitude increases (or vice versa). The following
-sentence might help:</li>
-</ol>
-<p>“We found a significant interaction (p = [p-value for interaction
-term]), such that for each 1 [x1 units] increase in [x1], we observed
-that the slope of the [x2]-[y] relationship [increased/decreased] by
-[beta for interaction][y units]/[x2 units] ([95% C.I. of beta for
-interaction]; +/-95% C.I.).”</p>
 <p><img src="pictures/pic_plethodon.png" style="width:50.0%" /></p>
 <p>Webster’s Salamander (<em>Plethodon websteri</em>) – a cousin of the
 red-backed salamander.</p>
@@ -482,71 +408,13 @@ red-backed salamander.</p>
 <p>If you would like to know the values used to create these datasets
 (i.e., ‘truth’), examine the code here:</p>
 <pre class="r"><code>########################## &#39;Truth&#39; ############################# 
-### Exercise 5: code to simulate datasets for the exploration of
-### interactions in multi-variable analysis
+### Exercise 6: code to simulate datasets for the exploration of
+### mixed-effects models
 
 # Set the seed for reproducibility
 set.seed(123)
 
 ### Dataset 1
-# Sample size
-n &lt;- 60
-
-# Road density
-RoadDensity &lt;- runif(n, 0, 1) * 10
-
-# Forest type
-g &lt;- 2 # number of groups
-ForestType &lt;- factor(c(rep(&quot;Hardwood&quot;, n/g), rep(&quot;Pine&quot;, n/g)))
-
-# Dummy-code the ForestType
-dummy &lt;- data.frame(model.matrix(~ ForestType - 1))
-colnames(dummy) &lt;- c(&quot;Hardwood&quot;, &quot;Pine&quot;)
-
-# Error
-Error &lt;- rnorm(n, mean = 0, sd = 1)
-
-# Response variable
-Squirrels &lt;- 10 - 0.5*RoadDensity + 1*dummy$Pine - 0.5*dummy$Pine*RoadDensity + Error
-
-# Dataframe
-datum &lt;- data.frame(RoadDensity, ForestType, Squirrels)
-
-# Save the CSV file
-write.csv(datum, &quot;exercise_5_dataset1.csv&quot;)
-
-
-### Dataset 2
-# Sample size
-n &lt;- 100
-
-# Sex
-g &lt;- 2 # number of groups
-Sex &lt;- factor(c(rep(&quot;Females&quot;, n/g), rep(&quot;Males&quot;, n/g)))
-Treatment &lt;- rep(c(rep(&quot;Control&quot;, 25), rep( &quot;Treatment&quot;, 25)), 2)
-
-# Dummy-code the Sex
-dummySex &lt;- data.frame(model.matrix(~ Sex - 1))
-colnames(dummySex) &lt;- c(&quot;Female&quot;, &quot;Male&quot;)
-
-# Dummy-code the Treatment
-dummyTreatment &lt;- data.frame(model.matrix(~ Treatment - 1))
-colnames(dummyTreatment) &lt;- c(&quot;Control&quot;, &quot;Treatment&quot;)
-
-# Error
-Error &lt;- rnorm(n, mean = 0, sd = 0.2)
-
-# Response variable
-Size &lt;- 1.5 + 0.5*dummySex$Male + 0.5*dummyTreatment$Treatment + 0.5*dummySex$Male*dummyTreatment$Treatment + Error
-
-# Dataframe
-datum &lt;- data.frame(Sex, Treatment, Size)
-
-# Save the CSV file
-write.csv(datum, &quot;exercise_5_dataset2.csv&quot;)
-
-
-### Dataset 3
 # Sample size
 n &lt;- 90
 
@@ -565,8 +433,8 @@ Size &lt;- 15 - 0.00125*Elevation - 0.00167*Latitude + 0.00001 * Latitude * Elev
 datum &lt;- data.frame(Latitude=Latitude, Elevation=Elevation, Size=Size)
 
 # Save the CSV file
-write.csv(datum, &quot;exercise_5_dataset3.csv&quot;, row.names = FALSE)</code></pre>
-<p><a href="exercise_6.html">–go to next exercise–</a></p>
+write.csv(datum, &quot;exercise_6_dataset1.csv&quot;, row.names = FALSE)</code></pre>
+<p><a href="exercise_7.html">–go to next exercise–</a></p>
 </div>
 
 
