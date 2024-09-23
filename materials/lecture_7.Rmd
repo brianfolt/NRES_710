@@ -30,13 +30,13 @@ knitr::opts_chunk$set(
 
 ## Summary
 
-Up to this point, we have been operating under the idea that we have been examing the relationship between a **continuous Y variable** and a **continuous X variable**.
+Up to this point, we have been operating under the idea that we have been examining the relationship between a **continuous Y variable** and a **continuous X variable**.
 
 What if we no longer have a continuous X-variable, but instead have a **categorical X-variable**?
 
-Let's assume that X-variable is binomial (two categories):
+Let's assume that we have our usual continuous Y-variable, but now our X-variable is categorical. And the X-variable is the most simple type of categorical variable: it is binomial (two categories):
 
-**Continuous Y, Categorical X (binomial)**
+- **Continuous Y, Categorical X (binomial)**
 
 **Q:** How would we typically analyze data with a categorical X and a continuous, normally-distributed Y?
 
@@ -52,9 +52,11 @@ For example, let's say we are interested in testing for body size differences be
 
 Photo: Luke Verburgt
 
-**$X_1$ = male, $X_2$ = female, $Y$ = length**
+- **$X_1$ = male**
+- **$X_2$ = female**
+- **$Y$ = size**
 
-Our data might look like this:
+Our data might look like this (*Brian plot on board*):
 
 ```{r size, echo=FALSE, message=FALSE, warning=FALSE, fig.width=4.5, fig.height=3.5}
 ### Code for simulating data to be analyzed body size data for two sexes
@@ -79,31 +81,51 @@ datum <- data.frame(Sex = x, Size = y)
 
 # Plot
 stripchart(Size ~ Sex, data = datum, vertical = TRUE, method = "jitter",
-           pch = 19, xlab = "Sex", ylab = "Body size (cm)")
+           pch = 4, xlab = "Sex", ylab = "Body size (kg)")
+
+# Calculate the means for each sex
+means <- tapply(datum$Size, datum$Sex, mean)
+
+# Add horizontal lines at the mean for each sex
+for (i in 1:length(means)) {
+  segments(i - 0.15, means[i], i + 0.15, means[i], lwd = 2, col = "black")  # Adjust length with i +/- 0.25
+}
+
+# Add a vertical line between the two means
+x_mid <- mean(1:2)  # Midpoint between group 1 and group 2 on the x-axis
+arrows(x_mid, means[1], x_mid, means[2], lwd = 2, col = "black", lty = 1)  # Vertical line connecting the means
+
 ```
 
 Both the female and male data are normally distributed. I'm putting a slight 'jitter' on these points, so they can be visualized easier by the naked eye.
 
-We want to know: how much larger are males than females? Or, what is the difference between the mean of females and males? We can visualize this with a horizontal line in the middle of each point cloud, and an arrow between the two means.
+We want to know: how much larger are males than females?
 
-Our scientific effort might focus on testing the null hypothesis:
+*Brian add horizontal lines for means within each point cloud*
+
+Or, what is the difference between the mean of females and males?
+
+*Brian an arrow between the two means*
+
+Our <u>scientific effort</u> might focus on testing the null hypothesis:
 
 **$H_0$: no difference between groups**
 
-- Or, **$\mu_{females} = \mu_{males}$**
-- Or, **$\mu_{females} - \mu_{males}$ = 0**
+- **$\mu_{females} = \mu_{males}$**
 
-These are all the same, and are core to our science-drive hypothesis that we want to test.
-
-From a statistical perspective, we are interested in knowing whether males are significantly larger than females, and measuring that effect (if any).
+From a <u>statistical perspective</u>, we are interested in knowing whether males are significantly different than females in body size, and measuring that effect (if any).
 
 Let's assume that we know truth for this graph:
 
-- Average mass of males is 250 kg
-- Average mass of females is 200 kg
-- $\sigma$ = 20 kg
+- **$X_1$ = male = 250 kg**
+- **$X_2 = female = 200 kg**
+- **$\sigma$ = 20 kg**
 
-The truth is that males are larger than females.
+The standard deviation for the normal distribution of data for each sex is 20 kg.
+
+The truth is that males are larger than females. Males are about 250 kg, females are about 200 kg, and there is some noise in our data.
+
+Questions?
 
 ### Simple t-test in R
 
@@ -115,25 +137,52 @@ Let's make these data in R, and run a t-test:
 # Set the seed for reproducibility
 set.seed(123)
 
-# Simulate the binomial X-variable (sex)
-n <- 40
-x <- c(rep("Female", n/2), rep("Male", n/2))
-x <- factor(x)
+# Simulate the female data
+n <- 20 # sample size
+Sex <- rep("Female", n) # female category
+Sigma <- 20 # standard deviation of the error (noise) in data
+Error <- rnorm(n, mean = 0, sd = Sigma) # simulate the error (noise)
+Size <- 200 + Error # make the response variable data
+FemaleData <- cbind(Sex, Size)
 
-# Simulate continuous y-variable data
-y <- ifelse(x == "Female",
-            rnorm(n/2, mean = 200, sd = 20), #females
-            rnorm(n/2, mean = 250, sd = 20)) #males
+# Simulate the male data
+n <- 20 # sample size
+Sex <- rep("Male", n) # female category
+Sigma <- 20 # standard deviation of the error (noise) in data
+Error <- rnorm(n, mean = 0, sd = Sigma) # simulate the error (noise)
+Size <- 250 + Error # make the response variable data
+MaleData <- cbind(Sex, Size)
 
-# Create dataframe
-datum <- data.frame(Sex = x, Size = y)
+# Bind the data together
+datum <- data.frame(rbind(FemaleData, MaleData))
+
+# Make the 'Sex' variable a factor
+datum$Sex <- as.factor(datum$Sex)
+
+# Force to 'Size' to numeric and round to 1 digit after the decimal
+datum$Size <- round(as.numeric(datum$Size), 1)
+
+# Save the data
+write.csv(datum, "lecture_7_seal_data.csv", row.names = FALSE)
+
+```
+
+I am going to show you all how to analyze these data using the 't.test()' function in R!
+
+```{r fig.width=4.5, fig.height=3.5}
+### Load in the data
+datum <- read.csv("lecture_7_seal_data.csv")
 
 # Examine the data
 head(datum)
 tail(datum)
+str(datum)
+
+# Force 'Sex' to be a factor
+datum$Sex <- as.factor(datum$Sex)
 
 # Plot the data to examine it!
-plot(Size ~ Sex, data=datum)
+plot(Size ~ Sex, data = datum)
 # Box and whiskers plot!
 # Bold black line = median
 # Edges of box: 75% and 25% quartiles
@@ -146,7 +195,7 @@ results <- t.test(Size ~ Sex, data = datum)
 
 # Examine the summary
 summary(results)
-# Some functions in R don't have summary functions for them because they are so simple!
+# Nothing pops up. Some functions in R don't have summary functions for them because they are so simple!
 
 # Just ask for the object
 results
@@ -166,19 +215,25 @@ All the results come from the object itself!
 
 It does not provide an **estimate** of the size difference between two groups!! This is not helpful (and somewhat silly)!
 
+- It gives us confidence intervals around the estimate of the difference between the two groups, but it does not give us the estimate. Really weird.
+
 We can calculate it by doing some math... subtract the smaller group from the larger group:
 
 ```{r fig.width=4.5, fig.height=3.5}
-251.2 - 198.9
+# Difference between groups
+248.9 - 202.8
 
 ```
 
 This is how much larger the males are than females.
 
-The confidence interval would be:
+It provides us *confidence limits*, but it does not provide us confidence interval. We can calculate those with:
 
 ```{r fig.width=4.5, fig.height=3.5}
-(64.44 - 40.14)/2
+# Use confidence limits of difference between groups to calculate confidence intervals
+(57.73 - 34.55)/2
+
+# Males are 46.1 kg (+/-11.6; 95% CI) heavier in size than females (p = 1.101e-09).
 
 ```
 
@@ -198,7 +253,7 @@ Here's a little secret... t-tests are just a **regression**! And can be analyzed
 
 **$Y = \beta_0 + \beta_1 X_1 + \epsilon \sim N(0, \sigma)$**
 
-We can use the **linear model** to analyze the elephant seal size data!
+We can use the **linear model** to analyze the seal size data!
 
 **$Size = \beta_0 + \beta_1 Sex + \epsilon \sim N(0, \sigma)$**
 
@@ -218,13 +273,22 @@ Male        1
 Female      0       
 Female      0       
 
+In the dummy-coded variable, you can arbitrarily decide which category gets 1s and which category gets 0s. That's up to you. It will only influence whether the effects are estimated as positive or negative, depending on the directionality.
+
+When you create a dummy-coded variable, I recommend making the variable name whatever category was given '1' -- it's the most clear.
+
 Now, we can replace our **sex** variable with **male**:
 
 **$Size = \beta_0 + \beta_1 Male + \epsilon \sim N(0, \sigma)$**
 
 Let's examine how this works mathematically. Anytime a sample is a male, it gives us a 1 here. Anytime a sample is female, it gives us a 0. Using this information, we can simplify this formula and see how it gives us the answer for both sexes.
 
+If we want to know the size of <u>females</u>, we get:
+
 - $Size_{females} = \beta_0 + \epsilon \sim N(0, \sigma)$
+
+If we want to know the size of <u>males</u>, we get:
+
 - $Size_{males} = \beta_0 + \beta_1 + \epsilon \sim N(0, \sigma)$
 
 **Q:** Everyone follow what we just did here?
@@ -240,16 +304,39 @@ Let's examine how this works mathematically. Anytime a sample is a male, it give
 
 Let's go back to our original graph.
 
-```{r fig.width=4.5, fig.height=3.5}
+```{r echo=FALSE, fig.width=4.5, fig.height=3.5}
+par(mar = c(4,4,0.5,0))
+
 # Plot
-stripchart(Size ~ Sex, data = datum, vertical = TRUE, method = "jitter", 
-           pch = 19, xlab = "Sex", ylab = "Body size (cm)")
+stripchart(Size ~ Sex, data = datum, vertical = TRUE, method = "jitter",
+           pch = 4, xlab = "Sex", ylab = "Body size (kg)",
+           ylim = c(150, 300))
+
+# Calculate the means for each sex
+means <- tapply(datum$Size, datum$Sex, mean)
+
+# Add horizontal lines at the mean for each sex
+for (i in 1:length(means)) {
+  segments(i - 0.15, means[i], i + 0.15, means[i], lwd = 2, col = "black")  # Adjust length with i +/- 0.25
+}
+
+# Add a vertical line between the two means
+x_mid <- mean(1:2)  # Midpoint between group 1 and group 2 on the x-axis
+arrows(x_mid, means[1], x_mid, means[2], lwd = 2, col = "black", lty = 1)  # Vertical line connecting the means
+
+# Add label for the arrow (beta1)
+text(x_mid + 0.1, mean(means), expression(beta[1]), col = "blue", cex = 1.2)
+
+# Add arrow and label for beta0 (mean of the Female group)
+beta0_x <- 1  # Position for Female group
+arrows(beta0_x, 0, beta0_x, means[1], lwd = 2, col = "red", length = 0.1)  # Arrow from (0, 0) to (1, mean of Female)
+text(beta0_x + 0.1, means[1] / 1.2, expression(beta[0]), col = "red", cex = 1.2)  # Adjust label position
 
 ```
 
 **Q:** how might we visualize $\beta_0$ and $\beta_1$ on this graph?
 
-If we remember that female is 0, then $\beta_0$ is the y-intercept, or the body size when y=0.
+If we remember that female is 0, then $\beta_0$ is the y-intercept, or the body size when X = 0.
 
 And then $\beta_1$ is the difference between these two groups.
 
@@ -257,7 +344,9 @@ And then $\beta_1$ is the difference between these two groups.
 
 Since males are 1, then the 'run' is from 0 to 1 -- which equals 1. The rise is $\beta_1$ divided by 1, which equals $\beta_1$.
 
-So $\beta_1$ is still the slope, but it's also more simply just the difference between the groups.
+<u>So $\beta_1$ is still the slope, but it's also more simply just the difference between the groups</u>.
+
+**Question?**
 
 So: why think about this as a t-test? Perhaps it would be easier to use the linear model that we have studied for three weeks, and gotten to know pretty well -- and instead say that our X-variable is categorical, rather than continuous.
 
@@ -273,11 +362,24 @@ head(datum)
 tail(datum)
 
 # We need to 'dummy-code' our Sex variable, e.g., as 'Male'
-Male <- c(rep(0, n/2), rep(1, n/2))
+Male <- c(rep(0, n), rep(1, n))
 
 # Add 'Male' to the dataframe
 datum <- cbind(datum, Male)
 
+```
+
+Now that we have a dummy-coded variable, we can simulate our data much easier:
+
+```{r fig.width=4.5, fig.height=3.5}
+# Aside: we can use dummy-coded sex variable to simulate data much easier
+Size <- 200 + 50 * Male + rnorm(n*2, 0, Sigma)
+Size
+```
+
+Plot the data
+
+```{r fig.width=4.5, fig.height=3.5}
 # Plot the data!
 plot(Size ~ Male, data = datum)
 
@@ -290,7 +392,7 @@ Let's now try to run our t-test using 'lm()':
 ```{r fig.width=4.5, fig.height=3.5}
 # Examine the old t-test results
 results
-248.9749 - 202.8325 # effect of being male
+248.9 - 202.8 # effect of being male
 
 # Use lm() to run regression with dummy-coded X-data
 results2 <- lm(Size ~ Male, data = datum)
@@ -347,11 +449,5 @@ And then we will tweak it just a little bit, week by week, until we use this bas
 We will learn how to tweak this formula to analyze our data as the data become more complicated.
 
 **Note:** We can't use our same canned statement for reporting results like we used for linear regression. Next class we will learn how to report our results when X-variable is categorical. And then we will extend the formula to accommodate situations for when we have more than two groups. And then we will keep moving on from there!
-
-```{r size-10, echo=FALSE, message=FALSE, warning=FALSE, fig.width=4.5, fig.height=3.5}
-# Save the data for future lectures, if needed
-write.csv(datum, "lecture_7_seal_data.csv")
-
-```
 
 [--go to next lecture--](lecture_8.html)

@@ -8,25 +8,47 @@
 # Set the seed for reproducibility
 set.seed(123)
 
-# Simulate the binomial X-variable (sex)
-n <- 40
-x <- c(rep("Female", n/2), rep("Male", n/2))
-x <- factor(x)
+# Simulate the female data
+n <- 20 # sample size
+Sex <- rep("Female", n) # female category
+Sigma <- 20 # standard deviation of the error (noise) in data
+Error <- rnorm(n, mean = 0, sd = Sigma) # simulate the error (noise)
+Size <- 200 + Error # make the response variable data
+FemaleData <- cbind(Sex, Size)
 
-# Simulate continuous y-variable data
-y <- ifelse(x == "Female",
-            rnorm(n/2, mean = 200, sd = 20), #females
-            rnorm(n/2, mean = 250, sd = 20)) #males
+# Simulate the male data
+n <- 20 # sample size
+Sex <- rep("Male", n) # female category
+Sigma <- 20 # standard deviation of the error (noise) in data
+Error <- rnorm(n, mean = 0, sd = Sigma) # simulate the error (noise)
+Size <- 250 + Error # make the response variable data
+MaleData <- cbind(Sex, Size)
 
-# Create dataframe
-datum <- data.frame(Sex = x, Size = y)
+# Bind the data together
+datum <- data.frame(rbind(FemaleData, MaleData))
+
+# Make the 'Sex' variable a factor
+datum$Sex <- as.factor(datum$Sex)
+
+# Force to 'Size' to numeric and round to 1 digit after the decimal
+datum$Size <- round(as.numeric(datum$Size), 1)
+
+# Save the data
+write.csv(datum, "lecture_7_seal_data.csv", row.names = FALSE)
+
+### Load in the data
+datum <- read.csv("lecture_7_seal_data.csv")
 
 # Examine the data
 head(datum)
 tail(datum)
+str(datum)
+
+# Force 'Sex' to be a factor
+datum$Sex <- as.factor(datum$Sex)
 
 # Plot the data to examine it!
-plot(Size ~ Sex, data=datum)
+plot(Size ~ Sex, data = datum)
 # Box and whiskers plot!
 # Bold black line = median
 # Edges of box: 75% and 25% quartiles
@@ -39,18 +61,18 @@ results <- t.test(Size ~ Sex, data = datum)
 
 # Examine the summary
 summary(results)
-# Some functions in R don't have summary functions for them because they are so simple!
+# Nothing pops up. Some functions in R don't have summary functions for them because they are so simple!
 
 # Just ask for the object
 results
 
-251.2 - 198.9
+# Difference between groups
+248.9 - 202.8
 
-(64.44 - 40.14)/2
+# Use confidence limits of difference between groups to calculate confidence intervals
+(57.73 - 34.55)/2
 
-# Plot
-stripchart(Size ~ Sex, data = datum, vertical = TRUE, method = "jitter", 
-           pch = 19, xlab = "Sex", ylab = "Body size (cm)")
+# Males are 46.1 kg (+/-11.6; 95% CI) heavier in size than females (p = 1.101e-09).
 
 ### Code for simulating data to be analyzed body size data for two sexes
 
@@ -59,17 +81,20 @@ head(datum)
 tail(datum)
 
 # We need to 'dummy-code' our Sex variable, e.g., as 'Male'
-Male <- c(rep(0, n/2), rep(1, n/2))
+Male <- c(rep(0, n), rep(1, n))
 
 # Add 'Male' to the dataframe
 datum <- cbind(datum, Male)
 
+# Aside: we can use dummy-coded sex variable to simulate data much easier
+Size <- 200 + 50 * Male + rnorm(n*2, 0, Sigma)
+Size
 # Plot the data!
 plot(Size ~ Male, data = datum)
 
 # Examine the old t-test results
 results
-248.9749 - 202.8325 # effect of being male
+248.9 - 202.8 # effect of being male
 
 # Use lm() to run regression with dummy-coded X-data
 results2 <- lm(Size ~ Male, data = datum)
