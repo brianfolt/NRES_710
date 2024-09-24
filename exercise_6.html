@@ -382,25 +382,91 @@ div.tocify {
 
 <h1 class="title toc-ignore">Exercise 6: Mixed Effects Models</h1>
 <h4 class="author">NRES 710</h4>
-<h4 class="date">Last compiled: 2024-09-19</h4>
+<h4 class="date">Last compiled: 2024-09-23</h4>
 
 </div>
 
 
 <div id="general-approach" class="section level2">
 <h2>General Approach</h2>
-<p>…</p>
+<p>There are three datasets to analyze for this exercise. For each
+dataset, please conduct the following analyses:</p>
+<ol style="list-style-type: decimal">
+<li>Analyze the data using a standard linear model with ‘lm()’; do not
+include any random effects. Report your results describing the fixed
+effects with the standard sentence(s).</li>
+<li>Analyze the data with random effects (random intercept) using a
+linear mixed-effects model with ‘lme()’ from the ‘nlme’ package. Report
+your results on the fixed effects using the standard sentence(s).</li>
+<li>Report what the standard deviation due the random effect is.</li>
+<li>Report how the results from the ‘lm()’ and ‘lme()’ approaches
+differ.</li>
+</ol>
+<p>Note: the ‘confint’ function doesn’t report confidence limits from
+‘lme()’ results the same way it does for ‘lm()’ results. To calculate
+the confidence intervals, use ‘intervals(results)’ instead.</p>
 </div>
 <div id="problem-1" class="section level2">
 <h2>Problem 1</h2>
-<p><strong><a href="exercise_6_dataset1.csv">Dataset 1</a></strong> –
-For this dataset, …</p>
-<ol style="list-style-type: decimal">
-<li>…</li>
-</ol>
-<p><img src="pictures/pic_plethodon.png" style="width:50.0%" /></p>
-<p>Webster’s Salamander (<em>Plethodon websteri</em>) – a cousin of the
-red-backed salamander.</p>
+<p><strong><a href="exercise_6_dataset1.csv">Dataset 1</a></strong> – We
+are worried about the effects of Mormon Crickets (<em>Anabrus
+simplex</em>) on agricultural landscapes. We performed an experiment
+with 8 fields; within each field, we had three different plots, which
+were randomly assigned to one of three ‘treatments’: control, pesticide
+application, and prescribed fire application. The burn treatment was
+called ‘PrescrBurn’ for reasons you should be able to figure out. We
+can’t test for an interaction between burn and fertilizer, because no
+plots received both treatments. This means the treatments are different
+groups within a single variable – not different variables. The response
+variable being measured is population density (crickets/hectare). Using
+the standard sentence(s), report the estimated difference in population
+density among all three treatments. This will require three
+sentences.</p>
+<p><img src="pictures/pic_cricket.png" style="width:50.0%" /></p>
+<p>Picture: John Sullivan, iNaturalist</p>
+<p><br></p>
+</div>
+<div id="problem-2" class="section level2">
+<h2>Problem 2</h2>
+<p><strong><a href="exercise_6_dataset2.csv">Dataset 2</a></strong> – We
+want to understand the effects of fertilizer and hormones on Black
+Cherry (<em>Prunus serotina</em>) tree growth. In this experiment, we
+performed an experiment with 8 fields; within each field, we had four
+different plots. In the plots, two levels of fertilizer (0 grams, 5
+grams) are crossed in a fully-factorial manner with two levels of
+hormone treatment (0 = no hormones given; 1 = hormones give). So within
+each field, one plot receives no fertilizer and no hormones, two plots
+receive one of the treatments, and one plot receives both treatments.
+This is called a fully factorial experiment. Thus, fertilizer and
+hormones are two separate fixed-effects variables (which contrasts to
+Dataset #1). Our response variable is the trunk diameter of trees in
+each plot (cm). This experimental design allows us to test for an
+interaction between the two variables, and we should do so! Report the
+results of the interaction, but remember: if the interaction isn’t
+significant, take it out of the model before reporting the main effects.
+Using the standard sentences, report the ‘effect’ of fertilizer and
+hormone.</p>
+<p><img src="pictures/pic_cherry.png" style="width:50.0%" /></p>
+<p>Picture: Heather Holm, iNaturalist</p>
+<p><br></p>
+</div>
+<div id="problem-3" class="section level2">
+<h2>Problem 3</h2>
+<p><strong><a href="exercise_6_dataset3.csv">Dataset 3</a></strong> – In
+this dataset, we want to determine the growth trajectory of Whitebark
+Pine Trees (<em>Pinus albicaulis</em>) from 10 years old to 20 years
+old. We repeatedly measure the size (height; meters) of 16 different
+individuals each year of the study and examine the relationship between
+age and size. In addition to running the fixed-effects model and the
+standard mixed model, also run a model that incorporates a ‘moving
+average’ autocorrelation. Run an F-drop test to see if including the
+autocorrelation parameter significantly improves the fit of the model to
+the data. Report the results of this F-drop test. Also report the value
+of <span class="math inline">\(\theta\)</span> (the coefficient of
+autocorrelation) in your assignment, along with the standard deviation
+due to the random effect.</p>
+<p><img src="pictures/pic_whitebarkpine.png" style="width:50.0%" /></p>
+<p>Picture: Gary Griffith, iNaturalist</p>
 <p><br></p>
 </div>
 <div id="truth" class="section level2">
@@ -411,29 +477,88 @@ red-backed salamander.</p>
 ### Exercise 6: code to simulate datasets for the exploration of
 ### mixed-effects models
 
+### Dataset 1
 # Set the seed for reproducibility
 set.seed(123)
 
-### Dataset 1
-# Sample size
-n &lt;- 90
+# X-variables
+n_fields &lt;- 8
+n_treatments &lt;- 3
+Fields &lt;- rep(1:n_fields, each = n_treatments)
+Treatment &lt;- rep(c(&quot;Control&quot;, &quot;Pesticide&quot;, &quot;PrBurn&quot;), n_fields)
+TrtMnt &lt;- rep(c(0,1,1), n_fields)
 
-# Simulate X-variables
-# Continuous variables: Latitude and Elevation
-Latitude &lt;- runif(n, 0, 1) * 3000
-Elevation &lt;- runif(n, 0, 1) * 2500
+# Error due to field
+FieldError &lt;- rep(rnorm(n_fields, 0, 3.5), each = n_treatments)
 
-# Error
-Error &lt;- rnorm(n, 0, 1)
+# Residual error
+ResidError &lt;- rnorm(n_treatments * n_fields, 0, 2)
 
-# Response variable: Size
-Size &lt;- 15 - 0.00125*Elevation - 0.00167*Latitude + 0.00001 * Latitude * Elevation 
+# Response variable
+Density &lt;- 20 - 6*TrtMnt + FieldError + ResidError
 
 # Create dataframe
-datum &lt;- data.frame(Latitude=Latitude, Elevation=Elevation, Size=Size)
+datum &lt;- data.frame(Fields=Fields, Treatment=Treatment, FieldError=FieldError, ResidError=ResidError, TrtMnt = TrtMnt, Density=Density)
 
 # Save the CSV file
-write.csv(datum, &quot;exercise_6_dataset1.csv&quot;, row.names = FALSE)</code></pre>
+write.csv(datum, &quot;exercise_6_dataset1.csv&quot;, row.names = FALSE)
+
+### Dataset 2
+# Set the seed for reproducibility
+set.seed(123)
+
+# X-variables
+n_fields &lt;- 8
+n_treatments &lt;- 4
+Fields &lt;- rep(1:8, n_treatments)
+Fertilizer &lt;- c(rep(0, n_fields), rep(1, n_fields), rep(0, n_fields), rep(1, n_fields))
+Hormone &lt;- c(rep(0, n_fields), rep(0, n_fields), rep(1, n_fields), rep(1, n_fields))
+
+# Error due to field
+FieldError &lt;- rep(rnorm(n_fields, 0, 6.5), each = n_treatments)
+
+# Residual error
+ResidError &lt;- rnorm(n_treatments * n_fields, 0, 1)
+
+# Response variable
+Size &lt;- 50 + 9*Fertilizer + 3*Hormone + FieldError + ResidError
+
+# Create dataframe
+datum &lt;- data.frame(Fields=Fields, Fertilizer=Fertilizer, Hormone=Hormone, FieldError=FieldError, ResidError=ResidError, Size=Size)
+
+# Save the CSV file
+write.csv(datum, &quot;exercise_6_dataset2.csv&quot;, row.names = FALSE)
+
+
+### Dataset 3
+# Set the seed for reproducibility
+set.seed(123)
+
+# X-variables
+n_trees &lt;- 16
+years &lt;- 10:20
+n_years &lt;- length(years)
+Individual &lt;- rep(1:16, n_years)
+Age &lt;- years
+
+# Tree error
+TreeError &lt;- rep(rnorm(n_trees, 0, 10), each = n_years)
+
+# Residual error
+ResidError &lt;- matrix(NA, n_trees * n_years, 1)
+ResidError[1,1] &lt;- rnorm(1, mean = 0, sd = 12)
+for (i in 2:(n_trees * n_years)){
+  ResidError[i,1] &lt;- rnorm(1, mean = ResidError[i-1, 1], sd = 1)
+}
+
+# Response variable
+Size &lt;- 20 + 1*Age + TreeError + ResidError
+
+# Create dataframe
+datum &lt;- data.frame(Individual=Individual, Age=Age, TreeError=TreeError, ResidError=ResidError, Size=Size)
+
+# Save the CSV file
+write.csv(datum, &quot;exercise_6_dataset3.csv&quot;, row.names = FALSE)</code></pre>
 <p><a href="exercise_7.html">–go to next exercise–</a></p>
 </div>
 
