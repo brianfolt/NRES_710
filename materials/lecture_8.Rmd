@@ -39,6 +39,10 @@ MathJax.Hub.Register.StartupHook("TeX Jax Ready",function () {
 });
 </script>
 
+Exercise 2: no big deal on the graphs, if you struggled with that. This class is focused on running analyses, and not making graphs. But if you are still having a hard time running 'linear models' and doing the associated assumption checks, then check-in with me and we can work together to help you.
+
+Reading for next week: Ruxton & Beauchamp 2008, skim this. Focus on learning about what post-hoc tests are.
+
 ## Summary
 
 Last class we discussed how to analyze data when we have a categorical X-variable data. 
@@ -47,15 +51,19 @@ Traditionally, this is called a *t-test* -- but I am going to avoid calling it t
 
 Today we will discuss how to **present results** from analysis of categorical data. We have a 'canned' sentence for presenting results when we have two continuous variables, but we need a slightly different approach for when we have categorical X-data.
 
-The good news is that our X-variable data can only be continuous or categorical. So once we learn this second approach, we will only have to know these **two approaches**. We can use them repeatedly during our various analytical activities, perhaps with slight modifications.
+The good news is that our <u>X-variable data can only be continuous or categorical</u>! So once we learn this second approach, we will only have to know these **two approaches**. We can use them repeatedly during our various analytical activities, perhaps with slight modifications.
 
 ## Presenting Results
 
-With continuous X data, we start out by saying: "For each 1 unit increase in X, we observed a unit change in Y." There is no such thing as a unit change in X when we have a categorical X variable, so we will drop that. Instead, we will say something like:
+With continuous X data, we start out by saying: "For each 1 unit increase in X, we observed a unit change in Y."
 
-**"We found that [group 1] was [$\beta_1$] [Y-units] ([+/-CI]; 95% CI) [descriptor word to indicate direction] than [group 2] (p = [p-value])."
+There is no such thing as a unit change in X when we have a categorical X variable! So we won't say that. Instead, we will say something like:
 
-- *if p > 0.05, then add: "; however, our results were not statistically significant."
+**"We found that [group 1] was [$\beta_1$] [Y-units] ([+/-CI]; +/-95% CI) [descriptor word] than [group 2] (p = [p-value])."**
+
+Don't need an $r^2$ because it doesn't really make sense with a categorical X-variable.
+
+- ***if p > 0.05, then add: "; however, our results were not statistically significant."**
 
 ### Example
 
@@ -108,13 +116,13 @@ confint(results)["SexMale", 2] - results$coefficients["SexMale"]
 
 **"We found that males were 46.1 kg (+/-11.6; +/-95% CI) heavier than females (p = 9.24e-10)."**
 
-You could also be more descriptive and perhaps say: "had 46.1 kg (...) greater mass than females". It's nice to be descriptive -- but also good to keep things concise.
+You could also be more descriptive and perhaps say: *"had 46.1 kg (...) greater mass than females"*. It's nice to be descriptive -- but also good to keep things concise.
 
 What if you wanted to put females first? That's fine -- just swap things around, word smith it a bit, and put females first: "We found that females had 46.1 kg (...) less mass than males".
 
 If you give R categorical data, R will automatically create the 'reference' group using the alphabetical order of the groups. For example, if you gave R data with two experimental treatments in the X-variable, "control" and "burned", it will automatically make "burned" the reference group -- but you might want to change that to visualize the 'effect' of burn treatment compared to control, untreated areas.
 
-**Takehome message:** Running a t-test is the same as running a regression, but with a categorical X-variable -- but it doesn't matter with coding in R. The only difference is you have to understand that you have a categorical X-variable, and write a slightly different sentence.
+**Takehome message:** Running a t-test is the same as running a regression, but with a categorical X-variable -- but it doesn't matter with coding in R. The only difference is you have to understand that you <u>have a categorical X-variable, and write a slightly different sentence</u>.
 
 ### Changing the reference group
 
@@ -141,8 +149,10 @@ Let's extend this model a little bit. Previously we had considered a situation w
 
 **Continuous Y; Multinomial X**
 
-- **X-variable: Group 1 - Juveniles, Group 2 - Subadults, Group 3 - Adults**
-- **Y-variable: body size (mass)**
+- **Group 1 - Juveniles**
+- **Group 2 - Subadults**
+- **Group 3 - Adults**
+- **Y: mass**
 
 The first thing I want to show you is how this works in the general linear modeling framework. Up to this point, we have used our trusty equation for the linear model as:
 
@@ -152,7 +162,10 @@ We previously introduced the concept of 'dummy coding', which will be particular
 
 We will take our categorical X-variable and 'dummy code' it by creating a **column for each category** that describes whether each observation in our data is **within that category (1) or not (0)**. For example:
 
-```{r create-table, echo=FALSE, message=FALSE, warning=FALSE}
+```{r create-table-kable, echo=FALSE, message=FALSE, warning=FALSE}
+# Load the knitr package for kable
+library(knitr)
+
 # Create the data
 Age <- c("Juvenile", "Juvenile", "Juvenile", "Subadult", "Subadult", "Subadult", "Adult", "Adult", "Adult")
 Juvenile <- c(1, 1, 1, 0, 0, 0, 0, 0, 0)
@@ -162,11 +175,14 @@ Adult <- c(0, 0, 0, 0, 0, 0, 1, 1, 1)
 # Create a data frame
 table_data <- data.frame(Age = Age, Juvenile = Juvenile, Subadult = Subadult, Adult = Adult)
 
-# Display the table
-print(table_data)
+# Display the table using kable
+kable(table_data, col.names = c("Age Category", "Juvenile", "Subadult", "Adult"))
+
 ```
 
-When we create our general linear model to accommodate these multiple groups, we now need to have an X for every one of these dummy-coded columns. But, we are going to leave one out.
+When we create our general linear model to accommodate these multiple groups, we now need to have an X for every one of these dummy-coded columns. <u>But, we are going to leave one out</u>.
+
+The reason we are going to leave one out is because we don't need that extra column to capture how that works. Let me show you how this works:
 
 **$Y = \beta_0 + \beta_1 Subadult + \beta_2 Adult + \epsilon \sim N(0, \sigma)$**
 
@@ -181,16 +197,8 @@ The reference group is the group by which all others are compared.
 Another way to look at this is to examine our dummy-coded columns. If we look at the 'Subadult' and 'Adult' columns, we actually don't need the 'Juvenile' column to know which observations are of juveniles:
 
 ```{r create-table-2, echo=FALSE, message=FALSE, warning=FALSE}
-# Create the data
-Age <- c("Juvenile", "Juvenile", "Juvenile", "Subadult", "Subadult", "Subadult", "Adult", "Adult", "Adult")
-Subadult <- c(0, 0, 0, 1, 1, 1, 0, 0, 0)
-Adult <- c(0, 0, 0, 0, 0, 0, 1, 1, 1)
+kable(table_data[c(1,4,7),], col.names = c("Age Category", "Juvenile", "Subadult", "Adult"))
 
-# Create a data frame
-table_data <- data.frame(Age = Age, Subadult = Subadult, Adult = Adult)
-
-# Display the table
-print(table_data)
 ```
 
 The individuals that were 0 for both Subadults and Adults must be Juveniles, by the process of elimination.
@@ -214,7 +222,6 @@ The meaning of $\beta_1$ has not changed either -- the difference between juveni
 **$Y(adult) = \beta_0 + \cancel{\beta_1 * 0} + \beta_2 * 1 + \epsilon$**
 
 **$Y(adult) = \beta_0 + \beta_2 + \epsilon$**
-
 
 Our new variable, $\beta_2$, has a similar meaning to $\beta_1$ -- the difference between adults and juveniles.
 
@@ -277,7 +284,11 @@ text(2, (mean_juvenile + mean_adult) / 2, expression(beta[2]), col = "darkgreen"
 
 Note: our **error** is normally distributed with a mean = 0, centered on the average, with a standard deviation of $\sigma$.
 
-Or:
+- The average size of juveniles is $\beta_0$
+- The diff between juvs and subads is $\beta_1$
+- The diff between juvs and adults is $\beta_2$
+
+These look like:
 
 ```{r stripplot-2, echo=FALSE, message=FALSE, warning=FALSE}
 ### Code for simulating data to be analyzed body size data for two sexes
@@ -350,18 +361,32 @@ You might be wondering... how would we estimate the difference between subadults
 
 ### Comparison of multiple groups in R
 
-Let's see what this would look like in R. Download some simulated data [here](lecture_8_ages.csv).
+Let's see what this would look like in R. Download some simulated data [here](lecture_8_dataset1.csv).
+
+'Truth' for these data are:
+
+- Juveniles: 75 kg, so $\beta_0$ = 75 kg
+- Subadults: 200 kg, so $\beta_1$ = 125 kg
+- Adults: 250 kg, so $\beta_2$ = 175 kg
+
+Load in the data:
 
 ```{r}
 ### Code to test for differences among three groups
 
 # Read in the data
-datum <- read.csv("lecture_8_ages.csv")
+datum <- read.csv("lecture_8_dataset1.csv")
 
 # Examine the data
 head(datum)
 
+# Make datum a factor
+datum$Age <- factor(datum$Age)
+
 # Plot
+plot(Size ~ Age, data = datum, xlab = "Age", ylab = "Body size (cm)")
+
+# Plot w/ jitter
 stripchart(Size ~ Age, data = datum, vertical = TRUE, method = "jitter",
            pch = 19, xlab = "Age", ylab = "Body size (cm)")
 
@@ -383,13 +408,7 @@ head(datum)
 
 ```
 
-'Truth' for these data are:
-
-- Juveniles: 75 kg, so $\beta_0$ = 75 kg
-- Subadults: 200 kg, so $\beta_1$ = 125 kg
-- Adults: 250 kg, so $\beta_2$ = 175 kg
-
-Let's use 'lm()' to test for these differences in R:
+Before we use 'lm()' to test for these differences in R, let's quickly look at the ANOVA function:
 
 ```{r}
 ## Analysis of variance; 'aov()'
@@ -439,7 +458,7 @@ Remember: Type I error is when we reject the null when in fact it is True; what 
 
 **If we did 3 t-tests**:
 
-- **P(Not committing error) = (1 - $\alpha$)** -- we take this to the power of the number of tests we will do
+- **P(No committing error) = (1 - $\alpha$)** -- we take this to the power of the number of tests we will do
 - **P(No errors) = (1 - 0.05)^3**
 - **P(>1 errors) = 1 - (1 - 0.05)^3**
 
@@ -452,13 +471,14 @@ Remember: Type I error is when we reject the null when in fact it is True; what 
 
 ```
 
-This is why they teach us to use analyses like ANOVA in statistics. It is meant to be one single test that can evaluate multiple comparisons and thus minimizes our risk of committing Type I error.
+14% is a lot more than 5%! We need to be careful if we start doing multiple tests.
+
+This is why they teach us to use analyses like ANOVA in statistics. It is meant to be <u>one single test</u> that can evaluate multiple comparisons and thus <u>minimizes our risk of committing Type I error</u>.
 
 - Concept: first, run ANOVA, and get a single p-value. That p-value tells you whether **at least two groups are different from another group**; but it does not mean that all groups are different.
-
 - **ANOVA w/ p < 0.05 -- at least 2 groups are different**
-
-- After getting the significant p-value, you then do a **'post-hoc' test** to evaluate those differences. (We'll talk about this in a few days.)
+- This is a single p-value testing the significance of that categorical variable <u>as a whole</u>.
+- After getting the significant p-value, you then do a **'post-hoc' test** to evaluate those differences. (We'll talk about this next week.)
 
 The important part is that our 'lm()' summary output gives us the single ANOVA p-value, which is at the bottom of the summary.
 
@@ -495,7 +515,7 @@ confint(results2)
 
 But, there are three groups, so we will need to write three sentences to report all of those comparisons. To do this, we have to recreate our results object. It's pretty easy!
 
-We will use the 'relevel()' function
+We will use the 'relevel()' function. To do this, we will replace the whole 'Sex variable' with a 'relevel()' function call. The relevel() function requires two arguments: the variable you want to change the reference for, and what you want the new reference to be.
 
 ```{r}
 # Re-run analysis with different reference
@@ -512,7 +532,7 @@ Note: the juvenile-subadult estimate remained the same, but became negative.
 
 **Questions?**
 
-I am going to encourage us to build models that can evaluate global difference and within-group differences within one single model, such as we have done using 'lm()', **for two reasons**.
+Next week we will learn about 'post-hoc tests'. But, I am going to encourage us to build models that can evaluate global difference and within-group differences within one single model, such as we have done using 'lm()', **for two reasons**.
 
 - First, this is more simple and minimize extra steps of having to do 'post-hoc tests'. As we get more advanced with our approaches, post-hoc tests will not exist for all of your needs, so building models that can test for differences within the model is the best approach, in my opinion.
 - Second, do we really care about p-values? Post-hoc tests are used to generate p-values, but we don't think p-values are the goal of statistics. We want to measure effects, and the modeling approach we are using here is good at estimating effects.
@@ -568,7 +588,7 @@ summary(results7)
 
 It compares the size of adults compared to the size of all other observations combined into a single group. Juveniles and subadults are lumped.
 
-"We found that adults were 109.9 kg (...) heavier than juveniles and subadults combined as a group (p = 7.69e-09)."
+"We found that adults were 115.0 kg (...) heavier than juveniles and subadults combined as a group (p = 7.69e-09)."
 
 Here's another way to do it:
 
@@ -589,11 +609,8 @@ These are advantages of using 'dummy-coded' variables! It gives us *flexibility.
 ## Summary
 
 - It doesn't matter how many groups your categorical variable has. It's still 'lm(Y ~ X)'.
-
 - It will create a number of effects ($\beta$). The number of $\beta$s will be the number of groups, $n$, minus 1 (the reference).
-
 - We have a different results sentence now, that we will use for any categorical variables.
-
 - For categorical variables, you will need a sentence for all pairwise comparisons.
 
 <br>
@@ -620,7 +637,7 @@ y <- ifelse(x == "Juvenile", rnorm(n/3, mean = 75, sd = 20), #juveniles
 datum <- data.frame(Age = x, Size = y)
 
 # Save these data for future use
-write.csv(datum, "lecture_8_ages.csv")
+write.csv(datum, "lecture_8_dataset1.csv")
 ```
 
 [--go to next lecture--](lecture_9.html)

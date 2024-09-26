@@ -43,12 +43,18 @@ summary(results2)
 ### Code to test for differences among three groups
 
 # Read in the data
-datum <- read.csv("lecture_8_ages.csv")
+datum <- read.csv("lecture_8_dataset1.csv")
 
 # Examine the data
 head(datum)
 
+# Make datum a factor
+datum$Age <- factor(datum$Age)
+
 # Plot
+plot(Size ~ Age, data = datum, xlab = "Age", ylab = "Body size (cm)")
+
+# Plot w/ jitter
 stripchart(Size ~ Age, data = datum, vertical = TRUE, method = "jitter",
            pch = 19, xlab = "Age", ylab = "Body size (cm)")
 
@@ -137,4 +143,4 @@ y <- ifelse(x == "Juvenile", rnorm(n/3, mean = 75, sd = 20), #juveniles
 datum <- data.frame(Age = x, Size = y)
 
 # Save these data for future use
-write.csv(datum, "lecture_8_ages.csv")
+write.csv(datum, "lecture_8_dataset1.csv")
