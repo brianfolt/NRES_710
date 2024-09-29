@@ -1,9 +1,10 @@
-titanic
-emmeans
-ggplot2
 simpleboot
+emmeans
 agricolae
+ggplot2
+titanic
 statmod
 knitr
 kableExtra
 WILD6900
+plotly

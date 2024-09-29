@@ -1,0 +1,77 @@
+---
+title: "Exercise 7: Nested Design Models"
+author: "NRES 710"
+date: "Last compiled: `r Sys.Date()`"
+output: 
+  html_document: 
+    theme: yeti
+    toc: yes
+    toc_float: yes
+    css: styles.css
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+	echo = TRUE,
+	message = FALSE,
+	warning = FALSE,
+	cache = TRUE
+)
+```
+
+## General Approach
+
+...
+
+## Problem 1
+
+**[Dataset 1](exercise_7_dataset1.csv)** -- [...]
+
+![](pictures/.png){width=50%}
+
+Picture: NAME, iNaturalist
+
+<br>
+
+## Truth
+
+If you would like to know the values used to create these datasets (i.e., 'truth'), examine the code here:
+
+```{r}
+########################## 'Truth' ############################# 
+### Exercise 7: code to simulate datasets for the exploration of
+### nested-design models
+
+### Dataset 1
+# Set the seed for reproducibility
+set.seed(123)
+
+# X-variables
+n_trees <- 16
+years <- 10:20
+n_years <- length(years)
+Individual <- rep(1:16, n_years)
+Age <- years
+
+# Tree error
+TreeError <- rep(rnorm(n_trees, 0, 10), each = n_years)
+
+# Residual error
+ResidError <- matrix(NA, n_trees * n_years, 1)
+ResidError[1,1] <- rnorm(1, mean = 0, sd = 12)
+for (i in 2:(n_trees * n_years)){
+  ResidError[i,1] <- rnorm(1, mean = ResidError[i-1, 1], sd = 1)
+}
+
+# Response variable
+Size <- 20 + 1*Age + TreeError + ResidError
+
+# Create dataframe
+datum <- data.frame(Individual=Individual, Age=Age, TreeError=TreeError, ResidError=ResidError, Size=Size)
+
+# Save the CSV file
+write.csv(datum, "exercise_7_dataset1.csv", row.names = FALSE)
+
+```
+
+[--go to next exercise--](exercise_8.html)

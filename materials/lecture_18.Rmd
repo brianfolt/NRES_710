@@ -35,7 +35,7 @@ knitr::opts_chunk$set(
 
 #  NRES 710, Nested Designs
 #     University of Nevada, Reno
-#     
+#     Different applications of nested designs
 
 ```
 
@@ -235,9 +235,7 @@ ggplot() +
 
 ```
 
-This doesn't work because it <u>spreads out upward</u>. This doesn't work so we have set this up incorrectly.
-
-The terminology doesn't really matter much.
+This doesn't work because it <u>spreads out upward</u>. This doesn't work, so we have set this up incorrectly.
 
 One cool thing is that you don't necessarily need to recognize that there is nesting structure in your data -- you just have to include that field effect! Just like with collinearity and swamping, you don't have to recognize these features, you just have to include all of the X-effects. Same thing with pseudoreplication -- you don't have to recognize it, you just have to include all of the appropriate random variables.
 

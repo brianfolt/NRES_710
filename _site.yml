@@ -21,7 +21,7 @@ navbar:
       href: exercise_5.html
     - text: Exercise 6 - Mixed Effects Models
       href: exercise_6.html
-    - text: Exercise 7 - TBD
+    - text: Exercise 7 - Nested Design Models
       href: exercise_7.html
   - text: More Resources
     menu:
