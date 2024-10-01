@@ -77,7 +77,7 @@ Type I error rate and Power are inversely related. For example, let's say we use
 
 In an idea world where we do a post-hoc test, we would have a Type I error rate of 0.05 and also have some theoretically-determined maximum power. Statisticians at universities trying to be important, and get tenure, try to develop their own post-hoc test to do this...
 
-A commonly used post-hoc test is **Tukey's post-hoc test** -- has pretty good power! But it has a higher Type I error rate (0.06, 0.07). This causes weird circumstances where you had a marginally significant ANOVA (e.g., 0.049), but Tukey's test fails to detect significant differences between pairwise comparisons.
+A commonly used post-hoc test is **Tukey's post-hoc test**. Tukey's test is moderately powerful, but conservative when it comes to controlling for Type I error. This causes weird circumstances where you had a marginally significant ANOVA (e.g., 0.049), but Tukey's test fails to detect significant differences between pairwise comparisons.
 
 All of the above tests try to balance this tradeoff, and all of them vary at it. And whichever one you choose is <u>**arbitrary**</u>. When you have a marginally significant result, you might start chasing pairwise significant results by using different post-hoc tests. Let's try Tukeys! Oh, that didn't work. Let's try Schauffe's! Nope, that didn't work either. And then you try another, and it gives you two significant comparisons.
 
@@ -337,30 +337,31 @@ Here is code to simulate the data we analyzed in this lecture.
 set.seed(123)
 
 # Simulate X-variable
-n <- 80
-x <- factor(c(rep("Spring", n/4), rep("Summer", n/4), rep("Winter", n/4), rep("Fall", n/4)))
+n <- 20
+Season <- factor(gl(4, n, labels = c("Spring", "Summer", "Winter", "Fall")))
 
 # Season as a numeric
-SeasonN <- as.numeric(factor(x, levels = c("Fall", "Winter", "Spring", "Summer")))
+SeasonN <- as.numeric(factor(Season, levels = c("Fall", "Winter", "Spring", "Summer")))
 
 # Simulate error
-error <- rnorm(n, mean = 0, sd = 0.1)
+Error <- rnorm(length(Season), mean = 0, sd = 0.1)
 
 # Create dummy-coded variables
-dummy <- model.matrix(~ x - 1)
-colnames(dummy) <- c("Fall", "Spring", "Summer", "Winter")
+Dummy <- model.matrix(~ Season - 1)
+colnames(Dummy) <- c("Fall", "Spring", "Summer", "Winter")
 
 # Create the dataframe
-datum <- data.frame(Season = x, error = error, dummy, SeasonN)
+datum <- data.frame(Season = Season, Error = Error, Dummy, SeasonN)
 
 # Calculate Y-variable
-y <- 4.6 - (0.6 * datum$Spring) - (0.6 * datum$Summer) - (0.05 * datum$Winter) + error
+y <- 4.6 - (0.6 * datum$Spring) - (0.6 * datum$Summer) - (0.05 * datum$Winter) + Error
 
 # Create dataframe
 datum <- cbind(datum, Mass = y)
 
 # Save the CSV file
 write.csv(datum, "lecture_9_seasons.csv", row.names = FALSE)
+
 ```
 
 [--go to next lecture--](lecture_10.html)
