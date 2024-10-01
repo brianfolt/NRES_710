@@ -30,14 +30,15 @@ summary(results3)
 # This analysis is so simple that it doesn't even have a summary file. Run it directly.
 TukeyHSD(results3)
 
+# Compare original lm() to TukeyHSD() results
 summary(results)
 
 TukeyHSD(results3)
 confint(results)
 
 # Spring to Fall
-(-0.63274618 - -0.5149456)/2 # LM
-(-0.65152888 - -0.49616295)/2 #Tukey
+(-0.63274618 - -0.5149456)/2 # Linear model
+(-0.65152888 - -0.49616295)/2 #Tukey HSD
 
 # Look at the second to last column
 head(datum)

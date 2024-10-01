@@ -178,6 +178,8 @@ rmarkdown::render('materials/lecture_14.Rmd', 'word_document')
 rmarkdown::render('materials/lecture_15.Rmd', 'word_document')
 rmarkdown::render('materials/lecture_16.Rmd', 'word_document')
 rmarkdown::render('materials/lecture_17.Rmd', 'word_document')
+rmarkdown::render('materials/lecture_18.Rmd', 'word_document')
+rmarkdown::render('materials/lecture_19.Rmd', 'word_document')
 
 knitr::opts_chunk$set(echo = TRUE, message = FALSE)
 rmarkdown::render('index.Rmd', output_file = 'syllabus.pdf', rmarkdown::pdf_document())
@@ -235,6 +237,9 @@ rmd2rscript("materials/lecture_13.Rmd")
 rmd2rscript("materials/lecture_15.Rmd")
 rmd2rscript("materials/lecture_16.Rmd")
 rmd2rscript("materials/lecture_17.Rmd")
+rmd2rscript("materials/lecture_18.Rmd")
+rmd2rscript("materials/lecture_19.Rmd")
+
 #rmd2rscript("exercise_1.Rmd") # no R code of substance necessary for students to have
 #rmd2rscript("exercise_2.Rmd") # sharing 'truth' at the bottom of the page
 #rmd2rscript("exercise_3.Rmd") # sharing 'truth' at the bottom of the page
