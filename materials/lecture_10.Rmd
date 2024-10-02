@@ -33,7 +33,7 @@ knitr::opts_chunk$set(
 Up to this point we have been working with the linear model and we have explored situations where the X-variable is continuous or categorical. We can analyze both of those instances using 'lm()', and the only difference is how we report the results. 
 
 - "For each unit increase, we observed a [...] change..."
-- "We found that group 1 was [beta] larger than group 2..."
+- "We fƒound that group 1 was [beta] larger than group 2..."
 
 Today we are going to talk about a special case that can be useful in statistics: when you have an X-variable that can be treated as either continuous or categorical.
 
@@ -116,7 +116,7 @@ For this example, the variable is words that cannot be translated into a numeric
 
 Let's revisit the bison example I mentioned previously. We want to know: what is the effect of bison on ecosystem productivity?
 
-![](pictures/pic_bison.png){width=50%}
+![](../pictures/pic_bison.png){width=50%}
 
 Photo: Ted Naninga (iNaturalist)
 
@@ -179,7 +179,7 @@ But let's draw up a list on the board weighing the pros and cons of both options
 ```{r, echo=FALSE, message=FALSE}
 # Load necessary libraries
 library(knitr)
-library(kableExtra)
+#library(kableExtra)
 
 # Create the data frame
 data <- data.frame(
@@ -189,8 +189,8 @@ data <- data.frame(
 )
 
 # Create the table
-kable(data, col.names = c("Continuous X", "Categorical X")) %>%
-  kable_styling(full_width = FALSE)
+kable(data, col.names = c("Continuous X", "Categorical X")) #%>%
+  #kable_styling(full_width = FALSE)
 
 ```
 
