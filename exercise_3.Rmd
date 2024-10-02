@@ -23,7 +23,11 @@ knitr::opts_chunk$set(
 
 ## Problems
 
-**[Dataset 1](exercise_3_dataset1.csv)** -- For this dataset, you are conducting an experiment to see if there is a difference in deer density (Y; deer/ha) between predator exclusion plots and control plots (X; groups). Technically, this could be analyzed with a 't-test'. However, for consistency with our general approach toward statistics, please use the 'lm()' function to do the analysis -- not the 't.test()' function. Report your results using the standard sentence.
+**[Dataset 1](exercise_3_dataset1.csv)** -- For this dataset, you are conducting an experiment to see if there is a difference in deer density (Y; deer/ha) between predator exclusion plots and control plots (X; groups). Technically, this could be analyzed with a 't-test'. However, for consistency with our general approach toward statistics, please use the 'lm()' function to do the analysis -- not the 't.test()' function. Report your results using the standard sentence for reporting results with categorical X-data:
+
+**"We found that [group 1] was [$\beta_1$] [Y-units] ([+/-CI]; +/-95% CI) [descriptor word] than [group 2] (p = [p-value])."**
+
+***if p > 0.05, then add: "; however, our results were not statistically significant."**
 
 ![](pictures/pic_deer.png){width=50%}
 
@@ -100,7 +104,7 @@ Density <- 5 + 2.5 * Exclusion + error
 datum <- data.frame(Group, Exclusion, Density)
 
 # Save the CSV file
-write.csv(datum, "exercise_3_dataset1.csv")
+write.csv(datum, "exercise_3_dataset1.csv", row.names = FALSE)
 
 
 ## Dataset 2
@@ -119,7 +123,7 @@ QuailDensity <- 0.85 - 0.25 * dummy$ClosedPine - 0.35 * dummy$OpenPine - 0.15 * 
 datum <- data.frame(Habitat, QuailDensity)
 
 # Save the CSV file
-write.csv(datum, "exercise_3_dataset2.csv")
+write.csv(datum, "exercise_3_dataset2.csv", row.names = FALSE)
 
 
 ## Dataset 3
@@ -138,7 +142,7 @@ Success <- abs(0.12 + 0.45 * dummy$Muzzleloader + 0.6 * dummy$Rifle + error)
 datum <- data.frame(Hunt, Success)
 
 # Save the CSV file
-write.csv(datum, "exercise_3_dataset3.csv")
+write.csv(datum, "exercise_3_dataset3.csv", row.names = FALSE)
 
 
 ## Dataset 4
@@ -157,7 +161,7 @@ Biomass <- 1.5 + 3.5 * dummy$Two + 5.25 * dummy$Four + 5.25 * dummy$Six + 4 * du
 datum <- data.frame(Fertilizer, Biomass)
 
 # Save only the first two columns in the CSV file
-write.csv(datum, "exercise_3_dataset4.csv")
+write.csv(datum, "exercise_3_dataset4.csv", row.names = FALSE)
 ```
 
 [--go to next exercise--](exercise_4.html)

@@ -43,7 +43,7 @@ Most of the lecture today is going to focus on historical approaches to using po
 
 The ANOVA result provide a **single p-value -- the significance of variable as a whole**. Today we will look at data describing the mass of an animal across four seasons as an example. The single ANOVA p-value will give us the significance of this entire 'season' variable. Historically speaking, researchers would often respond to that p-value in two ways:
 
-- **p > 0.05 -- none of the category groups are statistically significantly different**
+- **p ≥ 0.05 -- none of the category groups are statistically significantly different**
   - In this case, you would no longer pursue any further statistical testing.
   - I don't like this approach! You don't know whether your lack of result was due to a lack of sample size or due to a lack of effect size.
   - But this path was often followed to <u>avoid doing unnecessary tests</u> and to **minimize the Type I error rate**. (And also why we do ANOVA instead of jumping into a bunch of pairwise t-tests.)
