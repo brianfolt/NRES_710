@@ -338,7 +338,7 @@ set.seed(123)
 
 # Simulate X-variable
 n <- 20
-Season <- factor(gl(4, n, labels = c("Spring", "Summer", "Winter", "Fall")))
+Season <- factor(gl(4, n, labels = c("Fall", "Spring", "Summer", "Winter")))
 
 # Season as a numeric
 SeasonN <- as.numeric(factor(Season, levels = c("Fall", "Winter", "Spring", "Summer")))

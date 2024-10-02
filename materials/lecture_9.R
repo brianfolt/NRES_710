@@ -64,27 +64,28 @@ plot(Mass ~ SeasonN, data = datum)
 set.seed(123)
 
 # Simulate X-variable
-n <- 80
-x <- factor(c(rep("Spring", n/4), rep("Summer", n/4), rep("Winter", n/4), rep("Fall", n/4)))
+n <- 20
+Season <- factor(gl(4, n, labels = c("Fall", "Spring", "Summer", "Winter")))
 
 # Season as a numeric
-SeasonN <- as.numeric(factor(x, levels = c("Fall", "Winter", "Spring", "Summer")))
+SeasonN <- as.numeric(factor(Season, levels = c("Fall", "Winter", "Spring", "Summer")))
 
 # Simulate error
-error <- rnorm(n, mean = 0, sd = 0.1)
+Error <- rnorm(length(Season), mean = 0, sd = 0.1)
 
 # Create dummy-coded variables
-dummy <- model.matrix(~ x - 1)
-colnames(dummy) <- c("Fall", "Spring", "Summer", "Winter")
+Dummy <- model.matrix(~ Season - 1)
+colnames(Dummy) <- c("Fall", "Spring", "Summer", "Winter")
 
 # Create the dataframe
-datum <- data.frame(Season = x, error = error, dummy, SeasonN)
+datum <- data.frame(Season = Season, Error = Error, Dummy, SeasonN)
 
 # Calculate Y-variable
-y <- 4.6 - (0.6 * datum$Spring) - (0.6 * datum$Summer) - (0.05 * datum$Winter) + error
+y <- 4.6 - (0.6 * datum$Spring) - (0.6 * datum$Summer) - (0.05 * datum$Winter) + Error
 
 # Create dataframe
 datum <- cbind(datum, Mass = y)
 
 # Save the CSV file
 write.csv(datum, "lecture_9_seasons.csv", row.names = FALSE)
+
