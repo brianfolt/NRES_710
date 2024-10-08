@@ -15,30 +15,20 @@ plot(Biomass ~ Bison, data = datum)
 
 # Plot the data with X as a categorical variable
 plot(Biomass ~ as.factor(Bison), data = datum)
-# Use the as.factor function to get R to treat variable as a categorical variable
-# We could have manually created categorical variable or dummy-coded variables in Excel, but
-# using as.factor is much easier.
-# We could also also create a new variable and save it in our 'datum'
 
 # Run a regression, where we treat Bison as continuous
 results <- lm(Biomass ~ Bison, data = datum)
 summary(results)
-# Bison is continuous, because R saw numbers for that variable
-# We know this because we only got 1 beta from the analysis
-
-# Residuals plot
-plot(residuals(results) ~ datum$Bison)
-# Error in data appear normally distributed, etc.
 
 # Run an ANOVA - treat Bison as categorical
 results2 <- lm(Biomass ~ as.factor(Bison), data = datum)
 # use the as.factor function to get R to treat 'Bison' as continuous
 summary(results2)
 
-# Conduct the f-drop test
+# Conduct the F-drop test
 anova(results2, results)
 # The two models we have are the arguments
-# Usually, you should list the more complicated model first
+# Usually, you should list the more complicated model first (the one with more betas)
 # Note: the two models can't have the same number of parameters
 # A significant p-value means the more complex model is a significant improvement in fit
 # A non-significant p-value means the simpler model is adequate
