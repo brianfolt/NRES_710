@@ -1518,7 +1518,7 @@ border-radius: 0px;
 
 <h1 class="title toc-ignore">Analyze as Continuous or Categorical…?</h1>
 <h4 class="author">NRES 710</h4>
-<h4 class="date">Last compiled: 2024-10-07</h4>
+<h4 class="date">Last compiled: 2024-10-09</h4>
 
 </div>
 
@@ -2073,8 +2073,88 @@ asking whether or how much that additional parameter marginally improves
 the fit to the data beyond the simpler model without that variable.
 (This is also called Type III Sum of Squares). It is essentially an
 F-drop test that is built into our linear model.</p>
-<p>So, anytime you need a p-value, if R gives it to you, it is most
-likely giving you a marginal p-value that comes from an F-drop test.</p>
+<p>So, anytime you need a p-value associated with an effect in a model,
+if R gives it to you, it is most likely giving you a marginal p-value
+that comes from an F-drop test.</p>
+<p>For example:</p>
+<pre class="r"><code># Build three models varying in complexity
+results0 &lt;- lm(Biomass ~ 1, data = datum) # no effects; &#39;model of mean&#39;
+summary(results0)</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = Biomass ~ 1, data = datum)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -2.5738 -0.9224  0.2150  0.9069  1.8820 
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)   4.2408     0.2007   21.13   &lt;2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 1.269 on 39 degrees of freedom</code></pre>
+<pre class="r"><code>results1 &lt;- lm(Biomass ~ Bison, data = datum) # simple linear model
+summary(results1)</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = Biomass ~ Bison, data = datum)
+## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -1.40751 -0.35372  0.08017  0.31745  1.50813 
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)  5.82066    0.15962   36.47  &lt; 2e-16 ***
+## Bison       -0.78992    0.06517  -12.12 1.26e-14 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 0.5829 on 38 degrees of freedom
+## Multiple R-squared:  0.7945, Adjusted R-squared:  0.7891 
+## F-statistic: 146.9 on 1 and 38 DF,  p-value: 1.255e-14</code></pre>
+<pre class="r"><code>results2 &lt;- lm(Biomass ~ Bison + I(Bison^2), data = datum) # simple linear model
+summary(results2)</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = Biomass ~ Bison + I(Bison^2), data = datum)
+## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -1.45920 -0.38308  0.07405  0.27416  1.45643 
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)  5.71726    0.19425  29.433   &lt;2e-16 ***
+## Bison       -0.58313    0.23010  -2.534   0.0156 *  
+## I(Bison^2)  -0.05170    0.05516  -0.937   0.3547    
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 0.5838 on 37 degrees of freedom
+## Multiple R-squared:  0.7993, Adjusted R-squared:  0.7884 
+## F-statistic: 73.67 on 2 and 37 DF,  p-value: 1.252e-13</code></pre>
+<pre class="r"><code># F-drop test comparing results0 to results1
+anova(results1, results0) # p-value here is same as marginal p-value from results1</code></pre>
+<pre><code>## Analysis of Variance Table
+## 
+## Model 1: Biomass ~ Bison
+## Model 2: Biomass ~ 1
+##   Res.Df    RSS Df Sum of Sq      F    Pr(&gt;F)    
+## 1     38 12.909                                  
+## 2     39 62.827 -1   -49.918 146.94 1.255e-14 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<pre class="r"><code>anova(results2, results1) # p-value here is same as marginal p-value from results2</code></pre>
+<pre><code>## Analysis of Variance Table
+## 
+## Model 1: Biomass ~ Bison + I(Bison^2)
+## Model 2: Biomass ~ Bison
+##   Res.Df    RSS Df Sum of Sq      F Pr(&gt;F)
+## 1     37 12.610                           
+## 2     38 12.909 -1  -0.29934 0.8783 0.3547</code></pre>
 <p>Next class, we will explore more situations around this topic.</p>
 <p><br></p>
 </div>

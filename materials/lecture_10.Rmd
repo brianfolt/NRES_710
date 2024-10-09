@@ -484,13 +484,30 @@ datum <- read.csv("lecture_10_dataset1.csv")
 results <- lm(Biomass ~ Bison, data = datum)
 summary(results)
 
-
-
 ```
 
 This p-value is called a **marginal p-value** and is asking whether or how much that additional parameter marginally improves the fit to the data beyond the simpler model without that variable. (This is also called Type III Sum of Squares). It is essentially an F-drop test that is built into our linear model.
 
-So, anytime you need a p-value, if R gives it to you, it is most likely giving you a marginal p-value that comes from an F-drop test.
+So, anytime you need a p-value associated with an effect in a model, if R gives it to you, it is most likely giving you a marginal p-value that comes from an F-drop test.
+
+For example:
+
+```{r fig.height=4.5, fig.width=4.5}
+# Build three models varying in complexity
+results0 <- lm(Biomass ~ 1, data = datum) # no effects; 'model of mean'
+summary(results0)
+results1 <- lm(Biomass ~ Bison, data = datum) # simple linear model
+summary(results1)
+results2 <- lm(Biomass ~ Bison + I(Bison^2), data = datum) # simple linear model
+summary(results2)
+
+# F-drop test comparing results0 to results1
+anova(results1, results0) # p-value here is same as marginal p-value from results1
+anova(results2, results1) # p-value here is same as marginal p-value from results2
+
+
+
+```
 
 Next class, we will explore more situations around this topic.
 
