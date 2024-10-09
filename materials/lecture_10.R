@@ -57,6 +57,28 @@ datum <- read.csv("lecture_10_dataset1.csv")
 results <- lm(Biomass ~ Bison, data = datum)
 summary(results)
 
+# Build three models varying in complexity
+results0 <- lm(Biomass ~ 1, data = datum) # no effects; 'model of mean'
+summary(results0)
+results1 <- lm(Biomass ~ Bison, data = datum) # simple linear model
+summary(results1)
+results2 <- lm(Biomass ~ Bison + I(Bison^2), data = datum) # simple linear model
+summary(results2)
+
+# F-drop test comparing results0 to results1
+anova(results1, results0) # p-value here is same as marginal p-val from summary(results1)
+anova(results2, results1) # p-value here is same as marginal p-val from summary(results2)
+# So, the marginal p-values are F-drop tests comparing a more complex model w/ the extra
+# effect to more simple models without the extra effect
+
+# Another example: compare model with bison treated as categorical variable to a
+# model with no effect of bison
+results3 <- lm(Biomass ~ as.factor(Bison), data = datum)
+summary(results3)
+anova(results3, results0)
+# p-value here is same as ANOVA p-value from bottom of summary(results3),
+# so F-drop test can also evaluate significance of categorical variables with multiple
+# betas
 
 
 ###################### 'Truth' ######################## 

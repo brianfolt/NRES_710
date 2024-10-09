@@ -2137,7 +2137,7 @@ summary(results2)</code></pre>
 ## Multiple R-squared:  0.7993, Adjusted R-squared:  0.7884 
 ## F-statistic: 73.67 on 2 and 37 DF,  p-value: 1.252e-13</code></pre>
 <pre class="r"><code># F-drop test comparing results0 to results1
-anova(results1, results0) # p-value here is same as marginal p-value from results1</code></pre>
+anova(results1, results0) # p-value here is same as marginal p-val from summary(results1)</code></pre>
 <pre><code>## Analysis of Variance Table
 ## 
 ## Model 1: Biomass ~ Bison
@@ -2147,7 +2147,7 @@ anova(results1, results0) # p-value here is same as marginal p-value from result
 ## 2     39 62.827 -1   -49.918 146.94 1.255e-14 ***
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
-<pre class="r"><code>anova(results2, results1) # p-value here is same as marginal p-value from results2</code></pre>
+<pre class="r"><code>anova(results2, results1) # p-value here is same as marginal p-val from summary(results2)</code></pre>
 <pre><code>## Analysis of Variance Table
 ## 
 ## Model 1: Biomass ~ Bison + I(Bison^2)
@@ -2155,6 +2155,47 @@ anova(results1, results0) # p-value here is same as marginal p-value from result
 ##   Res.Df    RSS Df Sum of Sq      F Pr(&gt;F)
 ## 1     37 12.610                           
 ## 2     38 12.909 -1  -0.29934 0.8783 0.3547</code></pre>
+<pre class="r"><code># So, the marginal p-values are F-drop tests comparing a more complex model w/ the extra
+# effect to more simple models without the extra effect
+
+# Another example: compare model with bison treated as categorical variable to a
+# model with no effect of bison
+results3 &lt;- lm(Biomass ~ as.factor(Bison), data = datum)
+summary(results3)</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = Biomass ~ as.factor(Bison), data = datum)
+## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -1.34640 -0.42548  0.05945  0.31859  1.56923 
+## 
+## Coefficients:
+##                   Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)         5.6720     0.2105  26.942  &lt; 2e-16 ***
+## as.factor(Bison)1  -0.5065     0.2977  -1.701 0.097761 .  
+## as.factor(Bison)2  -1.3055     0.2977  -4.385 0.000101 ***
+## as.factor(Bison)3  -2.2822     0.2977  -7.665 5.40e-09 ***
+## as.factor(Bison)4  -3.0618     0.2977 -10.284 4.06e-12 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 0.5955 on 35 degrees of freedom
+## Multiple R-squared:  0.8025, Adjusted R-squared:  0.7799 
+## F-statistic: 35.55 on 4 and 35 DF,  p-value: 7.096e-12</code></pre>
+<pre class="r"><code>anova(results3, results0)</code></pre>
+<pre><code>## Analysis of Variance Table
+## 
+## Model 1: Biomass ~ as.factor(Bison)
+## Model 2: Biomass ~ 1
+##   Res.Df    RSS Df Sum of Sq      F    Pr(&gt;F)    
+## 1     35 12.410                                  
+## 2     39 62.827 -4   -50.417 35.547 7.096e-12 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<pre class="r"><code># p-value here is same as ANOVA p-value from bottom of summary(results3),
+# so F-drop test can also evaluate significance of categorical variables with multiple
+# betas</code></pre>
 <p>Next class, we will explore more situations around this topic.</p>
 <p><br></p>
 </div>
