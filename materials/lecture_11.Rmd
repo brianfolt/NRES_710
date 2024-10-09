@@ -45,10 +45,10 @@ We have gotten quite a bit done in class so far this semester! We are at a good 
 
 Many introductory statistics class for graduate students cover four types of analysis: t-tests, ANOVA, post-hoc tests, and linear regression. We have covered all of those topics so far as well -- but by using the linear regression model as a vehicle to do all of those different tests but with one cohesive framework.
 
-I also hope that we have emphasized that the purpose of statistics is **not** to generate **p-values** or **statistically significant results**. Rather, the purpose of statistics is to use **facts** to estimate **truth**. The truth we are trying to estimate is a relationship in nature, a relationship between some X-variable and some Y-variable.
+I also hope that we have emphasized that the purpose of statistics is **not** to generate **p-values** or **statistically significant results**. Rather, the purpose of statistics is to use **facts** to estimate **truth**. The truth we are trying to estimate is a relationship in nature -- a relationship between some X-variable and some Y-variable.
 
 - If the X-variable is continuous, we want to know what the slope is: how much does Y change for each unit change in X.
-- If the X-variable is categorical, we want to understand the difference between those groups. For example, consider a drug used for medical treatment. We want to know, for example. We don't want just know whether there is a statistical differenc between treatment groups. We want to know what the **effect** of that drug is.
+- If the X-variable is categorical, we want to understand the difference between those groups. For example, consider a drug used for medical treatment. We don't want just know whether there is a statistical difference between treatment groups. We want to know **what the effect** of that drug is.
 
 One convenient feature of what we have learned so far is that all of X-variables can be included in this general linear model:
 
@@ -89,23 +89,23 @@ In theory, you could have infinite effects! But in practice, with a usual comput
 
 And of course this depends on **sample size.** A good **rule of thumb**: you will need 10 samples for every X-variable in your model. If you have five X-variables, you should have at least 50 observations (rows in your datafile).
 
-A lot of people know that you can extend this model to include multiple X-variables! But what a lot of people don't know, or struggle to recognize, is *why* you might do this...
+A lot of people know that you can extend this model to include multiple X-variables! But what a lot of people don't know, or struggle to recognize, <u>**is *why* you might do this...**</u>
 
-What are the advantages of analyzing all of your X-variables at the same time.
+What are the advantages of analyzing all of your X-variables at the same time??
 
 ## Six reasons
 
 **1. It is more *elegant***.
 
-- In this day and age, it is easier and more likely for you to publish a paper if you say: "We ran a mixed-effects logistic regression model with interactions and dealt with collinearity and random effect..." Rather than to say: "we ran a t-test". People often equate complicated statistics with good science. Sometimes it does!
+- In this day and age, it is easier and more likely for you to publish a paper if you say: "We ran a mixed-effects logistic regression model with interactions and dealt with collinearity and random effects..." Rather than to say: "we ran a t-test". People often equate complicated statistics with good science. Sometimes it does!
 - Othertimes, complicated statistics are not necessary. A well-designed experiment does not require complicated statistics!
-- I would say, however, that a single, multi-variable analysis is often much more **concise** than iterative versions of univariate analyses -- and I do see a lot of value in that.
+- I would say, however, that a single, multi-variable analysis is often much more **concise** than iterative versions of univariate analyses. I see a lot of value in making an analysis concise, because it's more simple and easier to understand.
 
-**2. Swamping -- when the effect ($\beta$) of one variable is masked by another**
+**2. Swamping -- when the effect ($\beta$) of one variable is masked by the effect of another**
 
 - Swamping is automatically dealt with during multi-variable analyses.
 - A rule in statistics (axiom) -- every time you add an X into a model, the p-values for the X-variables already in the model should go down. The reason is because the p-values for your X-variables is determined by your error. When you add more X-variables into your model, you get rid of error, by explaining more noise. So, as a general rule, when you add more variables to a model, the p-values for other variables go down.
-- If the variable you added explains a lot, then the p-values for other variables should go down a lot as well!
+- If the variable you added explains a lot of noise, then the p-values for other variables should go down a lot as well!
 
 **3. Collinearity -- when X-variables are associated (correlated) with each other**
 
@@ -118,7 +118,7 @@ What are the advantages of analyzing all of your X-variables at the same time.
 - Let's say you are studying the relationship between size and age in two different species. You collect a bunch of data, and then you analyze those two different relationships in separate analyses. This is a valid approach.
 - However, what you have just done is that you have *implicitly* assumed an interaction. You suggested that the slope of the size-age relationship depends upon the species.
 - Instead, you could have analyzed them at the same time and shown that those relationships are different.
-- Interactions are kinda... in vogue/popular?! People think it's really cool/interesting to find interactions and therefore it is useful to examine these (?)
+- Interactions are kinda... in vogue/popular?! People think it's really cool/interesting to find interactions, and therefore it's useful to test for these
 - We will discuss these in two weeks.
 
 **5. Blocking variables (random variables)**
@@ -156,14 +156,14 @@ However, we can call them all **'General Linear Models'** -- much easier!
 **$X_1$ = Age** (continuous)   
 **$X_2$ = Sex** (categorical; male = 1) 
 
-Important point: when we run this model, it does not change the meanings of the betas at all! They are still interpretted the same ways as we have interpretted them before.
+<u>**Important point**</u>: when we run this model, it does not change the meanings of the betas at all! They are still interpreted the same ways as we have interpreted them before.
 
 - The meaning of $\beta_1$ is the effect (slope) of age on size -- or the slope of the age-size relationship
 - The meaning of $\beta_2$ is the difference between male and females (or, the effect of being male compared to the reference, female).
 
-The fact that we have an age effect in the model does not change our interpretation of the sex effect -- or vice versa!
+**The fact that we have an age effect in the model does not change our interpretation of the sex effect** -- or vice versa!
 
-So, this 'more complicated model' does not make it harder to interpet these betas -- they still have the same meaning!
+So, this 'more complicated model' does not make it harder to interpret these betas -- they still have the same meaning!
 
 Let's see what this looks like.
 
@@ -210,11 +210,15 @@ One of the things I want to point out is that... we can run a simple regression 
 
 **Q:** Would we get a good estimate of the age-sex relationship? **Yes!** It would be pretty good.
 
-**Error:** But, our **error** would be pretty large**. We can indicate this with a normal curve overlayed on top of the regression line and the spread of the data.
+But the **consequence** of doing this would be that our **error** would be pretty large**.
 
-Now let's consider what would happen if we run the multivariable model. What's actually going to happen is we are going to get **two lines!** One for females, and one for males. Let's break up the model and examine this:
+*Brian overlay a normal curve on top of the entire spread of data.*
 
-**$Y(female) = \beta_0 + \beta_1 Age + \cancel{\beta_2 * 0} + \epsilon \sim N(0, \sigma)$**
+Now let's consider what would happen if we run the multi-variable model. What's actually going to happen is we are going to get **two lines!** One for females, and one for males. Let's break up the model and examine this:
+
+**$Y = \beta_0 + \beta_1 Age + \beta_2 * Male + \epsilon \sim N(0, \sigma)$**
+
+**$Y(female) = \beta_0 + \beta_1 Age + \beta_2 * 0 + \epsilon \sim N(0, \sigma)$**
 
 <br>
 
@@ -263,9 +267,11 @@ segments(x0 = x2, y0 = y1, x1 = x2, y1 = y2, col = "red", lty = 2, lwd = 3) # Ri
 
 What happens to the Beta2 * Sex term for females? It goes away, because Sex = 0 for females. So now we have a line just for female data! 
 
-**Error:** Our **error** for this line will be **much smaller** than for a line for all the data. We can indicate this with smaller normal curves overlayed on top of the data and regression line for females.
+**Error:** Our **error** for this line will be **much smaller** than for a line for all the data. 
 
-The Y-intercept for this line is Beta0, the slope for this line is Beta1.
+***Brian indicate reduced error with smaller normal curves overlayed on data and regression line for females.***
+
+The Y-intercept for this line is $\beta_0$, the slope for this line is $\beta_1$
 
 Now let's examine this for males.
 
@@ -275,9 +281,9 @@ Let's rearrange the equation to move $\beta_2$ over next to $\beta_0$. We can do
 
 **$Y(male) = (\beta_0 + \beta_2) + \beta_1 Age + \epsilon \sim N(0, \sigma)$**
 
-So basically what this is saying is that our intercept is now $\beta_0 + \beta_2$. In other words, the intercept for the male equation is the female intercept ($\beta_0$) plus the difference of being male ($\beta_2$).
+So basically what this is saying is that our intercept is now $\beta_0 + \beta_2$. Or, in other words, the **intercept for the male equation** is the **female intercept ($\beta_0$)** plus the **difference of being male ($\beta_2$)**.
 
-The slope for the male line is the same term as the slope for the female line ($\beta_1)!
+The slope for the male line is the same term as the slope for the female line ($\beta_1$)!
 
 We can also visualize this on our graph:
 
@@ -355,25 +361,36 @@ segments(x0 = x1, y0 = y1, x1 = x2, y1 = y1, col = "red", lty = 2, lwd = 3) # Ru
 segments(x0 = x2, y0 = y1, x1 = x2, y1 = y2, col = "red", lty = 2, lwd = 3) # Rise
 ```
 
-**Error:** As with the line for females, our **error** for this line will be **much smaller** than for a line for all the data. We can indicate this with smaller normal curves overlayed on top of the data and regression line for females.
+**Error:** As with the line for females, our **error** for this line will be **much smaller** than for a line for all the data. 
+
+***Brian add normal curve for error in the male line as well.***
 
 Ultimately, by using this equation, we can capture all of the meaningful variation in the data, and it does so by allowing for much smaller error than more simple models.
 
-The meaning of the betas has not changed. $\beta_1$ is the slope for both lines, and $\beta_2$ is the difference between the groups. Notice that $\beta_2$ is not just the difference between the groups at age of zero, it's the difference everywhere! It's constant along the variation of the continuous X-variable. 
+The meaning of the betas has not changed.
+
+- $\beta_1$ is the slope for both lines
+- $\beta_2$ is the difference between the groups.
+
+Notice that $\beta_2$ is not just the difference between the groups at age of zero, <u>it's the difference everywhere</u>! It's constant along the variation of the continuous X-variable. 
 
 **Questions?**
+
+## Swamping
 
 Previously I mentioned one of the reasons we like multi-variable analysis is it automatically accounts for **swamping**. For example, if we run univariate analysis (a model with one X-variable), we may not observe a statistically significant result because a ton of variation in the system is explained by another X-variable. The result is 'swamped' out by the other X-variable that we did not include. **The effect of one X-variable is masked by another**.
 
 By adding in multiple X-variables, multi-variable analysis automatically deals with swamping.
 
-Because we have decreased the error related to all of the terms in our model, we have also decreased the p-values for each term.
+<u>**Because we have decreased the error related to all of the terms in our model, we have also decreased the p-values for each term**</u>.
 
 It's also entirely possible that if we had not included one of the X-variables in our model, we might NOT have recovered good estimates of the $\beta$ and instead failed to reject the null hypothesis of no effect. 
 
-For example, looking back at our original line fit to all of the data. We may have recovered a significant slope for this line, but our would have been higher, our confidence intervals would have been larger, and our estimate would not have been certain.
+Let's consider two scenarios. 
 
-What if we wouldn't have included age in the model?
+First, let's look back at our original line fit to all of the data. If we ran an analysis like this without a sex effect, we may have recovered a significant slope for this line, but our **error** would have been much larger, our confidence intervals would have been larger, and our estimate would have been less certain.
+
+For the second scenario, what if we wouldn't have included age in the model?
 
 ```{r example4, echo=FALSE, message=FALSE, warning=FALSE, fig.height=4, fig.width=9}
 # Set the seed for reproducibility & set graphing parameter
@@ -381,12 +398,12 @@ set.seed(123); par(mar=c(4,4,0,0)); par(mfrow=c(1,2))
 
 # Plot
 stripchart(Size ~ Sex, data = datum, vertical = TRUE, method = "jitter",
-           pch = 19, xlab = "Age", ylab = "Body size (cm)")
+           pch = 19, xlab = "Sex", ylab = "Body size (cm)")
 ```
 
-**Q:** Are these groups going to be significantly different from eachother?
+**Q:** Are these groups going to be significantly different from eachother? **Maybe...**
 
-Maybe... but there is a lot of noise here, and the groups overlap eachother. A linear model of sex alone [e.g., lm(Size ~ Sex)] may not return significance and thus we would fail to reject the null hypothesis of no difference between groups.
+But there is a lot of noise here, and the groups overlap eachother. A linear model of sex alone [e.g., lm(Size ~ Sex)] may not return significance and thus we would fail to reject the null hypothesis of no difference between groups -- when in fact there really is a significant effect of sex! <u>The effect of age that we did not account for might 'swamp out' our ability to measure an effect of sex</u>.
 
 **Takehome message:** by accounting for how both age and sex influences size in the model, our models will, in general, explain more variation and better recovery real, statistically-significant results. This helps minimize negative effects of swamping.
 
@@ -451,9 +468,9 @@ summary(results1)
 
 ```
 
-Remember, truth for the effect of being male, $\beta_2$, was 2.5. Our results here suggest that this effect is 1.5. But it is statistically significant -- although barely (p = 0.04). Our confidence limits are about ~1.5 (2 * SE). So our best guess from this model is that males are about 1.5 kg larger than females (+/- 1.5). This is a pretty noisy estimate -- but it does contain truth, which was 2.5.
+Remember, truth for the effect of being male, $\beta_2$, was 2.5. Our results here suggest that this effect is 1.5. But it is statistically significant -- although barely (p = 0.04). Our confidence limits are about ~1.5 (2 * SE). So our best guess from this model is that males are about 1.5 kg larger than females (+/- 1.5). <u>**This is a pretty noisy estimate -- but it does contain truth, which was 2.5.**</u>
 
-Notice the residual standard error is about ~4. Truth was 1! So this is about four times larger than truth. There is a lot of extra noise (error) in this simple model! Noise is often not just random variation, but there might be other information that might explains that noise in size. In this case, a lot of the variation in size is driven by age, while very little information is driven by sex. 
+Notice the residual standard error is about ~4. Truth was 0.8! So this is about five times larger than truth. There is a lot of extra noise (error) in this simple model! Noise is often not just random variation, but there might be other information that might explains that noise in size. In this case, a lot of the variation in size is driven by age, while very little information is driven by sex. 
 
 **Q:** How much variation in size is explained by sex? **Only 4%!** The multiple $R^2$.
 
@@ -497,7 +514,7 @@ This is a good illustration of **swamping**. Swamping occurs when the effect of 
 
 This is an advantage of using multi-variable analysis: by analyze all of the variables together, it improves our ability to estimate truth!
 
-NOTE: something weird is happening. Even now with this improved model, our effect of age (2.17; +/- 0.3, 95% CI) does not overlap with truth!!
+**NOTE: something weird is happening.** Even now with this improved model, our effect of age (2.17; +/- 0.3, 95% CI) does not overlap with truth!!
 
 Sometimes this happens due to random chance during data simulation! Basically, the simulation process ended up simulating pretty extreme data for the male effect in this case, due to random chance. Given our sample size and effect size, our estimate does not overlap in truth, even after correctly specifying the true model. This happens maybe 1 out of every 20 simulations. That's just part of the randomness of data and science!
 
@@ -616,9 +633,11 @@ The F-values change between these two outputs, which means our results and resul
 
 The sequential nature of p-values in this multi-variable ANOVA is another reason why I am not a big fan of the canned 'ANOVA'-style analyses. These ANOVA functions use Type I Sum of Squares to calculate p-values, and we are better off avoiding this.
 
-Instead, we want to use Type III Sum of Squares, where it always does an F-drop test.
+Instead, we want to use <u>Type III Sum of Squares</u>, where it always does an F-drop test.
 
-**Q:** Does anybody have an idea about how we might evaluate the significance of the sex variable *as a whole*?
+## Testing significance of categorical variables with >2 groups *as a whole*
+
+**Q:** Does anybody have an idea about how we might evaluate the significance of the 'Sex' variable *as a whole*?
 
 Hint: we learned how to do this last class...
 
@@ -632,7 +651,7 @@ results4 <- lm(Size ~ Age, data = datum)
 results5 <- lm(Size ~ Age + Sex, data = datum)
 
 # F-drop test
-anova(results4, results5)
+anova(results5, results4)
 
 ```
 
@@ -640,9 +659,9 @@ This p-value is the significance of our Sex variable as a whole.
 
 It is the same p-value and result that we saw before when we did 'anova(lm(Size + Age + Sex))', but only because we had sequentially listed 'age then sex' did that analysis compare the 'Age' model vs 'Age + Sex' model.
 
-The point is we can remove the ambiguity of sequential p-values and force the analysis to use the Type III Sum of Squares and compare the more complicated and more simple models manually, as we have shown here.
+**The point is** we can remove the ambiguity of sequential p-values and force the analysis to use the Type III Sum of Squares and compare the more complicated and more simple models <u>**manually**</u>, as we have shown here.
 
-Takehome: if you are performing a multi-variable analysis and want to know the significance of an entire categorical variable with more than two groups, use an F-drop test.
+<u>**Takehome**</u>: if you are performing a multi-variable analysis and want to know the significance of an **entire categorical variable with more than two groups**, use an F-drop test.
 
 Another thing I want to show you is what happens if you try to use a Tukey post-hoc test for this model.
 
@@ -678,7 +697,7 @@ You can run all of your variables at once in a multi-variable model! The advanta
 - Random variables
 - Pseudoreplication
 
-The last three, you have to do something to account for those -- but the first three are done automatically.
+**The last three, you have to do something to account for those -- but the first three are done automatically.**
 
 It does not change the meaning of the betas, and we can still report them with our simple, concise sentences.
 
