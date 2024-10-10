@@ -57,19 +57,26 @@ datum <- read.csv("lecture_10_dataset1.csv")
 results <- lm(Biomass ~ Bison, data = datum)
 summary(results)
 
-# Build three models varying in complexity
+# Build four models varying in complexity
 results0 <- lm(Biomass ~ 1, data = datum) # no effects; 'model of mean'
 summary(results0)
 results1 <- lm(Biomass ~ Bison, data = datum) # simple linear model
 summary(results1)
-results2 <- lm(Biomass ~ Bison + I(Bison^2), data = datum) # simple linear model
+results1b <- lm(Biomass ~ I(Bison^2), data = datum) # model with quadratic term only
+summary(results1b)
+results2 <- lm(Biomass ~ Bison + I(Bison^2), data = datum) # linear + quadratic model
 summary(results2)
 
 # F-drop test comparing results0 to results1
 anova(results1, results0) # p-value here is same as marginal p-val from summary(results1)
 anova(results2, results1) # p-value here is same as marginal p-val from summary(results2)
-# So, the marginal p-values are F-drop tests comparing a more complex model w/ the extra
-# effect to more simple models without the extra effect
+anova(results1b, results0) # p-value here is same as marginal p-val from summary(results1b)
+anova(results2, results1b) # p-value here is same as marginal p-val from summary(results2)
+
+# So, the marginal p-values from our 'summary()' results are F-drop tests
+# comparing a more complex model w/ the extra effect to more simple models
+# without the extra effect. And, the order that the variables are included in
+# the models doesn't matter!
 
 # Another example: compare model with bison treated as categorical variable to a
 # model with no effect of bison

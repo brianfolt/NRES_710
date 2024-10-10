@@ -1518,7 +1518,7 @@ border-radius: 0px;
 
 <h1 class="title toc-ignore">Analyze as Continuous or Categorical…?</h1>
 <h4 class="author">NRES 710</h4>
-<h4 class="date">Last compiled: 2024-10-09</h4>
+<h4 class="date">Last compiled: 2024-10-10</h4>
 
 </div>
 
@@ -2077,7 +2077,7 @@ F-drop test that is built into our linear model.</p>
 if R gives it to you, it is most likely giving you a marginal p-value
 that comes from an F-drop test.</p>
 <p>For example:</p>
-<pre class="r"><code># Build three models varying in complexity
+<pre class="r"><code># Build four models varying in complexity
 results0 &lt;- lm(Biomass ~ 1, data = datum) # no effects; &#39;model of mean&#39;
 summary(results0)</code></pre>
 <pre><code>## 
@@ -2115,7 +2115,27 @@ summary(results1)</code></pre>
 ## Residual standard error: 0.5829 on 38 degrees of freedom
 ## Multiple R-squared:  0.7945, Adjusted R-squared:  0.7891 
 ## F-statistic: 146.9 on 1 and 38 DF,  p-value: 1.255e-14</code></pre>
-<pre class="r"><code>results2 &lt;- lm(Biomass ~ Bison + I(Bison^2), data = datum) # simple linear model
+<pre class="r"><code>results1b &lt;- lm(Biomass ~ I(Bison^2), data = datum) # model with quadratic term only
+summary(results1b)</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = Biomass ~ I(Bison^2), data = datum)
+## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -1.64017 -0.39230 -0.03516  0.44172  1.27546 
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)  5.35532    0.14074   38.05  &lt; 2e-16 ***
+## I(Bison^2)  -0.18575    0.01673  -11.11 1.71e-13 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 0.6241 on 38 degrees of freedom
+## Multiple R-squared:  0.7645, Adjusted R-squared:  0.7583 
+## F-statistic: 123.3 on 1 and 38 DF,  p-value: 1.713e-13</code></pre>
+<pre class="r"><code>results2 &lt;- lm(Biomass ~ Bison + I(Bison^2), data = datum) # linear + quadratic model
 summary(results2)</code></pre>
 <pre><code>## 
 ## Call:
@@ -2155,8 +2175,30 @@ anova(results1, results0) # p-value here is same as marginal p-val from summary(
 ##   Res.Df    RSS Df Sum of Sq      F Pr(&gt;F)
 ## 1     37 12.610                           
 ## 2     38 12.909 -1  -0.29934 0.8783 0.3547</code></pre>
-<pre class="r"><code># So, the marginal p-values are F-drop tests comparing a more complex model w/ the extra
-# effect to more simple models without the extra effect
+<pre class="r"><code>anova(results1b, results0) # p-value here is same as marginal p-val from summary(results1b)</code></pre>
+<pre><code>## Analysis of Variance Table
+## 
+## Model 1: Biomass ~ I(Bison^2)
+## Model 2: Biomass ~ 1
+##   Res.Df    RSS Df Sum of Sq      F    Pr(&gt;F)    
+## 1     38 14.799                                  
+## 2     39 62.827 -1   -48.029 123.33 1.713e-13 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<pre class="r"><code>anova(results2, results1b) # p-value here is same as marginal p-val from summary(results2)</code></pre>
+<pre><code>## Analysis of Variance Table
+## 
+## Model 1: Biomass ~ Bison + I(Bison^2)
+## Model 2: Biomass ~ I(Bison^2)
+##   Res.Df    RSS Df Sum of Sq      F  Pr(&gt;F)  
+## 1     37 12.610                              
+## 2     38 14.799 -1   -2.1888 6.4222 0.01563 *
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<pre class="r"><code># So, the marginal p-values from our &#39;summary()&#39; results are F-drop tests
+# comparing a more complex model w/ the extra effect to more simple models
+# without the extra effect. And, the order that the variables are included in
+# the models doesn&#39;t matter!
 
 # Another example: compare model with bison treated as categorical variable to a
 # model with no effect of bison
