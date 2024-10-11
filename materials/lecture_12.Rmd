@@ -51,7 +51,7 @@ What is correlated with watching TV?
 - You might be snacking, and your snacks might not be something healthy. You probably aren't eating carrots if you are watching TV. I like eating chocolate covered pretzels!
 - You aren't working, which might relate to your socioeconomic status.
 - You may be less likely to have healthcare.
-- Et cetera, et cetera, et cetera.
+- *Et cetera*
 
 These features might all be correlated to how much an individual watches TV, and all might have their own effects on mortality. 
 
@@ -59,25 +59,25 @@ These features might all be correlated to how much an individual watches TV, and
 
 **A MANIPULATIVE EXPERIMENT**. In an ideal world, we would do a manipulative experiment, which is the only true way to show causation.
 
-- Option 1: We would try to control for all of the above factors: everyone has the same job, goes to the gym the same amount of time, no smoking, etc. Let's assume this class is our sample! We would assign half of the class to watch TV for 1 hour a day, while the other half of the class watches for 10 hours per day.
-- Option 2: We wouldn't try to control for any of those factors, but we would randomly assign for 1 vs. 10 hours of TV per day. This is a lower-quality experiment, because all of those other factors may *swamp out* our ability to detect an effect of watching TV. We are not controlling for anything, so all of these other factors may create *noise*.
+- Option 1: We would try to control for all of the above factors: everyone has the same job, goes to the gym the same amount of time, no smoking, etc. Let's assume this class is our sample! We would assign half of the class to watch TV for 1 hour a day, while the other half of the class watches for 10 hours per day. <u>**Control Everything!**</u>
+- Option 2: We wouldn't try to control for any of those factors, but we would randomly assign for 1 vs. 10 hours of TV per day. This is a lower-quality experiment, because all of those other factors may cause noise that *swamps out* our ability to detect an effect of watching TV. We are not controlling for anything, so all of these other factors may create *noise*. <u>**Randomize Everything!**</u>
   - But, we could collect data on those factors, and include those data in the models, and then we could avoid the swamping issue.
   - Of course, this experimental design is super impractical... There's no way we could get our sample to watch TV for 10 hours a day -- or probably even 1 hour per day in many cases. 
   
-So what do we do? Researchers often resort to performing an **observational study**, where theyn collect data on all of these other features that might also influence the response variable. Diet, exercise, socioeconomic status, smoking, alcohol, and maybe a whole slew of other things that we might hypothesize also influence the response variable (mortality). We could then put all those variables into the model and *statistically control* for those other variables. When we include correlated variables in a model, it statistically controls for them -- and we'll demonstrate this today.
+So what do we do? Researchers often resort to performing an **observational study**, where they collect data on all of these other features that might also influence the response variable. Diet, exercise, socioeconomic status, smoking, alcohol, and maybe a whole slew of other things that we might hypothesize also influence the response variable (mortality). We could then put all those variables into the model and *statistically control* for those other variables. When we include correlated variables in a model, it statistically controls for them -- **and we'll demonstrate this today**.
 
-We may not be able to show causation, because there may be some other confounding variable(s) in the world that we did not measure and collect data.
+However, ultimately we may not be able to show causation, because there might be some other confounding variable(s) in the world that we did not collect data for and include in our model.
 
-**Important takehome message:** When you are conducting studies and experiments for your thesis or your careeer, you need to *think carefully* about what are the potential confounding factors -- the other variables -- that may be correlated to the X-variable you are interested in and that might influence your results.
+**The whole point of this is:** When you are conducting studies and experiments for your thesis or your career, you need to *think carefully* about what are the potential confounding factors -- the other variables -- that may be correlated to the X-variable you are interested in and that might influence your results.
 
-- This is less of a concern in a well-designed manipulative study, where random assignment of treatment removes collinearity. For example, if I randomly assign to the class who watches 1 vs. 10 hours of TV, then there won't be any collinearity between exercise and TV watching. Presumably people that go the gym often will be randomly assigned to 10 hours of TV, and people who never go to the gym will be made to watch 1 hour of TV. This random assignment removes potential collinearity between these variables.
-- Again, manipulative experiments are the strongest approach to inference in science, but can be impractical and many of us resort to observational studies.
+- This is less of a concern in a <u>**well-designed manipulative study**</u>, where random assignment of treatment removes collinearity. For example, if I randomly assign to the class who watches 1 vs. 10 hours of TV, then there won't be any collinearity between exercise and TV watching. Presumably people that go the gym often will be randomly assigned to 10 hours of TV, and people who never go to the gym will be made to watch 1 hour of TV. This random assignment removes potential collinearity between these variables.
+- Again, manipulative experiments are the strongest approach to inference in scienc... but they can be impractical, and instead many of us resort to observational studies.
 
-My goal with this lecture today is to demonstrate to you all that: if you have confounding variables and you don't include them in your model/analysis, the estimates from your analysis will be biased (incorrect)!
+My goal with this lecture today is to demonstrate to you all that: **if there are confounding variables and you don't include them in your model/analysis, the estimates from your analysis will be biased (incorrect)!**
 
 **If confounding variables are not included in model/analysis --> biased (incorrect) estimates ($\beta$s)**
 
-People kind of understand this... but I want you to really understand it. If there are variables that are correlated to your X-variable of interest and you don't collect those data and include them, then your estimates are biased. This is scary!! That's why this is one of the more important topics we will cover this semester.
+People kind of understand this... but I want you to really understand it. If there are variables that are correlated to your X-variable of interest, and those other correlated X-variables have an effect on your response variable, and you don't include data on those confounding variables in your analysis, then your estimates will be biased (incorrect). This is scary!! That's why this is one of the more important topics we will cover this semester.
 
 Let's see how this works.
 
@@ -91,9 +91,9 @@ Let's reconsider an example that we examined in the last class.
 
 However, this time around when you were sampling the animals of interest, for some reason you had a hard time collecting data on young females.
 
-```{r example_1, echo=FALSE, message=FALSE, warning=FALSE, fig.height=4, fig.width=4.5}
+```{r example_1, echo=FALSE, message=FALSE, warning=FALSE, fig.height=4, fig.width=9}
 # Set the seed for reproducibility & set graphing parameter
-set.seed(123); par(mar=c(4,4,0,0))
+set.seed(123); par(mar=c(4,4,0,0)); par(mfrow=c(1,3))
 
 # Load in the data
 datum <- read.csv("lecture_12_dataset1.csv")
@@ -108,14 +108,6 @@ females <- subset(datum, Sex == "Female" & Age > 4)
 plot(Size ~ Age, data = females,
      xlim=c(0,max(datum$Age)), ylim=c(8, max(datum$Size)), pch = 1)
 
-```
-
-And you also had a really hard time catching old males...
-
-```{r example_2, echo=FALSE, message=FALSE, warning=FALSE, fig.height=4, fig.width=4.5}
-# Set the seed for reproducibility & set graphing parameter
-set.seed(123); par(mar=c(4,4,0,0))
-
 # Subset to just older females
 males <- subset(datum, Sex == "Male" & Age < 4)
 males$Size <- males$Size + 4
@@ -124,20 +116,6 @@ males$Size <- males$Size + 4
 plot(Size ~ Age, data = females,
      xlim=c(0,max(datum$Age)), ylim=c(8, max(datum$Size)), pch = 1)
 points(males$Age, males$Size, pch=2)
-
-```
-
-Let's say I run this model:
-
-**$Y = \beta_0 + \beta_1 Age$**
-
-Sex is not included in this model... but Sex is correlated with age! Our sample only includes old females and young males. (A T-test comparing age between females and males would be different.)
-
-**Q:** If I ran a regression, where would the line go? 
-
-```{r example_3, echo=FALSE, message=FALSE, warning=FALSE, fig.height=4, fig.width=4.5}
-# Set the seed for reproducibility & set graphing parameter
-set.seed(123); par(mar=c(4,4,0,0))
 
 # Plot the data
 plot(Size ~ Age, data = females,
@@ -150,6 +128,16 @@ results <- lm(Size ~ Age, data = datum)
 abline(results)
 
 ```
+
+And you also had a really hard time catching old males...
+
+Let's say I run this model:
+
+**$Y = \beta_0 + \beta_1 Age$**
+
+Sex is not included in this model... but **Sex is correlated with age!** Our sample only includes old females and young males.
+
+**Q:** If I ran a regression, where would the line go? 
 
 For these data, it would be ~horizontal across the data. This is a biased estimate. This estimate incorrectly estimates the effect of age on size of these animals.
 
@@ -188,6 +176,7 @@ If we leave out Sex in the first model, some of that Sex effect is being transmi
 
 - Females are smaller than males, and it's biasing that effect on Size.
 - The difference in size is transmitted to the effect of Age.
+- Age has a positive effect on size, female has a negative effect on size, and these two counter effects sort-of balance each other out when we don't include Sex in the model.
 
 The same thing might be happening in the TV-effect on mortality study. There were many other variables that were correlated to watching TV that were really influencing mortality. Their effects, which were left out of the statistical model, were being transmitted to the effect of watching TV.
 
@@ -202,11 +191,11 @@ In general though, we want to leave variables in to statistically control for co
 
 ### Tradeoff
 
-**If confounding variables *are* included in model --> Variance Inflation**
+**If confounding, collinear variables *are* included in model --> Variance Inflation**
 
 When we run a model with multiple X-variables, the computer package is trying to figure out which of the two variables are having an effect on Y. But they are correlated to eachother, which makes it tough for the software to figure out out which X-variable is having what effect. And the more strongly they are associated with eachother, it becomes more difficult for the software to disentangle these effects.
 
-A consequence of this is that more variables cause greater uncertainty in the effects ($\beta$s). Increased uncertainty is reflected in:
+A consequence of this is that running a model with multiple, collinear variables causes greater uncertainty in the effects ($\beta$s). Increased uncertainty is reflected in:
 
 - **increased SE**
 - **increased CI**
@@ -214,17 +203,17 @@ A consequence of this is that more variables cause greater uncertainty in the ef
 
 This can lead to problematic results.
 
-I mentioned during the last class that, generally, if we add a variable to a model, the p-values for the variables in a model go down. <u>However, collinearity is the one exception to that rule!</u> And in fact, it's a red flag.
+I mentioned during the last class that, generally, if we add a variable to a model, the p-values for the variables in a model go down. <u>**However, collinearity is the one exception to that rule!**</u> And in fact, it's a red flag.
 
 My recommendation is that, before you even start your analysis, you need to know what the collinearity is between your X-variables! Plot your X-variables, run some linear models (e.g., between Age and Sex), and learn about what the collinearity is.
 
 - Some people fail to do this and problems occur. For example, they might build a model where Age was significant... and then they add Sex, and Age is no longer significant...
-- If the P-value goes up a lot when you add a variable to a model, this is a symptom of collinearity! This is happening because of collinearity between X-variables.
+- P-values are supposed to go down when we add variables into models. If the P-value goes up a lot when you add a variable to a model, this is a symptom of collinearity! This is happening because of collinearity between X-variables.
 
 ## Symptoms of collinearity
 
 1) Collinearity between independent variables
-  - High $r^2$ values
+  - High $r^2$ values between X-variables
   - Statistically-significant relationships between X-variables
 2) High variance inflation factors (VIF) of variables in model
 3) Variables significant in simple regression, but not in multi-variable regression
@@ -244,7 +233,7 @@ Breaking this list down a bit...
 
 - How does that happen? All of the X-variables are explaining a lot of the Y-variable, but the software is having a hard-time figure out which X-variable is explaining the response. And the collinearity causes the p-values for individual variables to go up.
 
-5) Generally, when you add variables to a model, the betas *should not change too much*. What do I mean by 'too much'? E.g., when you have a simple model with beta and CI, and then you add another X-variable to the model to create a multi-variable model, then the new estimate for your beta should be within the 95% CI of the original estimate. If it moves to be outside of the 95% CI of the original estimate, that's a considerable change and is a symptom of collinearity of the X-variables.
+5) Generally, when you add variables to a model, the betas *should not change too much*. What do I mean by 'too much'? E.g., when you have a simple model with beta and CI, and then you add another X-variable to the model to create a multi-variable model, then the new estimate for your beta should be within the 95% CI of the original estimate. <u>**If it moves to be outside of the 95% CI of the original estimate, that's a considerable change and is a symptom of collinearity of the X-variables.**</u>
 
 6) What if you have 25,000 samples, and you have huge standard errors. Why are the SE so big, when we have such a large sample size? Collinearity in the system can increase SE, increase CI, and decrease p-values.
 
@@ -252,18 +241,18 @@ Breaking this list down a bit...
 
 ## Simulation Exercise 1
 
-When confronted with collinearity, a common approach taken by many folks in our field is to <u>take variables out of the model</u>. However, this has a consequence that they do not understand -- it biases our estimates! -- so this is not the approach I recommend.
+When confronted with collinearity, a common approach taken by many folks in our field is to <u>**take variables out of the model**</u>. However, this has a consequence that they do not understand -- it biases our estimates! -- so this is not the approach I recommend.
 
 I'm going to show you a simulation exercise that demonstrates:
 
 1) Collinearity influences parameter **estimates**, **uncertainty**, and **p-values** when confounding variables are not included in the model, and
-2) When all the necessary confounding variables are included, collinearity increases uncertainty and p-values but <u>does not bias estimates</u>.
+2) When all the necessary confounding variables are included, collinearity increases uncertainty and p-values, but <u>**does not bias estimates**</u>.
 
 ### Truth
 
-$\beta_1 = 3$
-$\beta_2 = 3$
-$z = U[0.5,20]$ -- an estimate of how much correlation (collinearity) there is between $X_1$ and $X_2$
+- $\beta_1 = 3$
+- $\beta_2 = 3$
+- $z = U[0.5,20]$ -- an estimate of how much correlation (collinearity) there is between $X_1$ and $X_2$
 
 For the simulation exercise, I simulated 1,000 datasets with varying degrees of collinearity (correlation) between two X-variables. Here is truth:
 
