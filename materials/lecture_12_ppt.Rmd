@@ -19,7 +19,7 @@ knitr::opts_chunk$set(echo = FALSE)
 5) Large changes in coefficient estimates between full and reduced models
 6) Large SE in multi-variable regresion models, despite high power
 
-## Simulation exercise
+## Simulation exercise 1
 
 - I simulated 1,000 datasets with varying degrees of collinearity (correlation) between two X-variables. Here is truth:
   - Simulations: $n = 1,000$
@@ -211,6 +211,173 @@ A useful way to think about confounding or redundant variables might be with the
 
 - If the $\beta \neq 0$, it's a confounding variable.
 - If the $\beta = 0$, it's a redundant variable.
+
+## Simulation exercise 2
+
+This simulation exercise is similar as before, but now only $X_1$ has an effect, and $X_2$ is a redundant variable.
+
+- $X_1$ = 3
+- $X_2$ = 0
+
+```{r sim_exercise_2_1, echo=FALSE, message=FALSE, warning=FALSE, fig.height=4, fig.width=4.5}
+# Set the seed for reproducibility & set graphing parameter
+set.seed(123); par(mar=c(4,4,0,0))
+
+# Number of simulations
+s <- 1000
+
+# Empty vectors to save results from each simulation
+simple_beta1 <- numeric(s)
+simple_se1 <- numeric(s)
+simple_p1 <- numeric(s)
+simple_beta2 <- numeric(s)
+multi_beta1 <- numeric(s)
+multi_beta2 <- numeric(s)
+multi_se1 <- numeric(s)
+multi_p1 <- numeric(s)
+r2 <- numeric(s)
+vif <- numeric(s)
+
+# x2 = x1 + error(0, z), where
+# z can range from 0.5 (highly correlated to x1) to 20 (not correlated at ~all)
+z_values <- seq(0.5, 20, length.out = s)
+
+# Loop through each simulation replicate to measure everything
+for (i in 1:s){
+  
+  # Number of datapoints per simulation
+  n <- 100
+
+  # x1
+  x1 <- runif(n, 0, 10) # Random, uniform variable; only simulated once
+
+  # error for y; only simulated once
+  error <- rnorm(n, 0, 2)
+  
+  # X2 for each simulation
+  x2 <- x1 + rnorm(n, 0, z_values[i])
+  
+  # Y for each
+  y <- 10 + 3 * x1 + error
+
+  # Simple model of X1
+  results1 <- lm(y ~ x1)
+  simple_beta1[i] <- summary(results1)$coefficients[2,1]
+  simple_se1[i] <- summary(results1)$coefficients[2,2]
+  simple_p1[i] <- summary(results1)$coefficients[2,4]
+  
+  # Simple model of X2
+  results2 <- lm(y ~ x2)
+  simple_beta2[i] <- summary(results2)$coefficients[2,1]
+
+  # Multi-variable model
+  results3 <- lm(y ~ x1 + x2)
+  multi_beta1[i] <- summary(results3)$coefficients[2,1]
+  multi_beta2[i] <- summary(results3)$coefficients[3,1]
+  multi_se1[i] <- summary(results3)$coefficients[2,2]
+  multi_p1[i] <- summary(results3)$coefficients[2,4]
+
+  # R^2 between X-variables
+  model_x12 <- lm(x2 ~ x1)
+  r2[i] <- summary(model_x12)$r.squared
+  
+  # VIF for multi-variable model
+  vif[i] <- car::vif(results3)["x1"]
+}
+
+```
+
+## Variance Inflation Factor
+
+```{r sim_exercise_2_2, echo=FALSE, message=FALSE, warning=FALSE, fig.height=4, fig.width=8}
+# Set the seed for reproducibility & set graphing parameter
+set.seed(123); par(mar=c(4,4,0.5,1))
+
+# Plotting VIF against collinearity values
+plot(r2, vif, xlab = expression("Collinearity ("~ r^2 ~") between" ~ X[1] ~ "and" ~ X[2]), ylab = "VIF")
+
+# Add horizontal line for when VIF = 2
+abline(h = 2, lty = 2)
+
+```
+
+## Simple regression model: $Y \sim X_1$
+
+Now, we see that the existence of a redundant variable does not influence our estimation of $\beta_1$ using a simple linear model! This is good.
+
+```{r sim_exercise_2_3, echo=FALSE, message=FALSE, warning=FALSE, fig.height=4, fig.width=8}
+# Set the seed for reproducibility & set graphing parameter
+set.seed(123); par(mar=c(4,4,0.5,1))
+
+# Plot beta1 estimate by collinearity values from the simple model
+plot(r2, simple_beta1, xlab = expression("Collinearity ("~ r^2 ~") between" ~ X[1] ~ "and" ~ X[2]), ylab = expression("Estimate of " ~ beta[1]))
+
+```
+
+## Simple regression model: $Y \sim X_1$
+
+```{r sim_exercise_2_4, echo=FALSE, message=FALSE, warning=FALSE, fig.height=4, fig.width=8}
+# Set the seed for reproducibility & set graphing parameter
+set.seed(123); par(mar=c(4,4,0.5,1))
+
+# Plot SE estimate by collinearity values from the simple model
+plot(r2, simple_se1,
+     xlab = expression("Collinearity ("~ r^2 ~") between" ~ X[1] ~ "and" ~ X[2]),
+    ylab = expression("SE of estimate of" ~ X[1]))
+
+```
+
+## Simple regression model: $Y \sim X_1$
+
+```{r sim_exercise_2_5, echo=FALSE, message=FALSE, warning=FALSE, fig.height=4.5, fig.width=8}
+# Set the seed for reproducibility & set graphing parameter
+set.seed(123); par(mar=c(4,4,0.5,1))
+
+# Plot p-values by collinearity values from the simple model
+plot(r2, log(simple_p1),
+     xlab = expression("Collinearity ("~ r^2 ~") between" ~ X[1] ~ "and" ~ X[2]),
+     ylab = expression("P-values of estimate of" ~ X[1] ~ " (log-transformed)"))
+
+```
+
+## Simple regression model w/ redundant variable: $Y \sim X_2$
+
+```{r sim_exercise_2_6, echo=FALSE, message=FALSE, warning=FALSE, fig.height=4, fig.width=8}
+# Set the seed for reproducibility & set graphing parameter
+set.seed(123); par(mar=c(4,4,0.5,1))
+
+# Plot beta1 estimate by collinearity values from the simple model
+plot(r2, simple_beta2, xlab = expression("Collinearity ("~ r^2 ~") between" ~ X[1] ~ "and" ~ X[2]), ylab = expression("Estimate of " ~ beta[2]))
+
+```
+
+## Multi-variable model: $Y \sim X_1 + X_2$
+
+```{r sim_exercise_2_7, echo=FALSE, message=FALSE, warning=FALSE, fig.height=4, fig.width=8}
+# Set the seed for reproducibility & set graphing parameter
+set.seed(123); par(mar=c(4,4,0.5,1))
+
+# Plot beta1 estimate by collinearity values from the simple model
+plot(r2, multi_beta1, xlab = expression("Collinearity ("~ r^2 ~") between" ~ X[1] ~ "and" ~ X[2]), ylab = expression("Estimate of " ~ beta[1]))
+
+# Add line to indicate the start of variance inflation
+abline(v = 0.6, lty = 2)
+
+```
+
+## Multi-variable model: $Y \sim X_1 + X_2$
+
+```{r sim_exercise_2_8, echo=FALSE, message=FALSE, warning=FALSE, fig.height=4, fig.width=8}
+# Set the seed for reproducibility & set graphing parameter
+set.seed(123); par(mar=c(4,4,0.5,1))
+
+# Plot beta1 estimate by collinearity values from the simple model
+plot(r2, multi_beta2, xlab = expression("Collinearity ("~ r^2 ~") between" ~ X[1] ~ "and" ~ X[2]), ylab = expression("Estimate of " ~ beta[2]))
+
+# Add line to indicate the start of variance inflation
+abline(v = 0.6, lty = 2)
+
+```
 
 ## Practical guidance for examining and dealing with collinearity
 
