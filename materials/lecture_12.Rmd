@@ -29,7 +29,7 @@ knitr::opts_chunk$set(
 
 ## Collinearity
 
-Today's class is an important one. The topic is on something that very few people understand well. So the plan is to spend 1-2 days on this topic so that you will understand it well. Many people have a decent idea of what **collinearity** is -- but tend to make bad decisions about how to handle it.
+Today's class is an important one. The topic is on something that very few people understand well. So the plan is to spend 1-2 days on this topic so that you will understand it well. Many people have a decent idea of what **collinearity** is -- but tend to make uninformed decisions about how to handle it.
 
 **Collinearity -- when X-variables are associated (correlated) with eachother**
 
@@ -43,7 +43,7 @@ Let's think about this for a minute. Do you think the actual act of watching TV 
 
 What's the problem here? Well, there are a lot of other things that are **correlated** to watching TV that may have their own effect on the Y variable (mortality).
 
-**Confounding factors -- an X-variable that is correlated with the X-variable of interest that has its own effect on Y**
+**Confounding factors -- an X-variable that is correlated with the X-variable of interest and has its own effect on Y**
 
 What is correlated with watching TV?
 
@@ -57,25 +57,29 @@ These features might all be correlated to how much an individual watches TV, and
 
 **Q:** Here's the key idea If we really want to know what the true effect of TV watching on mortality is, what would would we do?
 
-**A MANIPULATIVE EXPERIMENT**. In an ideal world, we would do a manipulative experiment, which is the only true way to show causation.
+**A MANIPULATIVE EXPERIMENT**. In an ideal world, we would do a manipulative experiment, which is the only true way to demonstrate causation.
 
-- Option 1: We would try to control for all of the above factors: everyone has the same job, goes to the gym the same amount of time, no smoking, etc. Let's assume this class is our sample! We would assign half of the class to watch TV for 1 hour a day, while the other half of the class watches for 10 hours per day. <u>**Control Everything!**</u>
+- Option 1: We would try to control for all of the above factors: everyone has the same job, goes to the gym the same amount of time, no smoking, etc. Let's assume this class is our sample! We would assign half of the class to <u>watch TV for 1 hour a day</u>, while the other half of the class watches for <u>10 hours per day</u>. <u>**Control Everything!**</u>
 - Option 2: We wouldn't try to control for any of those factors, but we would randomly assign for 1 vs. 10 hours of TV per day. This is a lower-quality experiment, because all of those other factors may cause noise that *swamps out* our ability to detect an effect of watching TV. We are not controlling for anything, so all of these other factors may create *noise*. <u>**Randomize Everything!**</u>
   - But, we could collect data on those factors, and include those data in the models, and then we could avoid the swamping issue.
   - Of course, this experimental design is super impractical... There's no way we could get our sample to watch TV for 10 hours a day -- or probably even 1 hour per day in many cases. 
   
-So what do we do? Researchers often resort to performing an **observational study**, where they collect data on all of these other features that might also influence the response variable. Diet, exercise, socioeconomic status, smoking, alcohol, and maybe a whole slew of other things that we might hypothesize also influence the response variable (mortality). We could then put all those variables into the model and *statistically control* for those other variables. When we include correlated variables in a model, it statistically controls for them -- **and we'll demonstrate this today**.
+So what do we do? Researchers often resort to performing an **observational study**, where they <u>collect data on all of these other features that might also influence the response variable</u>.
+
+- Diet, exercise, socioeconomic status, smoking, alcohol, and maybe a whole slew of other things that we might hypothesize also influence the response variable (mortality). - Put all those variables into the model and it will *statistically control* for them (decrease the swamping).
+- <u>When we include correlated variables in a model, it ***statistically controls*** for them -- **and we'll demonstrate this today**.</u>
 
 However, ultimately we may not be able to show causation, because there might be some other confounding variable(s) in the world that we did not collect data for and include in our model.
 
-**The whole point of this is:** When you are conducting studies and experiments for your thesis or your career, you need to *think carefully* about what are the potential confounding factors -- the other variables -- that may be correlated to the X-variable you are interested in and that might influence your results.
+**The whole point of this is:** When you are conducting studies and experiments for your thesis or your career, <u>you need to *think carefully* about what are the potential confounding factors -- the other variables -- that may be correlated to the X-variable you are interested in and that might influence your results</u>.
 
-- This is less of a concern in a <u>**well-designed manipulative study**</u>, where random assignment of treatment removes collinearity. For example, if I randomly assign to the class who watches 1 vs. 10 hours of TV, then there won't be any collinearity between exercise and TV watching. Presumably people that go the gym often will be randomly assigned to 10 hours of TV, and people who never go to the gym will be made to watch 1 hour of TV. This random assignment removes potential collinearity between these variables.
-- Again, manipulative experiments are the strongest approach to inference in scienc... but they can be impractical, and instead many of us resort to observational studies.
+- This is less of a concern in a <u>**well-designed manipulative study**</u>, <u>where random assignment of treatment removes collinearity</u>.
+- For example, if I randomly assign to the class who watches 1 vs. 10 hours of TV, then there won't be any collinearity between exercise and TV watching. Presumably people that go the gym often will be randomly assigned to 10 hours of TV, and people who never go to the gym will be made to watch 1 hour of TV. **This random assignment removes potential collinearity between these variables.**
+- Again, manipulative experiments are the strongest approach to inference in science... but they can be **impractical**, and instead many of us resort to observational studies.
 
 My goal with this lecture today is to demonstrate to you all that: **if there are confounding variables and you don't include them in your model/analysis, the estimates from your analysis will be biased (incorrect)!**
 
-**If confounding variables are not included in model/analysis --> biased (incorrect) estimates ($\beta$s)**
+<u>**If confounding variables are not included in model/analysis --> biased (incorrect) estimates ($\beta$s)**</u>
 
 People kind of understand this... but I want you to really understand it. If there are variables that are correlated to your X-variable of interest, and those other correlated X-variables have an effect on your response variable, and you don't include data on those confounding variables in your analysis, then your estimates will be biased (incorrect). This is scary!! That's why this is one of the more important topics we will cover this semester.
 
@@ -89,7 +93,17 @@ Let's reconsider an example that we examined in the last class.
 - **$X_1$ = age**
 - **$X_2$ = sex**
 
-However, this time around when you were sampling the animals of interest, for some reason you had a hard time collecting data on young females.
+*Brian draw data with two clusters for males and females, with same slope, a sex effect, and complete sampling across all ages*
+
+Last class we discussed what would happen if we built this model:
+
+**$Y = \beta_0 + \beta_1 Age$**
+
+It would create a line down the middle, which would have an acceptable estimate of the effect of age on size. 
+
+However, this time around when you were sampling the animals of interest, for some reason you had a hard time collecting data on young females, and also on old males.
+
+*Brian erase young females and old males to create collinearity between age and sex*
 
 ```{r example_1, echo=FALSE, message=FALSE, warning=FALSE, fig.height=4, fig.width=9}
 # Set the seed for reproducibility & set graphing parameter
@@ -129,17 +143,11 @@ abline(results)
 
 ```
 
-And you also had a really hard time catching old males...
-
-Let's say I run this model:
-
-**$Y = \beta_0 + \beta_1 Age$**
-
-Sex is not included in this model... but **Sex is correlated with age!** Our sample only includes old females and young males.
+**In your sample, sex is correlated with age!** Males are young and females are old.
 
 **Q:** If I ran a regression, where would the line go? 
 
-For these data, it would be ~horizontal across the data. This is a biased estimate. This estimate incorrectly estimates the effect of age on size of these animals.
+For these data, it would be ~horizontal across the data. This is a biased estimate. This estimate **incorrectly estimates the effect of age on size of these animals**.
 
 However, if we run this model:
 
@@ -172,24 +180,25 @@ abline(results3, lty=2)
 
 Now, we get *unbiased* estimates of the effect of Age on Size for each Sex.
 
-If we leave out Sex in the first model, some of that Sex effect is being transmitted to the effect of Age.
+What's happening here is... **If we leave out Sex in the first model, some of that Sex effect is being transmitted to the effect of Age.**
 
-- Females are smaller than males, and it's biasing that effect on Size.
-- The difference in size is transmitted to the effect of Age.
+- Females are smaller than males, and the difference in size is transmitted to the effect of Age on Size
 - Age has a positive effect on size, female has a negative effect on size, and these two counter effects sort-of balance each other out when we don't include Sex in the model.
+- This causes a **biased estimate**.
 
-The same thing might be happening in the TV-effect on mortality study. There were many other variables that were correlated to watching TV that were really influencing mortality. Their effects, which were left out of the statistical model, were being transmitted to the effect of watching TV.
+The same thing might be happening in the TV-effect on mortality study. There were many other variables that were correlated to watching TV that were really influencing mortality. **Those other effects, which were left out of the statistical model, were being transmitted to the effect of watching TV.**
 
 **Q:** Does that make sense? Questions?
 
-Reiterating the important point: if we leave confounding variables out of our model, we get biased estimates of the variables that we do leave in the model.
+Reiterating the important point: <u>**if we leave confounding variables out of our model, we get biased estimates of the variables that we do leave in the model.**</u>
 
 - So, we want to collect data on confounding variables and include them in the model.
-- And we want to do this even if they are not statistically significant. We'll talk about model building later in the class and when you should/should not remove variables from models.
-
-In general though, we want to leave variables in to statistically control for confounding effects.
+- And we want to do this even if they are not statistically significant.
+- **By leaving potentially confounding variables in the model, we will *statistically control* for confounding effects.**
 
 ### Tradeoff
+
+But, there is a tradeoff...!
 
 **If confounding, collinear variables *are* included in model --> Variance Inflation**
 
@@ -203,7 +212,7 @@ A consequence of this is that running a model with multiple, collinear variables
 
 This can lead to problematic results.
 
-I mentioned during the last class that, generally, if we add a variable to a model, the p-values for the variables in a model go down. <u>**However, collinearity is the one exception to that rule!**</u> And in fact, it's a red flag.
+I mentioned during the last class that, generally, if we add a variable to a model, the p-values for the variables in a model go down. <u>**However, collinearity is an exception to that rule!**</u> And in fact, it's a red flag.
 
 My recommendation is that, before you even start your analysis, you need to know what the collinearity is between your X-variables! Plot your X-variables, run some linear models (e.g., between Age and Sex), and learn about what the collinearity is.
 
@@ -223,19 +232,13 @@ My recommendation is that, before you even start your analysis, you need to know
 
 Breaking this list down a bit...
 
-1) The easiest way to know if you have collinearity is to examine fit a linear model between your two independent variables and see if they have **high $r^2$ values** or if there is a **statistically-significant relationship** between them.
-
-2) High variance inflation factors (VIF) of variables in model. Next class I will show you how to examine VIF for variables in a model.
-
-3) As I said before, if you have significant variables in a simple linear regression, but then you add another variable(s) to create a multi-variable regression and the individual variable(s) is no longer significant, then you have collinearity. 
-
-4) If you build a multi-variable model where (i) none of the individuals variables are significant, but (ii) the overall whole model is significant (the p-value at the bottom of the model0), then you have collinearity. The whole model is significant, but none of the individual variables is significant.
-
-- How does that happen? All of the X-variables are explaining a lot of the Y-variable, but the software is having a hard-time figure out which X-variable is explaining the response. And the collinearity causes the p-values for individual variables to go up.
-
-5) Generally, when you add variables to a model, the betas *should not change too much*. What do I mean by 'too much'? E.g., when you have a simple model with beta and CI, and then you add another X-variable to the model to create a multi-variable model, then the new estimate for your beta should be within the 95% CI of the original estimate. <u>**If it moves to be outside of the 95% CI of the original estimate, that's a considerable change and is a symptom of collinearity of the X-variables.**</u>
-
-6) What if you have 25,000 samples, and you have huge standard errors. Why are the SE so big, when we have such a large sample size? Collinearity in the system can increase SE, increase CI, and decrease p-values.
+- 1) The easiest way to know if you have collinearity is to examine fit a linear model between your two independent variables and see if they have **high $r^2$ values** or if there is a **statistically-significant relationship** between them.
+- 2) High variance inflation factors (VIF) of variables in model. Next class I will show you how to examine VIF for variables in a model.
+- 3) As I said before, if you have significant variables in a simple linear regression, but then you add another variable(s) to create a multi-variable regression and the individual variable(s) is no longer significant, then you have collinearity. 
+- 4) If you build a multi-variable model where (i) none of the individuals variables are significant, but (ii) the overall whole model is significant (the p-value at the bottom of the model), then you have collinearity. <u>The whole model is significant, but none of the individual variables is significant.</u>
+  - How does that happen? All of the X-variables are explaining a lot of the Y-variable, but the software is having a hard-time figure out which X-variable is explaining the response. And the collinearity causes the p-values for individual variables to go up.
+- 5) Generally, when you add variables to a model, the betas *should not change too much*. What do I mean by 'too much'? E.g., when you have a simple model with beta and CI, and then you add another X-variable to the model to create a multi-variable model, then the new estimate for your beta should be within the 95% CI of the original estimate. <u>**If it moves to be outside of the 95% CI of the original estimate, that's a considerable change and is a symptom of collinearity of the X-variables.**</u>
+- 6) What if you have 25,000 samples, and you have huge standard errors. Why are the SE so big, when we have such a large sample size? Collinearity in the system can increase SE, increase CI, and decrease p-values.
 
 **Questions?**
 
@@ -245,8 +248,8 @@ When confronted with collinearity, a common approach taken by many folks in our 
 
 I'm going to show you a simulation exercise that demonstrates:
 
-1) Collinearity influences parameter **estimates**, **uncertainty**, and **p-values** when confounding variables are not included in the model, and
-2) When all the necessary confounding variables are included, collinearity increases uncertainty and p-values, but <u>**does not bias estimates**</u>.
+1) Collinearity influences parameter **estimates**, **uncertainty**, and **p-values** when confounding variables <u>are not included in the model</u>, and
+2) When all the necessary confounding variables <u>are included</u>, collinearity increases uncertainty and p-values, but <u>**does not bias estimates**</u>.
 
 ### Truth
 
@@ -257,7 +260,7 @@ I'm going to show you a simulation exercise that demonstrates:
 For the simulation exercise, I simulated 1,000 datasets with varying degrees of collinearity (correlation) between two X-variables. Here is truth:
 
 - Simulations: $n = 1,000$
-- $y = 10 + 3X_1 + 3X_2 + \epsilon \sim N(0, 2)$
+- $y = 10 + 3X_1 + 3X_2 + \epsilon \sim N(0, 2)$ -- both X variables have effects on Y!
 - $X_1 = U[0,10]$
 - $X_2 = X_1 + N(0, z)$
 - For each simulation, I used a different value of *z* from a uniform distribution: $z = U[0.5, 20]$.
@@ -323,18 +326,18 @@ for (i in 1:s){
 
 ```
 
-Low values of *z* (e.g., *z* = 0.5) caused high collinearity between the X-variables, because only a little bit of noise gets added to $X_1$ to calculate $X_2$. Alternatively, high values of *z* (e.g., *z* = 20) had low collinearity, because large noise was added to $X_1$ to calculate $X_2$. In other words, the low values of *z* caused very little noise (and high collinearity) between $X_1$ and $X_2$, while the high values caused great noise (and low collinearity) between the variables.
+**Low values** of *z* (e.g., *z* = 0.5) caused **high collinearity** between the X-variables, because only a little bit of noise gets added to $X_1$ to calculate $X_2$. Alternatively, **high values** of *z* (e.g., *z* = 20) had **low collinearity**, because large noise was added to $X_1$ to calculate $X_2$. In other words, the low values of *z* caused very little noise (and high collinearity) between $X_1$ and $X_2$, while the high values caused great noise (and low collinearity) between the variables.
 
 For each simulation, I did a few things:
 
-- Fit a simple model ($Y ~ X_1$) and measured the estimate, SE, and p-value for $\beta1$
-- Fit a multi-variable model ($Y ~ X_1 + X_2$) that included both of the collinear, confounding variables, and measured the effect, SE, and p-value for $\beta1$.
+- Fit a **simple model** ($Y \sim X_1$) and measured the estimate, SE, and p-value for $\beta1$
+- Fit a **multi-variable model** ($Y \sim X_1 + X_2$) that included both of the collinear, confounding variables, and measured the effect, SE, and p-value for $\beta1$.
 
 Most importantly, I measured how collinearity between $X_1$ and $X_2$ (i.e., $r^2$) influenced the the Variance Inflation Factor from the multi-variable model.
 
 I'm going to show a number of graphs, and for all of these graphs the X-axis is a measure of collinearity (correlation; $r^2$) between $X_1$ and $X_2$. If it's collinearity equals 1, then the variables are perfectly correlated, whereas low values show weak/no correlation.
 
-The first graph I am going to show you describes how the **Variance Inflation Factor** score is influenced by collinearity. The **Variance Inflation Factor** is a metric used to diagnose whether there may be collinearity between X-variables in a multiple-variable model.
+The **Variance Inflation Factor** is a metric used to diagnose whether there may be collinearity between X-variables in a multiple-variable model. The first graph I am going to show you describes how the **Variance Inflation Factor** score is influenced by collinearity. 
 
 **Variance Inflation Factor (VIF) -- the amount (in *times*) that the variance ($SE^2$) in the $\beta$ increases due to collinearity**
 
@@ -366,7 +369,7 @@ VIF = 2 ~ $r^2$ = 0.6 -- so another rule of thumb is that an $r^2 > 0.6$ may als
 
 Now, let's consider results from the simple model ($Y \sim X_1$) across the simulations.
 
-The most important thing I want to emphasize to you all is in this first graph. How is the **beta for $X_1$** influenced by collinearity in the simple model?
+The most important thing I want to emphasize to you all is <u>here in this first graph</u>. How is the **beta for $X_1$** influenced by collinearity in the simple model?
 
 ```{r simulation_3, echo=FALSE, message=FALSE, warning=FALSE, fig.height=4, fig.width=8}
 # Set the seed for reproducibility & set graphing parameter
@@ -381,11 +384,11 @@ This graph shows, again, the $r^2$ between $X_1$ and $X_2$ (how correlated they 
 
 However, even with a very little bit of collinearity ($r^2 < 0.2$), the parameter estimate is biased! As collinearity increases, the parameter estimate jumps pretty quickly up to 6!
 
-**Q:** Why 6? 6 = 3 + 3. Because the two X-variables are correlated, the estimation model starts to assign the effect of $X_2$ onto $X_1$. 
+**Q:** Why 6? 6 = 3 + 3. Because the two X-variables are correlated, the estimation model starts to **assign** the effect of $X_2$ onto $X_1$. 
 
 Not including the confounding variable introduces bias in our estimates and negatively influences our inference.
 
-Now, often in this class we ask: how do different approaches influence betas, uncertainty, and p-values. Next we might ask ourselves: how is **standard error (SE)** influenced by collinearity in the simple model?
+Now, often in this class we ask: how do different approaches influence effects, uncertainty, and p-values. Next we might ask ourselves: how is **standard error (SE)** influenced by collinearity in the simple model?
 
 ```{r simulation_4, echo=FALSE, message=FALSE, warning=FALSE, fig.height=4, fig.width=8}
 # Set the seed for reproducibility & set graphing parameter
@@ -415,7 +418,7 @@ plot(r2, log(simple_p1),
 
 ```
 
-As uncertainty gets smaller and samller, our p-values also get smaller and smaller, because the effect of collinearity gets bigger and bigger...
+As uncertainty gets smaller and smaller, our p-values also get smaller and smaller, because the effect of collinearity gets bigger and bigger...
 
 So, collinearity is **really dangerous**! If you have collinearity in your data, and you leave out some confounding variable, you are going to get biased estimates, and it's going to seem like it's a really precise estimate with a clear result. Unless...
 
@@ -443,7 +446,7 @@ abline(v = 0.6, lty=2)
 
 On the Y-axis, we have the coefficient estimate for $\beta_1$, and the X-axis is again the correlation between the two X-variables.
 
-The estimate is good, right around 3 (truth)!! But as collinearity increases, the estimate can be more variable. So by including the confounding variables, your estimate is good, but the bad news is that due to the collinearity, you have less certainty in your estimate. But at least the estimate is unbiased, which is the most important thing.
+<u>**The estimate is good**</u>, right around 3 (truth)!! But as collinearity increases, the estimate can be more variable. So by including the confounding variables, your estimate is good, but the bad news is that due to the collinearity, you have less certainty in your estimate. But at least the estimate is unbiased, which is the most important thing.
 
 Remember the rule of thumb about $r^2$ indicating collinearity? Previously I said that when $r^2 = 0.6$, collinearity should be on your radar. In this graph, we can see that simulations with collinearity greater than 0.6 start to have parameter estimates that are more variable. However, the mean is still centered on ~3 (Truth) after this rule-of-thumb. So no matter how much collinearity there is, on average we will continue to get an unbiased estimate of the effect of X-variables in the model. In statistics, any one estimate may be bad -- but on average, for this multi-variable model, the estimates will be unbiased.
 
@@ -471,7 +474,9 @@ plot(r2, log(multi_p1), xlab = expression("Collinearity ("~ r^2 ~") between" ~ X
 
 And again, as uncertainty increases, p-values increase as well.
 
-But hopefully the takehome message is clear. Failing to account for confounding variables in a model will bias estimates. Accounting for those confounding variables will produce unbiased estimates, although the uncertainty may increase.
+But hopefully the takehome message is clear. **Failing to account for confounding variables in a model will bias estimates**. Accounting for those confounding variables will produce unbiased estimates, although the uncertainty may increase.
+
+**Q:** So how do we deal with collinearity? **We include all <u>confounding variables</u> in a multi-variable model!**
 
 ### Confounding variables
 
@@ -482,25 +487,23 @@ But hopefully the takehome message is clear. Failing to account for confounding 
 
 To avoid negative effects of confounding variables, I recommend:
 
-1) Sample in a manner that eliminates collinearity. Collinearity may be real, or it may be due to sampling artifact. E.g., in the first example above, collinearity was introduced due to non-random sampling of the different sexes. Collect your data in a way that eliminates collinearity. 
+1) **Sample in a manner that eliminates collinearity**. Collinearity may be real, or it may be due to sampling artifact. E.g., in the first example above, collinearity was introduced due to non-random sampling of the different sexes. Collect your data in a way that eliminates collinearity. 
 
-2) Use multi-variable regression. If you have collinear X-variables, it may cause your SE to be large, but <u>your estimates will be unbiased</u>. If you fail to include confounding variables, then estimates will be biased.
+2) **Use multi-variable regression**. If you have collinear X-variables, it may cause your SE to be large, but <u>your estimates will be unbiased</u>. If you fail to include confounding variables, then estimates will be biased.
 
-3) Include confounding variables, even if they are non-significant.
+3) **Include confounding variables, even if they are non-significant**.
 
-Scenarios: two collinear variables (Age and Sex), and you run the full model. VIF is really high (e.g., 10). SE and CI are very inflated, but everything is still significant. Do you do anything? No.
+Scenario: two collinear variables (Age and Sex), and you run the full model. VIF is really high (e.g., 10). SE and CI are very inflated, but everything is still significant. Do you do anything? No.
 
 - Your estimates are unbiased, because you ran the full model.
 - Your CI are large, but still statistically significant.
 - You have identified that you have collinearity, which caused the large CI. But the betas are unbiased.
 
-But sometimes you run the analysis but X-variables are not significant. What do you do then?
+But sometimes you run the analysis but X-variables are not significant. Maybe the model is significant, but none of the X-variables are. What do you do then?
 
-4) Get more data! This decreases SE and VIF.
+4) **Get more data!** This decreases SE and VIF.
 
-Most problems in statistics can be improved by getting more data. Increasing N decreases SE, CI, and P-values... If none of your data are significant due to collinearity, maybe you just need to collect more data.
-
-5) There are statistical techniques that can eliminate collinearity. One of those is Principal Component's Analysis, which we may talk about in this class. Popular analysis. What this analysis does is it creates *new variables* that are orthogonal -- which means they have zero collinearity.
+Most problems in statistics can be improved by getting more data. Increasing N decreases SE, CI, and P-values... If none of your data are significant due to collinearity, maybe you just need to collect more data, reduce uncertainty, and increase power.
 
 ### Redundant variables
 
@@ -513,13 +516,13 @@ These are sometimes called **redundant variables -- collinear X-variables that d
 1) Correlated to another X-variable, but
 2) Do not have an effect on Y
 
-They are similar to confounding variables by being correlated to another X-variable, but the key difference is that they do not have an effect on Y.
+They are similar to confounding variables by being correlated to another X-variable, but the **key difference is that they <u>do not</u> have an effect on Y**.
 
 - If they don't really have an effect (i.e., $\beta$ = 0), there is no problem when you take them out. Leaving out a redundant variable does not cause bias, because it does not have an effect to add onto another variable included in the model!
 - If you leave out a confounding variable, it assigns it's effect to the other collinear variable you left in. In the case of redundant variables, leaving them out assigns the effect to the other X-variable -- but that effect was zero!
 - If you include a redundant variable, it will cause **variance inflation**.
 
-In truth, there are no confounding or redundant variables, but rather it's a continuum depending on the $\beta$.
+A useful way to think about confounding or redundant variables might be with the $\beta$s.
 
 - If the $\beta \neq 0$, it's a confounding variable.
 - If the $\beta = 0$, it's a redundant variable. 
@@ -546,7 +549,7 @@ Put some thought into your variables. Statistics is a thinking exercise and shou
 
 ![](../pictures/pic_gopher_tortoise.jpg){width=50%}
 
-Example: Gopher Tortoises. The gopher tortoise is a burrow-digging turtle species in the southeastern United States that is a species of conservation concern. Reproduction is important for populations to grow and persist, and researchers are interested in what causes reproduction in tortoise populations. Male tortoises are known to compete with eachother for access to females, and they often get in wrestling matches for access to females. Males sometimes have large shell extensions under their neck called 'gular scutes' that are used to flip other males during male-male combat. People have wondered what are the factors that influence reproductive success of tortoises: age, body size, or gular scute size? These factors are all correlated: older tortoises get larger bodies and may grow larger gular scutes. However, there is likely variation in growth rates such that sometimes younger tortoises may be larger and/or have larger gular scutes than older tortoises. The question is: are these variables redundant or confounding variables?
+Example: Gopher Tortoises. The gopher tortoise is a burrow-digging turtle species in the southeastern United States that is a species of conservation concern. Reproduction is important for populations to grow and persist, and researchers are interested in what causes reproduction in tortoise populations. Male tortoises are known to compete with eachother for access to females, and they often get in wrestling matches for access to females. Males sometimes have large shell extensions under their neck called 'gular scutes' that are used to flip other males during male-male combat. People have wondered what are the factors that influence reproductive success of tortoises: age, body size, or gular scute size? These factors are all correlated (collinear): older tortoises get larger bodies and may grow larger gular scutes. However, there is likely variation in growth rates such that sometimes younger tortoises may be larger and/or have larger gular scutes than older tortoises. The question is: are these variables redundant or confounding variables?
 
 There may be an argument that they all of these variables are measures of age, and shell size and gular scute size are redundant variables. Alternatively, it could be that they each have their own effect, where age, size, and gular scute length have different effects on reproductive success. Maybe: (1) older tortoise are more experienced at winning wrestling matches, (2) larger animals are better at winning wrestling matches, and (3) animals with larger gular scutes are better at winning wrestling matches or provides a signal of fitness to females. So each one could have a different mechanism, such that you might have an instance where a young, small animal but with big gular scutes performs well at reproducing.
 
@@ -556,7 +559,7 @@ A helpful way to do this is to build a <u>conceptual model</u> describing hypoth
 
 ### 2. **What happens between 'full' and 'reduced' models?**
 
-A full model has all of the X-variables, whereas a reduced model has a subset of X-variables. How does <u>reducing</u> the model influence the betas and p-values? If you reduce the model and the betas change a lot, this is an indication of collinearity.
+A full model has all of the X-variables, whereas a reduced model has a subset of X-variables. How does <u>reducing</u> the model influence the betas and p-values? If you reduce the model and the betas change a lot, this is an indication of collinearity with confounding variables.
 
 - **Confounding variable -- removing it changes the betas for the other variables**
 - **Redundant variable -- removing it does not change other betas**
@@ -591,7 +594,7 @@ If you are not sure, treat it as confounding.
 
 Because then you will include it in your model, account for its statistical effect, if one exists. If it's actually a redundant variable, then there is no effect! Your parameter estimates will be unbiased and the only consequence will be a little bit of variance inflation and reduced uncertainty. This is much better than leaving out an important, confounding variable and having consequences on your betas! 
 
-<u>General takeaway here</u>: if adding variable(s) causes the beta of a variable to change to zero, then it's probably a redundant variable, and this should be pretty obvious.
+<u>General takeaway</u>: if adding variable(s) causes the beta of a variable to change to zero, then it's probably a redundant variable, and this should be pretty obvious.
 
 ## Simulation Exercise 2
 
@@ -743,7 +746,7 @@ This is what is happening in the TV-mortality study. A redundant, collinear vari
 
 ### Multi-variable model: $Y \sim X_1 + X_2$
 
-Now, what happens with the multi-variable model?
+Now, what happens with the multi-variable model? Let's include the redundant variable.
 
 Estimates of $X_1$:
 
@@ -779,36 +782,31 @@ It estimates the effect of the redundant variable to be zero! As collinearity in
 
 ## Practical guidance for examining and dealing with collinearity
 
-These lists mostly review what I have talked about during class so far today - quite a bit of content! [**Show these lists on the projector**]
+These lists mostly review what I have talked about during class so far today - quite a bit of content! *Show lists on the projector.*
 
-Do you have collinearity in your data or system?
+<u>**Do you have collinearity in your data or system?**</u>
 
 1) Be careful to identify potential confounding variables prior to data collection. Use logic and try to identify all confounding variables and measure these.
 2) Calculate collinearity and VIF among independent variables -- before you start your analysis. High collinearity between X-variables tends to imply redundancy.
 3) Pay attention to how coefficient estimates and variable significance change as variables are removed or added.
 
-Is a variable redundant or confounding?
+<u>**Is a variable redundant or confounding?**</u>
 
 1) Think! Use logic.
-2) If there is extreme collinearity
-  - Likely **redundant**
-3) Large changes in coefficient estimates of both variables between full and reduced models
-  - **Confounding**
-4) Large changes in coefficient estimates of one variable between full and reduced models
-  - **Redundant** -- full model estimate close to zero
-4) Not sure whether it's redundant or confounding? Assume confounding & include it.
-  - Multi-variable regression also produces unbiased estimates (on average) regardless of the type of collinearity
+2) If there is extreme collinearity, there's likely a **redundant** variable
+3) Large changes in coefficient estimates of **both variables** between full and reduced models: variables are likely **confounding**.
+4) Large changes in coefficient estimates of **one variable** between the reduced and full model, and the full model estimates a variable to be close to zero: **redundant**
+4) Not sure whether it's redundant or confounding? **Assume confounding & include it.** Multi-variable regression also produces unbiased estimates (on average) regardless of the type of collinearity.
   
-What to do with **redundant variables**?
+<u>What to do with **redundant variables**?</u>
 
 1) Determine which variable best explains the response using P-values from regression and changes in coefficient estimates with variable addition and removal
 2) Do not include redundant variable in final model (to reduce VIF)
-3) Try a variable reduction technique (e.g., PCA)
 
-What to do with **confounding variables**?
+<u>What to do with **confounding variables**?</u>
 
-1) Sample in a manner that eliminates collinearity, which can be due to real collinearity or sampling artifact
-2) Use multiple regression; may hvae large SE if collinearity is strong
+1) Sample in a manner that eliminates collinearity, which can be due to real collinearity or sampling artifact.
+2) Use multi-variable regression; may have large SE if collinearity is strong.
 3) Include confounding variables, even if non-significant.
 4) Get more data! Decrease SE due to variance inflation.
 
@@ -960,8 +958,8 @@ We now get unbiased estimates that overlap with truth, and all estimates are ~si
 
 ## Summary
 
-- If you add variables to a model, p-values should go down due to swamping.
-- Multivariable models are generally good because they eliminate issues related to swamping & collinearity.
+- If you add variables to a model, p-values should go down, because you have added parameters, more error is explained, and you have **reduced swamping**.
+- Multivariable models are generally useful, because they eliminate issues related to swamping & collinearity.
 
 <br>
 
