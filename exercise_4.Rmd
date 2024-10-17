@@ -118,7 +118,7 @@ Error <- rnorm(n, mean = 0, sd = 1)
 Size <- 45 - 0.95*Latitude - 0.00167*Elevation + 2*dummy$Nevada + 1*dummy$Utah + Error
 
 # Create dataframe
-datum <- data.frame(Latitude=Latitude, Elevation=Elevation, Nevada=dummy$Nevada,
+datum <- data.frame(Latitude=Latitude, State=State, Elevation=Elevation, Nevada=dummy$Nevada,
                     Utah=dummy$Utah, Size=Size)
 
 # Save the CSV file
