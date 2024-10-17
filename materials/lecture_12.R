@@ -21,7 +21,8 @@ summary(results)
 results <- lm(Age ~ MotherSize, data = datum)
 summary(results)
 
-# Create new dataframe without categorical Sex
+# Create new dataframe without categorical x-variable (Sex) and
+# without the response variable (Size)
 datum2 <- subset(datum, select = -Sex)
 datum2 <- subset(datum2, select = -Size)
 
@@ -31,7 +32,11 @@ head(datum2)
 # Correlation matrix - runs a simple 'lm()' between each pair of X-variables
 cor(datum2)
 
-# Download 'car' by uncommenting this next line and running it through your console
+# Squaring this produces the usual r^2 metric we are familiar with.
+cor(datum2)^2
+# These values are the same as the r^2 from our summary(results) objects above.
+
+# Download 'car' by uncommenting the next line and running it through your console
 # install.packages("car", dependencies=TRUE)
 
 # Full linear model with all X-variables
@@ -39,7 +44,10 @@ results <- lm(Size ~ Age + Sex + MotherSize + FatherSize, data = datum)
 
 # Use the VIF function from 'car'
 # using 'car::vif()' will tell R to call the function 'vif()' from the package 'car' specifically
+# this allows you to avoid having to run a 'library(car)' call
 car::vif(results)
+# These VIF values are above the 'rule-of-thumb' VIF = 2, so we should be aware
+# that we have collinearity in our data.
 
 # Square-root this to get VIF in terms of Standard Error
 car::vif(results)^0.5
