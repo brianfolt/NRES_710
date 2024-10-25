@@ -2,8 +2,9 @@
 #  NRES 710, Multi-Variable Modeling - Interactions
 #     University of Nevada, Reno
 #     Modeling interactions between X-variables
+#  NOTE: to print as a DOCX, need to comment out the two 'plotly' 3D graphs
 
-################### 'Truth' #################### 
+################### 'Truth' ####################
 ### Lecture 13: code to simulate data for class
 
 # Set the seed for reproducibility
@@ -57,7 +58,7 @@ datum <- data.frame(Age = x2, Sex = x1, Male = dummy$Male, Size = Response)
 write.csv(datum, "lecture_13_dataset2.csv", row.names = FALSE)
 
 
-### Dataset 3: 
+### Dataset 3:
 # Set the seed for reproducibility
 set.seed(123)
 
@@ -93,7 +94,7 @@ Latitude <- runif(n, 0, 1) * 30
 Elevation <- runif(n, 0, 1) * 30
 
 # Response variable: Size
-Size <- 3.33*Latitude + 1.6*Elevation - 0.08 * Latitude * Elevation 
+Size <- 3.33*Latitude + 1.6*Elevation - 0.08 * Latitude * Elevation
 
 # Create dataframe
 datum <- data.frame(Latitude=Latitude, Elevation=Elevation, Size=Size)

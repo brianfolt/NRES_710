@@ -36,6 +36,7 @@ knitr::opts_chunk$set(
 #  NRES 710, Multi-Variable Modeling - Interactions
 #     University of Nevada, Reno
 #     Modeling interactions between X-variables
+#  NOTE: to print as a DOCX, need to comment out the two 'plotly' 3D graphs
 
 ```
 
@@ -56,11 +57,11 @@ What are interactions...? Let's start with an example.
 
 - **$X_2$ -- Sex**
 
-The Pill reduces reproductive output of females to zero, but it does not influence the reproductive output of males. This is an interactions!
+The Pill reduces reproductive output of females to zero, but it does not influence the reproductive output of males. This is an interaction!
 
 **interactions -- the effect (beta) of one X-variable depends on the value of another X-variable**
 
-Sometimes people will implicitly assume there is an interaction, and separate out their data to analyze the effect of the pill on two groups separately: males and females. This is okay! BUT...
+Sometimes people will implicitly assume there is an interaction, and separate out their data to analyze the effect of the pill on two groups separately: males and females. <u>This is okay</u>! BUT...
 
 1. You are implicitly assuming there is an interaction, and,
 2. if there is a difference, you cannot say the difference is statistically significant or not, because you did not test that.
@@ -75,7 +76,7 @@ Let's again consider an example we have seen before, that I like, because it is 
 
 - **Y -- Size**
 - **$X_1$ -- Age**
-- **$X_2$ -- Sex**'
+- **$X_2$ -- Sex**
 
 Previously we ran this multi-variable model: $Size = \beta_0 + \beta_1 * Age + \beta_2 * Sex + \epsilon \sim N(0, \sigma)$
 
@@ -143,14 +144,14 @@ legend("topleft", legend = c("Females", "Males"), col = c("red", "blue"), lwd = 
 
 ```
 
-All individuals start out at about the same size, but then males grow faster and reach a larger size at an earlier age than females.
+All individuals start out at about the same size, but then <u>males grow faster and reach larger sizes at earlier ages than females</u>.
 
-This is an interaction! The effect of age depends on sex. We get a different beta (slope) for the age-size relationship for males then we do for females.
+This is an interaction! <u>**The effect of age depends on sex**</u>. We get a different beta (slope) for the age-size relationship for males then we do for females.
 
 Another interesting thing I want to point out is that for interactions, perspective does not matter:
 
-- The effect of age depends on sex.
-- The difference between the sexes also depends on age.
+- The **effect of age** depends on **sex**.
+- The **effect of sex**, or the difference in size between sexes, also depends on **age**.
 
 For example:
 
@@ -178,7 +179,7 @@ segments(old_age, 16, old_age, 26.5, col = "black", lty = 2, lwd = 2)
 
 ```
 
-At a young age, the difference between sexes is small; at an older age, the difference is larger.
+<u>At a young age, the difference between sexes is small</u>; <u>at an older age, the difference is larger</u>.
 
 You can take whatever perspective is most valid for you, and it depends on the questions you are asking. A little open to interpretation.
 
@@ -186,7 +187,7 @@ You can take whatever perspective is most valid for you, and it depends on the q
 
 How do we add an interaction into the linear model?
 
-1) Like I said before, you could just do this analysis separately: one regression for males, one for females. But you will get two betas and you won't know if they are statistically significant.
+1) Like I said before, you could just do this analysis separately: one regression for males, one for females. But you will get two slope estimates and you won't know if they are statistically significant.
 2) Add in another effect to our linear model ($\beta_3$) and then multiply the two X-variables by eachother (times eachother).
 
 So now the linear model looks like:
@@ -199,7 +200,9 @@ As we have done before, let's break this down for what the interaction does for 
 
 **Male = 1**
 
-$Size(female) = \beta_0 + \beta_1Age + \cancel{\beta_2*0} + \cancel{\beta_3 Age* 0} + \epsilon \sim N(0, \sigma)$
+$Size(female) = \beta_0 + \beta_1Age + \beta_2 * 0 + \beta_3 * 0 + \epsilon \sim N(0, \sigma)$
+
+*Brian cancel out the effects of $\beta2$ and $\beta3$*
 
 The effect of beta2 disappears, and so does the effect of beta3! So the female line is simply: the intercept (beta0) plus the effect of age (beta1)!
 
@@ -262,7 +265,7 @@ $Size(male) = \beta_0 + \beta_1Age + \beta_2*1 + \beta_3Age*1 + \epsilon \sim N(
 
 $Size(male) = (\beta_0 + \beta_2) + (\beta_1 + \beta_3)Age + \epsilon \sim N(0, \sigma)$
 
-So now our new intercept is $\beta0 + \beta2$, and our our new slope is $\beta1 + \beta3$:
+So now our new intercept for males is $\beta0 + \beta2$, and our our new slope is $\beta1 + \beta3$:
 
 ```{r echo=FALSE, fig.height=4, fig.width=4.5}
 # Specify plot margins
@@ -339,17 +342,17 @@ segments(x0 = x2, y0 = y1, x1 = x2, y1 = y2, col = "green", lty = 2, lwd = 3) # 
 
 Let's break this down and look at the meaning of our individual betas.
 
-Before, $\beta_0$ was the intercept of the female line. This remains unchanged; it is the average Y-value when all other X-variables are zero! **The average size of females at the age of zero.** 
+Before, $\beta_0$ was the intercept of the female line. This remains unchanged; <u>it is the average Y-value **when all other X-variables are zero**</u>! **The average size of females at the age of zero.**
 
-What is $\beta_2$? **The difference in average size of males and females at age = 0.** Graphically, it's that little distance between males and females at age zero.
+What is $\beta_2$? <u>**The difference in average size of males and females at age = 0.**</u> Graphically, it's that little distance between males and females at age zero.
 
-If we didn't have the interaction, what would $beta_2$ mean? It would simply be the difference between males and females at all ages. With the interaction, it restricts this meaning of this parameter to be at zero for the continuous X-variable.
+**Q:** Review question... <u>If we didn't have the interaction</u>, what would $beta_2$ mean? It would simply be the **difference between males and females at all ages**. With the interaction, it restricts this meaning of this parameter to be at zero for the continuous X-variable, <u>because the effect of being male now changes along the continuous X-variable</u>.
 
 What is $\beta_1$? Before it was the effect of age for all individuals, everybody. Now, it is **the effect of age for females.**
 
-Finally, what is $\beta_3$? This is a little more *tricky*. It is not the effect of age for males. Instead, it is the *difference* in the effect of age between females and males. The difference in the slope.
+<u>Finally, what is $\beta_3$? This is a little more ***tricky***.</u> It is not the effect of age for males. Instead, <u>it is the *difference* in the effect of age between females and males</u>. The difference in the slope.
 
-So, if we want to know if the slopes are different for males and females, that's what $\beta_3$ tells us!
+<u>So, if we want to know if the slopes are different for males and females, that's what $\beta_3$ tells us!</u>
 
 If $\beta_3$ is zero, what does that mean? ...There is no interaction, there is no differnece in the slopes for females and males, and the slopes are the same.
 
@@ -357,21 +360,21 @@ For this reason, I argue that if you get a non-significant interaction, it would
 
 - By leaving the insignificant interaction in, it changes the meaning of the other betas, and makes this more confusing and messy. If it's not significant, you are justified to **take it out** for your results to be more simple and clear.
 
-Alternatively, you might want to leave it in: 
+Alternatively, you might want to leave it in:
 
-- If you have a small sample size and your interaction beta is large, maybe you might leave it in to report it so that maybe will encourage future researchers to collect more data to potentially report that effect.
-- And if you are specifically testing for this interaction, you would **not want to take it out** -- you would want to leave it in to **report it**! "I hypothesized this to be different, but I didn't find support for that -- but here are the results."
+- If you have a small sample size and your interaction beta is large, maybe you might leave it in to report it so that maybe will encourage future researchers to collect more data to potentially test for that effect.
+- And if you are specifically testing for this interaction, you would **not want to take it out** -- you would want to leave it in to **report it**! <u>"I hypothesized this to be different, but I didn't find support for that -- but here are the results."</u>
 
 The reason why we test for interactions this way, rather than having a separate slope for males, is that:
 
-- If $\beta3 = 0$, there is no interaction, and the slopes are the same.
-- If $\beta3 \neq 0$, there is an interaaction, the slopes are different, and this equation accompanies that.
+- If $\beta_3 = 0$, there is no interaction, and the slopes are the same.
+- If $\beta_3 \neq 0$, there is an interaaction, the slopes are different, and this equation accompanies that.
 
 **Q:** As I've drawn this here, would $\beta3$ be positive or negative?
 
 Positive! It causes the slope to increase for males relative to females.
 
-Alternatively, $\beta3$ could be negative. Let's assume we have a positive $\beta2$ and a negative $\beta3$:
+Alternatively, <u>$\beta_3$ could be negative</u>. Let's assume we have a positive $\beta_2$ and a negative $\beta_3$:
 
 ```{r echo=FALSE, fig.height=4, fig.width=4.5}
 # Specify plot margins
@@ -406,32 +409,34 @@ In this case, the negative $\beta3$ causes the slope of the male line to be flat
 
 There is no hard-and-fast rule for (1) whether to test for an interaction or not, or (2) whether to leave a non-significant interaction term in your model or not. It depends on your **needs**. The purpose of statistics is not to tell you the answer. Rather, it is a tool to support or reject hypotheses that you have about the world. Statistics are a way to test hypotheses. You should only test for an interaction if you have a specific hypothesis suggesting that there might be an interaction effect.
 
-Note: this is a simple interaction model, a two-way interaction. What if we had another X-variable that might also interact with age and sex... e.g., Mother Size? That will get very complicated, very fast. And it will be very difficult to explain what those effects mean. So while you could start testing for three- or four-way interactions, it will be impossible to explain what those results mean! Point is: think about what your interactions are before putting them in the model. 
+Note: this is a simple interaction model, a two-way interaction. What if we had another X-variable that might also interact with age and sex... e.g., Mother Size? That will get very complicated, very fast. And it will be very difficult to explain what those effects mean. So while you could start testing for three- or four-way interactions, it will be impossible to explain what those results mean! Point is: think about what your interactions are before putting them in the model.
 
 ## Reporting results
 
-Without interactions, we learned to report results with two sentences:
+Without interactions, we learned to report results with <u>two sentences</u>:
 
 - For the continuous variable, age: "For each unit increase in age, we observed [beta] increase in size."
 - For the categorical variable, sex: "We found that males were [beta] more/less than females."
 
 We now need to modify the sentence for the continuous variable. Our sentences will be:
 
-- Continuous variable: "We found that, *in females*, for each one unit increase in age, we observed a [beta] increase in size."
-- Categorical variable: "We found that males were [beta] units larger than males *at age zero*."
-- Interaction variable sentence is a bit tricker: "We found a significant interaction, such that for males, the difference in the age-size relationship was [beta] [Y-units per X-units]."
+- Continuous variable: "We found that, <u>*in females*</u>, for each one unit increase in age, we observed a [beta] increase in size."
+- Categorical variable: "We found that males were [beta] units larger than males <u>*at age zero*</u>."
+- Interaction variable sentence is a bit trickier: "We found a significant interaction, such that for males, the difference in the age-size relationship was [beta] [Y-units per X-units] ([P-value])."
 
-We have to add in these *qualifiers* when we have an interaction, which makes it clunkier.
+We have to add in these <u>*qualifiers*</u> when we have an interaction, which makes it clunkier.
 
 This third sentence for the interaction ~works, but it is clunky, ugly, and not exactly elegant!
 
-Before I said that I didn't like analyzing males separate from females because you couldn't do a test to demonstrate that the male and female slopes were significantly different. However, describing the interaction effect is one situation where I will support (1) splitting your data, (2) re-running the simple model (e.g., males-only), and then (3) reporting that more simple beta to your readers. You can justify this approach by saying: 
+Before I said that I didn't like analyzing males separate from females because you couldn't do a test to demonstrate that the male and female slopes were significantly different. However, describing the interaction effect is one situation where I will support (1) splitting your data, (2) re-running the simple model (e.g., males-only), and then (3) reporting that more simple beta to your readers. You can justify this approach by saying:
 
 - "We found a significant interaction between males and females ($\beta_3$ = [...]; [p-value]). Therefore, we analyzed males and females separately. We found that, for females, for each one unit increase in age, we observed a [beta] unit (95% CI) increase in size (P-value). We also found that for males, for each one unit increase in age, we observed a [beta] increase in size."
 
-This all works when you have a categorical variable in the model. If you have a categorical variabel in the model, it is often easiest to figure a way to break them apart.
+This all works when you have a categorical variable in the model. If you have a categorical variable in the model, it is often easiest to figure a way to break them apart.
 
 If you have two continuous variables, it becomes more confusing, and I recommend using a graph -- specifically a three-dimensional one.
+
+*Brian pull up 3D plots on HTML page*
 
 Here, size is the Y-variable, elevation and latitude are the X-variables. There is no interaction between elevation and latitude.
 
@@ -459,9 +464,9 @@ grid$Size <- predict(model, newdata = grid)
 
 # Create a 3D plot with plotly
 plot_ly(
-  x = ~grid$Latitude, 
-  y = ~grid$Elevation, 
-  z = ~grid$Size, 
+  x = ~grid$Latitude,
+  y = ~grid$Elevation,
+  z = ~grid$Size,
   colorscale = "Viridis",
   type = "mesh3d",
   intensity = ~grid$Size,  # Color the plane based on Size values
@@ -512,9 +517,9 @@ grid$Size <- predict(model, newdata = grid)
 
 # Create a 3D plot with plotly
 plot_ly(
-  x = ~grid$Latitude, 
-  y = ~grid$Elevation, 
-  z = ~grid$Size, 
+  x = ~grid$Latitude,
+  y = ~grid$Elevation,
+  z = ~grid$Size,
   colorscale = "Viridis",
   type = "mesh3d",
   intensity = ~grid$Size,  # Color the plane based on Size values
@@ -603,17 +608,17 @@ summary(results)
 
 Is there any indication that we missed an interaction? Nope. There are symptoms of collinearity, but there aren't symptoms of interactions.
 
-The effect of age is ~2.5, which is basically the average of the male and female slopes. Which, isn't too bad.
+The <u>effect of age is ~2.5</u>, which is basically the average of the male and female slopes. Which, isn't too bad.
 
 The difference between males and females is ~9.5. However, for our data, the difference between males and females at young ages is smaller, and at old ages is larger. So this is again an average. It's not bad... But we are missing an opportunity to learn about interesting information in our data.
 
 ```{r echo=TRUE, fig.width = 5}
-# Fit a lm() without the interaction
+# Fit a lm() with the interaction
 results <- lm(Size ~ Age + Sex + Age:Sex, data = datum)
 summary(results)
 ```
 
-The age-size relationship for females is 2! The effect of being male is 3.79, and truth (4) is contained within the confidence interval. The difference in slope between male line and female line is 1.03 -- very close to truth. 
+The age-size relationship for females is 2! The effect of being male is 3.79, and truth (4) is contained within the confidence interval. The difference in slope between male line and female line is 1.03 -- very close to truth.
 
 You could report your results using these results. "We found that for each one year increase in age, females had a 2.00 cm increase in size." -- with p-values and confidence intervals. Same sentence as before, but we have the qualifiers *in females*. "We found that males were 3.79 [CI] cm larger at age 0 [P]." Again, need the qualifier of male. "We found that the slope of the age-size relationship was 1.03 [CI] cm per year larger in males than females [P]."
 
@@ -645,7 +650,7 @@ confint(resultsFemale)
 
 This will slightly influence your confidence intervals, but that's okay.
 
-## Using the *
+## Using the * to build the model
 
 Here's some other stuff to know about:
 
@@ -668,7 +673,7 @@ I encourage you to always tests for interactions, rather than splitting your dat
 ## Truth
 
 ```{r}
-################### 'Truth' #################### 
+################### 'Truth' ####################
 ### Lecture 13: code to simulate data for class
 
 # Set the seed for reproducibility
@@ -722,7 +727,7 @@ datum <- data.frame(Age = x2, Sex = x1, Male = dummy$Male, Size = Response)
 write.csv(datum, "lecture_13_dataset2.csv", row.names = FALSE)
 
 
-### Dataset 3: 
+### Dataset 3:
 # Set the seed for reproducibility
 set.seed(123)
 
@@ -758,7 +763,7 @@ Latitude <- runif(n, 0, 1) * 30
 Elevation <- runif(n, 0, 1) * 30
 
 # Response variable: Size
-Size <- 3.33*Latitude + 1.6*Elevation - 0.08 * Latitude * Elevation 
+Size <- 3.33*Latitude + 1.6*Elevation - 0.08 * Latitude * Elevation
 
 # Create dataframe
 datum <- data.frame(Latitude=Latitude, Elevation=Elevation, Size=Size)
