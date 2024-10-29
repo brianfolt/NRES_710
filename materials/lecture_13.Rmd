@@ -42,33 +42,41 @@ knitr::opts_chunk$set(
 
 Any questions before we begin?
 
+**HW:** Please read Odadi et al. 2011 before class on Thursday. The paper got published in Science because they found an interaction! However, they didn't test for an interaction directly... When reading the paper, I want you think: what is their linear model? What are the betas, and how do you interpret them? We'll go over this in class on Thursday, but i want you to try to figure it out first.
+
+Generally when we read scientific articles, we should be able to figure out what their linear model is and interpret what their betas are. If they are reasonably well written, that is! If you can't figure it out, then maybe they did not do a good job describing their stats.
+
+I want you to understand your linear models and other authors linear models because it will make everything easier to understand in the science that you do.
+
+**Review Quiz**
+
 ## Interactions
 
 Today we are going to learn about **interactions**!
 
-Last week I suggested that collinearity is critically important to understand, because it is a nuisance that we must account for to get unbiased estimates, and so we spent an entire week on the topic. This week, I think interactions are also critically important, so we will again spend a week on this topic. But interactions are actually really interesting and can greatly enhance the interest in our research and what we are learning.
+Last week I suggested that collinearity is critically important to understand, because it is a **nuisance** that we must account for to get unbiased estimates, and so we spent an entire week on the topic. This week, I think interactions are also critically important, so we will again spend a week on this topic. But interactions are actually really **interesting** and can greatly enhance the interest in our research and what we are learning.
 
 What are interactions...? Let's start with an example.
 
 - **Y -- reproductive output**
 - **$X_1$ -- Placebo / Pill** -- a binomial variable describing groups in a clinical trials of whether the 'estrogen/progesterone/birth-control pill'.
 
-**Q:** What is the effect of The Pill on reproductive output? ....does it cause reproduction to be ~0? *It depends....*
+**Q:** What is the effect of The Pill on reproductive output? ....does it cause reproduction to be ~0? <u>*It depends....*</u>
 
 - **$X_2$ -- Sex**
 
-The Pill reduces reproductive output of females to zero, but it does not influence the reproductive output of males. This is an interaction!
+The Pill reduces reproductive output of females to zero, but it does not influence the reproductive output of males. **This is an interaction!**
 
 **interactions -- the effect (beta) of one X-variable depends on the value of another X-variable**
 
-Sometimes people will implicitly assume there is an interaction, and separate out their data to analyze the effect of the pill on two groups separately: males and females. <u>This is okay</u>! BUT...
+Sometimes people will implicitly assume there is an interaction, and separate out their data to analyze the effect of the pill on two groups separately: males and females. <u>This is okay</u>! **BUT...**
 
 1. You are implicitly assuming there is an interaction, and,
-2. if there is a difference, you cannot say the difference is statistically significant or not, because you did not test that.
+2. If there is a difference, you cannot say the difference is statistically significant or not, because you did not test that.
 
 Let's say that we find that the effect of the pill on males is some very small number close to ~0 (e.g., beta = 0.001), and then we get a large beta for the effect of the pill on females. How would we know that these effects are statistically different? Well, we can't know that if we analyzed these effects separately.
 
-If you want to know if the effect is different between two groups (sexes, species, etc.), you need to test for an interaction.
+If you want to know if the effect is different between two groups (sexes, species, etc.), you need to test for an interaction **in your linear model**. 
 
 ## Example
 
@@ -80,7 +88,7 @@ Let's again consider an example we have seen before, that I like, because it is 
 
 Previously we ran this multi-variable model: $Size = \beta_0 + \beta_1 * Age + \beta_2 * Sex + \epsilon \sim N(0, \sigma)$
 
-This model is implicitly assuming that lines for each group are parallel -- they have the same slope:
+This model is implicitly assuming that lines for each group are **parallel** -- they have the same slope:
 
 ```{r echo=FALSE, fig.height=4, fig.width=4.5}
 # Specify plot margins
@@ -111,7 +119,7 @@ legend("topleft", legend = c("Females", "Males"), col = c("red", "blue"), lwd = 
 
 ```
 
-The effect of sex is the same for all ages, and the effect of age is the same for both sexes. This is an assumption that we have made. But this is *not* an assumption that we *have* to make...
+The effect of sex is the same for all ages, and the effect of age is the same for both sexes. <u>**This is an assumption that we have made**.</u> But this is *not* an assumption that we *have* to make...
 
 What if we assume that these effects are different...?
 
