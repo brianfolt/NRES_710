@@ -383,7 +383,7 @@ div.tocify {
 <h1 class="title toc-ignore">Exercise 4: Multivariable Analysis -
 Collinearity</h1>
 <h4 class="author">NRES 710</h4>
-<h4 class="date">Last compiled: 2024-10-17</h4>
+<h4 class="date">Last compiled: 2024-10-30</h4>
 
 </div>
 
@@ -398,9 +398,10 @@ continuous factors, elevation (meters above sea level) and latitude
 groups (state; Colorado, Nevada, Utah). There is no collinearity between
 variables.</p>
 <ol style="list-style-type: decimal">
-<li>Write a linear (statistical) model that describes a single
-multi-variable system containing all of the X-variables; be sure to
-specify what each X-variable represents.</li>
+<li>Write a linear (statistical) model with <span
+class="math inline">\(\beta\)</span>s and variable names that describes
+a single multi-variable system containing all of the X-variables; be
+sure to specify what each X-variable represents.</li>
 <li>What do the various <span class="math inline">\(\beta\)</span>s mean
 in this model?</li>
 <li>Analyze the data using a single multi-variable model [i.e., with
@@ -438,20 +439,21 @@ cover). The response variable is marmots per hectare. Examine the code
 used to simulate the data to get the values of ‘Truth’.</p>
 <ol style="list-style-type: decimal">
 <li>Load the data into Rstudio.</li>
-<li>Plot the relationship between understory cover (X) and plant food
-(Y). Copy and paste this graph into a Word document with all of your
-results.</li>
+<li>Plot the relationship between the two X-variables, understory cover
+and plant food. For this graph, treat understory cover as the X-variable
+and plant food as the Y-variable. Copy and paste this graph into the
+summary document with all of your results.</li>
 <li>Calculate the <span class="math inline">\(r^2\)</span> between
-understory cover and food. Report this value in your results
-document.</li>
+understory cover and food. Report this value in your results document.
+What does this tell us about these two X-variables?</li>
 <li>Plot the relationship between marmot density (Y) and understory
-cover (X). Paste this graph in your results document.</li>
+cover (X). Paste this graph in your results document. Run a simple
+regression between marmot density and cover. Report your results using
+the standard sentence.</li>
 <li>Plot the relationship between marmot density (Y) and food (X). Paste
-the graph in your results document.</li>
-<li>Run a simple regression between marmot density and food. Report your
-results in your document using the standard sentence.</li>
-<li>Run a simple regression between marmot density and cover. Report
-your results in your results document using the standard sentence.</li>
+the graph in your results document. Run a simple regression between
+marmot density and food. Report your results using the standard
+sentence.</li>
 <li>Run a multiple regression between marmot density (Y) and both cover
 (X) and food (X). Report your results in your results document using the
 standard sentence (or in this case, two sentences; one for each
@@ -459,7 +461,7 @@ X-variable).</li>
 <li>Calculate the variance inflation factor (VIF) for both plant food
 and understory cover density. Report the VIFs in your results
 document.</li>
-<li>In your results document, describe what happened in 6, 7, and 8
+<li>In your results document, describe what happened in 4, 5, and 6
 above. Be sure to discuss:
 <ul>
 <li>The coefficient estimates of the explanatory X-variable(s) relative
@@ -495,28 +497,28 @@ realistic. Examine the equations in the R script for ‘truth’ to see how
 the data were made and get the values of truth.</p>
 <ol style="list-style-type: decimal">
 <li>Load the data into Rstudio.</li>
-<li>Plot the relationship between sediment (X) and organic matter (Y).
-Copy and paste this graph into a Word document with all of your
-results.</li>
+<li>Plot the relationship between the two X-variables, sediment and
+organic matter. For this graph, treat sediment as the X-variable and
+organic matter as the Y-variable. Copy and paste this graph into the
+summary document with all of your results.</li>
 <li>Calculate the <span class="math inline">\(r^2\)</span> between
-sediment and organic matter. Report this value in your results
-document.</li>
+sediment and organic matter. Report this value in your results document.
+What does this tell us about these two X-variables?</li>
 <li>Plot the relationship between clarity (Y) and sediment (X). Paste
-this graph in your results document.</li>
+this graph in your results document. Run a simple regression between
+clarity (Y) and sediment (X). Report your results in your document using
+the standard sentence.</li>
 <li>Plot the relationship between clarity (Y) and organic matter (X).
-Paste the graph in your results document.</li>
-<li>Run a simple regression between clarity (Y) and sediment (X). Report
-your results in your document using the standard sentence.</li>
-<li>Run a simple regression between clarity (Y) and organic matter (X).
-Report your results in your results document using the standard
-sentence.</li>
+Paste the graph in your results document. Run a simple regression
+between clarity (Y) and organic matter (X). Report your results in your
+results document using the standard sentence.</li>
 <li>Run a multiple regression between clarity (Y) both sediment (X) and
 organic matter (X). Report your results in your results document using
 the standard sentence (or in this case, two sentences; one for each
 X-variable).</li>
 <li>Calculate the variance inflation factor (VIF) for both sediment and
 organic matter. Report the VIFs in your results document.</li>
-<li>In your results document, describe what happened in 6, 7, and 8
+<li>In your results document, describe what happened in 4, 5, and 6
 above. Be sure to discuss:
 <ul>
 <li>The coefficient estimates of the explanatory X-variable(s) and how
@@ -566,8 +568,7 @@ Error &lt;- rnorm(n, mean = 0, sd = 1)
 Size &lt;- 45 - 0.95*Latitude - 0.00167*Elevation + 2*dummy$Nevada + 1*dummy$Utah + Error
 
 # Create dataframe
-datum &lt;- data.frame(Latitude=Latitude, State=State, Elevation=Elevation, Nevada=dummy$Nevada,
-                    Utah=dummy$Utah, Size=Size)
+datum &lt;- data.frame(Latitude=Latitude, State=State, Elevation=Elevation, Colorado=dummy$Colorado, Nevada=dummy$Nevada, Utah=dummy$Utah, Size=Size)
 
 # Save the CSV file
 write.csv(datum, &quot;exercise_4_dataset1.csv&quot;)
