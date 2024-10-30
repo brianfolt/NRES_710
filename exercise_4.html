@@ -571,7 +571,7 @@ Size &lt;- 45 - 0.95*Latitude - 0.00167*Elevation + 2*dummy$Nevada + 1*dummy$Uta
 datum &lt;- data.frame(Latitude=Latitude, State=State, Elevation=Elevation, Colorado=dummy$Colorado, Nevada=dummy$Nevada, Utah=dummy$Utah, Size=Size)
 
 # Save the CSV file
-write.csv(datum, &quot;exercise_4_dataset1.csv&quot;)
+write.csv(datum, &quot;exercise_4_dataset1.csv&quot;, row.names = FALSE)
 
 
 ## Dataset 2
@@ -592,7 +592,7 @@ MarmotDensity &lt;- 0.01 + 3*Cover + 2*Food + Error
 datum &lt;- data.frame(Cover = Cover, Food = Food, MarmotDensity = MarmotDensity)
 
 # Save the CSV file
-write.csv(datum, &quot;exercise_4_dataset2.csv&quot;)
+write.csv(datum, &quot;exercise_4_dataset2.csv&quot;, row.names = FALSE)
 
 
 ## Dataset 3
@@ -625,7 +625,7 @@ Clarity &lt;- 50 - 0.4 * RunOff + Error
 datum &lt;- data.frame(Sediment, Organic, Clarity)
 
 # Save the CSV file
-write.csv(datum, &quot;exercise_4_dataset3.csv&quot;)</code></pre>
+write.csv(datum, &quot;exercise_4_dataset3.csv&quot;, row.names = FALSE)</code></pre>
 <p><a href="exercise_5.html">–go to next exercise–</a></p>
 </div>
 

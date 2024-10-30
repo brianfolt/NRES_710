@@ -117,7 +117,7 @@ Size <- 45 - 0.95*Latitude - 0.00167*Elevation + 2*dummy$Nevada + 1*dummy$Utah +
 datum <- data.frame(Latitude=Latitude, State=State, Elevation=Elevation, Colorado=dummy$Colorado, Nevada=dummy$Nevada, Utah=dummy$Utah, Size=Size)
 
 # Save the CSV file
-write.csv(datum, "exercise_4_dataset1.csv")
+write.csv(datum, "exercise_4_dataset1.csv", row.names = FALSE)
 
 
 ## Dataset 2
@@ -138,7 +138,7 @@ MarmotDensity <- 0.01 + 3*Cover + 2*Food + Error
 datum <- data.frame(Cover = Cover, Food = Food, MarmotDensity = MarmotDensity)
 
 # Save the CSV file
-write.csv(datum, "exercise_4_dataset2.csv")
+write.csv(datum, "exercise_4_dataset2.csv", row.names = FALSE)
 
 
 ## Dataset 3
@@ -171,7 +171,8 @@ Clarity <- 50 - 0.4 * RunOff + Error
 datum <- data.frame(Sediment, Organic, Clarity)
 
 # Save the CSV file
-write.csv(datum, "exercise_4_dataset3.csv")
+write.csv(datum, "exercise_4_dataset3.csv", row.names = FALSE)
+
 ```
 
 [--go to next exercise--](exercise_5.html)
