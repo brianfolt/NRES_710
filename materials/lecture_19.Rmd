@@ -498,4 +498,4 @@ write.csv(datum, "lecture_19_dataset2.csv", row.names = FALSE)
 
 ```
 
-[--go to next lecture--](lecture_19.html)
+[--go to next lecture--](lecture_20.html)
