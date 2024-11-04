@@ -98,6 +98,7 @@ Squirrels <- 10 - 0.5*RoadDensity + 1*dummy$Pine - 0.5*dummy$Pine*RoadDensity + 
 
 # Dataframe
 datum <- data.frame(RoadDensity, ForestType, dummy$Pine, Squirrels)
+colnames(datum) <- c("RoadDensity", "ForestType", "Pine", "Squirrels")
 
 # Save the CSV file
 write.csv(datum, "exercise_5_dataset1.csv", row.names = FALSE)
@@ -128,6 +129,7 @@ Size <- 1.5 + 0.5*dummySex$Male + 0.5*dummyTreatment$Treatment + 0.5*dummySex$Ma
 
 # Dataframe
 datum <- data.frame(Sex, dummySex$Male, Treatment, dummyTreatment$Treatment, Size)
+colnames(datum) <- c("Sex", "Male", "Treatment", "Treated", "Size")
 
 # Save the CSV file
 write.csv(datum, "exercise_5_dataset2.csv", row.names = FALSE)
