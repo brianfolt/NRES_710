@@ -515,7 +515,7 @@ Squirrels &lt;- 10 - 0.5*RoadDensity + 1*dummy$Pine - 0.5*dummy$Pine*RoadDensity
 datum &lt;- data.frame(RoadDensity, ForestType, Squirrels)
 
 # Save the CSV file
-write.csv(datum, &quot;exercise_5_dataset1.csv&quot;)
+write.csv(datum, &quot;exercise_5_dataset1.csv&quot;, row.names = FALSE)
 
 
 ### Dataset 2
@@ -545,7 +545,7 @@ Size &lt;- 1.5 + 0.5*dummySex$Male + 0.5*dummyTreatment$Treatment + 0.5*dummySex
 datum &lt;- data.frame(Sex, Treatment, Size)
 
 # Save the CSV file
-write.csv(datum, &quot;exercise_5_dataset2.csv&quot;)
+write.csv(datum, &quot;exercise_5_dataset2.csv&quot;, row.names = FALSE)
 
 
 ### Dataset 3
