@@ -37,7 +37,7 @@ Bonus: Note that the squirrel density is higher in pine at low road density and 
 
 ## Problem 2
 
-**[Dataset 2](exercise_5_dataset2.csv)** -- For this dataset, you have two categorical factors (e.g., Sex and Treatment) and each factor has two levels [male + female, control (placebo) + hormone injection]. The dependent variable is adult body size. In this system, there is an interaction between sex and treatment.
+**[Dataset 2](exercise_5_dataset2.csv)** -- For this dataset, you have two categorical factors (e.g., Sex and Treatment) and each factor has two levels [male + female, control (placebo) + hormone injection]. The dependent variable is adult body size (kg). In this system, there is an interaction between sex and treatment.
 
 1. Write a linear (statistical) model that describes the system; be sure you specify what each $X$-variable represents.
 2. What do the various $\beta$s mean in this model?
