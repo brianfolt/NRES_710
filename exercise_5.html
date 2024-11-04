@@ -419,10 +419,11 @@ in this model?</li>
 <li>Run the full model in R. Report whether or not the interaction is
 significant or not (including p-value)</li>
 <li>Analyze data from the two forest types separately and describe the
-results using the standard sentences.</li>
-<li>Note that the squirrel density is higher in pine at low road density
-and lower in pine at high road density. At what road density is squirrel
-density the same between both forest types?</li>
+results using the standard sentences. Bonus: Note that the squirrel
+density is higher in pine at low road density and lower in pine at high
+road density. At approximately what road density is squirrel density the
+same between both forest types? Show a graph illustrating how you found
+that solution.</li>
 </ol>
 <p><br></p>
 </div>
@@ -512,7 +513,7 @@ Error &lt;- rnorm(n, mean = 0, sd = 1)
 Squirrels &lt;- 10 - 0.5*RoadDensity + 1*dummy$Pine - 0.5*dummy$Pine*RoadDensity + Error
 
 # Dataframe
-datum &lt;- data.frame(RoadDensity, ForestType, Squirrels)
+datum &lt;- data.frame(RoadDensity, ForestType, dummy$Pine, Squirrels)
 
 # Save the CSV file
 write.csv(datum, &quot;exercise_5_dataset1.csv&quot;, row.names = FALSE)
@@ -542,7 +543,7 @@ Error &lt;- rnorm(n, mean = 0, sd = 0.2)
 Size &lt;- 1.5 + 0.5*dummySex$Male + 0.5*dummyTreatment$Treatment + 0.5*dummySex$Male*dummyTreatment$Treatment + Error
 
 # Dataframe
-datum &lt;- data.frame(Sex, Treatment, Size)
+datum &lt;- data.frame(Sex, dummySex$Male, Treatment, dummyTreatment$Treatment, Size)
 
 # Save the CSV file
 write.csv(datum, &quot;exercise_5_dataset2.csv&quot;, row.names = FALSE)

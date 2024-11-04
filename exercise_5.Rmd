@@ -31,7 +31,7 @@ Put all your answers in a summary document and, as always, share that with me to
 2. What do the various $\beta$s mean in this model?
 3. Run the full model in R. Report whether or not the interaction is significant or not (including p-value)
 4. Analyze data from the two forest types separately and describe the results using the standard sentences.
-5. Note that the squirrel density is higher in pine at low road density and lower in pine at high road density. At what road density is squirrel density the same between both forest types?
+Bonus: Note that the squirrel density is higher in pine at low road density and lower in pine at high road density. At approximately what road density is squirrel density the same between both forest types? Show a graph illustrating how you found that solution.
 
 <br>
 
@@ -97,7 +97,7 @@ Error <- rnorm(n, mean = 0, sd = 1)
 Squirrels <- 10 - 0.5*RoadDensity + 1*dummy$Pine - 0.5*dummy$Pine*RoadDensity + Error
 
 # Dataframe
-datum <- data.frame(RoadDensity, ForestType, Squirrels)
+datum <- data.frame(RoadDensity, ForestType, dummy$Pine, Squirrels)
 
 # Save the CSV file
 write.csv(datum, "exercise_5_dataset1.csv", row.names = FALSE)
@@ -127,7 +127,7 @@ Error <- rnorm(n, mean = 0, sd = 0.2)
 Size <- 1.5 + 0.5*dummySex$Male + 0.5*dummyTreatment$Treatment + 0.5*dummySex$Male*dummyTreatment$Treatment + Error
 
 # Dataframe
-datum <- data.frame(Sex, Treatment, Size)
+datum <- data.frame(Sex, dummySex$Male, Treatment, dummyTreatment$Treatment, Size)
 
 # Save the CSV file
 write.csv(datum, "exercise_5_dataset2.csv", row.names = FALSE)
