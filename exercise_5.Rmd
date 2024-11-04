@@ -21,17 +21,17 @@ knitr::opts_chunk$set(
 
 ## General Approach
 
-Put all your answers in a summary document and, as always, share that with me to get credit for the assignment. In general, while we should always report the betas and C.I. from our analyses on main effects, I believe that if interactions are non-significant that it is sufficient to say say (with the p-value) and then (1) remove the interaction from the model, (2) re-run the analysis, and (3) extracting and report the other betas from main effects. The main reason is because interactions make everything so much more complicated.
+Put all your answers in a summary document and, as always, share that with me to get credit for the assignment. In general, while we should always report the betas and C.I. from our analyses on main effects, I believe that if interactions are non-significant that it is sufficient to say say so (e.g., 'We built a model that included an interaction between the [x-variable] and [x-variable]; however, the result was not statistically significant (p = [p-value])." and then (1) remove the interaction from the model, (2) re-run the analysis, and (3) extract and report the other betas from main effects. The main reason is because interactions make everything so much more complicated.
 
 ## Problem 1
 
-**[Dataset 1](exercise_5_dataset1.csv)** -- For this dataset, you have a continuous x-variable (e.g., road density [roads/sq. km]) and one categorical x-variable (hardwood forest vs. pine forest). You want to learn about the effects of road density and forest type on Eastern Grey Squirrel (*Sciurus carolinensis*) density (squirrels / hectare). In this system, there is an interaction between road density and forest type.
+**[Dataset 1](exercise_5_dataset1.csv)** -- For this dataset, you have a continuous x-variable (e.g., road density [roads/sq. km]) and one categorical x-variable (aspen vs. pine forest). You want to learn about the effects of road density and forest type on Douglass' Squirrel (*Tamiasciurus douglasii*) density (squirrels / hectare). In this system, there is an interaction between road density and forest type.
 
 1. Write a linear (statistical) model that describes the system; be sure you specify what each $X$-variable represents.
 2. What do the various $\beta$s mean in this model?
 3. Run the full model in R. Report whether or not the interaction is significant or not (including p-value)
 4. Analyze data from the two forest types separately and describe the results using the standard sentences.
-Bonus: Note that the squirrel dens is higher in pine at low road density and lower in pine at high road density. At what road density is squirrel density the same between both forest types?
+5. Note that the squirrel density is higher in pine at low road density and lower in pine at high road density. At what road density is squirrel density the same between both forest types?
 
 <br>
 
@@ -41,7 +41,7 @@ Bonus: Note that the squirrel dens is higher in pine at low road density and low
 
 1. Write a linear (statistical) model that describes the system; be sure you specify what each $X$-variable represents.
 2. What do the various $\beta$s mean in this model?
-3. Run the full model in R. Report whether or not the interaction is significant or not (including p-value)
+3. Run the full model in R. Report whether or not the interaction is significant or not (including p-value).
 4. Analyze data from the two sexes separately and describe the results using the standard sentences.
 
 <br>
@@ -84,11 +84,11 @@ RoadDensity <- runif(n, 0, 1) * 10
 
 # Forest type
 g <- 2 # number of groups
-ForestType <- factor(c(rep("Hardwood", n/g), rep("Pine", n/g)))
+ForestType <- factor(c(rep("Aspen", n/g), rep("Pine", n/g)))
 
 # Dummy-code the ForestType
 dummy <- data.frame(model.matrix(~ ForestType - 1))
-colnames(dummy) <- c("Hardwood", "Pine")
+colnames(dummy) <- c("Aspen", "Pine")
 
 # Error
 Error <- rnorm(n, mean = 0, sd = 1)

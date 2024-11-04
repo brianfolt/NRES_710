@@ -383,7 +383,7 @@ div.tocify {
 <h1 class="title toc-ignore">Exercise 5: Multivariable Analysis -
 Interactions</h1>
 <h4 class="author">NRES 710</h4>
-<h4 class="date">Last compiled: 2024-09-30</h4>
+<h4 class="date">Last compiled: 2024-11-04</h4>
 
 </div>
 
@@ -394,20 +394,22 @@ Interactions</h1>
 with me to get credit for the assignment. In general, while we should
 always report the betas and C.I. from our analyses on main effects, I
 believe that if interactions are non-significant that it is sufficient
-to say say (with the p-value) and then (1) remove the interaction from
-the model, (2) re-run the analysis, and (3) extracting and report the
-other betas from main effects. The main reason is because interactions
-make everything so much more complicated.</p>
+to say say so (e.g., ’We built a model that included an interaction
+between the [x-variable] and [x-variable]; however, the result was not
+statistically significant (p = [p-value]).” and then (1) remove the
+interaction from the model, (2) re-run the analysis, and (3) extract and
+report the other betas from main effects. The main reason is because
+interactions make everything so much more complicated.</p>
 </div>
 <div id="problem-1" class="section level2">
 <h2>Problem 1</h2>
 <p><strong><a href="exercise_5_dataset1.csv">Dataset 1</a></strong> –
 For this dataset, you have a continuous x-variable (e.g., road density
-[roads/sq. km]) and one categorical x-variable (hardwood forest vs. pine
-forest). You want to learn about the effects of road density and forest
-type on Eastern Grey Squirrel (<em>Sciurus carolinensis</em>) density
-(squirrels / hectare). In this system, there is an interaction between
-road density and forest type.</p>
+[roads/sq. km]) and one categorical x-variable (aspen vs. pine forest).
+You want to learn about the effects of road density and forest type on
+Douglass’ Squirrel (<em>Tamiasciurus douglasii</em>) density (squirrels
+/ hectare). In this system, there is an interaction between road density
+and forest type.</p>
 <ol style="list-style-type: decimal">
 <li>Write a linear (statistical) model that describes the system; be
 sure you specify what each <span
@@ -417,10 +419,10 @@ in this model?</li>
 <li>Run the full model in R. Report whether or not the interaction is
 significant or not (including p-value)</li>
 <li>Analyze data from the two forest types separately and describe the
-results using the standard sentences. Bonus: Note that the squirrel dens
-is higher in pine at low road density and lower in pine at high road
-density. At what road density is squirrel density the same between both
-forest types?</li>
+results using the standard sentences.</li>
+<li>Note that the squirrel density is higher in pine at low road density
+and lower in pine at high road density. At what road density is squirrel
+density the same between both forest types?</li>
 </ol>
 <p><br></p>
 </div>
@@ -439,7 +441,7 @@ class="math inline">\(X\)</span>-variable represents.</li>
 <li>What do the various <span class="math inline">\(\beta\)</span>s mean
 in this model?</li>
 <li>Run the full model in R. Report whether or not the interaction is
-significant or not (including p-value)</li>
+significant or not (including p-value).</li>
 <li>Analyze data from the two sexes separately and describe the results
 using the standard sentences.</li>
 </ol>
@@ -497,11 +499,11 @@ RoadDensity &lt;- runif(n, 0, 1) * 10
 
 # Forest type
 g &lt;- 2 # number of groups
-ForestType &lt;- factor(c(rep(&quot;Hardwood&quot;, n/g), rep(&quot;Pine&quot;, n/g)))
+ForestType &lt;- factor(c(rep(&quot;Aspen&quot;, n/g), rep(&quot;Pine&quot;, n/g)))
 
 # Dummy-code the ForestType
 dummy &lt;- data.frame(model.matrix(~ ForestType - 1))
-colnames(dummy) &lt;- c(&quot;Hardwood&quot;, &quot;Pine&quot;)
+colnames(dummy) &lt;- c(&quot;Aspen&quot;, &quot;Pine&quot;)
 
 # Error
 Error &lt;- rnorm(n, mean = 0, sd = 1)
