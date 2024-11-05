@@ -556,7 +556,7 @@ The plane is not flat! The effect of latitude is *steeper* at low elevations tha
 
 Let's analyze some data that we simulated in R. Here is truth:
 
-```{r echo=TRUE}
+```{r}
 ### Dataset 1: age + sex + age*sex
 # This is similar to the Age, Sex, and Size data we simulated for in Lecture 12.
 # There is no collinearity between Age and Sex, but now there is an interaction
@@ -596,7 +596,7 @@ What is **Truth** for these data -- and what do the effects mean?
 
 Let's do the analysis in R.
 
-```{r echo=TRUE, fig.width = 5}
+```{r fig.width = 5}
 # Load the data
 datum <- read.csv("lecture_13_dataset.csv")
 head(datum)
@@ -608,7 +608,7 @@ plot(Size ~ Age, data = datum)
 
 If your data look like this, you likely have an interaction!!
 
-```{r echo=TRUE, fig.width = 5}
+```{r fig.width = 5}
 # Fit a lm() without the interaction
 results <- lm(Size ~ Age + Sex, data = datum)
 summary(results)
@@ -620,7 +620,7 @@ The <u>effect of age is ~2.5</u>, which is basically the average of the male and
 
 The difference between males and females is ~9.5. However, for our data, the difference between males and females at young ages is smaller, and at old ages is larger. So this is again an average. It's not bad... But we are missing an opportunity to learn about interesting information in our data.
 
-```{r echo=TRUE, fig.width = 5}
+```{r fig.width = 5}
 # Fit a lm() with the interaction
 results <- lm(Size ~ Age + Sex + Age:Sex, data = datum)
 summary(results)
@@ -634,7 +634,7 @@ Or, you could state that you found a significant interaction between the X-varia
 
 How do you do that?
 
-```{r echo=TRUE, fig.width = 5}
+```{r fig.width = 5}
 # Fit a lm() for males only
 resultsMale <- lm(Size ~ Age, data = subset(datum, datum$Sex == "Male"))
 summary(resultsMale)
@@ -642,14 +642,14 @@ summary(resultsMale)
 
 When we run that, we get a slope of 3.03 -- which is equal to the sum of the age effect and the age:sex effect from our interaction model. Just adding them together and getting the same result -- but now we have a confidence interval for our simple slope also:
 
-```{r echo=TRUE, fig.width = 5}
+```{r fig.width = 5}
 # Confint for males
 confint(resultsMale)
 ```
 
 And we can do this for females also:
 
-```{r echo=TRUE, fig.width = 5}
+```{r fig.width = 5}
 # Fit a lm() for females only
 resultsFemale <- lm(Size ~ Age, data = subset(datum, datum$Sex == "Female"))
 summary(resultsFemale)
@@ -662,7 +662,7 @@ This will slightly influence your confidence intervals, but that's okay.
 
 Here's some other stuff to know about:
 
-```{r echo=TRUE, fig.width = 5}
+```{r fig.width = 5}
 # Fit a lm() with interactions using a *
 results <- lm(Size ~ Age*Sex, data = datum)
 summary(results)

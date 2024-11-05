@@ -4,6 +4,31 @@
 #     Modeling interactions between X-variables
 #  NOTE: to print as a DOCX, need to comment out the two 'plotly' 3D graphs
 
+# Load the data
+datum <- read.csv("lecture_13_dataset.csv")
+head(datum)
+
+# Plot the data
+plot(Size ~ Age, data = datum)
+
+# Fit a lm() without the interaction
+results <- lm(Size ~ Age + Sex, data = datum)
+summary(results)
+# Fit a lm() with the interaction
+results <- lm(Size ~ Age + Sex + Age:Sex, data = datum)
+summary(results)
+# Fit a lm() for males only
+resultsMale <- lm(Size ~ Age, data = subset(datum, datum$Sex == "Male"))
+summary(resultsMale)
+# Confint for males
+confint(resultsMale)
+# Fit a lm() for females only
+resultsFemale <- lm(Size ~ Age, data = subset(datum, datum$Sex == "Female"))
+summary(resultsFemale)
+confint(resultsFemale)
+# Fit a lm() with interactions using a *
+results <- lm(Size ~ Age*Sex, data = datum)
+summary(results)
 ################### 'Truth' ####################
 ### Lecture 13: code to simulate data for class
 
@@ -103,7 +128,7 @@ datum <- data.frame(Latitude=Latitude, Elevation=Elevation, Size=Size)
 write.csv(datum, "lecture_13_dataset4.csv", row.names = FALSE)
 
 
-### Dataset 5: age + sex + age*sex
+### Dataset for class exercise: age + sex + age*sex
 # This is similar to the Age, Sex, and Size data we simulated for in Lecture 12.
 # There is no collinearity between Age and Sex, but now there is an interaction
 # between Sex and Age.
@@ -126,4 +151,4 @@ Response <- 1 + 2 * x2 + 4 * dummy$Male + 1 * x2 * dummy$Male + Error
 datum <- data.frame(Age = x2, Sex = x1, Male = dummy$Male, Size = Response)
 
 # Save as CSV
-write.csv(datum, "lecture_13_dataset5.csv")
+write.csv(datum, "lecture_13_dataset.csv")
