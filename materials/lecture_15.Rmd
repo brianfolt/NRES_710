@@ -39,8 +39,6 @@ knitr::opts_chunk$set(
 
 ```
 
-Review quiz for interactions.
-
 ## Review of recent material
 
 We have been learning about **multi-variable models** using a generic model:
@@ -51,7 +49,7 @@ In theory, you could have unlimited number of X-variables... but in practice, yo
 
 We can have **interactions** (e.g., $\beta_m * X_1 * X_2$).
 
-- Note: Sometimes other fields refer to this in other ways (e.g., 'effect modification'; where one effect modifies another effect).
+- Note: Sometimes other fields refer to this in other ways (e.g., 'effect modification'; where one effect modifies another effect). I mostly see these as 'interactions' in environmental science fields.
 
 We have talked about the **advantages** of multi-variable models: eliminates swamping, eliminates bias associated with collinearity (but inflates variance), and allows us to look for interactions.
 
@@ -73,17 +71,17 @@ Let's say that we have three variables:
 **$X_1$ -- flow**   
 **$X_2$ -- year**   
 
-We have gone into a particular stream and measured the abundance of fish at ~eight different stretches in the stream. We have measured flow rate, because we are interested in understanding how flow rates influence abundance of fish.
+We have gone into a particular stream and measured the abundance of fish at ~eight different stretches in the stream. We have measured flow rate, because we are interested in understanding how flow rates influence fish abundance.
 
 But then we repeated the study over a multiple-year period, and we went back measured fish density and flow rate over a 14-year period!
 
 **2010--2024**
 
-**Q:** does anybody have any idea whether fish populations tend to vary from year to year? Yes, they do: fish density can be quite sensitive to rainfall, flowrate, stream disturbance, whatever. We might want to test whether fish density varies from year-to-year.
+**Q:** does anybody have any idea whether fish populations tend to vary from year to year? Yes, they do: fish density can be quite sensitive to rainfall, flow rate, stream disturbance, whatever. We might want to test whether fish density varies from year-to-year.
 
 How would we include 'year' in our model...?
 
-$FishDens = \beta_0 + \beta_12011 + \beta_22012 + ... + \beta_{14}2016 + \epsilon \sim N(0, \sigma)$ -- lots of terms here
+$FishDens = \beta_0 + \beta_12011 + \beta_22012 + ... + \beta_{14}2024 + \epsilon \sim N(0, \sigma)$ -- lots of terms here
 
 Alternatively, we could have written the model like this:
 
@@ -99,7 +97,7 @@ The problem with the second model is we are assuming that there is a linear rela
 
 Graphically, our study design and data might look like:
 
-```{r echo=FALSE, fig.height=4, fig.width=4}
+```{r echo=FALSE, fig.height=4, fig.width=6}
 # Specify plot margins & set random seed
 par(mar = c(4,4,0,0))
 set.seed(123)
@@ -132,7 +130,8 @@ for (i in 1:n_years){
 }
 
 # Plot Fish Density over Years
-plot(datum$year, datum$FishDensity, xlab = "Year", ylab = "Fish Density")
+plot(datum$year, datum$FishDensity, xlab = "Year", ylab = "Fish Density",
+          pch = 4, cex = 1.3, lwd = 2)
 
 ```
 
@@ -142,23 +141,23 @@ In this example, the fish abundance bounces all over the place. It's not going t
 
 It's LONG and UGLY. It's not very elegant. And do we really care if... 2013 is different from 2019? Or 2017 is different from 2024?
 
-My point is: there would be a ton of comparisons you would have to do! How many pairwise comparisons would a post-hoc test have to do?
+My point is: **there would be a ton of comparisons we would have to do!** How many pairwise comparisons would a post-hoc test have to do?
 
-A post-hoc test would make `13 + 12 + 11 + 10 + 9 + 8 + 7 + 6 + 5 + 4 + 3 + 2 + 1` interannual comparisons, which equals `r sum(13:1)` pairwise comparisons!
+A post-hoc test would make `13 + 12 + 11 + 10 + 9 + 8 + 7 + 6 + 5 + 4 + 3 + 2 + 1` interannual comparisons, which equals <u>**`r sum(13:1)` pairwise comparisons**</u>!
 
-What we really want to do by including **Year** in the model is to account for  variation that occurs from year to year -- and we can do that in a different way than the way described here with the long model.
+What we really want to do by including **Year** in the model is to *account for variation that occurs from year to year* -- and we can do that in a different way than the way described here with the long model.
 
-Here's how we do that. Instead, we would run this model (I'm not going to include **Flow** just yet)...
+Here's how we do that. Instead, we would build this model. (I'm not going to include **Flow** just yet)...
 
 $FishDensity = \beta_0 + \epsilon_{year} \sim N(0, \sigma_{year}) + \epsilon_{residual} \sim N(0,  \sigma_{residual}))$
 
-So now we have an equation with two error terms: annual yearly error and residual error.
+So now we have an equation with **two error terms**: <u>annual yearly error</u> and <u>residual error</u>.
 
 Let's think about what this means...
 
 #### Annual error
 
-The variation in fish density from year to year can be described by some normal probability distribution with some standard deviation, \sigma. We can think about this as: the <u>**between-year variation**</u>. 
+The variation in fish density from year to year can be described by some normal probability distribution with some standard deviation, $\sigma_{year}$. We can think about this as: the <u>**between-year variation**</u>.
 
 Graphically, this might be:
 
@@ -206,29 +205,52 @@ abline(h = beta_0, lty = 2, lwd = 4, col = "blue")
 # text(x = max(y_vals) * 0.2, y = beta_0 - 0.9, labels = expression(beta[0]), cex = 1.2)
 
 # Second plot: Normal distribution curve on its side
+# Define sigma_year based on the standard deviation you used for yearly variation
+sigma_year <- 2
 x_vals <- seq(0, 16, length = 100)
-y_vals <- dnorm(x_vals, mean = beta_0, sd = 2)
+y_vals <- dnorm(x_vals, mean = beta_0, sd = sigma_year)
 
 # Rotate the curve by flipping axes
-plot(y_vals, x_vals, type = "l", xlab = "Density", ylab = "", ylim = c(0, 16), xlim = c(0, max(y_vals)), axes = FALSE, lwd = 3)
+plot(y_vals, x_vals, type = "l", xlab = "", ylab = "", ylim = c(0, 16), xlim = c(0, max(y_vals)), axes = FALSE, lwd = 3)
 abline(h = beta_0, lty = 2, lwd = 4, col = "blue")
 text(x = max(y_vals) * 0.2, y = beta_0 - 0.9, labels = expression(beta[0]), cex = 1.2, col = "blue")
+
+# Add a vertical line starting from the mean and extending up by sigma_year
+segments(x0 = 0, y0 = beta_0, x1 = 0, y1 = beta_0 + sigma_year, 
+         lty = 2, col = "red", lwd = 3)
+text(x = 0, y = beta_0 + sigma_year / 2, labels = expression(sigma[year]), 
+     col = "red", pos = 4)
+
 ```
 
-The average fish density among all years is $\beta_0$ (**horizontal blue line**). Within each year, there is also an average fish density (**solid blue dots**), and this varies from year to year. The **between-year variation** is normally distributed, which we can visualize with a bell curve that is centered on a mean of $\beta_0$.
+The average fish density among all years is $\beta_0$ (**horizontal blue line**). 
+
+*Brian draw long horizontal line to indicate the average among all years*
+
+Within each year, there is also an average fish density (**solid blue dots**), and this varies from year to year.
+
+*Brian draw small horizontal lines to indicate the average density within each year*
+
+The **between-year variation** is normally distributed, which we can visualize with a bell curve that is centered on $\beta_0$, has a mean of 0 (so error is both positive and negative on average), and has a standard deviation of $\sigma_{year}$.
+
+*Brian draw a sideways bell curve indicating the distribution of error in interannual variation*
 
 #### Residual error
 
-The residual variation is the **within-year variation**. *We can visualize this by drawing little bell curves on the data within each year*. It's the amount of variation we have from stretch-to-stretch within any given year. We assume that it's the same among years. 
+The residual variation is the **within-year variation**.
+
+*Brian illustrate this by drawing little bell curves on the data within each year*.
+
+It's the amount of variation we have from stretch-to-stretch within any given year. We assume that it's the same among years.
 
 #### Total model
 
 So now we have a model for how average fish density varies both among years ($\epsilon_{year}$) and within years ($\epsilon_{residual}$). We have an overall average fish density that can vary each year and also vary within years.
 
-What are the advantages of the model with between-year variation compared to the model with many annual effects?
+What are the <u>**advantages** of the model with between-year variation</u> compared to the model with <u>many annual effects</u>?
 
-- The model with year as X-variables has a ton of variables that have to be estimated by the model. 14 betas plus residual error. 
-- The model with between-year variation only has 3 parameters! Average fish density, the standard deviation in variation due to year (i.e., between-year variation), and the standard deviation due to error (i.e., residual standard deviation).
+- The model with **year as X-variables** has a **ton of variables** that have to be estimated by the model: **14 betas and the residual error**. 
+- The model with **between-year variation only has 3 parameters**! Average fish density, the standard deviation in variation due to year (i.e., between-year variation), and the standard deviation due to error (i.e., residual standard deviation). Much more elegant.
 
 ### Nomenclature
 
@@ -236,13 +258,13 @@ These two models have names!
 
 The model with many X-variables and one residual error term is called a '**fixed-effects models**'. Up to this point in class, we have been dealing exclusively with fixed-effects models. This is generally an implicit assumption of any model that someone is talking about (regression, t-test, ANOVA, ANCOVA, whatever) -- when they say they did one of those analyses, they typically mean they built a fixed-effects version of that. The model with the many effects of years is a fixed-effect model; <u>year is treated as a fixed-effect</u>.
 
-The model with the two error terms is called a '**random-effects model**'. Year as an error term that is treated as <u>a random effect</u>. Since the second model does not have any fixed effects, it is called a random-effects model. Random effects models have no X-variables -- they just have random error terms.
+The model with the two error terms is called a '**random-effects model**'. Year is an error term that is treated as a <u>random effect</u>. Since the second model does not have any fixed effects, it is called a random-effects model. Random effects models have no X-variables -- they just have random error terms.
 
 If we added in a fixed effect (e.g., flow), this would become a '**mixed-effects model** -- it has both fixed and random effects -- both X-variables and random error terms.
 
 ### Fixed or random effects?
 
-How do you determine whether variables should be considered as fixed or random effects? No hard-and-fast rules about this. Up to you!
+How do you determine whether variables should be considered as fixed or random effects? **No hard-and-fast rules about this.** Up to you!
 
 But, depending on your variable, there are advantages to treating them as random or fixed. Here are some guidelines: 
 
@@ -252,10 +274,10 @@ library(knitr)
 
 # Create the data frame
 data <- t(data.frame(
-  `1` = c("Mean of Y", "Variation in Y"),
-  `2` = c("Understand effects", "Account for variation"),
-  `3` = c("Groups or values are chosen", "Values are a sample of what's possible"),
-  `4` = c("Limited groups", "Many, many groups")
+  `One` = c("Mean of Y", "Variation in Y"),
+  `Two` = c("Understand effects", "Account for variation"),
+  `Three` = c("Groups or values are chosen", "Values are a sample of what's possible"),
+  `Four` = c("Limited groups", "Many, many groups")
 ))
 
 # Create the table
@@ -263,18 +285,18 @@ kable(data, col.names = c("Fixed Effects", "Random Effects"))
 
 ```
 
-Fixed effects influence the *mean* of the Y-value within groups, whereas random effects influence the *variation* in Y. This has important implications in your decision.
+Fixed effects influence the ***mean* of the Y-value** within groups, whereas random effects influence the ***variation* in Y**. This has important implications in your decision.
 
 - If you are interested in understanding what an effect is, you should use a fixed-effects, to understand the effects of the X-variable.
 - If you just want to account for variation, you are better off treating a variable as a random effect.
 
-If you chose the treatment levels or treatment groups (i.e., ran an experiment), then better to treat the variable as a fixed-effect. However, if the values are just a sample of what's possible, then maybe treat the variable as a random-effect.
+If you chose the treatment levels or treatment groups (i.e., ran an experiment), then it's better to treat the variable as a fixed-effect. However, if the values are just a sample of what's possible, then maybe treat the variable as a random-effect.
 
 If you have a limited number of groups (e.g., treatment vs. control), then probably treat it as a fixed effect. If you have many, many groups (e.g., years in a long-term study), then better to treat as a random-variable.
 
 - It's hard to estimate a standard deviation among a limited number of groups (e.g., two groups), whereas it's easier to estimate a standard deviation among many group (e.g., 14 years of a study).
 
-But the most important reason is: are you interested in how the *X-variable influences the mean*, or *how it influences variation*.
+But the most important consideration is: **are you interested in how the *X-variable influences the mean*, or *how the variable influences variation*?**
 
 ## Analysis in R
 
