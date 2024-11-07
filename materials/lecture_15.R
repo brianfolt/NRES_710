@@ -3,6 +3,50 @@
 #     University of Nevada, Reno
 #     Simple models with random effects
 
+# Read in the data
+datum <- read.csv("lecture_15_dataset1.csv")
+
+# Examine it
+head(datum, 15)
+
+# Plot it!
+plot(Abundance ~ Year, data = datum)
+
+# Year as a categorical, fixed effect
+results <- lm(Abundance ~ as.factor(Year), data = datum)
+summary(results)
+
+# Year as a categorical, fixed effect
+results2 <- aov(results)
+TukeyHSD(results2)
+
+# We don't have to install this package - it now comes defaul in R!
+library(nlme)
+
+# Examine the help file
+
+# Examine the help file
+help(lme)
+# Fit the model
+results <- lme(Abundance ~ 1, data = datum, random = ~1|Year)
+summary(results)
+# Load the data
+datum <- read.csv("lecture_15_dataset2.csv")
+
+# Examine
+head(datum)
+
+# Plot
+plot(Biomass ~ Treatment, data = datum)
+
+# T-test
+results <- lm(Biomass ~ Treatment, data = datum)
+summary(results)
+
+# LME; i.e., paired T-test
+results2 <- lme(Biomass ~ Treatment, data = datum, random = ~1|Field)
+summary(results2)
+
 ################### 'Truth' #################### 
 ### Lecture 15: code to simulate data for class
 

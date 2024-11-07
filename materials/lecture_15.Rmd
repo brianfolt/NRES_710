@@ -341,7 +341,7 @@ The term 'Error' is random variation for each observation within each year, whic
 
 Let's look at the data and plot it.
 
-```{r echo=TRUE}
+```{r}
 # Read in the data
 datum <- read.csv("lecture_15_dataset1.csv")
 
@@ -359,7 +359,7 @@ We obviously don't want to run a linear model on this. Year does not have a line
 
 Let's run a 'lm()' but with Year as a fixed, categorical effect.
 
-```{r echo=TRUE}
+```{r}
 # Year as a categorical, fixed effect
 results <- lm(Abundance ~ as.factor(Year), data = datum)
 summary(results)
@@ -370,7 +370,7 @@ This code forces Year to be a factor in a fixed-effect model. This is ugly! All 
 
 What if we were to use a post-hoc test? Which will adjust our p-values to 'correct' them...
 
-```{r echo=TRUE}
+```{r}
 # Year as a categorical, fixed effect
 results2 <- aov(results)
 TukeyHSD(results2)
@@ -383,7 +383,7 @@ I've got some bad news... We can't use 'lm()' anymore!! It's gotten us all the w
 
 We have to move onto a new model called an 'lme()' which is in the 'nlme' package.
 
-```{r echo=TRUE}
+```{r}
 # We don't have to install this package - it now comes defaul in R!
 library(nlme)
 
@@ -393,7 +393,7 @@ library(nlme)
 
 'nlme' -- non-linear mixed effects
 
-```{r echo=TRUE}
+```{r}
 # Examine the help file
 help(lme)
 ```
@@ -408,7 +408,7 @@ Random variables! We have to specify what the random variables are now.
 
 Rest of the stuff you can mostly ignore.
 
-```{r echo=TRUE}
+```{r}
 # Fit the model
 results <- lme(Abundance ~ 1, data = datum, random = ~1|Year)
 summary(results)
@@ -520,7 +520,7 @@ Truth:
 
 Load it into R:
 
-```{r echo=TRUE}
+```{r}
 # Load the data
 datum <- read.csv("lecture_15_dataset2.csv")
 
@@ -536,7 +536,7 @@ Now remember, our observations within each field are *paired*. Some researchers 
 
 Let's run a t-test:
 
-```{r echo=TRUE}
+```{r}
 # T-test
 results <- lm(Biomass ~ Treatment, data = datum)
 summary(results)
@@ -551,7 +551,7 @@ There is nothing wrong with this, but our power is low due to the large confiden
 
 Let's try a LME.
 
-```{r echo=TRUE}
+```{r}
 # LME; i.e., paired T-test
 results2 <- lme(Biomass ~ Treatment, data = datum, random = ~1|Field)
 summary(results2)
