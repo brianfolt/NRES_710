@@ -507,7 +507,7 @@ set.seed(121)
 # X-variables
 n_fields &lt;- 20
 n_treatments &lt;- 4
-Fields &lt;- rep(1:n_fields, n_treatments)
+Fields &lt;- sort(rep(1:n_fields, n_treatments))
 Fertilizer &lt;- c(rep(0, n_fields), rep(1, n_fields), rep(0, n_fields), rep(1, n_fields))
 Hormone &lt;- c(rep(0, n_fields), rep(0, n_fields), rep(1, n_fields), rep(1, n_fields))
 
@@ -535,7 +535,7 @@ set.seed(123)
 n_trees &lt;- 16
 years &lt;- 10:20
 n_years &lt;- length(years)
-Individual &lt;- rep(1:16, n_years)
+Individual &lt;- sort(rep(1:16, n_years))
 Age &lt;- years
 
 # Tree error
