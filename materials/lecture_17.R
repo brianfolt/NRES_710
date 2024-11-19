@@ -33,7 +33,7 @@ anova(results2, results)
 results3 <- lme(Pollution ~ Distance, data = datum, random = ~1|River, correlation = corARMA(p = 0, q = 1))
 summary(results3)
 
-# Partial likelihood test
+# Partial likelihood test comparing model with moving-average autocorrelation and no autocorrelation
 anova(results3, results)
 
 # Compare the two models with autocorrelation

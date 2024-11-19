@@ -41,56 +41,72 @@ knitr::opts_chunk$set(
 
 ## Repeated Measures Design
 
-In the last few classes, we have been talking about mixed effects models and randomized block designs. Today we are going to talk about a particular kind of randomized block design model that is called a '<u>repeated measures design</u>'.
+In the last few classes, we have been talking about mixed effects models and randomized block designs. Today we are going to talk about a particular kind of randomized block design model that is called a **'<u>repeated measures design</u>'**.
 
 **Repeated Measures**
 
-The original application of this involved giving a drug/treatment to an individual, and the response was measured *repeatedly* over time in that individual.
+The original application of this involved giving a drug/treatment to an individual, and the <u>*response was measured repeatedly over time in that individual*</u>.
 
-In truth, there is not that much differenc between a repeated measures design and a randomized block design. They are both mixed-effects models.
+In truth, there is not that much difference between a repeated measures design and a randomized block design. They are both mixed-effects models.
 
-- Randomized Block Design: random effect is block.
-- Repeated Measures: random effect is individual
+- **Randomized Block Design:** random effect is block.
+- **Repeated Measures:** random effect is individual
 
-There is one slight difference: **Autocorrelation**. Because of the particular nature of the repeated measures design, autocorrelation is a common attribute in those designs. One thing we have learned this semester is we often have to be pretty explicit in telling R what to do for us. This is no different when we fit a repeated measures model in R: we have to tell R very carefully to handle this autocorrelation. And we'll learn how to do that today.
+There is one slight difference: **Autocorrelation**. Because of the particular nature of the repeated measures design, autocorrelation is a common attribute in those designs.
 
-Originally designed for drug treatment trials where individuals are measured over time. But this can be used for any study where we have repeated measures of a subject -- either repeated measures in *space* or repeated measures in *time* -- that might lead to autocorrelation.
+One thing we have learned this semester is we often have to be pretty **explicit** in telling R what to do for us. This is no different when we fit a repeated measures model in R: we have to be careful to tell R to account for autocorrelation in a mixed-effects model. And we'll learn how to do that today.
+
+Originally designed for **biomedical research**, such as drug treatment trials where individuals are measured over time. But the repeated-measures design can be used for any study where we have repeated measures of a subject -- either repeated measures in ***space*** or repeated measures in ***time*** -- that might lead to autocorrelation.
 
 ## Example: Pollution in a River
 
 ### Single River Example
 
-Let's go back to an example from earlier in the semester, where we considered how to measure whether a powerplant might be polluting a river. We want to know how pollution levels may dissipate as a function of distance from the source.
+Let's go back to an example from earlier in the semester, where we considered how to measure whether a powerplant might be polluting a river.
 
-**Y -- Pollution**
-**X -- distance from source**
+*Brian draw a river with a factory at the top-end that is polluting the river and*
 
-We previously discussed this example when we considered the assumption of linear regression; we said the assumption of autocorrelation was likely to be violated depending on how close together your samples are. Samples every 5 m, for example, might be extremely autocorrelated.
+We wanted to know how pollution levels may dissipate as a function of distance from the source.
 
-**Q:** This is actually not a repeated-measures design. Does anybody know why? You might think...
+**Y -- Pollution**    
+**X -- distance from source**   
+
+*Brian indicate samples taken in the river*
+
+We previously discussed this example when we considered the assumptions of linear regression; we said the assumption of autocorrelation was likely to be violated depending on how close together your samples are. Samples every 5 m, for example, might be extremely similar to each other -- which is autocorrelation. Samples every 500 m, alternatively, might not be very similar to each other.
+
+**Q:** This is actually ***not*** a repeated-measures design. Does anybody know why?
+
+You might think...
 
 - Because the samples are taken at different distances? No, this is a good thing, it allows us to measure the distance effect on pollution levels.
 - Because pollution might get introduced at different times? No, that is something else... that would be an interaction! Where pollution levels vary by distance and time.
 
-The limitation is that we don't have a variable here that we can include as a random-effect.
+The limitation is that **we don't have a variable here that we can include as a random-effect**.
 
-First, we only have *1 river*, and we therefore cannot include river as a random effect in a mixed-effects model. Our model will look something like this:
+First, **we only have *1 river***, and we therefore cannot include river as a random effect in a mixed-effects model. Our model will look something like this:
 
 $Pollution = \beta_0 + \beta_1Distance + \epsilon_{river} \sim N(0, \sigma_{river}) + \epsilon_{residual} \sim N(0, \sigma_{residual})$
 
-When we add in the random effect of river, R is going to try to measure what is the variation in pollution level due to river. Some rivers might have naturally high pollution, or naturally low pollution -- but if we only have 1 river, we cannot include river as a random-effect like we were doing before.
+When we add in the random effect of river, R is going to try to measure ***what is the variation in pollution level due to river***. Some rivers might have naturally high pollution, or naturally low pollution -- but if we only have 1 river, we cannot include river as a random-effect, like we were doing before with fields.
 
-Second, we only sampled the river once, and we did not do repeated samples of each individual location (X), so we cannot include *Time* as a random effect.
+Second, **we only sampled the river once**, and we did not collect repeated samples of each individual location (X). If we had repeated samples of locations through time, we could include ***Time*** as a random effect -- but we don't have that.
+
+To include a random effect, you need to have (1) **multiple samples from each study area** and (2) **multiple study areas.**
 
 ### Multiple Rivers
 
-Let's assume that instead we now have ~3 rivers. Each river has a pollution source and we want to know how pollution dissipates as a function of distance from source among rivers in general. *e.g., Brian draw 3 of these on the board.*
+Let's assume that instead we now have ~5 rivers. Each river has a pollution source, and we want to know how pollution changes as a function of distance from source among rivers *in general.*
+
+*e.g., Brian draw 3 rivers on the board.*
 
 We will run this model:
 
 $Pollution = \beta_0 + \beta_1Distance + \epsilon_{river} + \epsilon_{residual}$
 
-Graphically, this looks like: *draw graph on board with autocorrelated points for three rivers, each with same slope, but different y-intercepts*
+Graphically, this looks like:
+
+*Draw graph on board with autocorrelated points for three rivers: each with same slope, but different y-intercepts*
 
 ```{r echo=FALSE, fig.height=4, fig.width=5}
 # Make a graph to visualize how random intercepts work in mixed-effects models
@@ -139,67 +155,71 @@ legend("topright", legend = paste("River", 1:3), col = colors, pch = 19, lwd = 2
 
 ```
 
-Remember, the reason we are doing the mixed-effects model is because we have variation in pollution (Y) due to river -- and we want to account for that river variation.
+Remember, the reason we are doing the mixed-effects model is because **we have variation in pollution (Y) due to river** -- and we want to account for that river variation.
 
-*We can visualie this with a normally-distributed bell curve over the graph to illustrate river variation*
+*Brian draw a normally-distributed bell curve over the Y-intercepts of the graph to illustrate variation among rivers*
 
 This is the $\epsilon_{River}$ term in our model -- '**between-river variation**'.
 
-And the $\epsilon_{Residual}$ is the noise around our line -- this is our '**within-river variation**'. By including the river-effect, we have greatly reduced our residual error, and increases our <u>power</u>.
+*Brian draw a normally-distributed bell curve over one of the river-lines to illustrate within-river variation*
+
+And the $\epsilon_{Residual}$ is the noise around each line -- this is our '**within-river variation**'. By including the river-effect, we have greatly reduced our residual error, and increased our <u>power</u>.
 
 **Q:** Any questions?
 
-So far, this is exactly the same as what we have done previously; nothing new. Same as fields, plots, multiple plots per field, etc.
+So far, this is exactly the same as what we have done previously; nothing new. Same as fields, plots, multiple plots per field, etc. We had between-field variation, and within-field variation. Now we have that with rivers.
 
-But the key difference here is that: our data have autocorrelation -- that trailing pattern of data within each river. We have autocorrelation, and we want to deal with it. A repeated-measures design can deal with autocorrelation for us.
+But the key difference here is that: **our data have autocorrelation** -- that trailing pattern of data within each river. I tried to capture this with how I drew the points. We have autocorrelation, and we may want to deal with it. **A repeated-measures design can deal with autocorrelation for us.**
 
 ## Dealing with autocorrelation
 
-In statistics, autocorrelation is dealt with in a **phenomenological** way, as opposed to a **mechanistic** way. 
+In statistics, autocorrelation is often dealt with in a **phenomenological** way, as opposed to a **mechanistic** way. 
 
 **Phenomenological -- model that captures the 'phenomena' observed in the data**
 
-**Mechanistic -- model that tries to explain the mechanisms by which phenomena arise**
+**Mechanistic -- model that tries to explain the <u>mechanisms</u> by which phenomena arise**
 
-An example: we previously talked about how we might try to capture a non-linear relationship using a quadratic equation. This is a phenomenological model. It can explain curves, but <u>it does explain how the curves arise</u>. Alternatively, you can use a mechanistic model, such as Holling's Disc equation or Michaelis-Menten equation for enzyme kinetics, that capture the mechanisms that produce non-linear phenomena.
+An example: we previously talked about **non-linear models**, and how we might try to capture a non-linear relationship using a **quadratic equation**. This is a phenomenological model. It can explain curves, but <u>it does not explain how the curves arise</u>.
 
-- [Sidenote: Holling's Disc equation was generated to explain how many prey a predator can kill as a function of prey density. As prey density goes up, predators are limited in how many prey they can capture, handle, and consume. The mechanistic equation generates non-linear dynamics.]
-- [Sidenote: Michaelis-Menten equation for enzyme kinetics explains how reaction rate is influenced by substrate concentration; but as substrate concentration goes up, reaction rate increases plateau due to constraints in reactivity. The mechanistic equation generates non-linear dynamics.]
+Alternatively, you can use a mechanistic model, such as **Holling's Disc equation** or **Michaelis-Menten equation for enzyme kinetics**, that would capture the mechanisms that produce non-linear phenomena.
 
-Most autocorrelation functions are not trying to capture the mechanisms by which autocorrelation arises. Rather, it just creates a curve that phenomenologically explains the autocorrelation.
+- [Sidenote: **Holling's Disc equation** was generated to explain how many prey a predator can kill as a function of prey density. As prey density goes up, predators are limited in how many prey they can capture, handle, and consume. The mechanistic equation generates non-linear dynamics.]
+- [Sidenote: **Michaelis-Menten equation** for enzyme kinetics explains how reaction rate is influenced by substrate concentration; but as substrate concentration goes up, reaction rate increases plateau due to constraints in reactivity. The mechanistic equation generates non-linear dynamics.]
 
-There are two types of autocorrelation models that we work with in statistics.
+Most autocorrelation functions do not attempt to capture the mechanisms by which autocorrelation arises. Rather, it just creates a curve that **explains the phenomenon of autocorrelation**.
+
+There are two types of **autocorrelation models** that we work with in statistics. I won't get into too much detail about what they are, but they are:
 
 - **Moving Average**
 - **Autoregressive**
 
-These are mechanistic-type models:
+**<u>These are mechanistic-type models.</u>**
 
 - **Moving Average -- residuals are a function of previous residuals**
 - **Autoregressive -- Y is a function of the previous Y**
 
-What's the difference? It may feel like there isn't much of a difference, but mathematically there is. We don't have to dwell too much on it.
+What's the difference? It may feel like there isn't much of a difference, but mathematically there is. We don't have to dwell too much on it. But, by fitting these models, we can estimate parameters that describe the mechanisms that cause moving-average behavior or autoregressive behavior.
 
-In environmental sciences, our autocorrelation is probably autoregressive in nature.   For example, growth of individuals, height in 1 year is most likely a function of height in the previous year. This happens a lot, and causes autocorrelation in the system.
+In environmental sciences, our autocorrelation is probably **autoregressive** in nature. For example, growth of individuals, height in 1 year is most likely a function of height in the previous year. This happens a lot, and causes autocorrelation in the system.
 
-Alternatively, moving averages would say that if you were above average in 1 year, you are more likely to be above average in the next year. This is actually less likely in ecology; for example, when we have things like density dependence. If your population is above carrying capacity one year, it often responds and drops below the carrying capacity the next year. It doesn't experience the moving average, instead it does the opposite, which causes there to be ~less autocorrelation in the system.
+Alternatively, **moving averages** would say that if you were above average in 1 year, you are more likely to be above average in the next year. This is actually ***less likely in ecology***, and we often expect the opposite. For example, when we have things like density dependence. If your population is **above** carrying capacity one year, it often responds and drops to be **below** the carrying capacity the next year. It doesn't experience the moving average; instead, it does the opposite, which causes there to be ~less autocorrelation in the system.
 
-Don't worry about this though -- you don't need to try to figure this out for your data. It doesn't matter; we just need to account for the phenomena.
+Don't worry about this though -- you don't need to try to figure this out for your data. It doesn't matter; <u>we just need to account for the phenomena</u>.
 
 ## Accounting for Autocorrelation in R
 
 ### Truth
 
-Let's examine the code used to simulate the dataset we will analyze here today. Now we have 10 rivers, distance (km) from a point source, we have some error due to each river being different from the average of rivers (error = 5), the residual error (error within rivers) is 1, beta0 is 150, and beta1 is -2.
+Let's examine the code used to simulate the dataset we will analyze here today. Now we have **10 rivers**, distance (km) from a **pollution point source**, we have some error due to each river being different from the average of rivers (error = 5), the residual error (error within rivers) is 1, beta0 is 150, and beta1 is -2.
 
 - $\beta_0 = 150$
 - $\beta_1 = -2$
 - $\sigma_{river} = 5$
 - $\sigma_{residual} = 1$
 
-As we expect, pollution decreases as you get further and further away from the point source in each river.
+As we expect, **pollution decreases** as you get further and **further away** from the point source in each river.
 
-There is autocorrelation in the data! The residual error within each river is a moving average of itself.
+**There is autocorrelation in the data!** The residual error within each river is a **moving average** of itself.
 
 You can examine how Truth was simulated at the end of the lecture's R code.
 
@@ -238,15 +258,15 @@ summary(results)
 
 Let's first look at the error explained by the random effect term.
 
-- Note that the random-effect formula is ~1|River, and below that we have error due to random variation in the intercept and also residual error. This means that we are specifying the Y-intercept to vary randomly by River; 'river' is the random intercept.
+- Note that the random-effect formula is ~1|River, and below that we have error due to random variation in the intercept and also residual error. This means that we are specifying the Y-intercept to vary randomly by river; 'river' is the random intercept.
 - The 'Residual' error is the error within rivers; unexplained noise.
 - Both these values are similar to Truth.
 - And our estimate is close to Truth, and its confidence intervals overlap Truth.
 - P-value is highly significant.
 
-Nothing new here. This is the same model we built last class. We have autocorrelation in our data, and we built a model that does not account for it -- and we still get unbiased results. This is why I am often not bothered by autocorrelation.
+Nothing new here. This is the same model we built last class. We have autocorrelation in our data, and we built a model that does not account for it -- **and we still got unbiased results**. This is why I am often not bothered by autocorrelation...
 
-Let's take a look at the LME function and see how to deal with autocorrelation
+Let's take a look at the 'lme()' function and see how to deal with autocorrelation
 
 ```{r fig.height=4, fig.width=5}
 # Linear model
@@ -256,12 +276,12 @@ help(lme)
 
 Usage --> 'fixed', 'data', and 'random --> we have used these so far.
 
-But the specific attribute we want to use is 'correlation'. <u>This is the argument that you use to introduce/account for autocorrelation in your data</u>!
+But the specific attribute we want to use is 'correlation'. **<u>This is the argument that you use to introduce/account for autocorrelation in your data</u>!**
 
 - 'An optional 'corStruct' object describing within-group correlation structure.
 - When you have a random effect, it automatically doesn't look for correlation within rivers. We have to give it something to do that.
 - Click on the 'corStruct' objects link: 
-  - corAR1: autoregression process of order 1. The order is an indication of the 'lag'. If we think back to the ACF plots, this would be a lag of 1. For example:
+  - **corAR1**: autoregression process of order 1. The order is an indication of the 'lag'. If we think back to the ACF plots, this would be a lag of 1. For example:
 
 ```{r, echo = FALSE, fig.height=4, fig.width=5}
 # Linear model
@@ -271,8 +291,8 @@ acf(residuals(res)[order(auto$x)], main="")
 
 ```
   
-  - In ecology, lags are at time=1. We generally don't need to worry about higher-order lags, as they are uncommon.
-  - corARMA: allows you to include 'moving average processes' and 'autoregressive processes'. You can do both, but you have to specify which process it is.
+  - In ecology, lags are at time = 1. We generally don't need to worry about higher-order lags, as they are uncommon.
+  - **corARMA**: allows you to include 'moving-average processes' and 'autoregressive processes'. You can do both, but you have to specify which process it is.
   - Ignore the rest.
 
 Let's do this in R:
@@ -286,17 +306,17 @@ summary(results2)
 
 It doesn't take any arguments, but it will run a function -- so you have to have the two parentheses after 'corAR1()'. 
 
-Our estimates look the same, but our random effects looks weird. It's supposed to be an effect of 5 for River, but it gave us zero -- and it instead said all the error is residual error. 
+Our estimates look the same, but our random effects looks weird. It's supposed to be an effect of 5 for River, but it gave us **~zero** -- and it instead said all the error is residual error. 
 
-It gives us a new parameter estimate, $\phi$ (phi). This may have meaning, but I honestly cannot explain it to you. That is for true statisticians. But I do know that it is part of the math that generates that autoregressive phenomenon.
+It gives us a new parameter estimate, $\phi$ (phi). This may have meaning, **but I honestly cannot explain it to you**. That is for true statisticians. But I do know that it is part of the math that generates that autoregressive phenomenon.
 
-It did not change our estimates much, but it did mess up our interpretation of the random effects. Which I don't much like.
+It did not change our estimates much, but it did mess up our interpretation of the random effects. Which I don't much like!
 
 So, since it didn't change our estimates, it's for this reason that I often don't deal with autocorrelation when I run these analyses. However, if a reviewer says you have to, then you can fit this model and do so.
 
-We can use a partial likelihood test to see if this more complicated model better fits the data.
+We can use a **partial likelihood test** to see if this more complicated model better fits the data.
 
-1) *Does the model that has autoregression in it explain the data better?*
+1) ***Does the model that has autoregression in it explain the data better?***
 
 ```{r fig.height=4, fig.width=5}
 # Partial likelihood test
@@ -307,7 +327,7 @@ anova(results2, results)
   
 2) Did it give us a better results?
   - Both produces the ~same estimates of the distance effect.
-  - But the SE for distance doubled! We lost precision...
+  - But the SE for the distance effect doubled! We lost precision...
 
 I am not impressed by the results. Maybe it didn't work that well because we used the wrong autocorrelation function. Let's try another.
 
@@ -316,8 +336,8 @@ If we want to use a moving-average, we have to use 'corARMA()' function: 'cor' '
 1) p = auto-regressive order
 2) q = moving-average order 
 
-corARMA(p = 1, q = 0) -- same thing as 'corAR1'
-corARMA(p = 0, q = 1) -- a moving-average autoregression
+**corARMA(p = 1, q = 0)** -- same thing as 'corAR1'   
+**corARMA(p = 0, q = 1)** -- a moving-average autoregression    
 
 ```{r fig.height=4, fig.width=5}
 # Linear mixed-effects model that accounts for autocorrelation with a moving-average autocorrelation model
@@ -328,17 +348,17 @@ summary(results3)
 
 - Our random error terms are much better again! Effect of river and residual error terms are much closer to Truth.
 - The estimates for the intercept and distance effect are close to Truth.
-- Before it gave us 'phi' for the autoregressive parameter, but now it gives us 'theta' for the moving-average. I don't know the meaning of this but you are welcome to look it up.
+- Before it gave us 'phi' for the autoregressive parameter, but now it gives us 'theta' for the moving-average. I don't know the meaning of this, but you are welcome to look it up.
 
 So now we have bent over backwards to account for autocorrelation -- and it didn't change our estimates of river error, residual error, or the distance effect compared to the model.
 
 ```{r fig.height=4, fig.width=5}
-# Partial likelihood test
+# Partial likelihood test comparing model with moving-average autocorrelation and no autocorrelation
 anova(results3, results)
 
 ```
 
-This model again fits our data better than our more simple model. A moving average is better than no autocorrelation.
+This model again fits our data better than our more simple model. <u>A moving-average is better than no autocorrelation</u>.
 
 ```{r fig.height=4, fig.width=5}
 # Compare the two models with autocorrelation
@@ -351,6 +371,8 @@ anova(results3, results2)
 We can compare these models using AIC -- we haven't talked about AIC yet -- AIC is a way with which you can compare all models -- lower values are better. AIC says that the autoregressive model, results2, is a better model... even though I made the autocorrelation with a moving-average (???). I don't know why.
 
 **Questions?**
+
+If you would like to learn more about statistical approaches to accounting for and understanding autocorrelation in your data, Franco Biondi is offering a class next semester, **NRES 730 -- Autocorrelation in Time and Space**, where you can learn more about this topic and using Program R.
 
 ## Truth
 

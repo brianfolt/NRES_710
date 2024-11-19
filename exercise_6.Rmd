@@ -42,7 +42,7 @@ Picture: John Sullivan, iNaturalist
 
 ## Problem 2
 
-**[Dataset 2](exercise_6_dataset2.csv)** -- We want to understand the effects of fertilizer and hormones on Black Cherry (*Prunus serotina*) tree growth. In this experiment, we performed an experiment with 8 fields; within each field, we had four different plots. In the plots, two levels of fertilizer (0 grams, 5 grams) are crossed in a fully-factorial manner with two levels of hormone treatment (0 = no hormones given; 1 = hormones give). So within each field, one plot receives no fertilizer and no hormones, two plots receive one of the treatments, and one plot receives both treatments. This is called a fully factorial experiment. Thus, fertilizer and hormones are two separate fixed-effects variables (which contrasts to Dataset #1). Our response variable is the trunk diameter of trees in each plot (cm). This experimental design allows us to test for an interaction between the two variables, and we should do so! Report the results of the interaction, but remember: if the interaction isn't significant, take it out of the model before reporting the main effects. Using the standard sentences, report the 'effect' of fertilizer and hormone.
+**[Dataset 2](exercise_6_dataset2.csv)** -- We want to understand the effects of fertilizer and hormones on Black Cherry (*Prunus serotina*) tree growth. In this experiment, we performed an experiment with 8 fields; within each field, we had four different plots. In the plots, two levels of fertilizer (0 grams, 5 grams) are crossed in a fully-factorial manner with two levels of hormone treatment (0 = no hormones given; 1 = hormones give). So within each field, one plot receives no fertilizer and no hormones, two plots receive one of the treatments, and one plot receives both treatments. This is called a fully factorial experiment. Thus, fertilizer and hormones are two separate fixed-effects variables (which contrasts to Dataset #1). Our response variable is the trunk diameter of trees in each plot (cm). This experimental design allows us to test for an interaction between the two variables, and we should do so! Report the results of the interaction, but remember: if the interaction isn't significant, take it out of the model before reporting the main effects. Using the standard sentences, report the 'effects' of fertilizer, hormone, and the interaction (if there is one).
 
 ![](pictures/pic_cherry.png){width=50%}
 
@@ -97,7 +97,7 @@ write.csv(datum, "exercise_6_dataset1.csv", row.names = FALSE)
 
 ### Dataset 2
 # Set the seed for reproducibility
-set.seed(123)
+set.seed(122)
 
 # X-variables
 n_fields <- 8
