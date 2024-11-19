@@ -428,7 +428,7 @@ sentences.</p>
 <p><strong><a href="exercise_6_dataset2.csv">Dataset 2</a></strong> – We
 want to understand the effects of fertilizer and hormones on Black
 Cherry (<em>Prunus serotina</em>) tree growth. In this experiment, we
-performed an experiment with 8 fields; within each field, we had four
+performed an experiment with 20 fields; within each field, we had four
 different plots. In the plots, two levels of fertilizer (0 grams, 5
 grams) are crossed in a fully-factorial manner with two levels of
 hormone treatment (0 = no hormones given; 1 = hormones give). So within
@@ -505,7 +505,7 @@ write.csv(datum, &quot;exercise_6_dataset1.csv&quot;, row.names = FALSE)
 set.seed(121)
 
 # X-variables
-n_fields &lt;- 50
+n_fields &lt;- 20
 n_treatments &lt;- 4
 Fields &lt;- rep(1:n_fields, n_treatments)
 Fertilizer &lt;- c(rep(0, n_fields), rep(1, n_fields), rep(0, n_fields), rep(1, n_fields))
