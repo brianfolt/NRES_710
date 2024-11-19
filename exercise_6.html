@@ -505,9 +505,9 @@ write.csv(datum, &quot;exercise_6_dataset1.csv&quot;, row.names = FALSE)
 set.seed(122)
 
 # X-variables
-n_fields &lt;- 8
+n_fields &lt;- 50
 n_treatments &lt;- 4
-Fields &lt;- rep(1:8, n_treatments)
+Fields &lt;- rep(1:n_fields, n_treatments)
 Fertilizer &lt;- c(rep(0, n_fields), rep(1, n_fields), rep(0, n_fields), rep(1, n_fields))
 Hormone &lt;- c(rep(0, n_fields), rep(0, n_fields), rep(1, n_fields), rep(1, n_fields))
 
