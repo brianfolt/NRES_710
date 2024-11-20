@@ -32,7 +32,7 @@ Note: the 'confint' function doesn't report confidence limits from 'lme()' resul
 
 ## Problem 1
 
-**[Dataset 1](exercise_6_dataset1.csv)** -- We are worried about the effects of Mormon Crickets (*Anabrus simplex*) on agricultural landscapes. We performed an experiment with 8 fields; within each field, we had three different plots, which were randomly assigned to one of three 'treatments': control, pesticide application, and prescribed fire application. The burn treatment was called 'PrescrBurn' for reasons you should be able to figure out. We can't test for an interaction between burn and fertilizer, because no plots received both treatments. This means the treatments are different groups within a single variable -- not different variables. The response variable being measured is population density (crickets/hectare). Using the standard sentence(s), report the estimated difference in population density among all three treatments. This will require three sentences.
+**[Dataset 1](exercise_6_dataset1.csv)** -- We are worried about the effects of Mormon Crickets (*Anabrus simplex*) on agricultural landscapes. We performed an experiment with 8 fields; within each field, we had three different plots, which were randomly assigned to one of three 'treatments': control, pesticide application, and prescribed fire application. The burn treatment was called 'PrescrBurn' for reasons you should be able to figure out. We can't test for an interaction between burn and fertilizer, because no plots received both treatments. This means the treatments are different groups within a single variable -- not different variables. The response variable being measured is population density (crickets/hectare). Create a graph (e.g., box plots) that visualizes differences in the response variable between groups. Using the standard sentence(s), report the estimated difference in population density among all three treatments. This will require three sentences.
 
 ![](pictures/pic_cricket.png){width=50%}
 
@@ -42,7 +42,7 @@ Picture: John Sullivan, iNaturalist
 
 ## Problem 2
 
-**[Dataset 2](exercise_6_dataset2.csv)** -- We want to understand the effects of fertilizer and hormones on Black Cherry (*Prunus serotina*) tree growth. In this experiment, we performed an experiment with 20 fields; within each field, we had four different plots. In the plots, two levels of fertilizer (0 grams, 5 grams) are crossed in a fully-factorial manner with two levels of hormone treatment (0 = no hormones given; 1 = hormones give). So within each field, one plot receives no fertilizer and no hormones, two plots receive one of the treatments, and one plot receives both treatments. This is called a fully factorial experiment. Thus, fertilizer and hormones are two separate fixed-effects variables (which contrasts to Dataset #1). Our response variable is the trunk diameter of trees in each plot (cm). This experimental design allows us to test for an interaction between the two variables, and we should do so! Report the results of the interaction, but remember: if the interaction isn't significant, take it out of the model before reporting the main effects. Using the standard sentences, report the 'effects' of fertilizer, hormone, and the interaction (if there is one).
+**[Dataset 2](exercise_6_dataset2.csv)** -- We want to understand the effects of fertilizer and hormones on Black Cherry (*Prunus serotina*) tree growth. In this experiment, we performed an experiment with 20 fields; within each field, we had four different plots. In the plots, two levels of fertilizer (0 grams, 5 grams) are crossed in a fully-factorial manner with two levels of hormone treatment (0 = no hormones given; 1 = hormones give). So within each field, one plot receives no fertilizer and no hormones, two plots receive one of the treatments, and one plot receives both treatments. This is called a fully factorial experiment. Thus, fertilizer and hormones are two separate fixed-effects variables (which contrasts to Dataset #1). Our response variable is the trunk diameter of trees in each plot (cm). Create a graph (e.g., box plots) that visualizes differences in the response variable between groups. This experimental design allows us to test for an interaction between the two variables, and we should do so! Report the results of the interaction, but remember: if the interaction isn't significant, take it out of the model before reporting the main effects. Using the standard sentences, report the 'effects' of fertilizer, hormone, and the interaction (if there is one).
 
 ![](pictures/pic_cherry.png){width=50%}
 
@@ -52,11 +52,19 @@ Picture: Heather Holm, iNaturalist
 
 ## Problem 3
 
-**[Dataset 3](exercise_6_dataset3.csv)** -- In this dataset, we want to determine the growth trajectory of Whitebark Pine Trees (*Pinus albicaulis*) from 10 years old to 20 years old. We repeatedly measure the size (height; meters) of 16 different individuals each year of the study and examine the relationship between age and size. In addition to running the fixed-effects model and the standard mixed model, also run a model that incorporates a 'moving average' autocorrelation. Run an F-drop test to see if including the autocorrelation parameter significantly improves the fit of the model to the data. Report the results of this F-drop test. Also report the value of $\theta$ (the coefficient of autocorrelation) in your assignment, along with the standard deviation due to the random effect.
+**[Dataset 3](exercise_6_dataset3.csv)** -- In this dataset, we want to determine the growth trajectory of Whitebark Pine Trees (*Pinus albicaulis*) from 10 years old to 20 years old. We repeatedly measure the size (height; meters) of 16 different individuals each year of the study and examine the relationship between age and size. Create a graph (e.g., standard plot) that visualizes the effect of age on size of trees; illustrate the individual trees as different using the 'pch' command in 'plot()'. In addition to running the fixed-effects model and the standard mixed model, also run a model that incorporates a 'moving average' autocorrelation. Run an F-drop test to see if including the autocorrelation parameter significantly improves the fit of the model to the data. Report the results of this F-drop test. Also report the value of $\theta$ (the coefficient of autocorrelation) in your assignment, along with the standard deviation due to the random effect.
 
 ![](pictures/pic_whitebarkpine.png){width=50%}
 
 Picture: Gary Griffith, iNaturalist
+
+<br>
+
+## Problem 4
+
+**[Dataset 4](exercise_6_dataset4.csv)** -- In this dataset, we want to determine the growth of Big Sagebrush (*Artimesia tridentata*) from along soil moisture gradients in 10 different basins in central Nevada. We measure the biomass (kg) of 20 sagebrush plants in each basin and related each measurement to soil moisture. Create a graph (e.g., standard plot) that visualizes the effect of soil moisture on sagebrush biomass; illustrate the measurements by basin using the 'pch' command in 'plot()'. In addition to running the fixed-effects model and the standard mixed model, also run a mixed model that incorporates an interaction between soil moisture and basin. Run an F-drop test to see if including the random interaction effect significantly improves the fit of the model to the data. Report the results of this F-drop test. Report the standard deviation due to the random interaction effect in addition to the random intercept effect.
+
+![](pictures/pic_sagebrush.png){width=50%}
 
 <br>
 
@@ -151,6 +159,37 @@ datum <- data.frame(Individual=Individual, Age=Age, TreeError=TreeError, ResidEr
 
 # Save the CSV file
 write.csv(datum, "exercise_6_dataset3.csv", row.names = FALSE)
+
+
+### Dataset 4
+# Effect of soil moisture on sagebrush biomass in different basins in Nevada.
+# Set seed
+set.seed(123)
+
+# Simulate data
+n_basins <- 10
+Basin <- sort(c(rep(1:n_basins, 20)))
+
+# Continuous X-variable
+SoilMoisture <- runif(length(Basin), 0, 1)
+
+# Basin error (matching the number of samples for each basin)
+BasinError <- c(rep(rnorm(Basin, 0, 5), each = 5))
+
+# Field X SoilMoisture interaction error (matching the number of samples for each field)
+BasinXMoistureError <- c(rep(rnorm(Basin, 0, 3), each = 5))
+
+# Within-basin error
+Error <- rnorm(length(Basin), 0, 1)
+
+# Response variable
+Biomass <- 25 + 10*SoilMoisture + SoilMoisture*BasinXMoistureError + BasinError + Error
+
+# Save the data
+datum <- data.frame(Basin = Basin, SoilMoisture = SoilMoisture, BasinXMoistureError = BasinXMoistureError, BasinError = BasinError, Error = Error, Biomass = Biomass)
+
+# Save the data
+write.csv(datum, "exercise_6_dataset4.csv", row.names = FALSE)
 
 ```
 
