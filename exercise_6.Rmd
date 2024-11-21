@@ -98,7 +98,7 @@ ResidError <- rnorm(n_treatments * n_fields, 0, 2)
 Density <- 20 - 6*TrtMnt + FieldError + ResidError
 
 # Create dataframe
-datum <- data.frame(Fields=Fields, Treatment=Treatment, FieldError=FieldError, ResidError=ResidError, TrtMnt = TrtMnt, Density=Density)
+datum <- data.frame(Fields=Fields, Treatment=Treatment, FieldError=FieldError, ResidError=ResidError, Density=Density)
 
 # Save the CSV file
 write.csv(datum, "exercise_6_dataset1.csv", row.names = FALSE)
