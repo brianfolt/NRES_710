@@ -1,0 +1,21 @@
+---
+title: "To-Do List For Next Year"
+output: html_document
+date: "2024-11-22"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## To-Do List
+
+Add a 'real' dataset to each exercise. Make it the final 'problem'. 
+
+Add a simulation exercise to lecture 18 to understand how collinearity between fields and plot treatments influences estimation when sample sizes are low. 
+
+Revise readings to make them a little more up-to-date
+
+Maybe trim lectures to make them more efficient (?), maybe remove the post-hoc test lecture (?), maybe add 1-2 more (?)
+
+Add in a lecture on GLMs
