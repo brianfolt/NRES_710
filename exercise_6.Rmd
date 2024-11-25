@@ -60,6 +60,8 @@ Picture: Gary Griffith, iNaturalist
 
 <br>
 
+# FALL 2024 CLASS - NO NEED TO WORRY ABOUT PROBLEM 4 BELOW - IGNORE THIS
+
 ## Problem 4
 
 **[Dataset 4](exercise_6_dataset4.csv)** -- In this dataset, we want to determine the growth of Big Sagebrush (*Artimesia tridentata*) from along soil moisture gradients in 10 different basins in central Nevada. We measure the biomass (kg) of 20 sagebrush plants in each basin and related each measurement to soil moisture. Create a graph (e.g., standard plot) that visualizes the effect of soil moisture on sagebrush biomass; illustrate the measurements by basin using the 'pch' command in 'plot()'. In addition to running the fixed-effects model and the standard mixed model, also run a mixed model that incorporates an interaction between soil moisture and basin. Run an F-drop test to see if including the random interaction effect significantly improves the fit of the model to the data. Report the results of this F-drop test. Report the standard deviation due to the random interaction effect in addition to the random intercept effect.
