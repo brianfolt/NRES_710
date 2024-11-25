@@ -379,7 +379,7 @@ div.tocify {
 
 <h1 class="title toc-ignore">Exercise 6: Mixed Effects Models</h1>
 <h4 class="author">NRES 710</h4>
-<h4 class="date">Last compiled: 2024-11-19</h4>
+<h4 class="date">Last compiled: 2024-11-25</h4>
 
 </div>
 
@@ -415,10 +415,11 @@ called ‘PrescrBurn’ for reasons you should be able to figure out. We
 can’t test for an interaction between burn and fertilizer, because no
 plots received both treatments. This means the treatments are different
 groups within a single variable – not different variables. The response
-variable being measured is population density (crickets/hectare). Using
-the standard sentence(s), report the estimated difference in population
-density among all three treatments. This will require three
-sentences.</p>
+variable being measured is population density (crickets/hectare). Create
+a graph (e.g., box plots) that visualizes differences in the response
+variable between groups. Using the standard sentence(s), report the
+estimated difference in population density among all three treatments.
+This will require three sentences.</p>
 <p><img src="pictures/pic_cricket.png" style="width:50.0%" /></p>
 <p>Picture: John Sullivan, iNaturalist</p>
 <p><br></p>
@@ -428,7 +429,7 @@ sentences.</p>
 <p><strong><a href="exercise_6_dataset2.csv">Dataset 2</a></strong> – We
 want to understand the effects of fertilizer and hormones on Black
 Cherry (<em>Prunus serotina</em>) tree growth. In this experiment, we
-performed an experiment with 20 fields; within each field, we had four
+performed an experiment with 10 fields; within each field, we had four
 different plots. In the plots, two levels of fertilizer (0 grams, 5
 grams) are crossed in a fully-factorial manner with two levels of
 hormone treatment (0 = no hormones given; 1 = hormones give). So within
@@ -437,12 +438,14 @@ receive one of the treatments, and one plot receives both treatments.
 This is called a fully factorial experiment. Thus, fertilizer and
 hormones are two separate fixed-effects variables (which contrasts to
 Dataset #1). Our response variable is the trunk diameter of trees in
-each plot (cm). This experimental design allows us to test for an
-interaction between the two variables, and we should do so! Report the
-results of the interaction, but remember: if the interaction isn’t
-significant, take it out of the model before reporting the main effects.
-Using the standard sentences, report the ‘effects’ of fertilizer,
-hormone, and the interaction (if there is one).</p>
+each plot (cm). Create a graph (e.g., box plots) that visualizes
+differences in the response variable between groups. This experimental
+design allows us to test for an interaction between the two variables,
+and we should do so! Report the results of the interaction, but
+remember: if the interaction isn’t significant, take it out of the model
+before reporting the main effects. Using the standard sentences, report
+the ‘effects’ of fertilizer, hormone, and the interaction (if there is
+one).</p>
 <p><img src="pictures/pic_cherry.png" style="width:50.0%" /></p>
 <p>Picture: Heather Holm, iNaturalist</p>
 <p><br></p>
@@ -454,16 +457,39 @@ this dataset, we want to determine the growth trajectory of Whitebark
 Pine Trees (<em>Pinus albicaulis</em>) from 10 years old to 20 years
 old. We repeatedly measure the size (height; meters) of 16 different
 individuals each year of the study and examine the relationship between
-age and size. In addition to running the fixed-effects model and the
-standard mixed model, also run a model that incorporates a ‘moving
-average’ autocorrelation. Run an F-drop test to see if including the
-autocorrelation parameter significantly improves the fit of the model to
-the data. Report the results of this F-drop test. Also report the value
-of <span class="math inline">\(\theta\)</span> (the coefficient of
+age and size. Create a graph (e.g., standard plot) that visualizes the
+effect of age on size of trees; illustrate the individual trees as
+different using the ‘pch’ command in ‘plot()’. In addition to running
+the fixed-effects model and the standard mixed model, also run a model
+that incorporates a ‘moving average’ autocorrelation. Run an F-drop test
+to see if including the autocorrelation parameter significantly improves
+the fit of the model to the data. Report the results of this F-drop
+test. Also report the value of <span
+class="math inline">\(\theta\)</span> (the coefficient of
 autocorrelation) in your assignment, along with the standard deviation
 due to the random effect.</p>
 <p><img src="pictures/pic_whitebarkpine.png" style="width:50.0%" /></p>
 <p>Picture: Gary Griffith, iNaturalist</p>
+<p><br></p>
+</div>
+<div id="problem-4" class="section level2">
+<h2>Problem 4</h2>
+<p><strong><a href="exercise_6_dataset4.csv">Dataset 4</a></strong> – In
+this dataset, we want to determine the growth of Big Sagebrush
+(<em>Artimesia tridentata</em>) from along soil moisture gradients in 10
+different basins in central Nevada. We measure the biomass (kg) of 20
+sagebrush plants in each basin and related each measurement to soil
+moisture. Create a graph (e.g., standard plot) that visualizes the
+effect of soil moisture on sagebrush biomass; illustrate the
+measurements by basin using the ‘pch’ command in ‘plot()’. In addition
+to running the fixed-effects model and the standard mixed model, also
+run a mixed model that incorporates an interaction between soil moisture
+and basin. Run an F-drop test to see if including the random interaction
+effect significantly improves the fit of the model to the data. Report
+the results of this F-drop test. Report the standard deviation due to
+the random interaction effect in addition to the random intercept
+effect.</p>
+<p><img src="pictures/pic_sagebrush.png" style="width:50.0%" /></p>
 <p><br></p>
 </div>
 <div id="truth" class="section level2">
@@ -495,21 +521,22 @@ ResidError &lt;- rnorm(n_treatments * n_fields, 0, 2)
 Density &lt;- 20 - 6*TrtMnt + FieldError + ResidError
 
 # Create dataframe
-datum &lt;- data.frame(Fields=Fields, Treatment=Treatment, FieldError=FieldError, ResidError=ResidError, TrtMnt = TrtMnt, Density=Density)
+datum &lt;- data.frame(Fields=Fields, Treatment=Treatment, FieldError=FieldError, ResidError=ResidError, Density=Density)
 
 # Save the CSV file
 write.csv(datum, &quot;exercise_6_dataset1.csv&quot;, row.names = FALSE)
+
 
 ### Dataset 2
 # Set the seed for reproducibility
 set.seed(121)
 
 # X-variables
-n_fields &lt;- 20
+n_fields &lt;- 10
 n_treatments &lt;- 4
 Fields &lt;- sort(rep(1:n_fields, n_treatments))
-Fertilizer &lt;- c(rep(0, n_fields), rep(1, n_fields), rep(0, n_fields), rep(1, n_fields))
-Hormone &lt;- c(rep(0, n_fields), rep(0, n_fields), rep(1, n_fields), rep(1, n_fields))
+Fertilizer &lt;- c(rep(c(0, 1), n_fields * 2))
+Hormone &lt;- c(rep(c(0, 0, 1, 1), n_fields))
 
 # Error due to field
 FieldError &lt;- rep(rnorm(n_fields, 0, 6.5), each = n_treatments)
@@ -555,7 +582,38 @@ Size &lt;- 20 + 1*Age + TreeError + ResidError
 datum &lt;- data.frame(Individual=Individual, Age=Age, TreeError=TreeError, ResidError=ResidError, Size=Size)
 
 # Save the CSV file
-write.csv(datum, &quot;exercise_6_dataset3.csv&quot;, row.names = FALSE)</code></pre>
+write.csv(datum, &quot;exercise_6_dataset3.csv&quot;, row.names = FALSE)
+
+
+### Dataset 4
+# Effect of soil moisture on sagebrush biomass in different basins in Nevada.
+# Set seed
+set.seed(123)
+
+# Simulate data
+n_basins &lt;- 10
+Basin &lt;- sort(c(rep(1:n_basins, 20)))
+
+# Continuous X-variable
+SoilMoisture &lt;- runif(length(Basin), 0, 1)
+
+# Basin error (matching the number of samples for each basin)
+BasinError &lt;- c(rep(rnorm(Basin, 0, 5), each = 5))
+
+# Field X SoilMoisture interaction error (matching the number of samples for each field)
+BasinXMoistureError &lt;- c(rep(rnorm(Basin, 0, 3), each = 5))
+
+# Within-basin error
+Error &lt;- rnorm(length(Basin), 0, 1)
+
+# Response variable
+Biomass &lt;- 25 + 10*SoilMoisture + SoilMoisture*BasinXMoistureError + BasinError + Error
+
+# Save the data
+datum &lt;- data.frame(Basin = Basin, SoilMoisture = SoilMoisture, BasinXMoistureError = BasinXMoistureError, BasinError = BasinError, Error = Error, Biomass = Biomass)
+
+# Save the data
+write.csv(datum, &quot;exercise_6_dataset4.csv&quot;, row.names = FALSE)</code></pre>
 <p><a href="exercise_7.html">–go to next exercise–</a></p>
 </div>
 

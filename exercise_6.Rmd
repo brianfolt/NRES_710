@@ -112,8 +112,8 @@ set.seed(121)
 n_fields <- 10
 n_treatments <- 4
 Fields <- sort(rep(1:n_fields, n_treatments))
-Fertilizer <- c(rep(0, n_fields), rep(1, n_fields), rep(0, n_fields), rep(1, n_fields))
-Hormone <- c(rep(0, n_fields), rep(0, n_fields), rep(1, n_fields), rep(1, n_fields))
+Fertilizer <- c(rep(c(0, 1), n_fields * 2))
+Hormone <- c(rep(c(0, 0, 1, 1), n_fields))
 
 # Error due to field
 FieldError <- rep(rnorm(n_fields, 0, 6.5), each = n_treatments)

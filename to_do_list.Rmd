@@ -12,7 +12,9 @@ knitr::opts_chunk$set(echo = TRUE)
 
 Add a 'real' dataset to each exercise. Make it the final 'problem'. 
 
-Add a simulation exercise to lecture 18 to understand how collinearity between fields and plot treatments influences estimation when sample sizes are low. 
+Add a simulation exercise to lecture 18 to understand how collinearity between fields and plot treatments influences estimation when sample sizes are low.
+
+Add one reading for each lecture -- a resource that provides notes for students to read along with the lecture
 
 Revise readings to make them a little more up-to-date
 

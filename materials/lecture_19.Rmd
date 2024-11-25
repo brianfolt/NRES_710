@@ -10,17 +10,6 @@ output:
     css: styles.css
 ---
 
-<script type="text/x-mathjax-config">
-MathJax.Hub.Register.StartupHook("TeX Jax Ready",function () {
-  MathJax.Hub.Insert(MathJax.InputJax.TeX.Definitions.macros,{
-    cancel: ["Extension","cancel"],
-    bcancel: ["Extension","cancel"],
-    xcancel: ["Extension","cancel"],
-    cancelto: ["Extension","cancel"]
-  });
-});
-</script>
-
 ```{r setup, include=FALSE}
 
 knitr::opts_chunk$set(
@@ -41,19 +30,19 @@ knitr::opts_chunk$set(
 
 So last class we discussed nested designs, and specifically how they can handle pseudoreplication and random effects that are nested within each other.
 
-Today I want to show you the upper limits of what this design can handle.
+Today I want to show you the upper limits of what this design can handle -- and some constraints that emerge.
 
 ## Split-plot Design
 
 Let's consider a field experiment with six fields and four variables:
 
 - $Y = biomass$
-- $X_1 = bison/no bison$
-- $X_2 = fertilizer/no fertilizer$
-- $X_3 = water low/medium/high$
-- $X_4 = pesticide/no pesticide$
+- $X_1 = bison (yes/no)$
+- $X_2 = fertilizer (yes/no)$
+- $X_3 = water (low/medium/high)$
+- $X_4 = pesticide (yes/no)$
 
-We want this to be a fully-factorial design, where we will cross every single one of these variables with every other variable. 
+We want this to be a **fully-factorial design**, where we will cross every single one of these variables with every other variable. 
 
 - E.g., bison, no fertilizer, medium water, no pesticide, etc.
 - 2 bison * 2 fertilizer * 3 water * 2 pesticides = 24 plots within each field.
@@ -80,17 +69,17 @@ How many rows would our Excel file have for this design?
 - 2 fertilizer treatments
 - 3 water treatments
 - 2 pesticide treatments
-- 6 fields * 2 bison treatments * 2 fertilizer treatments * 3 water treatments * 2 pesticide treatments = <u>**144 biomass measurements**</u>
+- **Total:** 6 fields * 2 bison treatments * 2 fertilizer treatments * 3 water treatments * 2 pesticide treatments = <u>**144 biomass measurements**</u>
 
-We will 144 biomass measurements; one each from every pesticide plot.
+We will take 144 biomass measurements; one each from every pesticide plot.
 
 This is called a 'split-plot design'! Lots of plot splitting happening here.
 
-**Q:** We have a 144 samples to look at the effect of pesticide. Do we have 144 samples to look at the effect of water?
+**Q:** We have 144 samples to look at the effect of pesticide. Do we have 144 samples to look at the effect of water?
 
 - We have 72 water plots.
 - We have 24 fertilizer plots.
-- We have 12 bison plots. 
+- We have 12 bison plots.
 
 This is important! While we have 144 rows, our sample sizes differ depending the effect we are testing for.
 
