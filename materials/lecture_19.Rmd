@@ -44,7 +44,9 @@ Let's consider a field experiment with six fields and four variables:
 
 We want this to be a **fully-factorial design**, where we will cross every single one of these variables with every other variable. 
 
-- E.g., bison, no fertilizer, medium water, no pesticide, etc.
+- E.g., bison, no fertilizer, medium water, no pesticide
+- E.g., no bison, fertilizer, high water, pesticide
+- We will have a replicate for every combination of treatments in each field.
 - 2 bison * 2 fertilizer * 3 water * 2 pesticides = 24 plots within each field.
 - We need to break up each field into 24 blocks to do all of these combinations.
 
@@ -62,6 +64,8 @@ Last, we'll take each water plot, split those in half, and randomly assign pesti
 
 ![](lecture_19_factorial_design.png){width=100%}
 
+*Emphasize the **cow plots**, the **fertilizer plots**, the **water plots**, and the **pesticide** plots*
+
 How many rows would our Excel file have for this design?
 
 - 6 fields
@@ -71,41 +75,45 @@ How many rows would our Excel file have for this design?
 - 2 pesticide treatments
 - **Total:** 6 fields * 2 bison treatments * 2 fertilizer treatments * 3 water treatments * 2 pesticide treatments = <u>**144 biomass measurements**</u>
 
-We will take 144 biomass measurements; one each from every pesticide plot.
+There would be 144 pesticide plots, and we would take a biomass measurement from each one. **144 total measurements = 144 rows in our Excel file.**
 
 This is called a 'split-plot design'! Lots of plot splitting happening here.
 
-**Q:** We have 144 samples to look at the effect of pesticide. Do we have 144 samples to look at the effect of water?
+**Q:** We have 144 samples to look at the effect of pesticide. Do we have 144 samples to look at the effect of water? **The number of samples to test for the effect of water is the number of *water plots*!**
 
-- We have 72 water plots.
+- We have $6 * 2 * 2 * 3 = 72$ water plots.
 - We have 24 fertilizer plots.
 - We have 12 bison plots.
 
 This is important! While we have 144 rows, our sample sizes differ depending the effect we are testing for.
 
-We could simplify the model and just test for an effect of bison, for example. But then we would introduce a lot of pseudoreplication into the design. Therefore, we have to account for these nested random effects to account for that pseudoreplication.
+We could simplify the model and just test for an effect of bison, for example. But then we would introduce a lot of pseudoreplication into the design. We only have a sample size of 12 plots to test for the effect of bison. Therefore, to avoid that pseudoreplication, we have to account for these nested random effects in our model.
 
-We may want to look at the effect of these all at the same time, because we want to account for swamping.
+We may also want to look at the effect of these all at the same time, because we want to account for swamping.
 
 A scary thing about this design is that the people who do these experiments are interested in interactions. Two-way interactions (e.g., bison, fertilizer; water, fertilizer; fertilizer, pesticides), three-way interactions (e.g., bison, water, pesticide), or four-way interactions...??
 
-But the important part of this design is <u>we need to account for pseudoreplication</u>. We can do that using random effects in our model, that are nested according to the split-plot structure of our experiment.
+But the important part of this design is <u>we need to account for pseudoreplication</u>. We can do that using **random effects in our model**, and these random effects are **nested** according to the split-plot structure of our experiment. We need to specify to R: each fertilizer plot is nested within bison plots; each water plot is nested within fertilizer plots; and each pesticide plot is nested within water plots.
 
 ## Statistical model
 
-$Biomass = \beta_0 + \beta_1Bison + \beta_2Fertilizer + \beta_{3,4}Water + \beta_5Pesticide + epsilon_{field} + epsilon_{field|bison} + epsilon_{field|bison|fertilizer} + epsilon_{field|bison|fertilizer|water}$
+$Biomass = \beta_0 + \beta_1Bison + \beta_2Fertilizer + \beta_{3,4}Water + \beta_5Pesticide + epsilon_{field} + epsilon_{field|bison} + epsilon_{field|bison|fertilizer} + epsilon_{field|bison|fertilizer|water} + epsilon_{residual}$
 
-- between-field error
-- between-bison plot error (*residual error for the bison effect*)
-- between-fertilizer plot error (*residual error for the fertilizer effect*)
-- between-water plot error (*residual error for the water effect*)
+- between-field error (*variability among fields*)
+- between-bison plot error (*variability within fields due to bison; i.e., residual error for the bison effect*)
+- between-fertilizer plot error (*variability within bison treatments due to fertilizer; residual error for the fertilizer effect*)
+- between-water plot error (*variability within fertilizer treatments due to water treatments; residual error for the water effect*)
 - residual error
 
-**Q:** Why is there no pesticide random effect? Can't include it because each pesticide treatment is only measured once. Maybe if we had a repeated-measures through time for pesticides, then we could have a pesticide effect. But we don't.
+**Q:** Why is there no pesticide random effect? **No**, we can't include it because each pesticide treatment is only measured once. Maybe if we had a repeated-measures through time for pesticides, then we could have a pesticide effect. But we don't. Instead, the $\epsilon_{residual}$ is the error term for the pesticide effect.
 
-**Q:** Are we double-counting fixed effects as random effects? No. The fixed-effect for bison is different from the field|bison random effect. The fixed effect compares all bison plots to all no-bison plots. The random effect is different because *bison is nested within field*, and every field has a different effect, so the bison effects are different within every different field.
+**Q:** Are we double-counting fixed effects as random effects? **No.** The fixed-effect for bison is different from the field|bison random effect. The fixed effect compares all bison plots to all no-bison plots. The random effect is different because *bison is nested within field*, and every field has a different effect, so the bison effects are different within every different field.
 
-Last thing: what if we wanted to test for interactions...?
+- The fixed effect says: all bison plots have less biomass than non-bison plots.
+- The nested random effect says: every field is different (field 1, 2, 3, ..., 6), and every bison-plot within each of those fields is different from each other.
+- Since the **fixed effect** variables are **nested** within **random effects**, we can treat them as both fixed and random effects. 
+
+Last thing: what if we wanted to test for **interactions**...?
 
 Let's say we added an interaction term, $\beta_6 * Bison * Fertilizer$. What is the meaning of $\beta_6$?
 
@@ -113,18 +121,36 @@ Let's say we added an interaction term, $\beta_6 * Bison * Fertilizer$. What is 
 
 Let's say we added an interaction term, $\beta_7 * Fertilizer * Pesticide$. What is the meaning of $\beta_7$?
 
-- When we add $\beta_7$, then $\beta_5$ becomes the effect of pesticide in unfertilized plots, and $\beta_5 + \beta_7$ becomes the effect of pesticides in fertilized plots. So $beta_7$ becomes the difference in the effect of pesticide between fertilizer and no fertilizer plots.
+- When we add $\beta_7$, then $\beta_5$ becomes the effect of pesticide in unfertilized plots, $\beta_2$ becomes the effect of fertilizer in no-bison and no-pesticide plots, and $\beta_5 + \beta_7$ becomes the effect of pesticides in fertilized plots. So $\beta_7$ becomes the difference in the effect of pesticide between fertilizer and no fertilizer plots.
 
 Let's say we added another interaction term, $\beta_8 * Fertilizer * Pesticide * Bison$. What is the meaning of $\beta_8$...?!
 
-- We've just changed the meaning of $\beta_6$... before it was the difference between the effect of bison in fertilizer and unfertilized plots. Now that we have the interaction, $\beta_6$ is the <u>difference in the effect of bison between fertilized and unfertilized plots *in no-pesticide plots*</u>.
-- Which means, $\beta_8$ is... <u>the difference in the difference in the effect of bison between fertilizer and no fertilizer plots *between pesticide plots and no pesticide plots*</u>. 
+- We've just changed the meaning of $\beta_6$...
+- Before, $\beta_6$ was the difference between the effect of bison in fertilizer and unfertilized plots. Now that we have the interaction, $\beta_6$ is the <u>difference in the effect of bison between fertilized and unfertilized plots *in no-pesticide plots*</u>.
+- Which means, $\beta_8$ is... <u>the ***difference in* the difference in the effect of bison between fertilizer and no fertilizer plots *between pesticide plots and no pesticide plots***</u>. 
 
 Graphically, this might look like...
 
-*Brian draw graphs on the board. Create one panel with bison x fertilizer, with bison positive effect, no fertilizer effect, and a bison x fertilizer interaction. Create another panel with bison x pesticide; bison positive effect, no pesticide effect, but then a negative bison x pesticide effect that is beta8...???*
+*Brian draw graphs on the board...*
 
-The take-home message: this gets confusing really quickly... don't do three-way interactions. It can be done, but it's difficult to interpret.
+![](lecture_19_interactions.png){width=100%}
+
+PESTICIDE = 0 PANEL
+
+- B-F- = beta0
+- B+F- = beta0 + beta1
+- B-F+ = beta0 + beta2
+- B+F+ = beta0 + beta1 + beta2 + beta6
+
+PESTICIDE = 1 PANEL
+
+- B-F- = beta0 + beta5
+- B+F- = beta0 + beta1 + beta5 (no unique beta here b/c no interaction between bison and pesticide)
+- B-F+ = beta0 + beta2 + beta5 + beta7
+- B+F+ = beta0 + beta1 + beta2 + beta6 + beta5 + beta7 + beta8
+
+
+**Take-home message:** this gets confusing really quickly... don't do three-way interactions. It can be done, but it's difficult to interpret.
 
 ## Split-plot analysis in R
 
@@ -158,18 +184,18 @@ summary(results)
 
 The summary says we have 72 observations with 6 groups (fields). Take a look at the Degrees of Freedom (DF). We can go into the exact math of degrees of freedom, but it's complicated and I don't pretend to understand it entirely. 
 
-However, a good <u>rule of thumb</u> is that the DF has to be less than the number of samples that should be used. In this case, it is using at least 62 samples when estimating each of these effects. In fact, it's using all 72 ('72 observations' at the bottom).
+However, a good **<u>rule of thumb</u>** is that the DF has to be less than the number of samples that should be used. In this case, it is using at least 62 samples when estimating each of these effects. In fact, it's using all 72 ('72 observations' at the bottom).
 
-**Q:** How many samples do we have for 'bison'? In truth, we actually have 12 bison plots: 6 with bison, and 6 without. So the true Degrees of Freedom for bison should be less than 12. But it says 62, which means we are pseudoreplicating with respect to bison, and also fertilizer as well. However, we have not pseudoreplicated with respect to 'water', as all 72 samples are used to test the effect of water.
+**Q:** How many samples do we have for 'bison'? In truth, we actually have 12 bison plots: 6 with bison, and 6 without. So the true Degrees of Freedom for bison should be less than 12. But it says 62, which means we are pseudoreplicating with respect to bison, and also fertilizer as well. However, we have not pseudoreplicated with respect to 'water', as all 72 samples are used to test the effect of water. The water sample is the 'ultimate sample'.
 
-Part of the definition of a split-plot design is that *you have different sample sizes for different variables*. So we need to remove this pseudoreplication to correctly measure and test these effects.
+Part of the definition of a split-plot design is that *you have different sample sizes for different variables* ([link](https://www.stat.purdue.edu/~zhanghao/STAT514/Lecture_Notes/LectureNotes20-Split-plot-Designs-.html)). So we need to remove this pseudoreplication to correctly measure and test these effects.
 
 ```{r fig.height=4, fig.width=5}
 ### Split-plot Design
 # Linear-mixed effects model w/ random, nested effects
 results2 <- lme(Biomass ~ Bison + Fertilizer + Water, data = datum, random = ~1|Field/Bison/Fertilizer)
 summary(results2)
-# The random effects are nested with field > bison > fertilizer. Water is not included, because it is our 'ultimate sample' and therefore is the residual error.
+# The random effects are nested with field > bison > fertilizer. Water is not included, because it is our 'ultimate sample' and therefore is the residual error. We only have one sample for each water plot, so we can't disentangle error due to water measurements being different from residual error.
 
 ```
 
@@ -284,35 +310,36 @@ legend("topleft", legend = paste("Individual", 1:3, c("(F)", "(F)", "(M)")), col
 
 Technically, we need to worry about autocorrelation... but there is another thing we need to be worried about that we have not so far.
 
-Our individuals differ in sex: female, female, male, etc.
+Our individuals differ in **sex**: female, female, male, female, etc.
 
 - **10 individuals**
 - **1-10 years old**
 - **100 total points**
 
-**Q1:** What do you think our sample size is for looking at the effect of age on sample size?
+**Q1:** What do you think our sample size is for looking at the **effect of age** on body size?
 
 - A lot of people might say '10', because we only have ten individuals.
 - **But it's actually 100 samples for looking at the effect of age on size**.
 - The reason is because: for every single point here, **the X-value changed for age**.
-- That makes those points <u>*true replicates*</u> for looking at the effect of age on size.
+- These points may be ***autocorrelated*** with eachother... but since they changed, that makes those points **<u>*true replicates*</u>** for looking at the **effect of age on body size**.
 
-Let's take this to an extreme. Imagine we only had 1 individual, which we measured 10 times. Can we test for the effect of age on size?
+**Q2:** Let's take this to an extreme. Imagine we only had 1 individual, which we measured 10 times. **Can we test for the effect of age on size?**
 
-- Yes, we can: each observation is a true replicate for looking at the effect of age on size.
-- However, this is poor inference, because it's hard to make conclusions beyond that single individual.
+- **Yes**, we can! Each observation is a true replicate for looking at the effect of age on size.
+- However, this is **weak inference**, because it's hard to make conclusions beyond that single individual.
 - But, it's technically not pseudoreplication. We have true replicates, but we have weak inference.
 
-**Q2:** How many samples do we have to look at the effect of sex? **Ten**. The sex of the individual could not change, which makes each one of those points a *pseudoreplicate* for looking at the effect of sex.
+**Q3:** How many samples do we have to look at the effect of sex? **Ten**. The **sex of the individual cannot change**, which makes each one of those points a *pseudoreplicate* for looking at the effect of sex.
 
-**Q3:** How many samples do we have to look at an interaction -- a sex by age interaction? 10 or 100?
+**Q4:** How many samples do we have to look at an ***interaction*** -- a sex by age interaction? 10 or 100?
 
-- A little more complicated... the answer is **100 samples**. Each sample is actually a true replicate for looking at the interaction between age and size, *because age did change*.
+- A little more complicated... the answer is **100 samples**.
+- Each sample is actually a true replicate for looking at the interaction between age and size, **because *age* did change**.
 - **Rule of thumb**: when it comes to interactions, whatever variable has the greatest number of samples -- this becomes the number of samples for your interactions.
 
 Let's learn how to run this analysis in R:
 
-```{r echo=FALSE, fig.height=4, fig.width=5}
+```{r fig.height=4, fig.width=5}
 ### Nested ANCOVA Design
 # Read the data
 datum <- read.csv("lecture_19_dataset2.csv")
@@ -324,21 +351,30 @@ head(datum, 15)
 
 Briefly looking at our data, we have 10 individuals that we have each measured 10 years, 5 females (0) and 5 males (1). 
 
-```{r echo=FALSE, fig.height=4, fig.width=5}
+```{r fig.height=4, fig.width=5}
 # Plot it
 plot(Size ~ Age, data = datum)
+# You can almost see that there are ten individuals here....
+
+# Plot with points colored by sex and shaped by individual... a bit messy, but:
+plot(Size ~ Age, data = datum, pch = as.numeric(datum$Individual), col = as.numeric(datum$Male) + 1)
+legend("topleft", legend = c("Female", "Male"), pch = c(21, 21), col = c(1, 2))
 
 ```
-
-You can almost see that there are ten individuals here.
 
 I am not going to worry about autocorrelation, because you know how I feel about it: it ain't worth it!
 
 In terms of nesting structure here, INDIVIDUAL is NOT nested within AGE, because every INDIVIDUAL got every AGE. But individual is nested within SEX, because not every individual got every sex. The design expands from top-to-bottom with: Sex < Individual < Age.
 
-Sex is a fixed effect, so we won't list it as a random effect. All we will do is list individual as random effect, and R will automatically recognize that individual is nested within sex. The key thing here: individual is our *sample* for looking at the effect of sex.
+*Brian draw nesting on board*
 
-```{r echo=FALSE, fig.height=4, fig.width=5}
+![](lecture_19_nested_ancova_design.png){width=100%}
+
+The hierarchy spreads *spread out* from the top down to the bottom for this nested design.
+
+Age and sex our **fixed effects**, so we won't list them as a random effect. All we will do is list 'individual' as random effect, and **R will automatically recognize that individual is nested within sex**. The key thing here is: by doing this, R will force <u>individual to be our *sample* for looking at the effect of sex</u>.
+
+```{r fig.height=4, fig.width=5}
 # LME with Age and Sex fixed effects and random effect of individual (repeated measures!)
 library(nlme)
 results <- lme(Size ~ Age + Male, data = datum, random = ~1|Individual)
@@ -346,11 +382,11 @@ summary(results)
 
 ```
 
-Look at the degrees of freedom: it uses the appropriate less than 10 degrees of freedom for MALE (because we have 10 individuals), and then it uses less than 100 degrees of freedom for the effect of age (because we have 100 measurements at different ages).
+We want to **check the degrees of freedom** to make sure it does this appropriately! We see that it uses the appropriate <10 degrees of freedom for MALE (because we have 10 individuals), and then it uses <100 degrees of freedom for the effect of age (because we have 100 measurements at different ages).
 
-Adding in the interaction term:
+Now let's add in the **interaction term**:
 
-```{r echo=FALSE, fig.height=4, fig.width=5}
+```{r fig.height=4, fig.width=5}
 # LME with Age, Sex, and Age*Sex fixed effects and random effect of individual (repeated measures!)
 library(nlme)
 results2 <- lme(Size ~ Age + Male + Age:Male, data = datum, random = ~1|Individual)
@@ -365,34 +401,177 @@ DF for Age:Male = 88 -- so it used all 100 samples to look at the interaction be
 I want to briefly describe one final design that is used by many graduate students. Let's consider these variables:
 
 - $Y = Pain$
-- $X_1 = Treatment (drug/placebo)$
+- $X_1 = Treatment (drug/placebo)$ -- (some sort of treatment)
 - $X_2 = Time$
 
 We have worked with 20 individuals, given them the drug/placebo, and measured their pain through time: 0 hours, 2 hours, 4 hours, 8 hours.
 
+```{r scatter-plot-base, echo=FALSE, message=FALSE, warning=FALSE, fig.height=4, fig.width=6}
+# Simulate data
+set.seed(123)
+n <- 10 # Number of individuals per group
+data <- expand.grid(
+  ID = 1:n,
+  Time = factor(c(0, 2, 4, 8), levels = c(0, 2, 4, 8)), # Categorical Time
+  Drug = c("Placebo", "Drug")
+)
+
+# Pain values based on the description
+data$Pain <- with(data, ifelse(
+  Drug == "Placebo",
+  ifelse(Time == 0, 10, ifelse(Time == 8, 10, 10)),
+  ifelse(Time == 0, 10, ifelse(Time == 8, 10, 10 - as.numeric(as.character(Time))))
+))
+
+# Add some individual variability (noise)
+data$Pain <- data$Pain + rnorm(nrow(data), mean = 0, sd = 1)
+
+# Base R plot
+# Base R plot with adjusted x-axis limits
+par(mar = c(4,4,0,0))
+plot(
+  NA, 
+  xlim = c(0.5, 4.5), # Adjust limits to avoid excessive space
+  ylim = range(data$Pain), 
+  xaxt = "n", 
+  xlab = "Time (hours)", 
+  ylab = "Pain level"
+)
+axis(1, at = 1:4, labels = c("0", "2", "4", "8"))
+
+# Add points for each group
+colors <- c("Placebo" = "blue", "Drug" = "red")
+for (drug in levels(data$Drug)) {
+  points(
+    as.numeric(data$Time[data$Drug == drug]),
+    data$Pain[data$Drug == drug],
+    col = colors[drug], pch = 16
+  )
+}
+
+# Add lines connecting means for each group
+for (drug in levels(data$Drug)) {
+  means <- tapply(data$Pain[data$Drug == drug], data$Time[data$Drug == drug], mean)
+  lines(
+    1:4, means, col = colors[drug], lwd = 2
+  )
+}
+
+# Add legend
+legend(
+  "bottomright", legend = levels(data$Drug), 
+  col = colors, pch = 16, lwd = 2, bty = "n"
+)
+
+```
+
 We assume that everyone's pain is the same at the beginning. After 2 hours, the placebo individuals have the same pain, and drugged individuals have less pain. And this continues in this pattern through time... until it ultimately converges together again at 8 hours.
 
-Linear model:
+Let's sketch out our **statistical linear model** for this study!
 
-$Pain = \beta_0 + \beta_1Drug + \beta_{2-6}Time + \beta_{7-11}Drug*Time + \epsilon$
+$Pain = \beta_0 + \beta_1Drug + \beta_{2-4}Time + \beta_{5-7}Drug*Time + epsilon_{ind} + \epsilon_{resid}$
 
-We treat 'Time' as categorical, because then we no longer have to assume a linear relationship.
+We will treat the '**time**' variable as **categorical**, because when we look at our data,, time does not have a **continuous** effect. We don't want to assume a linear relationship between time and pain, so we treat time as categorical.
 
-Do we have an interaction? **Absolutely!** We actually don't care about the individual effects of drug or time -- but what we really care about is the interaction effects through time.
+**Q:** Do we have an interaction? **Absolutely!** We actually don't care about the individual effects of drug or time are... but what we really care about is the interaction effects through time. How does the **effect of drug *change* through time???**
 
-**Q:** If we have 10 individuals, what's our sample size for looking at the effect of drug? **10!** -- but again, we don't care about beta1. The interpretation for beta1 is the difference between drug and control at time 0. We already believe this to be ~zero.
+Let's think about the **sample sizes** for our **different effects**.
 
-Every single point is a true replicate for looking at the effect of time AND every single point is a true replicate for looking at the interaction between drug and time -- which is our focal interest. We want to know how these lines diverge. 
+**Q:** If we have 10 individuals, what's our sample size for looking at the effect of drug? **10!** -- but again, we don't care about $\beta_1$. The interpretation for $\beta_1$ is the difference between drug and control at time 0. **We already believe this to be ~zero.**
 
-**Q:** If you get a significant interaction, what should you do? **Analyze things separately!** Start to analyze the different time-chunks separately. In each time-chunk, you model becomes:
+Every single point is a true replicate for looking at the effect of time AND every single point is a true replicate for looking at the **interaction between drug and time -- which is our main interest**. We want to know *how these lines diverge.* How does the effect of drug *change* through time. The ***difference* in the effect of drug in different time periods**.
+
+**Q:** If you get a significant interaction, what should you do? **Analyze things separately!** Start to analyze the different **time-chunks separately**.
+
+*Brian draw blocks over the time steps on the graph*
+
+```{r scatter-plot-base-2, echo=FALSE, message=FALSE, warning=FALSE, fig.height=4, fig.width=6}
+# Simulate data
+set.seed(123)
+n <- 10 # Number of individuals per group
+data <- expand.grid(
+  ID = 1:n,
+  Time = factor(c(0, 2, 4, 8), levels = c(0, 2, 4, 8)), # Categorical Time
+  Drug = c("Placebo", "Drug")
+)
+
+# Pain values based on the description
+data$Pain <- with(data, ifelse(
+  Drug == "Placebo",
+  ifelse(Time == 0, 10, ifelse(Time == 8, 10, 10)),
+  ifelse(Time == 0, 10, ifelse(Time == 8, 10, 10 - as.numeric(as.character(Time))))
+))
+
+# Add some individual variability (noise)
+data$Pain <- data$Pain + rnorm(nrow(data), mean = 0, sd = 1)
+
+# Base R plot
+# Base R plot with adjusted x-axis limits
+par(mar = c(4,4,0,0))
+plot(
+  NA, 
+  xlim = c(0.5, 4.5), # Adjust limits to avoid excessive space
+  ylim = range(data$Pain), 
+  xaxt = "n", 
+  xlab = "Time (hours)", 
+  ylab = "Pain level"
+)
+axis(1, at = 1:4, labels = c("0", "2", "4", "8"))
+
+# Highlight the data at hour 2 with a rectangle
+rect(
+  xleft = 1.75, xright = 2.25, # Define the range on the x-axis
+  ybottom = min(data$Pain), ytop = max(data$Pain), # Cover full y-axis range
+  border = "black", lwd = 2, col = rgb(0.9, 0.9, 0.9, 0.5) # Light gray with transparency
+)
+rect(
+  xleft = 2.75, xright = 3.25, # Define the range on the x-axis
+  ybottom = min(data$Pain), ytop = max(data$Pain), # Cover full y-axis range
+  border = "black", lwd = 2, col = rgb(0.9, 0.9, 0.9, 0.5) # Light gray with transparency
+)
+
+# Add points for each group
+colors <- c("Placebo" = "blue", "Drug" = "red")
+for (drug in levels(data$Drug)) {
+  points(
+    as.numeric(data$Time[data$Drug == drug]),
+    data$Pain[data$Drug == drug],
+    col = colors[drug], pch = 16
+  )
+}
+
+# Add lines connecting means for each group
+for (drug in levels(data$Drug)) {
+  means <- tapply(data$Pain[data$Drug == drug], data$Time[data$Drug == drug], mean)
+  lines(
+    1:4, means, col = colors[drug], lwd = 2
+  )
+}
+
+# Add legend
+legend(
+  "bottomright", legend = levels(data$Drug), 
+  col = colors, pch = 16, lwd = 2, bty = "n"
+)
+
+```
+
+In each time-chunk, you model becomes:
 
 $Pain = \beta_0 + \beta_1Drug$
 
-In this case, you won't have to include random effects, because you will only have 1 measurement for each individual in each time period, so pseudoreplication will not be an issue. You only need to include the random effect when you use the big, whole model.
+In this case, **you won't have to include random effects**, because you will only have 1 measurement for each individual in each time period, so pseudoreplication will not be an issue. You only need to include the random effect when you use the big, whole model.
 
-So, this model looks scary at first... but if you identify the significant interaction effect, then you can say: "We found a significant interaction between drug and time; therefore, we analyzed the effect of drug separately during each time period."
+So, **this model looks scary at first...!** But if you identify the significant interaction effect, then you can say: "We found a significant interaction between drug and time; therefore, we analyzed the **effect of drug separately *during each time period***."
 
-Many people often jump straight to analyzing the effect of drug separately during each time period, but this is a mistake. Sometimes the noise will not produce significant differences at individual time steps, but the global analysis with all the replicates can identify the significant divergence due to the interaction effect.
+Many people often **jump straight into analyzing the effect of drug separately during each time period**, but <u>**this is a mistake**</u>.
+
+- *Brian indicate that certain bars analyzed separately might be non-significant (NS)*
+- Sometimes the noise will not produce significant differences at individual time steps.
+- But the **global analysis with all the replicates** can identify the significant divergence due to the interaction effect.
+- You can use the p-values from the full interaction model to provide support for groups being different within each time-step.
+
+**Q:** Can anyone of you think of a common experimental design in natural sciences that would have the same statistical model as this described here? **Before-After Control-Impact (BACI) Design**
 
 <br>
 
