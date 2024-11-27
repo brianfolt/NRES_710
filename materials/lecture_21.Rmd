@@ -222,7 +222,7 @@ In order to include a random effect, that random 'block' has to have been <u>mea
 
 **Q:** What's the disadvantage of leaving out a random effect in a randomized block design? **Less power**. You could leave this out, but you would lose power -- potentially due to swamping.
 
-### Nested Designs
+### Nested Designs and Pseudoreplication
 
 We next discussed nested designs. The problem with nested designs is that you have the potential for **pseudoreplication**! You have something that has been measured more than once (random effect) that is nested within one of your treatments/groups/variables.
 
@@ -234,6 +234,41 @@ Four types of **pseudoreplication**:
 - Sacrificial
 - Temporal
 - Implicit
+
+## Data and Analysis Considerations -- A Practical Guide
+
+Here is a list of things that you might *consider* when conducting a statistical analysis. I say *consider*, because there is no 'one-size-fits-all' approach to statistics. Instead, every research question is different, every dataset is different, and thus every analysis is unique. Given this challenge in statistics, I recommend the following *considerations* as things to *think* about. You should think about your research questions, data, and analysis, and this should guide how you analyze your data. 
+
+1. What is the **scientific question** you are trying to answer?
+   - What is your hypothesis?
+   - What are the predictions of those hypothesis?
+2. What **statistical modeling procedure** might help you answer that question(s)? E.g., will a linear model help you? Note: statistics cannot provide you with the answer, but it might help you answer the question.
+3. What is the **statistical goal** of your analysis? Is it to:
+   - Determine if an **effect** is real (i.e., **significant**)?   
+   - Estimate an **effect size** or difference?   
+   - Make **predictions**?   
+4. What are the **independent variables** of interest? Are there other independent variables that you aren't interested, but that may swamp out the effects of variables you are interested in?
+5. Are your independent variables **continuous or categorical**? Ask this question for each of your independent variables.
+6. For each continuous independent variable, is it possible that its effect on the response is **non-linear**? Treating non-linear variables as categorical will increase power.
+7. Are the other **assumptions** of statistical procedures possibly **violated** (e.g., homoscedasticity, no autocorrelation in data, etc.)?
+8. Is it possible that your independent variables interact with eachother (i.e., **interactions**)?
+9. Is there **collinearity** among your independent variables? Collinearity is common in environmental sciences. If so, how strong is it? How will you deal with the collinearity? Are there are independent variables that you haven't measured that might have confounding effects?
+10. Should you treat your independent variables as **fixed effects** or **random effects**? Are there any blocking factors or other random effects you need to include in your model?
+11. Are there any measurements that were **repeated on a subject**? If so, do you have to worry about **autocorrelation** among those variables, or can you simply treat the subject as a **blocking factor**?
+12. Are any variables **nested** within other variables? In other words, do you need to be concerned about **pseudoreplication** in your analysis?
+
+**Additional steps** that we didn't get to in class this year:
+
+13. What is the **nature** of your **response variable**? Is it:
+   - Continuous, normally distributed?
+   - Count data?
+   - Binomial data (coin flip)?
+   - Follow some other distribution?
+14. Do you have **multiple response variables** of interest and if so, should you use **multivariate statistics** (e.g., principal components analysis)?
+15. How will you **build** your statistical model?
+   - No 'building' -- just run an analysis of the **global model**.
+   - Build the model using **stepwise procedures** (e.g., many F-drop tests).
+   - Use **AIC** to find a best model, possibly with multi-model inference of coefficient estimates.
 
 ## What Next?
 
