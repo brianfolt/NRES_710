@@ -194,60 +194,66 @@ rmarkdown::render('schedule.Rmd', rmarkdown::pdf_document())
 
 ```{r echo=FALSE}
 ### Function to convert RMD files to R scripts
-rmd2rscript <- function(infile="LECTURE2.Rmd"){
-  outfile <- gsub(".Rmd",".R",infile)
-  close(file(outfile, open="w"))   # clear output file
-  con1 <- file(infile, open="r")
+rmd2rscript <- function(infile = "LECTURE2.Rmd", outdir = ".") {
+  # Extract only the filename from infile
+  outfile <- file.path(outdir, gsub(".Rmd", ".R", basename(infile)))
+  
+  # Ensure the output directory exists
+  if (!dir.exists(outdir)) {
+    stop("The specified output directory does not exist: ", outdir)
+  }
+  
+  # Clear output file
+  close(file(outfile, open = "w"))
+  
+  con1 <- file(infile, open = "r")
   con2 <- file(outfile, "w")
   stringToFind <- "```{r*"
   stringToFind2 <- "echo"
   isrblock <- FALSE
-  #count=0
-  blocknum=0
+  blocknum <- 0
   
-  while(length(input <- readLines(con1, n=1)) > 0){   # while there are still lines to be read
-    isrblock <- grepl(input, pattern = stringToFind, perl = TRUE)   # is it the start of an R block?
-    showit <- !grepl(input, pattern = stringToFind2, perl = TRUE)   # is it hidden (echo=FALSE)
-    if(isrblock){
-      blocknum=blocknum+1
-      while(!grepl(newline<-readLines(con1, n=1),pattern="```",perl=TRUE)){
-        if((blocknum>1)&((showit)|(blocknum==2))) write(newline,file=con2,append=TRUE)
-        #count=count+1
+  while (length(input <- readLines(con1, n = 1)) > 0) { # while there are still lines to be read
+    isrblock <- grepl(input, pattern = stringToFind, perl = TRUE) # is it the start of an R block?
+    showit <- !grepl(input, pattern = stringToFind2, perl = TRUE) # is it hidden (echo=FALSE)
+    if (isrblock) {
+      blocknum <- blocknum + 1
+      while (!grepl(newline <- readLines(con1, n = 1), pattern = "```", perl = TRUE)) {
+        if ((blocknum > 1) & ((showit) | (blocknum == 2))) {
+          write(newline, file = con2, append = TRUE)
+        }
       }
-      isrblock=FALSE
+      isrblock <- FALSE
     }
   }
   closeAllConnections()
 }
+
 ```
 
 ```{r echo=FALSE, eval=FALSE}
 ## Manually run these lines through console to turn the RMD to R scripts
-rmd2rscript("materials/lecture_2.Rmd")
-rmd2rscript("materials/lecture_3.Rmd")
-rmd2rscript("materials/lecture_4.Rmd")
-rmd2rscript("materials/lecture_5.Rmd")
-rmd2rscript("materials/lecture_6.Rmd")
-rmd2rscript("materials/lecture_7.Rmd")
-rmd2rscript("materials/lecture_8.Rmd")
-rmd2rscript("materials/lecture_9.Rmd")
-rmd2rscript("materials/lecture_10.Rmd")
-rmd2rscript("materials/lecture_11.Rmd")
-rmd2rscript("materials/lecture_12.Rmd")
-rmd2rscript("materials/lecture_13.Rmd")
-# rmd2rscript("materials/lecture_14.Rmd") # no rmd for lecture 14
-rmd2rscript("materials/lecture_15.Rmd")
-rmd2rscript("materials/lecture_16.Rmd")
-rmd2rscript("materials/lecture_17.Rmd")
-rmd2rscript("materials/lecture_18.Rmd")
-rmd2rscript("materials/lecture_19.Rmd")
+rmd2rscript(infile = "./materials/lecture_2.Rmd", outdir = "datasets/")
+rmd2rscript(infile = "./materials/lecture_3.Rmd", outdir = "datasets/")
+rmd2rscript(infile = "./materials/lecture_4.Rmd", outdir = "datasets/")
+rmd2rscript(infile = "./materials/lecture_5.Rmd", outdir = "datasets/")
+rmd2rscript(infile = "./materials/lecture_6.Rmd", outdir = "datasets/")
+rmd2rscript(infile = "./materials/lecture_7.Rmd", outdir = "datasets/")
+rmd2rscript(infile = "./materials/lecture_8.Rmd", outdir = "datasets/")
+rmd2rscript(infile = "./materials/lecture_9.Rmd", outdir = "datasets/")
+rmd2rscript(infile = "./materials/lecture_10.Rmd", outdir = "datasets/")
+rmd2rscript(infile = "./materials/lecture_11.Rmd", outdir = "datasets/")
+rmd2rscript(infile = "./materials/lecture_12.Rmd", outdir = "datasets/")
+rmd2rscript(infile = "./materials/lecture_13.Rmd", outdir = "datasets/")
+#rmd2rscript(infile = "./materials/lecture_14.Rmd", outdir = "datasets/") # no rmd script for lecture 14
+rmd2rscript(infile = "./materials/lecture_15.Rmd", outdir = "datasets/")
+rmd2rscript(infile = "./materials/lecture_16.Rmd", outdir = "datasets/")
+rmd2rscript(infile = "./materials/lecture_17.Rmd", outdir = "datasets/")
+rmd2rscript(infile = "./materials/lecture_18.Rmd", outdir = "datasets/")
+rmd2rscript(infile = "./materials/lecture_19.Rmd", outdir = "datasets/")
+#rmd2rscript(infile = "./materials/lecture_20.Rmd", outdir = "datasets/") # no r code
+#rmd2rscript(infile = "./materials/lecture_21.Rmd", outdir = "datasets/") # no r code
 
-#rmd2rscript("exercise_1.Rmd") # no R code of substance necessary for students to have
-#rmd2rscript("exercise_2.Rmd") # sharing 'truth' at the bottom of the page
-#rmd2rscript("exercise_3.Rmd") # sharing 'truth' at the bottom of the page
-#rmd2rscript("exercise_4.Rmd") # sharing 'truth' at the bottom of the page
-#rmd2rscript("exercise_5.Rmd") # sharing 'truth' at the bottom of the page
-#rmd2rscript("exercise_6.Rmd") # sharing 'truth' at the bottom of the page
 ```
 
 ```{r echo=FALSE, eval=FALSE}
