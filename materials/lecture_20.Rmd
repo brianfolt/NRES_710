@@ -175,13 +175,17 @@ data$Pain <- with(data, ifelse(
 # Add some individual variability (noise)
 data$Pain <- data$Pain + rnorm(nrow(data), mean = 0, sd = 1)
 
+# Force the pain observations to be different, known values
+# with two clearly different trajectories
+data$Pain <- c(12, 12.5, 12.25, 12.4, 8.5, 9, 8.25, 8.4)
+
 # Base R plot
 # Base R plot with adjusted x-axis limits
 par(mar = c(4,4,0,0))
 plot(
   NA, 
   xlim = c(0.5, 4.5), # Adjust limits to avoid excessive space
-  ylim = range(data$Pain), 
+  ylim = range(0, data$Pain), 
   xaxt = "n", 
   xlab = "Time (hours)", 
   ylab = "Pain level"
