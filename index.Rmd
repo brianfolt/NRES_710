@@ -180,6 +180,8 @@ rmarkdown::render('materials/lecture_16.Rmd', 'word_document')
 rmarkdown::render('materials/lecture_17.Rmd', 'word_document')
 rmarkdown::render('materials/lecture_18.Rmd', 'word_document')
 rmarkdown::render('materials/lecture_19.Rmd', 'word_document')
+rmarkdown::render('materials/lecture_20.Rmd', 'word_document')
+rmarkdown::render('materials/lecture_21.Rmd', 'word_document')
 
 knitr::opts_chunk$set(echo = TRUE, message = FALSE)
 rmarkdown::render('index.Rmd', output_file = 'syllabus.pdf', rmarkdown::pdf_document())

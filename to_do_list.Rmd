@@ -20,4 +20,6 @@ Revise readings to make them a little more up-to-date
 
 Maybe trim lectures to make them more efficient (?), maybe remove the post-hoc test lecture (?), maybe add 1-2 more (?)
 
-Add in a lecture on GLMs
+Add in 1 (?) lecture on GLMs
+
+Revise class from 3 credits to 4 credits and add a 1-hour laboratory to do the exercises

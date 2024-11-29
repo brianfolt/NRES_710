@@ -13,5 +13,5 @@ Week,Dates,Tuesday class meeting,Thursday class meeting,Exercises/deadlines
 12,"Nov. 12, 14","Mixed-effect Models ([Code](materials/lecture_16.R), [Data1](materials/lecture_16_dataset1.csv), [Data2](materials/lecture_16_dataset2.csv))","Repeated Measures ([Code](materials/lecture_17.R), [Data](materials/lecture_17_dataset1.csv))",Exercise 5 - due Nov. 14
 13,"Nov. 19, 21",Exercise 6: Mixed-effect Models ([Link](exercise_6.html)),"Nested Designs ([Code](materials/lecture_18.R), [Data1](materials/lecture_18_dataset1.csv), [Data2](materials/lecture_18_dataset2.csv))",
 14,"Nov. 26, 28","More Nested Designs ([Code](materials/lecture_19.R), [Data1](materials/lecture_19_dataset1.csv), [Data2](materials/lecture_19_dataset2.csv))",*No class (Thanksgiving)*,Quiz 7 - due Nov. 25
-15,"Dec. 3, 5",TBD,Synthesis and Next Steps,Exercise 6 - due Dec. 4; [Reading]() - before last class
+15,"Dec. 3, 5",Pseudoreplication,Synthesis and Next Steps,Exercise 6 - due Dec. 4; [Reading](papers/hurlbert_1984.pdf) - before Tues. 3 December
 Finals,"Dec. 10, 12",*No class*,*No class*,Good luck on your exams!
