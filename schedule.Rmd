@@ -16,8 +16,6 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ## Schedule
 
-Note: this schedule is subject to change. Please check for updates frequently. Also, if a due date listed here differs from that on WebCampus, please use the date listed on WebCampus! Thank you.
-
 ```{r load_data, include=FALSE}
 courseSchedule <- read.csv("schedule.csv")
 ```
