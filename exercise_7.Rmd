@@ -40,23 +40,15 @@ Picture: Gary Griffith, iNaturalist
 
 <br>
 
-## Problem 2 -- 
+## Problem 2 -- Fixed x Random Effect interactions
 
-**[Dataset 1](exercise_7_dataset2.csv)** -- [... something with fixed effects that vary by the random effect...]
-
-![](pictures/.png){width=50%}
-
-Picture: NAME, iNaturalist
+Create this at a later date
 
 <br>
 
 ## Problem 3 -- BACI design
 
-**[Dataset 1](exercise_7_dataset3.csv)** -- [...]
-
-![](pictures/.png){width=50%}
-
-Picture: NAME, iNaturalist
+Create this at a later date 
 
 <br>
 
@@ -109,7 +101,7 @@ PlotError <- rep(rnorm(n_plots * n_sites, 0, 2), each = n_samples)
 ResidualError <- rnorm(length(Plot), 0, 1)
 
 # Response variable -- tree stems per sample
-StemDensity <- 50 + 5*Heat + 10*Elevation + 15*Heat*Elevation + SiteError + PlotError + ResidualError
+StemDensity <- 50 + 2*Heat + 3*Elevation + 6*Heat*Elevation + SiteError + PlotError + ResidualError
 
 # Save the data
 datum <- data.frame(Site = Site, Heat = Heat, Elevation = Elevation, Treatment = Treatment, Plot = Plot, Sample = Sample, SiteError = SiteError, PlotError = PlotError, ResidualError = ResidualError, StemDensity = StemDensity)

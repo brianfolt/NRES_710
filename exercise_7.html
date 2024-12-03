@@ -431,20 +431,15 @@ is one).</p>
 <p>Picture: Gary Griffith, iNaturalist</p>
 <p><br></p>
 </div>
-<div id="problem-2" class="section level2">
-<h2>Problem 2 –</h2>
-<p><strong><a href="exercise_7_dataset2.csv">Dataset 1</a></strong> – […
-something with fixed effects that vary by the random effect…]</p>
-<p><img src="pictures/.png" style="width:50.0%" /></p>
-<p>Picture: NAME, iNaturalist</p>
+<div id="problem-2-fixed-x-random-effect-interactions"
+class="section level2">
+<h2>Problem 2 – Fixed x Random Effect interactions</h2>
+<p>Create this at a later date</p>
 <p><br></p>
 </div>
 <div id="problem-3-baci-design" class="section level2">
 <h2>Problem 3 – BACI design</h2>
-<p><strong><a href="exercise_7_dataset3.csv">Dataset 1</a></strong> –
-[…]</p>
-<p><img src="pictures/.png" style="width:50.0%" /></p>
-<p>Picture: NAME, iNaturalist</p>
+<p>Create this at a later date</p>
 <p><br></p>
 </div>
 <div id="truth" class="section level2">
@@ -495,7 +490,7 @@ PlotError &lt;- rep(rnorm(n_plots * n_sites, 0, 2), each = n_samples)
 ResidualError &lt;- rnorm(length(Plot), 0, 1)
 
 # Response variable -- tree stems per sample
-StemDensity &lt;- 50 + 5*Heat + 10*Elevation + 15*Heat*Elevation + SiteError + PlotError + ResidualError
+StemDensity &lt;- 50 + 2*Heat + 3*Elevation + 6*Heat*Elevation + SiteError + PlotError + ResidualError
 
 # Save the data
 datum &lt;- data.frame(Site = Site, Heat = Heat, Elevation = Elevation, Treatment = Treatment, Plot = Plot, Sample = Sample, SiteError = SiteError, PlotError = PlotError, ResidualError = ResidualError, StemDensity = StemDensity)
