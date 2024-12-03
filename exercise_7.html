@@ -379,27 +379,62 @@ div.tocify {
 
 <h1 class="title toc-ignore">Exercise 7: Nested Design Models</h1>
 <h4 class="author">NRES 710</h4>
-<h4 class="date">Last compiled: 2024-11-26</h4>
+<h4 class="date">Last compiled: 2024-12-03</h4>
 
 </div>
 
 
 <div id="general-approach" class="section level2">
 <h2>General Approach</h2>
-<p>…</p>
+<p>There are three datasets to analyze for this exercise. For each
+dataset, please conduct the following analyses:</p>
+<ol style="list-style-type: decimal">
+<li>Analyze the data using a standard linear model with ‘lm()’; do not
+include any random effects. Report your results describing the fixed
+effects with the standard sentence(s). Report the sample sizes
+associated with each test of your effects.</li>
+<li>Analyze the data with random effects (random intercept) using a
+linear mixed-effects model with ‘lme()’ from the ‘nlme’ package. If
+there might be multiple random effects, consider whether they might be
+‘nested’ and handle this appropriately in your analysis. Report your
+results on the fixed effects using the standard sentence(s). Report the
+sample sizes associated with each test of your fixed effects.</li>
+<li>Report what the standard deviation due the random effect(s) is.</li>
+<li>Report how the results from the ‘lm()’ and ‘lme()’ approaches
+differ.</li>
+</ol>
+<p>Note: the ‘confint’ function doesn’t report confidence limits from
+‘lme()’ results the same way it does for ‘lm()’ results. To calculate
+the confidence intervals, use ‘intervals(results)’ instead.</p>
 </div>
-<div id="problem-1" class="section level2">
-<h2>Problem 1 – […]</h2>
-<p><strong><a href="exercise_7_dataset1.csv">Dataset 1</a></strong> –
-[…]</p>
-<p><img src="pictures/.png" style="width:50.0%" /></p>
-<p>Picture: NAME, iNaturalist</p>
+<div id="problem-1-pine-abundance" class="section level2">
+<h2>Problem 1 – Pine Abundance</h2>
+<p><strong><a href="exercise_7_dataset1.csv">Dataset 1</a></strong> – In
+this dataset, we want to understand how the abundance of Whitebark Pine
+Trees (<em>Pinus albicaulis</em>) varies by heat and elevation. We have
+four sites where we are studying <em>P. albicaulis</em> along the Carson
+Range; within each site, there are four plots. Each plot falls into one
+of four categories: low elevation and low heat, high elevation and low
+heat, low elevation and high heat, and high elevation and high heat.
+Within each plot, there are four samples where tree abundance (stems per
+plot) was measured. This is a fully factorial experiment. Thus, heat and
+elevation are two separate fixed-effects variables, and our response
+variable is tree abundance. Create a graph (e.g., box plots) that
+visualizes differences in the response variable between groups. This
+experimental design allows us to test for an interaction between the two
+variables, and we should do so! Report the results of the interaction,
+but remember: if the interaction isn’t significant, take it out of the
+model before reporting the main effects. Using the standard sentences,
+report the ‘effects’ of heat, elevation, and the interaction (if there
+is one).</p>
+<p><img src="pictures/pic_whitebarkpine.png" style="width:50.0%" /></p>
+<p>Picture: Gary Griffith, iNaturalist</p>
 <p><br></p>
 </div>
 <div id="problem-2" class="section level2">
 <h2>Problem 2 –</h2>
-<p><strong><a href="exercise_7_dataset2.csv">Dataset 1</a></strong> –
-[…]</p>
+<p><strong><a href="exercise_7_dataset2.csv">Dataset 1</a></strong> – […
+something with fixed effects that vary by the random effect…]</p>
 <p><img src="pictures/.png" style="width:50.0%" /></p>
 <p>Picture: NAME, iNaturalist</p>
 <p><br></p>
@@ -421,31 +456,49 @@ div.tocify {
 ### nested mixed-effects models
 
 ### Dataset 1
-# Set the seed for reproducibility
-set.seed(123)
+# Simulate study design with four sites; each site has four plots; each plot receives one of four treatments; each plot has four different samples. 
+set.seed(123) # Reproducibility
 
-# X-variables
-n_trees &lt;- 16
-years &lt;- 10:20
-n_years &lt;- length(years)
-Individual &lt;- rep(1:16, n_years)
-Age &lt;- years
+## Set up study design
+# Plots
+n_sites &lt;- 4
+n_plots &lt;- 4
+n_samples &lt;- 4
 
-# Tree error
-TreeError &lt;- rep(rnorm(n_trees, 0, 10), each = n_years)
+# Site
+Site &lt;- sort(rep(rep(1:n_sites, n_plots*n_samples)))
 
-# Residual error
-ResidError &lt;- matrix(NA, n_trees * n_years, 1)
-ResidError[1,1] &lt;- rnorm(1, mean = 0, sd = 12)
-for (i in 2:(n_trees * n_years)){
-  ResidError[i,1] &lt;- rnorm(1, mean = ResidError[i-1, 1], sd = 1)
-}
+# Heat
+Heat &lt;- rep(c(rep(0, n_samples), rep(1, n_samples), rep(0, n_samples), rep(1, n_samples)), n_sites)
 
-# Response variable
-Size &lt;- 20 + 1*Age + TreeError + ResidError
+# Elevation
+Elevation &lt;- rep(c(rep(0, n_samples), rep(0, n_samples), rep(1, n_samples), rep(1, n_samples)), n_sites)
 
-# Create dataframe
-datum &lt;- data.frame(Individual=Individual, Age=Age, TreeError=TreeError, ResidError=ResidError, Size=Size)
+# Treatment
+Treatment &lt;- factor(rep(c(&quot;HLEL&quot;, &quot;HHEL&quot;, &quot;HLEH&quot;, &quot;HHEH&quot;), each = 4, times = n_sites),
+                    levels = c(&quot;HLEL&quot;, &quot;HHEL&quot;, &quot;HLEH&quot;, &quot;HHEH&quot;))
+
+# Plot
+Plot &lt;- rep(sort(rep(1:4, n_samples)), n_sites)
+
+# Sample
+Sample &lt;- rep(rep(1:4, n_samples), n_sites)
+
+## Simulate error
+# Site error
+SiteError &lt;- rep(rnorm(n_sites, 0, 4), each =  n_plots * n_samples)
+
+# Plot error
+PlotError &lt;- rep(rnorm(n_plots * n_sites, 0, 2), each = n_samples)
+
+# Residual error (i.e., sample error)
+ResidualError &lt;- rnorm(length(Plot), 0, 1)
+
+# Response variable -- tree stems per sample
+StemDensity &lt;- 50 + 5*Heat + 10*Elevation + 15*Heat*Elevation + SiteError + PlotError + ResidualError
+
+# Save the data
+datum &lt;- data.frame(Site = Site, Heat = Heat, Elevation = Elevation, Treatment = Treatment, Plot = Plot, Sample = Sample, SiteError = SiteError, PlotError = PlotError, ResidualError = ResidualError, StemDensity = StemDensity)
 
 # Save the CSV file
 write.csv(datum, &quot;exercise_7_dataset1.csv&quot;, row.names = FALSE)</code></pre>

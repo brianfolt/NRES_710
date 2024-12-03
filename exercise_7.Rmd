@@ -21,21 +21,28 @@ knitr::opts_chunk$set(
 
 ## General Approach
 
-...
+There are three datasets to analyze for this exercise. For each dataset, please conduct the following analyses:
 
-## Problem 1 -- [...]
+1. Analyze the data using a standard linear model with 'lm()'; do not include any random effects. Report your results describing the fixed effects with the standard sentence(s). Report the sample sizes associated with each test of your effects.
+2. Analyze the data with random effects (random intercept) using a linear mixed-effects model with 'lme()' from the 'nlme' package. If there might be multiple random effects, consider whether they might be 'nested' and handle this appropriately in your analysis. Report your results on the fixed effects using the standard sentence(s). Report the sample sizes associated with each test of your fixed effects.
+3. Report what the standard deviation due the random effect(s) is.
+4. Report how the results from the 'lm()' and 'lme()' approaches differ.
 
-**[Dataset 1](exercise_7_dataset1.csv)** -- [...]
+Note: the 'confint' function doesn't report confidence limits from 'lme()' results the same way it does for 'lm()' results. To calculate the confidence intervals, use 'intervals(results)' instead.
 
-![](pictures/.png){width=50%}
+## Problem 1 -- Pine Abundance
 
-Picture: NAME, iNaturalist
+**[Dataset 1](exercise_7_dataset1.csv)** -- In this dataset, we want to understand how the abundance of Whitebark Pine Trees (*Pinus albicaulis*) varies by heat and elevation. We have four sites where we are studying *P. albicaulis* along the Carson Range; within each site, there are four plots. Each plot falls into one of four categories: low elevation and low heat, high elevation and low heat, low elevation and high heat, and high elevation and high heat. Within each plot, there are four samples where tree abundance (stems per plot) was measured. This is a fully factorial experiment. Thus, heat and elevation are two separate fixed-effects variables, and our response variable is tree abundance. Create a graph (e.g., box plots) that visualizes differences in the response variable between groups. This experimental design allows us to test for an interaction between the two variables, and we should do so! Report the results of the interaction, but remember: if the interaction isn't significant, take it out of the model before reporting the main effects. Using the standard sentences, report the 'effects' of heat, elevation, and the interaction (if there is one).
+
+![](pictures/pic_whitebarkpine.png){width=50%}
+
+Picture: Gary Griffith, iNaturalist
 
 <br>
 
 ## Problem 2 -- 
 
-**[Dataset 1](exercise_7_dataset2.csv)** -- [...]
+**[Dataset 1](exercise_7_dataset2.csv)** -- [... something with fixed effects that vary by the random effect...]
 
 ![](pictures/.png){width=50%}
 
@@ -63,31 +70,49 @@ If you would like to know the values used to create these datasets (i.e., 'truth
 ### nested mixed-effects models
 
 ### Dataset 1
-# Set the seed for reproducibility
-set.seed(123)
+# Simulate study design with four sites; each site has four plots; each plot receives one of four treatments; each plot has four different samples. 
+set.seed(123) # Reproducibility
 
-# X-variables
-n_trees <- 16
-years <- 10:20
-n_years <- length(years)
-Individual <- rep(1:16, n_years)
-Age <- years
+## Set up study design
+# Plots
+n_sites <- 4
+n_plots <- 4
+n_samples <- 4
 
-# Tree error
-TreeError <- rep(rnorm(n_trees, 0, 10), each = n_years)
+# Site
+Site <- sort(rep(rep(1:n_sites, n_plots*n_samples)))
 
-# Residual error
-ResidError <- matrix(NA, n_trees * n_years, 1)
-ResidError[1,1] <- rnorm(1, mean = 0, sd = 12)
-for (i in 2:(n_trees * n_years)){
-  ResidError[i,1] <- rnorm(1, mean = ResidError[i-1, 1], sd = 1)
-}
+# Heat
+Heat <- rep(c(rep(0, n_samples), rep(1, n_samples), rep(0, n_samples), rep(1, n_samples)), n_sites)
 
-# Response variable
-Size <- 20 + 1*Age + TreeError + ResidError
+# Elevation
+Elevation <- rep(c(rep(0, n_samples), rep(0, n_samples), rep(1, n_samples), rep(1, n_samples)), n_sites)
 
-# Create dataframe
-datum <- data.frame(Individual=Individual, Age=Age, TreeError=TreeError, ResidError=ResidError, Size=Size)
+# Treatment
+Treatment <- factor(rep(c("HLEL", "HHEL", "HLEH", "HHEH"), each = 4, times = n_sites),
+                    levels = c("HLEL", "HHEL", "HLEH", "HHEH"))
+
+# Plot
+Plot <- rep(sort(rep(1:4, n_samples)), n_sites)
+
+# Sample
+Sample <- rep(rep(1:4, n_samples), n_sites)
+
+## Simulate error
+# Site error
+SiteError <- rep(rnorm(n_sites, 0, 4), each =  n_plots * n_samples)
+
+# Plot error
+PlotError <- rep(rnorm(n_plots * n_sites, 0, 2), each = n_samples)
+
+# Residual error (i.e., sample error)
+ResidualError <- rnorm(length(Plot), 0, 1)
+
+# Response variable -- tree stems per sample
+StemDensity <- 50 + 5*Heat + 10*Elevation + 15*Heat*Elevation + SiteError + PlotError + ResidualError
+
+# Save the data
+datum <- data.frame(Site = Site, Heat = Heat, Elevation = Elevation, Treatment = Treatment, Plot = Plot, Sample = Sample, SiteError = SiteError, PlotError = PlotError, ResidualError = ResidualError, StemDensity = StemDensity)
 
 # Save the CSV file
 write.csv(datum, "exercise_7_dataset1.csv", row.names = FALSE)
