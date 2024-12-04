@@ -387,58 +387,88 @@ div.tocify {
 <div id="general-approach" class="section level2">
 <h2>General Approach</h2>
 <p>There are three datasets to analyze for this exercise. For each
-dataset, please conduct the following analyses:</p>
-<ol style="list-style-type: decimal">
-<li>Analyze the data using a standard linear model with ‘lm()’; do not
-include any random effects. Report your results describing the fixed
+dataset, follow the directions to work through different analyses and
+report the results.</p>
+</div>
+<div id="problem-1-nested-design" class="section level2">
+<h2>Problem 1 – Nested Design</h2>
+<p><strong><a href="exercise_7_dataset1.csv">Dataset 1</a></strong> – In
+this dataset, we want to understand how the abundance of Mountain
+Chickadees (<em>Poecile gambeli</em>) varies by heat index and elevation
+in the Carson Range. There are four study sites where chickadee
+abundance is surveyed each June with breeding surveys, where the number
+of seen during point counts is used as an estimate of population size.
+Within each site, there are four plots. Each plot falls into one of four
+categories: low elevation and low heat index, high elevation and low
+heat index, low elevation and high heat index, and high elevation and
+high heat index. Within each plot, there are four samples where
+chickadee abundance was measured. This is a fully factorial study
+design; thus, heat and elevation are two separate fixed-effects
+variables, and our response variable is tree abundance. Create a graph
+(e.g., box plots) that visualizes differences in the response variable
+between groups. This study design allows us to test for an interaction
+between the two variables, and we should do so! Report the results of
+the interaction, but remember: if the interaction isn’t significant,
+take it out of the model before reporting the main effects. Using the
+standard sentences, report the ‘effects’ of heat, elevation, and the
+interaction (if there is one).</p>
+<p>Please conduct the following analyses:</p>
+<p>1a. Analyze the data using a standard linear model with ‘lm()’; do
+not include any random effects. Report your results describing the fixed
 effects with the standard sentence(s). Report the sample sizes
-associated with each test of your effects.</li>
-<li>Analyze the data with random effects (random intercept) using a
+associated with each test of your effects. 1b. Analyze the data with a
 linear mixed-effects model with ‘lme()’ from the ‘nlme’ package. If
 there might be multiple random effects, consider whether they might be
 ‘nested’ and handle this appropriately in your analysis. Report your
 results on the fixed effects using the standard sentence(s). Report the
-sample sizes associated with each test of your fixed effects.</li>
-<li>Report what the standard deviation due the random effect(s) is.</li>
-<li>Report how the results from the ‘lm()’ and ‘lme()’ approaches
-differ.</li>
-</ol>
+sample sizes (<em>n</em> and DF) associated with each test of your fixed
+effects. 1c. Report what the standard deviation due to the random effect
+are. 1d. Report how the results from the ‘lm()’ and ‘lme()’ approaches
+differ.</p>
 <p>Note: the ‘confint’ function doesn’t report confidence limits from
 ‘lme()’ results the same way it does for ‘lm()’ results. To calculate
 the confidence intervals, use ‘intervals(results)’ instead.</p>
-</div>
-<div id="problem-1-pine-abundance" class="section level2">
-<h2>Problem 1 – Pine Abundance</h2>
-<p><strong><a href="exercise_7_dataset1.csv">Dataset 1</a></strong> – In
-this dataset, we want to understand how the abundance of Whitebark Pine
-Trees (<em>Pinus albicaulis</em>) varies by heat and elevation. We have
-four sites where we are studying <em>P. albicaulis</em> along the Carson
-Range; within each site, there are four plots. Each plot falls into one
-of four categories: low elevation and low heat, high elevation and low
-heat, low elevation and high heat, and high elevation and high heat.
-Within each plot, there are four samples where tree abundance (stems per
-plot) was measured. This is a fully factorial experiment. Thus, heat and
-elevation are two separate fixed-effects variables, and our response
-variable is tree abundance. Create a graph (e.g., box plots) that
-visualizes differences in the response variable between groups. This
-experimental design allows us to test for an interaction between the two
-variables, and we should do so! Report the results of the interaction,
-but remember: if the interaction isn’t significant, take it out of the
-model before reporting the main effects. Using the standard sentences,
-report the ‘effects’ of heat, elevation, and the interaction (if there
-is one).</p>
-<p><img src="pictures/pic_whitebarkpine.png" style="width:50.0%" /></p>
-<p>Picture: Gary Griffith, iNaturalist</p>
+<p><img src="pictures/pic_chickadee.png" style="width:50.0%" /></p>
+<p>Picture: Cornell Laboratory of Ornithology</p>
 <p><br></p>
 </div>
-<div id="problem-2-fixed-x-random-effect-interactions"
+<div id="problem-2-before-after-control-impact-design"
 class="section level2">
-<h2>Problem 2 – Fixed x Random Effect interactions</h2>
-<p>Create this at a later date</p>
+<h2>Problem 2 – Before-After Control-Impact Design</h2>
+<p><strong><a href="exercise_7_dataset2.csv">Dataset 2</a></strong> – In
+this dataset, we are studying a lizard that lives in lowland rainforests
+in Costa Rica, the Humble Anole (<em>Norops humilis</em>). We want to
+know whether anole populations are regulated by food abundance. The
+anoles eat small arthropods. We selected ten areas in the rain forest
+that the <em>N. humilis</em> are present and set up 15m x 15m study
+plots. We estimated the population size of lizards in each plot using
+mark-recapture methods during the month of January. We then
+randomly-selected three study plots and experimentally manipulated the
+amount of food available to lizards by setting out tuna cans that
+attracted insects. We supplemented food all year and resurveyed the
+lizard populations every three months: in April, July, and October.</p>
+<p>This is a Before-After Control-Impact (BACI) study design. We are
+specifically interested in understanding how lizard population size
+(number of lizards) varies seasonally (different months) and whether
+food supplementation changes the population cycle through time (i.e.,
+season x treatment interaction). If you recover a significant
+interaction, report then, then simplify your analysis. Specifically,
+recall my guidance from class: split the data into the different months,
+and then report the effects of treatment for each month.</p>
+<p>2a. Create a graph (e.g., box plots) that visualizes differences in
+the response variable by month and treatment group. 2b. Build a
+mixed-effects model to test ‘effects’ of treatment, month, treatment x
+month interactions. Report the results using the standard sentences.
+Hint: you should have five sentences (one for the overall interaction
+and one each for the four months). 2c. What was your random effect, and
+what the standard deviation due to that random effect?</p>
+<p><img src="pictures/pic_anole.png" style="width:50.0%" /></p>
+<p>Picture: Tobias Eisenberg, Reptile Database.</p>
 <p><br></p>
 </div>
-<div id="problem-3-baci-design" class="section level2">
-<h2>Problem 3 – BACI design</h2>
+<div id="problem-3-fixed-x-random-effect-interactions"
+class="section level2">
+<h2>Problem 3 – Fixed x Random Effect interactions</h2>
 <p>Create this at a later date</p>
 <p><br></p>
 </div>
@@ -489,14 +519,55 @@ PlotError &lt;- rep(rnorm(n_plots * n_sites, 0, 2), each = n_samples)
 # Residual error (i.e., sample error)
 ResidualError &lt;- rnorm(length(Plot), 0, 1)
 
-# Response variable -- tree stems per sample
-StemDensity &lt;- 50 + 2*Heat + 3*Elevation + 6*Heat*Elevation + SiteError + PlotError + ResidualError
+# Response variable -- birds per sample
+BirdDensity &lt;- 50 + 2*Heat + 3*Elevation + 6*Heat*Elevation + SiteError + PlotError + ResidualError
 
 # Save the data
-datum &lt;- data.frame(Site = Site, Heat = Heat, Elevation = Elevation, Treatment = Treatment, Plot = Plot, Sample = Sample, SiteError = SiteError, PlotError = PlotError, ResidualError = ResidualError, StemDensity = StemDensity)
+datum &lt;- data.frame(Site = Site, Heat = Heat, Elevation = Elevation, Treatment = Treatment, Plot = Plot, Sample = Sample, SiteError = SiteError, PlotError = PlotError, ResidualError = ResidualError, BirdDensity = BirdDensity)
 
 # Save the CSV file
-write.csv(datum, &quot;exercise_7_dataset1.csv&quot;, row.names = FALSE)</code></pre>
+write.csv(datum, &quot;exercise_7_dataset1.csv&quot;, row.names = FALSE)
+
+
+### Dataset 2
+# Simulate study design with multiple study plots, two treatments (treatment and control), measured across four seasons; i.e., a Before-After Control-Impact Design.
+set.seed(123) # Reproducibility
+
+## Set up study design
+# Plots
+n_plots &lt;- 10
+n_months &lt;- 4
+
+# Month
+Month &lt;- factor(rep(c(&quot;January&quot;, &quot;April&quot;, &quot;July&quot;, &quot;October&quot;), n_plots), levels = c(&quot;January&quot;, &quot;April&quot;, &quot;July&quot;, &quot;October&quot;))
+
+# Dummy-code the Month
+dummy &lt;- data.frame(model.matrix(~ Month - 1))
+colnames(dummy) &lt;- c(&quot;January&quot;, &quot;April&quot;, &quot;July&quot;, &quot;October&quot;)
+
+# Treatment
+Treatment &lt;- factor(sort(rep(c(&quot;Control&quot;, &quot;Food+&quot;), each = (n_plots/2) * n_months)), levels = c(&quot;Control&quot;, &quot;Food+&quot;))
+Treated &lt;- data.frame(model.matrix(~ Treatment - 1))
+colnames(Treated) &lt;- c(&quot;Control&quot;, &quot;Treated&quot;)
+
+# Plot
+Plot &lt;- sort(rep(rep(1:n_plots), n_months))
+
+## Simulate error
+# Plot error
+PlotError &lt;- rep(rnorm(n_plots, 0, 3.5), each = n_months)
+
+# Residual error (i.e., sample error)
+ResidualError &lt;- rnorm(length(Plot), 0, 3)
+
+# Response variable -- lizards per plot in each month
+LizardAbundance &lt;- 25 + 0*Treated$Treated + 8*dummy$April + 4*dummy$July - 1*dummy$October + 5*Treated$Treated*dummy$April + 2*Treated$Treated*dummy$July + 0*Treated$Treated*dummy$October + PlotError + ResidualError
+
+# Save the data
+datum &lt;- data.frame(Plot = Plot, Month = Month, Jan = dummy$January, Apr = dummy$April, Jul = dummy$July, Oct = dummy$Oct, Treatment = Treatment, Treated = Treated$Treated, PlotError = PlotError, ResidualError = ResidualError, Lizards = LizardAbundance)
+
+# Save the CSV file
+write.csv(datum, &quot;exercise_7_dataset2.csv&quot;, row.names = FALSE)</code></pre>
 <p><a href="exercise_8.html">–go to next exercise–</a></p>
 </div>
 
