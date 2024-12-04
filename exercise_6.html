@@ -382,7 +382,7 @@ div.tocify {
 
 <h1 class="title toc-ignore">Exercise 6: Mixed Effects Models</h1>
 <h4 class="author">NRES 710</h4>
-<h4 class="date">Last compiled: 2024-12-03</h4>
+<h4 class="date">Last compiled: 2024-12-04</h4>
 
 </div>
 
@@ -405,6 +405,21 @@ differ.</li>
 <p>Note: the ‘confint’ function doesn’t report confidence limits from
 ‘lme()’ results the same way it does for ‘lm()’ results. To calculate
 the confidence intervals, use ‘intervals(results)’ instead.</p>
+<p>Note: We have noticed in class that when we run mixed-effects models
+with the ‘lme()’ function using ‘library(nlme)’, it often rounds our
+small p-values to be ~0. This makes it difficult to see if the p-values
+got larger or smaller when we compare different models. Here is a trick.
+Whenever we have an object in R, we can use the ‘str()’ function to
+examine the structure of the object. We have often used ‘str()’ to
+examine our data, but we can also use ‘str()’ to examine our ‘results’
+objects. Take a look at one of your ‘lme()’ objects in R using:
+<strong>str(summary(results))</strong>. This will show you the structure
+of the summary of the results object. If we dig through there, we find
+that there is a ‘slot’ in that summary called ‘tTable’. This ‘tTable’
+contains the effects, SE, DF, t-value, and p-value for each effect in
+our model – and the p-values are unrounded here. We can call that
+information directly using <strong>summary(results2)$tTable</strong>
+which will provide unrounded p-value estimates.</p>
 </div>
 <div id="problem-1" class="section level2">
 <h2>Problem 1</h2>
