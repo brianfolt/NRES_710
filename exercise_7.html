@@ -398,37 +398,49 @@ report the results.</p>
 <p><strong><a href="exercise_7_dataset1.csv">Dataset 1</a></strong> – In
 this dataset, we want to understand how the abundance of Mountain
 Chickadees (<em>Poecile gambeli</em>) varies by heat index and elevation
-in the Carson Range. There are four study sites where chickadee
-abundance is surveyed each June with breeding surveys, where the number
-of seen during point counts is used as an estimate of population size.
-Within each site, there are four plots. Each plot falls into one of four
-categories: low elevation and low heat index, high elevation and low
-heat index, low elevation and high heat index, and high elevation and
-high heat index. Within each plot, there are four samples where
-chickadee abundance was measured. This is a fully factorial study
-design; thus, heat and elevation are two separate fixed-effects
-variables, and our response variable is tree abundance. Create a graph
-(e.g., box plots) that visualizes differences in the response variable
-between groups. This study design allows us to test for an interaction
-between the two variables, and we should do so! Report the results of
-the interaction, but remember: if the interaction isn’t significant,
-take it out of the model before reporting the main effects. Using the
-standard sentences, report the ‘effects’ of heat, elevation, and the
-interaction (if there is one).</p>
+in the Carson Range. Aspect causes some areas to be warmer (high heat
+index) and others cooler (low heat index), independent of weather
+elevation is low or high. These factors might interact to influence seed
+production and ultimately bird abundance. There are four study sites
+where chickadee abundance is surveyed each June with breeding surveys,
+where the number of seen during point counts is used as an estimate of
+population size. Within each site, there are four plots. Each plot falls
+into one of four categories: low elevation and low heat index, high
+elevation and low heat index, low elevation and high heat index, and
+high elevation and high heat index. Within each plot, there are four
+samples where chickadee abundance was measured. This is a fully
+factorial study design; thus, heat and elevation are two separate
+fixed-effects variables, and our response variable is tree abundance.
+This study design allows us to test for an interaction between the two
+variables, and we should do so! Report the results of the interaction,
+but remember: if the interaction isn’t significant, take it out of the
+model before reporting the main effects. Using the standard sentences,
+report the ‘effects’ of heat, elevation, and the interaction (if there
+is one).</p>
 <p>Please conduct the following analyses:</p>
-<p><strong>1a.</strong> Analyze the data using a standard linear model
-with ‘lm()’; do not include any random effects. Report your results
+<p><strong>1a.</strong> Create a graph (e.g., box plots) that visualizes
+differences in the response variable between groups.<br />
+<strong>1b.</strong> What is the relationship between sites, plots,
+treatments, and samples? Please use your preferred software (e.g.,
+PowerPoint, Google Slides, etc.) to create a diagram illustrating the
+nestedness of the study design related to these features, like I showed
+you all in class. Remember: the lines connecting study design layers
+should spread out from top-to-bottom across all dimension of the design.
+Hint: this should tell us how many true replicates we have to test for
+treatment effects in our analysis.<br />
+<strong>1c.</strong> Analyze the data using a standard linear model with
+‘lm()’; do not include any random effects. Report your results
 describing the fixed effects with the standard sentence(s). Report the
 sample sizes associated with each test of your effects.<br />
-<strong>1b.</strong> Analyze the data with a linear mixed-effects model
+<strong>1d.</strong> Analyze the data with a linear mixed-effects model
 with ‘lme()’ from the ‘nlme’ package. If there might be multiple random
 effects, consider whether they might be ‘nested’ and handle this
 appropriately in your analysis. Report your results on the fixed effects
 using the standard sentence(s). Report the sample sizes (<em>n</em> and
 DF) associated with each test of your fixed effects.<br />
-<strong>1c.</strong> Report what the standard deviation due to the
+<strong>1e.</strong> Report what the standard deviation due to the
 random effect are.<br />
-<strong>1d.</strong> Report how the results from the ‘lm()’ and ‘lme()’
+<strong>1f.</strong> Report how the results from the ‘lm()’ and ‘lme()’
 approaches differ.</p>
 <p>Note: the ‘confint’ function doesn’t report confidence limits from
 ‘lme()’ results the same way it does for ‘lm()’ results. To calculate
