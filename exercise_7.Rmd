@@ -49,7 +49,7 @@ Picture: Cornell Laboratory of Ornithology
 This is a **Before-After Control-Impact (BACI)** study design. We are specifically interested in understanding how lizard population size (number of lizards) varies seasonally (different months) and whether food supplementation changes the population cycle through time (i.e., season x treatment interaction). If you recover a significant interaction, report then, then simplify your analysis. Specifically, recall my guidance from class: split the data into the different months, and then report the effects of treatment for each month.
 
 **2a.** Create a graph (e.g., box plots) that visualizes differences in the response variable by month and treatment group.    
-**2b.** Build a mixed-effects model to test 'effects' of treatment, month, treatment x month interactions. Report the results using the standard sentences. Hint: you should have five sentences (one for the overall interaction and one each for the four months). Report your sample sizes (*n* and DF) associated with each sentence.   
+**2b.** Build a mixed-effects model to test for 'effects' of treatment, month, treatment x month interactions. Report the results using the standard sentences. Hint: you should have five sentences (one for the overall interaction and one each for the four months). Report your sample sizes (*n* and DF) associated with each sentence.   
 **2c**. What was your random effect, and what the standard deviation due to that random effect?    
 
 ![](pictures/pic_anole.png){width=50%}
