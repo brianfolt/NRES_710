@@ -29,10 +29,10 @@ There are three datasets to analyze for this exercise. For each dataset, follow 
 
 Please conduct the following analyses:
 
-1a. Analyze the data using a standard linear model with 'lm()'; do not include any random effects. Report your results describing the fixed effects with the standard sentence(s). Report the sample sizes associated with each test of your effects.
-1b. Analyze the data with a linear mixed-effects model with 'lme()' from the 'nlme' package. If there might be multiple random effects, consider whether they might be 'nested' and handle this appropriately in your analysis. Report your results on the fixed effects using the standard sentence(s). Report the sample sizes (*n* and DF) associated with each test of your fixed effects.
-1c. Report what the standard deviation due to the random effect are.
-1d. Report how the results from the 'lm()' and 'lme()' approaches differ.
+**1a.** Analyze the data using a standard linear model with 'lm()'; do not include any random effects. Report your results describing the fixed effects with the standard sentence(s). Report the sample sizes associated with each test of your effects.   
+**1b.** Analyze the data with a linear mixed-effects model with 'lme()' from the 'nlme' package. If there might be multiple random effects, consider whether they might be 'nested' and handle this appropriately in your analysis. Report your results on the fixed effects using the standard sentence(s). Report the sample sizes (*n* and DF) associated with each test of your fixed effects.    
+**1c.** Report what the standard deviation due to the random effect are.    
+**1d.** Report how the results from the 'lm()' and 'lme()' approaches differ.   
 
 Note: the 'confint' function doesn't report confidence limits from 'lme()' results the same way it does for 'lm()' results. To calculate the confidence intervals, use 'intervals(results)' instead.
 
@@ -46,11 +46,11 @@ Picture: Cornell Laboratory of Ornithology
 
 **[Dataset 2](exercise_7_dataset2.csv)** -- In this dataset, we are studying a lizard that lives in lowland rainforests in Costa Rica, the Humble Anole (*Norops humilis*). We want to know whether anole populations are regulated by food abundance. The anoles eat small arthropods. We selected ten areas in the rain forest that the *N. humilis* are present and set up 15m x 15m study plots. We estimated the population size of lizards in each plot using mark-recapture methods during the month of January. We then randomly-selected three study plots and experimentally manipulated the amount of food available to lizards by setting out tuna cans that attracted insects. We supplemented food all year and resurveyed the lizard populations every three months: in April, July, and October.
 
-This is a Before-After Control-Impact (BACI) study design. We are specifically interested in understanding how lizard population size (number of lizards) varies seasonally (different months) and whether food supplementation changes the population cycle through time (i.e., season x treatment interaction). If you recover a significant interaction, report then, then simplify your analysis. Specifically, recall my guidance from class: split the data into the different months, and then report the effects of treatment for each month.
+This is a **Before-After Control-Impact (BACI)** study design. We are specifically interested in understanding how lizard population size (number of lizards) varies seasonally (different months) and whether food supplementation changes the population cycle through time (i.e., season x treatment interaction). If you recover a significant interaction, report then, then simplify your analysis. Specifically, recall my guidance from class: split the data into the different months, and then report the effects of treatment for each month.
 
-2a. Create a graph (e.g., box plots) that visualizes differences in the response variable by month and treatment group.
-2b. Build a mixed-effects model to test 'effects' of treatment, month, treatment x month interactions. Report the results using the standard sentences. Hint: you should have five sentences (one for the overall interaction and one each for the four months). Report your sample sizes (*n* and DF) associated with each sentence.
-2c. What was your random effect, and what the standard deviation due to that random effect?
+**2a.** Create a graph (e.g., box plots) that visualizes differences in the response variable by month and treatment group.    
+**2b.** Build a mixed-effects model to test 'effects' of treatment, month, treatment x month interactions. Report the results using the standard sentences. Hint: you should have five sentences (one for the overall interaction and one each for the four months). Report your sample sizes (*n* and DF) associated with each sentence.   
+**2c**. What was your random effect, and what the standard deviation due to that random effect?    
 
 ![](pictures/pic_anole.png){width=50%}
 

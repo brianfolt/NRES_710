@@ -416,18 +416,20 @@ take it out of the model before reporting the main effects. Using the
 standard sentences, report the ‘effects’ of heat, elevation, and the
 interaction (if there is one).</p>
 <p>Please conduct the following analyses:</p>
-<p>1a. Analyze the data using a standard linear model with ‘lm()’; do
-not include any random effects. Report your results describing the fixed
-effects with the standard sentence(s). Report the sample sizes
-associated with each test of your effects. 1b. Analyze the data with a
-linear mixed-effects model with ‘lme()’ from the ‘nlme’ package. If
-there might be multiple random effects, consider whether they might be
-‘nested’ and handle this appropriately in your analysis. Report your
-results on the fixed effects using the standard sentence(s). Report the
-sample sizes (<em>n</em> and DF) associated with each test of your fixed
-effects. 1c. Report what the standard deviation due to the random effect
-are. 1d. Report how the results from the ‘lm()’ and ‘lme()’ approaches
-differ.</p>
+<p><strong>1a.</strong> Analyze the data using a standard linear model
+with ‘lm()’; do not include any random effects. Report your results
+describing the fixed effects with the standard sentence(s). Report the
+sample sizes associated with each test of your effects.<br />
+<strong>1b.</strong> Analyze the data with a linear mixed-effects model
+with ‘lme()’ from the ‘nlme’ package. If there might be multiple random
+effects, consider whether they might be ‘nested’ and handle this
+appropriately in your analysis. Report your results on the fixed effects
+using the standard sentence(s). Report the sample sizes (<em>n</em> and
+DF) associated with each test of your fixed effects.<br />
+<strong>1c.</strong> Report what the standard deviation due to the
+random effect are.<br />
+<strong>1d.</strong> Report how the results from the ‘lm()’ and ‘lme()’
+approaches differ.</p>
 <p>Note: the ‘confint’ function doesn’t report confidence limits from
 ‘lme()’ results the same way it does for ‘lm()’ results. To calculate
 the confidence intervals, use ‘intervals(results)’ instead.</p>
@@ -450,22 +452,25 @@ randomly-selected three study plots and experimentally manipulated the
 amount of food available to lizards by setting out tuna cans that
 attracted insects. We supplemented food all year and resurveyed the
 lizard populations every three months: in April, July, and October.</p>
-<p>This is a Before-After Control-Impact (BACI) study design. We are
-specifically interested in understanding how lizard population size
-(number of lizards) varies seasonally (different months) and whether
-food supplementation changes the population cycle through time (i.e.,
-season x treatment interaction). If you recover a significant
-interaction, report then, then simplify your analysis. Specifically,
-recall my guidance from class: split the data into the different months,
-and then report the effects of treatment for each month.</p>
-<p>2a. Create a graph (e.g., box plots) that visualizes differences in
-the response variable by month and treatment group. 2b. Build a
-mixed-effects model to test ‘effects’ of treatment, month, treatment x
-month interactions. Report the results using the standard sentences.
-Hint: you should have five sentences (one for the overall interaction
-and one each for the four months). Report your sample sizes (<em>n</em>
-and DF) associated with each sentence. 2c. What was your random effect,
-and what the standard deviation due to that random effect?</p>
+<p>This is a <strong>Before-After Control-Impact (BACI)</strong> study
+design. We are specifically interested in understanding how lizard
+population size (number of lizards) varies seasonally (different months)
+and whether food supplementation changes the population cycle through
+time (i.e., season x treatment interaction). If you recover a
+significant interaction, report then, then simplify your analysis.
+Specifically, recall my guidance from class: split the data into the
+different months, and then report the effects of treatment for each
+month.</p>
+<p><strong>2a.</strong> Create a graph (e.g., box plots) that visualizes
+differences in the response variable by month and treatment group.<br />
+<strong>2b.</strong> Build a mixed-effects model to test ‘effects’ of
+treatment, month, treatment x month interactions. Report the results
+using the standard sentences. Hint: you should have five sentences (one
+for the overall interaction and one each for the four months). Report
+your sample sizes (<em>n</em> and DF) associated with each
+sentence.<br />
+<strong>2c</strong>. What was your random effect, and what the standard
+deviation due to that random effect?</p>
 <p><img src="pictures/pic_anole.png" style="width:50.0%" /></p>
 <p>Picture: Tobias Eisenberg, Reptile Database.</p>
 <p><br></p>
