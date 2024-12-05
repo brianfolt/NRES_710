@@ -182,6 +182,7 @@ rmarkdown::render('materials_/lecture_18.Rmd', 'word_document')
 rmarkdown::render('materials_/lecture_19.Rmd', 'word_document')
 rmarkdown::render('materials_/lecture_20.Rmd', 'word_document')
 rmarkdown::render('materials_/lecture_21.Rmd', 'word_document')
+rmarkdown::render('materials_/lecture_GLM.Rmd', 'word_document')
 
 knitr::opts_chunk$set(echo = TRUE, message = FALSE)
 rmarkdown::render('index.Rmd', output_file = 'syllabus.pdf', rmarkdown::pdf_document())
@@ -254,6 +255,7 @@ rmd2rscript(infile = "./materials_/lecture_18.Rmd", outdir = "datasets/")
 rmd2rscript(infile = "./materials_/lecture_19.Rmd", outdir = "datasets/")
 #rmd2rscript(infile = "./materials_/lecture_20.Rmd", outdir = "datasets/") # no r code
 #rmd2rscript(infile = "./materials_/lecture_21.Rmd", outdir = "datasets/") # no r code
+rmd2rscript(infile = "./materials_/lecture_GLM.Rmd", outdir = "datasets/")
 
 ```
 

@@ -20,6 +20,16 @@ Revise readings to make them a little more up-to-date
 
 Maybe trim lectures to make them more efficient (?), maybe remove the post-hoc test lecture (?), maybe add 1-2 more (?)
 
-Add in 1 (?) lecture on GLMs
+Add in 1-3 (?) lecture on GLMs -- HAVE ALREADY STARTED ONE
 
 Revise class from 3 credits to 4 credits and add a 1-hour laboratory to do the exercises
+
+TAKEHOME FINAL: Give it to them on Monday, they get all week, turn in on Friday at noon.
+
+TEACH HOW TO GRAPH INTERACTIONS with 3-D PLOTS: add code for this into a lecture
+
+DO A DAY WHERE WE DISCUSS STUDENTS DATASETS: write different variables on board, sampling design, nesting, linear model, etc.
+
+GET A 1-HR LAB EVERY WEEK TO WORK ON EXERCISES AND CLASS PROJECT
+
+PROJECT: small group projects where students describe methods and analysis for a dataset
