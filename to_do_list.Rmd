@@ -10,6 +10,8 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ## To-Do List
 
+LATE-WORK POLICY: make this explicit. I will work with you on assignments before they are due to help you submit it with a '100%' grade. After the due date has passed, there is a 25% reduction in grade and the submission is the final submission that will be graded by points. (THIS CREATES A GREY AREA IF STUDENTS SUBMIT SOMETHING AT 11pm ON THE NIGHT OF THE DUE DATE... do they get help??)
+
 Add a 'real' dataset to each exercise. Make it the final 'problem'. 
 
 Add a simulation exercise to lecture 18 to understand how collinearity between fields and plot treatments influences estimation when sample sizes are low.
