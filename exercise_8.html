@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+<meta name="author" content="NRES 710" />
+
+
+<title>Exercise 8: Generalized Linear Models</title>
+
+<script src="site_libs/header-attrs-2.27/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/yeti.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/jqueryui-1.13.2/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+<link rel="stylesheet" href="styles.css" type="text/css" />
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "\e258";
+  font-family: 'Glyphicons Halflings';
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">NRES 710</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Syllabus</a>
+</li>
+<li>
+  <a href="schedule.html">Schedule</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    Exercises
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="exercise_1.html">Exercise 1 - Linear Regression</a>
+    </li>
+    <li>
+      <a href="exercise_2.html">Exercise 2 - Linear Regression (cont.)</a>
+    </li>
+    <li>
+      <a href="exercise_3.html">Exercise 3 - Analysis of Categorical Data</a>
+    </li>
+    <li>
+      <a href="exercise_4.html">Exercise 4 - Multi-variable Analysis - Collinearity</a>
+    </li>
+    <li>
+      <a href="exercise_5.html">Exercise 5 - Multi-variable Analysis - Interactions</a>
+    </li>
+    <li>
+      <a href="exercise_6.html">Exercise 6 - Mixed Effects Models</a>
+    </li>
+    <li>
+      <a href="exercise_7.html">Exercise 7 - Nested Designs</a>
+    </li>
+    <li>
+      <a href="exercise_8.html">Exercise 8 - Generalized Linear Models</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    More Resources
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="Links.html">Links</a>
+    </li>
+  </ul>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+
+
+<h1 class="title toc-ignore">Exercise 8: Generalized Linear Models</h1>
+<h4 class="author">NRES 710</h4>
+<h4 class="date">Last compiled: 2025-01-21</h4>
+
+</div>
+
+
+<div id="general-approach" class="section level2">
+<h2>General Approach</h2>
+<p>There are two datasets to analyze for this exercise. For each one,
+analyze the data using generalized linear modeling with the appropriate
+statistical distribution (i.e., family). Analyze with regular ‘main’
+effects; there are no interactions, collinearity, or other complications
+to worry about. For each dataset, write one paragraph summarizing your
+results with the standard results sentences.</p>
+</div>
+<div id="problem-1" class="section level2">
+<h2>Problem 1</h2>
+<p><strong><a href="exercise_8_dataset1.csv">Dataset 1</a></strong> –
+For this problem, you will be doing a habitat analysis to understand
+whether the presence of Greater-sage Grouse (<em>Centrocercus
+urophasianus</em>) varies by (1) the number of years since the habitat
+has burned, (2) the density of big sage brush (<em>Artemisia
+tridentata</em>) bushes, (3) whether there is a water source at the
+site. Your data are 100 surveys in 1-ha sage-brush plots where you
+noted: whether or not grouse were present (assuming this was done
+without error), number of years since fire, sage-brush density, and
+presence/absence of water.</p>
+<p>In addition to the results paragraph, answer the following question:
+What is the average, predicted probability of habitat use by grouse in a
+stand that burned 15 years ago with a sage-brush density of 150
+bushes/ha and a water source present? No need for confidence intervals
+around this prediction.</p>
+<p><img src="pictures/pic_sagegrouse.png" style="width:50.0%" /></p>
+<p>Picture: Donna Pomeroy (iNaturalist)</p>
+<p><br></p>
+</div>
+<div id="problem-2" class="section level2">
+<h2>Problem 2</h2>
+<p><strong><a href="exercise_8_dataset2.csv">Dataset 2</a></strong> –
+For this problem, you are still studying birds, but now you are studying
+the entire community of birds that live in various habitats in Nevada.
+You visit 100 sites early in the morning and count the <strong>number of
+bird species</strong> present at each site (response variable) during a
+standardized 1-hour survey. You also collected data on habitat type
+(desert, sage-brush, grassland) and understory density (an index from
+0–100 made from observations of a density board: 100% is thick [can’t
+see through it], 0 means no understory [open views!]).</p>
+<p>In your results description, be sure to describe the differences
+among all pairs of habitat types and the effect of understory density.
+In addition, please answer this question in your results: what is the
+average, predicted number of bird species in desert habitat with an
+understory density of 35%? No need to worry about confidence intervals
+here.</p>
+<p><img src="pictures/pic_sagebrush.png" style="width:50.0%" /></p>
+<p>Picture: Monitor Valley, Nevada (B. Folt).</p>
+<p><br></p>
+</div>
+<div id="truth" class="section level2">
+<h2>Truth</h2>
+<p>If you would like to examine the true values used to create these
+datasets (i.e., ‘truth’), examine the code here:</p>
+<pre class="r"><code>########################## &#39;Truth&#39; ############################# 
+### Exercise 8: code to simulate datasets for the exploration of
+### generalized linear models (GLMs)
+
+### Dataset 1
+set.seed(111) # Reproducibility
+
+## Set up study design
+# Plots
+n_sites &lt;- 100
+
+# yr_since_burn
+mean_lambda &lt;- 10  # Mean of the Poisson component
+dispersion &lt;- 2    # Dispersion parameter (larger values = less overdispersion)
+yr_since_burn &lt;- rnbinom(n_sites, size = 1 / dispersion, mu = mean_lambda)
+
+# sagebrush density
+sagebrush &lt;- round(runif(n_sites, 10, 200), 1)
+
+# water source presence
+water &lt;- rbinom(n_sites, 1, 0.4)
+
+# Response variable -- bird presence
+mean_presence &lt;- exp(-3 + 0.035*yr_since_burn + 0.01*sagebrush + 2*water)/(1 + exp(-3 + 0.03*yr_since_burn + 0.01*sagebrush + 2*water))
+# y_hat; the mean presence for each site, given effects
+
+# Response variable - data
+presence &lt;- rep(NA, n_sites)
+for (i in 1:n_sites){
+  presence[i] &lt;- rbinom(1, 1, mean_presence[i])
+  # y_i - simulated each observation of y_i using a random process but given the y_hat mean for each individual
+}
+
+# Save the data
+datum &lt;- data.frame(YearSinceBurn = yr_since_burn, SageDensity = sagebrush, Water = water, Presence = presence)
+
+# Save the CSV file
+write.csv(datum, &quot;exercise_8_dataset1.csv&quot;, row.names = FALSE)
+
+
+### Dataset 2
+set.seed(111) # Reproducibility
+
+## Set up study design
+# Plots
+n_sites &lt;- 120
+
+# habitat type
+habitat &lt;- rep(c(&quot;desert&quot;, &quot;grassland&quot;, &quot;sagebrush&quot;), each = n_sites/3)
+dummy &lt;- data.frame(model.matrix(~ habitat - 1))
+colnames(dummy) &lt;- c(&quot;Desert&quot;, &quot;Grassland&quot;, &quot;Sagebrush&quot;)
+
+# understory density
+understory &lt;- round(runif(n_sites, 0, 100), 0)
+
+# Response variable -- predicted number of bird species
+mean_species &lt;- exp(0 + 2*dummy$Grassland + 1.2*dummy$Sagebrush + 0.015*understory) # y_hat; mean predicted number of species per area
+no_species &lt;- rep(NA, n_sites)
+# Response variable
+for (i in 1:n_sites){
+  no_species[i] &lt;- rpois(1, mean_species[i])
+  # y_i - simulate each observation of y_i using a random process but given the y_hat mean for each site
+}
+
+# Save the data
+datum &lt;- data.frame(Habitat = habitat, Desert = dummy$Desert, Grassland = dummy$Grassland, Sagebrush = dummy$Sagebrush, UnderstoryDensity = understory, SpeciesCount = no_species)
+
+# Save the CSV file
+write.csv(datum, &quot;exercise_8_dataset2.csv&quot;, row.names = FALSE)</code></pre>
+<p><a href="exercise_9.html">–go to next exercise–</a></p>
+</div>
+
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+<script>
+$(document).ready(function ()  {
+
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
