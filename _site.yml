@@ -25,6 +25,8 @@ navbar:
       href: exercise_7.html
     - text: Exercise 8 - Generalized Linear Models
       href: exercise_8.html 
+    - text: CJS Models
+      href: cjs_models.html
   - text: More Resources
     menu:
     - text: Links 

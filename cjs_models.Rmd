@@ -1,0 +1,30 @@
+---
+title: "Cormack-Jolly-Seber Models"
+author: "WIS 4601 - Teaching Demo"
+date: "Last compiled: `r Sys.Date()`"
+output: 
+  html_document: 
+    theme: yeti
+    toc: yes
+    toc_float: yes
+    css: styles.css
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+	echo = TRUE,
+	message = FALSE,
+	warning = FALSE,
+	cache = TRUE
+)
+```
+
+## Cormack-Jolly Seber Models
+
+[Lecture Slides](cjs_beamer_ppt.pdf)
+
+[Lab Slides](cjs_beamer_ppt.pdf)
+
+[R Code](https://brianfolt.github.io/NRES_710/CJS)
+
+[Data]()
