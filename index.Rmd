@@ -184,6 +184,7 @@ rmarkdown::render('materials_/lecture_20.Rmd', 'word_document')
 rmarkdown::render('materials_/lecture_21.Rmd', 'word_document')
 rmarkdown::render('materials_/lecture_GLM1.Rmd', 'word_document')
 rmarkdown::render('materials_/lecture_GLM2.Rmd', 'word_document')
+rmarkdown::render('cjs_models_notes.Rmd', 'word_document')
 
 knitr::opts_chunk$set(echo = TRUE, message = FALSE)
 rmarkdown::render('index.Rmd', output_file = 'syllabus.pdf', rmarkdown::pdf_document())
