@@ -19,52 +19,25 @@ knitr::opts_chunk$set(
 )
 ```
 
-## Title slide
+Write link to course website on the dry-erase board
 
-Today we are going to learn about one of the most famous models in wildlife biology, the Cormack-Jolly-Seber model, which uses capture-mark-recapture data to estimate survival of animals would accounting for a pesky nuisance variable, imperfect detection.
+With today's lecture, we are going to learn how to estimate survival -- or do our best to estimate survival -- using capture-mark-recapture data.
 
-I'm going to walk you through some general concepts related to why we need this model, study design and assumptions, and how we can conceptualize and build this model this model hierarchically using probability functions. Then I will show examples of how to perform these analyses using both frequentist and Bayesian methods in R. As always, we will use simulated data in class to make sure the model is estimating parameters we know to be 'truth', and then in lab later this week, you all will work through analysis with both simulated and real data. 
-
-## Review
-
-A quick review before we dive into today's topic. Remember that for the final few weeks of the semester, our goal is to work toward building an 'integrated population model'. Over the last two weeks, we have learned how to (1) estimate population size using count data and hierarchical state-space models, the model in this central grey box, but then we also learned (2) how to estimate population productivity using data describing reproduction using Poisson regression models, and then (3) last class we learned how to estimate survival using 'known-fate data' with a Kaplain-Meier model. We are learning how to build each of these individual models for abundance, reproduction, and survival, so we can put them all together into integrated population models at the end of the semester.
-
-But radiotags or GPS devices are expensive, and we don't have 'known fate' data.
-
-## Review 2
-
-Instead, we rely on capture-mark-recapture data to estimate survival. These mark-recapture data, M, inheritly are challenged by this pesky nuisance parameter, imperfect detection, annotated P in this graph. today we will learn how to build CJS models that can estimate survival while accounting for imperfect detection.
-
-## Readings
+## Readings & Materials
 
 I asked you all to read Chapter 7 of Kery & Schaub 2012 before class, which provides a simple introduction to these models and how to fit them. The other two chapters also provide context on implementation in both Bayesian and frequentist methods - providing these here mostly for reference.
 
 For today's class, you can access the slides, code, and data on the course website, as always. Navigate to https://brianfolt.github.io/NRES_710/cjs_models.html, and then there are links on that page to access all the material.
 
-## Why do we need CJS models?
+## Review
 
-We talked about this earlier this semester when we learned about closed-population models to estimate population size, the Lincoln-Peterson model and state-space abundance models.... but most animals are difficult to observe or capture.
+A quick review before we dive into today's topic. Remember that for the final few weeks of the semester, our goal is to work toward building an 'integrated population model'. Over the last two weeks, we have learned how to (1) estimate population size using count data and hierarchical state-space models, the model in this central grey box, but then we also learned (2) how to estimate population productivity using data describing reproduction using Poisson regression models, and then (3) last class we learned how to estimate survival using 'known-fate data' with a Kaplain-Meier model. We are learning how to build each of these individual models for abundance, reproduction, and survival, so we can put them all together into integrated population models at the end of the semester.
 
-Here's a picture of a Great Basin landscape, that has an animal in it... it's not exactly a stumper of a picture....
-
-## Why do we need CJS models? 2
-
-The animal is front and center in the picture, but it's color and shape blends in with the sand, and it's also hidden in the shade of a grass clump....
-
-## Why do we need CJS models? 3
-
-It's a Desert Horned Lizard! The species relies almost entirely on crypsis to avoid getting eaten by avian predators.
-
-I saw this one hiding there, but I'm almost certain there were other individuals out there that day that I didn't see...
-
-The bottom line is: if we want to get unbiased and precise estimates of population size or survival, we need to account for imperfect detection. If we do not account for imperfect detection, we will often:
-
-- underestimate population size
-- and underestimate survival
+But our study animal is too small for radiotags or GPS devices, and we don't have 'known fate' data. What do we do when we don't have GPS tags for our critters...?
 
 ## Study design
 
-As we have seen with closed population models, we can use capture-mark-recapture data to account for imperfect detection when estimating population size. 
+We previously learned how to use capture-mark-recapture studies to estimate population size using Lincoln-Petersen models. But we can also use mark-recapture data to estimate survival!
 
 Basic study design involves going out, capturing animals, uniquely marking them with some way that will provide a permanent form of identification of that individual into the future, and then let the animal go alive!
 
@@ -88,7 +61,7 @@ I will revisit these design features later on.
 We previously discussed '**closed population models**', where we assumed the population was closed to any change in $\large N$ during our study
 
 - There are no births, deaths, emigration, or immigration during the study.
-- Any $\large 0$ in the capture histories was due to detection error -- the animal was present in population, but it simply went undetected. It was a lizard that was hiding in the grass, and we missed it.
+- Any $\large 0$ in the capture histories was due to detection error -- the animal was present in population, but it simply went undetected. 
 
 ## Open population models 2
 
@@ -102,11 +75,13 @@ Different open population models can be used to estimate **survival**, **recruit
 
 ## Cormack-Jolly-Seber (CJS) models
 
+Enter one of the most famous models in wildlife biology -- the Cormack-Jolly-Seber model, or CJS models for shirt. CJS models use capture-mark-recapture data to estimate survival of animals while accounting for a pesky nuisance variable... imperfect detection.
+
 CJS models are open-population **state-space models** to estimate **survival**. 
 
 We previously talked about **state-space models** for population size... these were models that estimate a true, underlying, "latent" state of populations (THE STATE PROCESS), while accounting for imperfect detection (OBSERVATION PROCESS). We can do something similar with CJS models.
 
-For CJS survival models, we are interested in estimating the true underlying state of individuals: each circle represents a time step, and whether individuals are alive (blue) or dead (white). Each individual has a stochastic probability of surviving and staying alive -- but if they don't survive, then they die, and they stay dead into the future -- this is deterministic.
+For CJS survival models, we are interested in estimating the true underlying, often-unobservable state of individuals: each circle represents a time step, and whether individuals are alive (blue) or dead (white). Each individual has a stochastic probability of surviving and staying alive -- but if they don't survive, then they die, and they stay dead into the future -- this is deterministic.
 
 ## Cormack-Jolly-Seber (CJS) models 2
 
@@ -114,13 +89,15 @@ Overlaying this true, latent, or 'hidden' state, is the observation process. Aga
 
 Using our capture histories through time and a state-space model, we are going to try to estimate these two different, stochastic process: the probability of surviving or dying (the black dashed arrows), and the probability of an alive animal being recaptured (red dashed arrows).
 
-An important feature to mention is that this model is 'conditioned on the first capture'. When the first capture occurs, we know an animal was certainly alive and observed, so these processes are deterministic. Into the future, the animal may survive and be determined, but the model considers those processes randomly-varying or stochastic.
+An important feature to mention is that this model is 'conditioned on the first capture'. When the first capture occurs, we know an animal was certainly alive and observed, so these processes are deterministic. Into the future, the animal *may* survive and be detected, but the model considers those processes randomly-varying or stochastic.
 
 ## Cormack-Jolly-Seber (CJS) models
 
-Data are most frequently organized as 'capture histories', which are a series of $\large 1$s and $\large 0$s denoted when individuals are captured ($\large 1$) or not ($\large 0$). The capture histories have dimensions of n x t: each row is for an individual, *n*, and each column is a sampling occasion. So for example, if we sample the population every summer, each column will be our annual sampling occasion, and each entry is whether or not we observed each individual. 
+Data are most frequently organized as 'capture histories', which are a series of $\large 1$s and $\large 0$s denoted when individuals are captured ($\large 1$) or not ($\large 0$) through time. The capture histories have dimensions of n x t: each row is for an individual, *n*, and each column is a sampling occasion. So for example, if we sample the population every summer, each column will be our annual sampling occasion; and then each row is an individual, and each entry along each row is whether or not we observed that individual. 
 
-Here is an example: here are capture histories for 10 individuals over a 7 year period. The first few animals were recaptured quite a few times, but note individual 7 -- it was captured and marked, went undetected in the second year, and then was recaptured again in year 3.
+Here is an example: here are capture histories for 10 individuals over a 6 year period. The first few animals were recaptured quite a few times, but note individual 7 -- it was captured and marked, went undetected in the second year, and then was recaptured again in year 3.
+
+I want to briefly point out these 'internal zeros' -- occasions where an individual was **not detected**, that are sandwiched between two occasions where an individual ***was*** detected. These are really important to us... we'll see this later.
 
 ## Cormack-Jolly-Seber (CJS) models
 
@@ -129,7 +106,13 @@ After an animal is marked and released, the next time we go out to sample the po
 1) Individual **survives** and is **re-captured** (capture history = `11`)  
 2) Individual **survives** but is not **recaptured** (capture history = `10`)  
 3) Individual **dies** and is **not available** for recapture (capture history = `10`)  
-4) Individual **survives** but **leaves the study area** (emigrates) and is **not available** for recapture (capture history = `10`)  
+4) Individual **survives** but **leaves the study area** (emigrates) and is **not available** for recapture (capture history = `10`)    
+
+**Q:** So let me ask you all a question... If we observe a '10' capture history and we assume that the animal is **not available** for recapture, is that animal alive or dead? **We can't know!** 
+
+We can't tell whether the animal is (1) alive and emigrated away OR (2) if it died. **Both emigration and mortality result in the same observed data (10) -- but these are very different processes.**
+
+This is a key **limitation** of these data -- we cannot disentangle death from emigration.
 
 ## Cormack-Jolly-Seber (CJS) models
 
@@ -153,19 +136,42 @@ But, this model can be adapted to having time-varying survival and recapture pro
 
 ## How It Works 1
 
-This flow chart is useful to understand how we can use capture histories to disentangle apparent survival, recapture probability, from death and emigration.
+*Brian write this on the board*
 
-Start on the left hand side. We have captured an animal, marked it, and released it on sampling occasion 1. Over the course of the next year, the animal can either survive and stay in the study area (with probability *phi*), or die or emigrate from the study area (with probability 1 minus *phi*).
+I'm going to create a flow chart that might help us think about how capture histories can be used to disentangle apparent survival, recapture probability, from death and emigration.
 
-If the animal is alive and present, then when we sample the population again, we may recapture it (with recapture probability, *p*), and it is seen again. This animal would then have a capture history of 11 over the first two occasions, and this 11 capture history has a probability of phi * p.
+Let's consider one animal in a population that we marked in **Occasion 1** and released back into the population.
 
-If this animal is alive but not recaptured, then the capture history is 10, and the probability is phi * (1-p).
+Occasion 1 (True State) --> Occasion 2 (True State) + Occasion 2 (Observation)
 
-If the animal either dies or emigrates away between the occasions, then we have no chance of recapturing it -- it is gone from the population. This also yields an encounter history of 10, but has a different probability: 1 minus phi.
+```{r out.width = "100%", echo=FALSE}
+knitr::include_graphics("pictures/cjs_flowchart.png")
+```
+
+**Q:** During the interval from **Occasion 1** to **Occasion 2**, what can happen to this animal?
+
+It can survive **ALIVE** and stay in the study area, or it can die OR emigrate.
+
+**Q:** Does anybody know what the probabilities are of these two opposing outcomes?
+
+- survival would be **apparent survival probability, phi**
+- dying/emigration would be **1 minus phi**
+
+**Q:** If the animal is alive and present during sampling Occasion 2, what are two possible outcomes for us?
+
+We may **Recapture** it (with recapture probability, *p*). This animal would then have a **capture history** of 11 over the first two occasions.
+
+**Q:** Does anybody know what the probability of observing a '11' capture history is? **phi times p**
+
+If this animal is alive but **not recaptured**, then the capture history is 10, and the probability is phi * (1-p).
+
+If the animal either dies or emigrates away between the occasions, then we have no chance of recapturing it -- it is gone from the population. If the animal is truly gone, then then our probability of not seeing it is ONE. This also yields an encounter history of 10, but has a different probability -- **1 minus phi**!
+
+The point here is: even though both the '10' outcomes have the same encounter histories, **they have different probabilities**.
 
 ## How It Works - Ind 1
 
-Let's use this to consider a few different capture-history scenarios. Let's say we observed an individual over three consecutive occasions: that means it survived two intervals, and was recaptured both times. So we observed a "11" for this animal twice, and using the probabilities from the last slide, the overall probability of this outcome is phi1 * p2 * phi2 * p3.
+Let's use these three distinct probability ***products*** to consider a few different capture-history scenarios. Let's say we observed an individual over three consecutive occasions: that means it survived two intervals, and was recaptured both times. So we observed a "11" for this animal twice, and using the probabilities from the last slide, the overall probability of this outcome is phi1 * p2 * phi2 * p3.
 
 ## How It Works - Ind 2
 
@@ -174,6 +180,10 @@ For individual two, we didn't observe it on the second occasion, but then recapt
 ## How It Works - Ind 3
 
 Individual 3 is a little trickier. This animal survived interval 1, and was recaptured on occasion 2 (phi1 * p2). But we don't know what happened to it during interval 2: it could have survived interval 2 and gone uncaptured on occasion 3 (1 - p3), OR, died during interval 2 with probability 1 - phi2. Since we don't know whether it survived or died during interval 2, we sum both of those probabilities together in the second term.
+
+phi = 0.8, p = 0.5
+
+[0.8 * 0.5] * [0.8(1-0.5) + (1 - 0.8)] = 0.4 * (0.4 + 0.2) = 0.3
 
 ## How It Works - Ind 4
 
@@ -187,32 +197,36 @@ Last, individual 4 is the most confusing. It was captured, marked, and released,
 
 We can the probabilities of these three outcomes together with this equation, and then simplify it with factoring to the more simple term expressed in the table. 
 
-**Takehome message**: This math is confusing, and I don't want to get too deep into it because it frankly gets more confusing, quickly. But, the takehome message is that:
+**Takehome message**: This math is confusing, and I don't want to get too deep into it because it is confusing But, the takehome message is that:
 
 - different outcomes in our data can be related to distinct probabilities.
-- Since these different capture histories have different probabilities, we can use these data to estimate what these detection and survival parameters are using either maximum-likelihood or Bayesian methods.
+- Since these different capture histories have different probabilities, we can use these data to **separately estimate detection and apparent survival parameters using maximum-likelihood or Bayesian methods**.
+
+And the **internal zeroes** are critical for doing this.
 
 **Q:** Any questions?
 
 ## CJS model as a state-space model
 
-Using the tools we've learned this semester, we can write the **CJS model** as a Bayesian **state-space model**. I think this is the most simple intuitively and prefer to teach it this way.
+Using the tools we've learned this semester, we can write the **CJS model** as a Bayesian **state-space model**. I prefer to teach and implement CJS models with Bayesian approaches, because they are more simple and intuitive.
+
+This model is hierarchical, in that it has two sub-models: the state process model, estimating whether or not individuals are alive, and the observation model, which uses information about whether individuals are alive to estimate recapture probability.
 
 ### Process model
 
-In the state-space model, we first have the process model, which is defined by two equations: first, we know animals are alive the first time they are captured, and we denote this with array Z. Z has dimensions i individuals and t years, but each individual's values for Z start with the first occasion that is it capture: denoted with the  vector *f1*. 
+**Equation 1** is our starting point for the process model: We know that the animal was alive and in the study area at the time it was first captured, so we set: Z_i,f1 = 1.
 
-For capture occasion 1 for each individual, we can only specify it's initial state. We cannot estimate survival or detection.
+That means the true state for individual i at their first capture occasion is "alive."
 
-Then, for each year after the first capture, an individuals true state, Z_t, is a Bernoulli draw of it's previous state, z_t-1 times phi. So, we if we have lots of data of individuals either being alive or dead through time, we can fit these data with a Bernoulli distribution and estimate the apparent survival probability, phi. Phi is basically a weighted coinflip: survive and stay with probability phi, or die/emigrate with probability 1-phi. 
+**Equation 2** is the process model for all capture occasions after the first. This equation says: *If* the animal was alive at t−1, it survives to occasion t with probability phi. If it wasn’t alive at t−1, it can’t come back back to being alive -- so it stays 0 (dead).
 
-### Observation model
+This equation estimates apparent survival; with a Bernoulli draw, Phi is basically a weighted coinflip: survive and stay with probability phi, or die/emigrate with probability 1-phi.
 
-However, we have to account for imperfect detection when we estimate whether or not we think each individual is alive! If we fail to account for imperfect detection, we will underestimate survival. We can do this using the Observation Model. And this is where our data come in!
+**Equation 3** is the observation model. Y is our raw data -- our captures histories -- whether we saw each individual i during each occasion t. This says: If the animal is alive and in the study area at time t — that is, if z = 1 — then we observe it with probability p. If it’s dead or emigrated, we don’t have a chance to see it.
 
-Our data are y -- y is our capture histories, for each individual i and year t. We model whether or not we saw an animal in any given year as a Bernoulli draw of whether it is alive that year, z_it time recapture probability.
+So overall, we’re modeling both the underlying biological state — whether each individual is alive — and the chance of seeing it, which together form a hierarchical, state-space framework.
 
-Our data provide information for the samplers to estimate what the most likely probabilities phi and p.
+By conditioning the model on the first capture year of each year with z = 1 and providing capture histories, this is enough information for the samplers to estimate what the most likely probabilities are for phi and p.
 
 ## CJS model with time-variation
 
@@ -220,19 +234,19 @@ As for other models we've seen this semester, we can add linear, individual-leve
 
 Remember, our parameters of interest here are *probabilities*, which are constrained between 0 and 1. We cannot fit simple linear models to probabilities, because linear models assume that response is continuous and unbounded. Instead, we have to use the 'logit' link function -- 1 / (1 + exp(-(linear model))) -- which unconstrains our betas to be values from negative infinite to positive infinite.
 
-The first equation shows the logit link function, which JAGS does for us in short-hand using the 'logit()' command (second equation).
+JAGS does the logit-link for us in short-hand using the 'logit()' command (second equation).
 
-The third and fourth equations show how we would specify time-varying survival, where survival in a given year is the sum of the logit-mean intercept, mu, plus epsilon_t, which is a normally-distributed random variable with a mean of zero and a variance of tau_phi. 
+The third and fourth equations show how we would specify time-varying survival, where survival in a given year is the sum of the logit-mean intercept, mu, plus epsilon_t, which is a normally-distributed random variable with a mean of zero and a variance of tau_phi. We're saying... that survival can vary randomly from year to year with a normal distribution.
 
 And we can do the same thing for recapture probability, in equations 5 and 6.
 
 ## Identifiability of the CJS model with time-variation
 
-Now there is something important we need to be aware of: if we make this model fully-time dependent, parameters $\large \phi_T$ and $\large p_T$ are not identifiable.
+Now there is something important we need to be aware of: if we make this model fully-time dependent for both phi and p, the **terminal parameters** of  $\large \phi_T$ and $\large p_T$ -- the estimates of phi and p in the last year -- are not identifiable.
 
 - The model will return posteriors for both parameters (because each has a prior), but the model will **not** be able to separately **estimate both parameters**. 
 
-- Posteriors will actually be for $\phi_T \times p_T$
+- Posteriors will actually be: $\phi_T \times p_T$
 
 ## Identifiability of the CJS model with time-variation 2
 
@@ -266,10 +280,98 @@ Or use informed priors.
 - Samples are ~instantaneous
 - Individuals are randomly sampled
 
+## Analysis in R
 
+Let's explore what Cormack-Jolly-Seber analysis might look like in Program R.
 
+```{r}
+#install.packages("AHMbook", "wiqid") # install - only have to run once
+library(AHMbook) # load each package - run at start of exercise
+library(wiqid) 
+```
 
+If you haven't previously installed the packages 'AHMbook' and 'wiqid', you will have to do so on your computer. Just run the install packages line one time, and then you never have to do it again on your machine.
 
+And then load each package before starting the analysis.
 
+In previously classes and labs, we learned how to simulate our own data, where we decided what all the fixed and random effects were, and how much random noise was present in the data. Unforunately, data simulation gets a little harder for Cormack-Jolly-Seber models, because there are multiple random processes that are hierarchically linked in the data. 
 
+The good news is: the 'AHMbook' library has a built-in function to simulate data for us! Let's take a look at this function, which is called 'simCJS()'
 
+```{r}
+help(simCJS)
+```
+
+We can tell the function to simulate data for us with, say, 6 occasions, 20 marked animals each occasion, apparent surivival of 0.8, and recapture probability of 0.5.
+
+Let's simulate the data, and examine the structure of the output object, which we always call 'datum'. 
+
+```{r}
+datum <- simCJS(n.occ = 6, n.marked = 20, phi = 0.8, p = 0.5, show.plot = FALSE)
+str(datum)
+```
+
+This object saves various information about our simulation... but the key thing is: it saves (1) the 'capture histories' CH, and (2) the first year that we marked-and-released each animal, F. These two slots are raw-data requirements for our analyses. 
+
+Let's look at the capture histories:
+
+```{r}
+head(datum$ch, 20)
+```
+
+One other cool thing this function does, it that it will graph the fates of each individual for us, Z, and whether or not we observed each individual. We can quickly do that by re-running our simulation with the 'show.plot = TRUE' option enabled.
+
+```{r}
+datum <- simCJS(n.occ = 6, n.marked = 20, phi = 0.8, p = 0.5, show.plot = TRUE)
+```
+
+The first graph is the Z matric -- whether or not each animal was alive.
+
+The second graph is our OBSERVED DATA, our capture histories -- there is less black here, because even though many animals were alive, they went undetected! 
+
+The third graph is both (1) the capture histories in black and (2) the unobserved but live/present. So we can see how frequently we miss animals due to imperfect detection in these data!
+
+The package 'wiqid' has built-in functions to perform CJS analyses using dataframes like the the one we just created. There are both frequentist and Bayesian options:
+
+```{r}
+help(survCJS)
+```
+
+The help file describes both these models. The key thing is that we have to provide it data 'DH', which the help file calls 'detection histories' -- but this is the same thing as our 'capture histories' data object. If we think survival or recapture probability vary by groups in our data (e.g., SEX), we can also provide it a 'group' variable and then tweak the 'model' formula to accommodate fixed-effects of groups.
+
+Now let's see how to fit these models with a **Frequentist** approach.
+
+```{r}
+results <- survCJS(datum$ch)
+results
+```
+
+This model says that apparent survival probability is 0.79, with confidence limits of 0.69--0.87. This estimate is very close to our 'truth' of 0.8! And our confidence limits -- our uncertainty of this estimate -- also includes 'truth' basically smack dab in the middle. And same thing for recapture probability. So we know this model works.
+
+We can also ask it to make survival vary by year. 
+
+```{r}
+results2 <- survCJS(datum$ch, phi ~ .time)
+results2
+```
+
+We now get 5 estimates of survival, related to each interval between our 6 sampling occasions. However, our confidence limits is really HIGH for some of these estimates -- ranges from 0-1 in some years! Basically we have no idea what survival is in those years.
+
+**Q:** Does anybody remember how we might compare and choose which of these models is better?
+
+The **AIC** value, Akaike's Information Criterion, is a metric of model fit, where lower values indicate models that better fit our data. The simple model with no time effect had an AIC of 374, whereas the time-varying model had 378. We previously said our rule-of-thumb for model selection with AIC was that if the change in AIC between two models was 2 or more, that the better model has 'significantly better fit'. So this suggests the more simple model is significantly better.
+
+Let's try to fit these using a **Bayesian approach.**
+
+```{r}
+results3 <- BsurvCJS(datum$ch)
+results3
+```
+
+Looking at the results... The Rhat statistic suggests that all of our parameters converge nicely, and the survival and recapture probabilities are same for all years because we did not specify time-variance. The estimates and Credible Intervals very clearly include TRUTH. 
+
+When we fit the time-varying model, we see estimates oscillate a bit, but they all include TRUTH. Notice know though that the credible intervals here are much more narrow than the time-varying model fit with the frequentist approach -- which I prefer.
+
+But, a disadvantage is that we no longer get a convenient metric, AIC, to compare models. It's actually really difficult to evaluate model fit with hierarchical models!
+
+So, that's all I have for today on CJS models. We'll meet again this week in the lab, where we will learn how to write customizable code for these models in JAGS, check model accuracy using simulated data, analyze real datasets, and learn how to use posterior-predictive checks to do 'goodness-of-fit' testing with our Bayesian models.

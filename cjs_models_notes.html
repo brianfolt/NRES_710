@@ -1,0 +1,1075 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+<meta name="author" content="WIS 4601 - Teaching Demo" />
+
+
+<title>Cormack-Jolly-Seber Models – notes</title>
+
+<script src="site_libs/header-attrs-2.27/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/yeti.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/jqueryui-1.13.2/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+<link rel="stylesheet" href="styles.css" type="text/css" />
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "\e258";
+  font-family: 'Glyphicons Halflings';
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">NRES 710</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Syllabus</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    Exercises
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="exercise_1.html">Exercise 1 - Linear Regression</a>
+    </li>
+    <li>
+      <a href="exercise_2.html">Exercise 2 - Linear Regression (cont.)</a>
+    </li>
+    <li>
+      <a href="exercise_3.html">Exercise 3 - Analysis of Categorical Data</a>
+    </li>
+    <li>
+      <a href="exercise_4.html">Exercise 4 - Multi-variable Analysis - Collinearity</a>
+    </li>
+    <li>
+      <a href="exercise_5.html">Exercise 5 - Multi-variable Analysis - Interactions</a>
+    </li>
+    <li>
+      <a href="exercise_6.html">Exercise 6 - Mixed Effects Models</a>
+    </li>
+    <li>
+      <a href="exercise_7.html">Exercise 7 - Nested Designs</a>
+    </li>
+    <li>
+      <a href="exercise_8.html">Exercise 8 - Generalized Linear Models</a>
+    </li>
+    <li>
+      <a href="cjs_models.html">CJS Models</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    More Resources
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="Links.html">Links</a>
+    </li>
+  </ul>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+
+
+<h1 class="title toc-ignore">Cormack-Jolly-Seber Models – notes</h1>
+<h4 class="author">WIS 4601 - Teaching Demo</h4>
+<h4 class="date">Last compiled: 2025-04-18</h4>
+
+</div>
+
+
+<p>Write link to course website on the dry-erase board</p>
+<p>With today’s lecture, we are going to learn how to estimate survival
+– or do our best to estimate survival – using capture-mark-recapture
+data.</p>
+<div id="readings-materials" class="section level2">
+<h2>Readings &amp; Materials</h2>
+<p>I asked you all to read Chapter 7 of Kery &amp; Schaub 2012 before
+class, which provides a simple introduction to these models and how to
+fit them. The other two chapters also provide context on implementation
+in both Bayesian and frequentist methods - providing these here mostly
+for reference.</p>
+<p>For today’s class, you can access the slides, code, and data on the
+course website, as always. Navigate to <a
+href="https://brianfolt.github.io/NRES_710/cjs_models.html"
+class="uri">https://brianfolt.github.io/NRES_710/cjs_models.html</a>,
+and then there are links on that page to access all the material.</p>
+</div>
+<div id="review" class="section level2">
+<h2>Review</h2>
+<p>A quick review before we dive into today’s topic. Remember that for
+the final few weeks of the semester, our goal is to work toward building
+an ‘integrated population model’. Over the last two weeks, we have
+learned how to (1) estimate population size using count data and
+hierarchical state-space models, the model in this central grey box, but
+then we also learned (2) how to estimate population productivity using
+data describing reproduction using Poisson regression models, and then
+(3) last class we learned how to estimate survival using ‘known-fate
+data’ with a Kaplain-Meier model. We are learning how to build each of
+these individual models for abundance, reproduction, and survival, so we
+can put them all together into integrated population models at the end
+of the semester.</p>
+<p>But our study animal is too small for radiotags or GPS devices, and
+we don’t have ‘known fate’ data. What do we do when we don’t have GPS
+tags for our critters…?</p>
+</div>
+<div id="study-design" class="section level2">
+<h2>Study design</h2>
+<p>We previously learned how to use capture-mark-recapture studies to
+estimate population size using Lincoln-Petersen models. But we can also
+use mark-recapture data to estimate survival!</p>
+<p>Basic study design involves going out, capturing animals, uniquely
+marking them with some way that will provide a permanent form of
+identification of that individual into the future, and then let the
+animal go alive!</p>
+<p>There are three examples of different marking ‘technologies’ in these
+pictures: alligator with a tail tag, an alligator snapping turtle with
+unique combinations of screws being drilled into the marginal scutes of
+the carapace, or a tag being banded onto the leg of a large bird.</p>
+<p>To estimate survival though, we need to repeat these sampling
+occasions through time. We might survey the study area every year, and
+then we can use these data to estimate <em>annual survival
+probability</em> through time.</p>
+</div>
+<div id="study-design-2" class="section level2">
+<h2>Study design 2</h2>
+<p>There are a few considerations when designing these studies:</p>
+<ul>
+<li>Fixed study area: area should not change through time. Fairly simple
+&amp; standard approach. If the study area increases, site fidelity will
+increase, and apparent survival will increase.</li>
+<li>Study area is ~large. We want it to encompass a relatively large
+sample of individuals, and preferably those individuals will not leave
+the study area.</li>
+<li>Samples are ~instantaneous in time. We generally don’t want to take
+our sample at different times of the year, or else we might bias our
+estimation of survival probabilities.</li>
+<li>Individuals are a random sampled of the population during each
+occasion</li>
+</ul>
+<p>I will revisit these design features later on.</p>
+</div>
+<div id="open-population-models-1" class="section level2">
+<h2>Open population models 1</h2>
+<p>We previously discussed ‘<strong>closed population models</strong>’,
+where we assumed the population was closed to any change in <span
+class="math inline">\(\large N\)</span> during our study</p>
+<ul>
+<li>There are no births, deaths, emigration, or immigration during the
+study.</li>
+<li>Any <span class="math inline">\(\large 0\)</span> in the capture
+histories was due to detection error – the animal was present in
+population, but it simply went undetected.</li>
+</ul>
+</div>
+<div id="open-population-models-2" class="section level2">
+<h2>Open population models 2</h2>
+<p>Open population models let us relax the assumption of population
+closure.</p>
+<p>Between sampling occasions, individuals can enter the population
+through birth or immigration, or leave the population by dying or
+emigrating away.</p>
+<p>Zeros in our data can result from animals (1) being present and
+undetected, OR (2) being not present because they either died or
+emigrated away.</p>
+<p>Different open population models can be used to estimate
+<strong>survival</strong>, <strong>recruitment</strong>, and
+<strong>movement</strong> – but our focus today is on survival
+estimation.</p>
+</div>
+<div id="cormack-jolly-seber-cjs-models" class="section level2">
+<h2>Cormack-Jolly-Seber (CJS) models</h2>
+<p>Enter one of the most famous models in wildlife biology – the
+Cormack-Jolly-Seber model, or CJS models for shirt. CJS models use
+capture-mark-recapture data to estimate survival of animals while
+accounting for a pesky nuisance variable… imperfect detection.</p>
+<p>CJS models are open-population <strong>state-space models</strong> to
+estimate <strong>survival</strong>.</p>
+<p>We previously talked about <strong>state-space models</strong> for
+population size… these were models that estimate a true, underlying,
+“latent” state of populations (THE STATE PROCESS), while accounting for
+imperfect detection (OBSERVATION PROCESS). We can do something similar
+with CJS models.</p>
+<p>For CJS survival models, we are interested in estimating the true
+underlying, often-unobservable state of individuals: each circle
+represents a time step, and whether individuals are alive (blue) or dead
+(white). Each individual has a stochastic probability of surviving and
+staying alive – but if they don’t survive, then they die, and they stay
+dead into the future – this is deterministic.</p>
+</div>
+<div id="cormack-jolly-seber-cjs-models-2" class="section level2">
+<h2>Cormack-Jolly-Seber (CJS) models 2</h2>
+<p>Overlaying this true, latent, or ‘hidden’ state, is the observation
+process. Again, when we go out into nature, animals are not always
+detected, even if they are alive and present. The red circles indicate
+situations where an animal was alive, and we observed it. But sometimes
+we do not. This is a stochastic process that can vary randomly. However,
+once an animal is dead, this becomes deterministic – we cannot observe a
+dead animal because it’s ‘dead and gone.’</p>
+<p>Using our capture histories through time and a state-space model, we
+are going to try to estimate these two different, stochastic process:
+the probability of surviving or dying (the black dashed arrows), and the
+probability of an alive animal being recaptured (red dashed arrows).</p>
+<p>An important feature to mention is that this model is ‘conditioned on
+the first capture’. When the first capture occurs, we know an animal was
+certainly alive and observed, so these processes are deterministic. Into
+the future, the animal <em>may</em> survive and be detected, but the
+model considers those processes randomly-varying or stochastic.</p>
+</div>
+<div id="cormack-jolly-seber-cjs-models-1" class="section level2">
+<h2>Cormack-Jolly-Seber (CJS) models</h2>
+<p>Data are most frequently organized as ‘capture histories’, which are
+a series of <span class="math inline">\(\large 1\)</span>s and <span
+class="math inline">\(\large 0\)</span>s denoted when individuals are
+captured (<span class="math inline">\(\large 1\)</span>) or not (<span
+class="math inline">\(\large 0\)</span>) through time. The capture
+histories have dimensions of n x t: each row is for an individual,
+<em>n</em>, and each column is a sampling occasion. So for example, if
+we sample the population every summer, each column will be our annual
+sampling occasion; and then each row is an individual, and each entry
+along each row is whether or not we observed that individual.</p>
+<p>Here is an example: here are capture histories for 10 individuals
+over a 6 year period. The first few animals were recaptured quite a few
+times, but note individual 7 – it was captured and marked, went
+undetected in the second year, and then was recaptured again in year
+3.</p>
+<p>I want to briefly point out these ‘internal zeros’ – occasions where
+an individual was <strong>not detected</strong>, that are sandwiched
+between two occasions where an individual <strong><em>was</em></strong>
+detected. These are really important to us… we’ll see this later.</p>
+</div>
+<div id="cormack-jolly-seber-cjs-models-3" class="section level2">
+<h2>Cormack-Jolly-Seber (CJS) models</h2>
+<p>After an animal is marked and released, the next time we go out to
+sample the population, there are 4 possible scenarios for that
+animal:</p>
+<ol style="list-style-type: decimal">
+<li>Individual <strong>survives</strong> and is
+<strong>re-captured</strong> (capture history = <code>11</code>)<br />
+</li>
+<li>Individual <strong>survives</strong> but is not
+<strong>recaptured</strong> (capture history = <code>10</code>)<br />
+</li>
+<li>Individual <strong>dies</strong> and is <strong>not
+available</strong> for recapture (capture history =
+<code>10</code>)<br />
+</li>
+<li>Individual <strong>survives</strong> but <strong>leaves the study
+area</strong> (emigrates) and is <strong>not available</strong> for
+recapture (capture history = <code>10</code>)</li>
+</ol>
+<p><strong>Q:</strong> So let me ask you all a question… If we observe a
+‘10’ capture history and we assume that the animal is <strong>not
+available</strong> for recapture, is that animal alive or dead?
+<strong>We can’t know!</strong></p>
+<p>We can’t tell whether the animal is (1) alive and emigrated away OR
+(2) if it died. <strong>Both emigration and mortality result in the same
+observed data (10) – but these are very different
+processes.</strong></p>
+<p>This is a key <strong>limitation</strong> of these data – we cannot
+disentangle death from emigration.</p>
+</div>
+<div id="cormack-jolly-seber-cjs-models-4" class="section level2">
+<h2>Cormack-Jolly-Seber (CJS) models</h2>
+<p>Without additional data, we can’t distinguish between scenario 3
+(death) &amp; scenario (emigration). So, what this model
+<strong>can</strong> estimate is:</p>
+<p>Apparent survival probability – denoted with the greek letter Phi –
+this is the probability that an individual <strong>survives</strong> and
+also <strong>stays within the study area</strong>.</p>
+<p>We can break this down a bit. Last week we learned how to estimate
+true survival probability, <strong>S</strong>, using known-fate models.
+Phi is the true survival times 1 minus the emigration probability,
+epsilon.</p>
+</div>
+<div id="cormack-jolly-seber-models" class="section level2">
+<h2>Cormack-Jolly-Seber models</h2>
+<p>However, the data we are collecting don’t have any information about
+true survival or emigration, so we cannot disentangle true survival from
+emigration… and instead are stuck with estimating apparent survival
+probability.</p>
+<p>The CJS model estimates 2 parameters: - phi – apparent survival
+probability - p – recapture probability</p>
+<p>I’ve removed the t subscripts for simplicity, which implies that
+these probabilities are constant across all sampling occasions.</p>
+<p>But, this model can be adapted to having time-varying survival and
+recapture probabilities, as we’ve done with other models earlier in the
+semester (i.e., time effects).</p>
+</div>
+<div id="how-it-works-1" class="section level2">
+<h2>How It Works 1</h2>
+<p><em>Brian write this on the board</em></p>
+<p>I’m going to create a flow chart that might help us think about how
+capture histories can be used to disentangle apparent survival,
+recapture probability, from death and emigration.</p>
+<p>Let’s consider one animal in a population that we marked in
+<strong>Occasion 1</strong> and released back into the population.</p>
+<p>Occasion 1 (True State) –&gt; Occasion 2 (True State) + Occasion 2
+(Observation)</p>
+<p><img src="pictures/cjs_flowchart.png" width="100%" /></p>
+<p><strong>Q:</strong> During the interval from <strong>Occasion
+1</strong> to <strong>Occasion 2</strong>, what can happen to this
+animal?</p>
+<p>It can survive <strong>ALIVE</strong> and stay in the study area, or
+it can die OR emigrate.</p>
+<p><strong>Q:</strong> Does anybody know what the probabilities are of
+these two opposing outcomes?</p>
+<ul>
+<li>survival would be <strong>apparent survival probability,
+phi</strong></li>
+<li>dying/emigration would be <strong>1 minus phi</strong></li>
+</ul>
+<p><strong>Q:</strong> If the animal is alive and present during
+sampling Occasion 2, what are two possible outcomes for us?</p>
+<p>We may <strong>Recapture</strong> it (with recapture probability,
+<em>p</em>). This animal would then have a <strong>capture
+history</strong> of 11 over the first two occasions.</p>
+<p><strong>Q:</strong> Does anybody know what the probability of
+observing a ‘11’ capture history is? <strong>phi times p</strong></p>
+<p>If this animal is alive but <strong>not recaptured</strong>, then the
+capture history is 10, and the probability is phi * (1-p).</p>
+<p>If the animal either dies or emigrates away between the occasions,
+then we have no chance of recapturing it – it is gone from the
+population. If the animal is truly gone, then then our probability of
+not seeing it is ONE. This also yields an encounter history of 10, but
+has a different probability – <strong>1 minus phi</strong>!</p>
+<p>The point here is: even though both the ‘10’ outcomes have the same
+encounter histories, <strong>they have different
+probabilities</strong>.</p>
+</div>
+<div id="how-it-works---ind-1" class="section level2">
+<h2>How It Works - Ind 1</h2>
+<p>Let’s use these three distinct probability
+<strong><em>products</em></strong> to consider a few different
+capture-history scenarios. Let’s say we observed an individual over
+three consecutive occasions: that means it survived two intervals, and
+was recaptured both times. So we observed a “11” for this animal twice,
+and using the probabilities from the last slide, the overall probability
+of this outcome is phi1 * p2 * phi2 * p3.</p>
+</div>
+<div id="how-it-works---ind-2" class="section level2">
+<h2>How It Works - Ind 2</h2>
+<p>For individual two, we didn’t observe it on the second occasion, but
+then recaptured it on the third occasion. This ‘internal zero’ here that
+is surrounded by 1s has information; since it was bracketed by a 1 on
+both sides, we know that it survived and stayed in the study area, but
+went undetected. So the probability of the 10 in this instance is
+phi(1-p) and then the final 1 is phi*p – it survived and was
+detected.</p>
+</div>
+<div id="how-it-works---ind-3" class="section level2">
+<h2>How It Works - Ind 3</h2>
+<p>Individual 3 is a little trickier. This animal survived interval 1,
+and was recaptured on occasion 2 (phi1 * p2). But we don’t know what
+happened to it during interval 2: it could have survived interval 2 and
+gone uncaptured on occasion 3 (1 - p3), OR, died during interval 2 with
+probability 1 - phi2. Since we don’t know whether it survived or died
+during interval 2, we sum both of those probabilities together in the
+second term.</p>
+<p>phi = 0.8, p = 0.5</p>
+<p>[0.8 * 0.5] * [0.8(1-0.5) + (1 - 0.8)] = 0.4 * (0.4 + 0.2) = 0.3</p>
+</div>
+<div id="how-it-works---ind-4" class="section level2">
+<h2>How It Works - Ind 4</h2>
+<p>Last, individual 4 is the most confusing. It was captured, marked,
+and released, and never seen again. It could have:</p>
+<ul>
+<li><p>died during interval 1 (1 minus phi1), OR</p></li>
+<li><p>survived interval 1, gone uncaptured during occasion 2, and died
+during interval 2, OR</p></li>
+<li><p>survived interval 1, gone uncaptured during occasion 2, AND
+survived interval 2 but went uncaptured during occasion 3.</p></li>
+</ul>
+<p>We can the probabilities of these three outcomes together with this
+equation, and then simplify it with factoring to the more simple term
+expressed in the table.</p>
+<p><strong>Takehome message</strong>: This math is confusing, and I
+don’t want to get too deep into it because it is confusing But, the
+takehome message is that:</p>
+<ul>
+<li>different outcomes in our data can be related to distinct
+probabilities.</li>
+<li>Since these different capture histories have different
+probabilities, we can use these data to <strong>separately estimate
+detection and apparent survival parameters using maximum-likelihood or
+Bayesian methods</strong>.</li>
+</ul>
+<p>And the <strong>internal zeroes</strong> are critical for doing
+this.</p>
+<p><strong>Q:</strong> Any questions?</p>
+</div>
+<div id="cjs-model-as-a-state-space-model" class="section level2">
+<h2>CJS model as a state-space model</h2>
+<p>Using the tools we’ve learned this semester, we can write the
+<strong>CJS model</strong> as a Bayesian <strong>state-space
+model</strong>. I prefer to teach and implement CJS models with Bayesian
+approaches, because they are more simple and intuitive.</p>
+<p>This model is hierarchical, in that it has two sub-models: the state
+process model, estimating whether or not individuals are alive, and the
+observation model, which uses information about whether individuals are
+alive to estimate recapture probability.</p>
+<div id="process-model" class="section level3">
+<h3>Process model</h3>
+<p><strong>Equation 1</strong> is our starting point for the process
+model: We know that the animal was alive and in the study area at the
+time it was first captured, so we set: Z_i,f1 = 1.</p>
+<p>That means the true state for individual i at their first capture
+occasion is “alive.”</p>
+<p><strong>Equation 2</strong> is the process model for all capture
+occasions after the first. This equation says: <em>If</em> the animal
+was alive at t−1, it survives to occasion t with probability phi. If it
+wasn’t alive at t−1, it can’t come back back to being alive – so it
+stays 0 (dead).</p>
+<p>This equation estimates apparent survival; with a Bernoulli draw, Phi
+is basically a weighted coinflip: survive and stay with probability phi,
+or die/emigrate with probability 1-phi.</p>
+<p><strong>Equation 3</strong> is the observation model. Y is our raw
+data – our captures histories – whether we saw each individual i during
+each occasion t. This says: If the animal is alive and in the study area
+at time t — that is, if z = 1 — then we observe it with probability
+p. If it’s dead or emigrated, we don’t have a chance to see it.</p>
+<p>So overall, we’re modeling both the underlying biological state —
+whether each individual is alive — and the chance of seeing it, which
+together form a hierarchical, state-space framework.</p>
+<p>By conditioning the model on the first capture year of each year with
+z = 1 and providing capture histories, this is enough information for
+the samplers to estimate what the most likely probabilities are for phi
+and p.</p>
+</div>
+</div>
+<div id="cjs-model-with-time-variation" class="section level2">
+<h2>CJS model with time-variation</h2>
+<p>As for other models we’ve seen this semester, we can add linear,
+individual-level covariates or temporal variation to the CJS model using
+the ‘logit’ link function.</p>
+<p>Remember, our parameters of interest here are <em>probabilities</em>,
+which are constrained between 0 and 1. We cannot fit simple linear
+models to probabilities, because linear models assume that response is
+continuous and unbounded. Instead, we have to use the ‘logit’ link
+function – 1 / (1 + exp(-(linear model))) – which unconstrains our betas
+to be values from negative infinite to positive infinite.</p>
+<p>JAGS does the logit-link for us in short-hand using the ‘logit()’
+command (second equation).</p>
+<p>The third and fourth equations show how we would specify time-varying
+survival, where survival in a given year is the sum of the logit-mean
+intercept, mu, plus epsilon_t, which is a normally-distributed random
+variable with a mean of zero and a variance of tau_phi. We’re saying…
+that survival can vary randomly from year to year with a normal
+distribution.</p>
+<p>And we can do the same thing for recapture probability, in equations
+5 and 6.</p>
+</div>
+<div id="identifiability-of-the-cjs-model-with-time-variation"
+class="section level2">
+<h2>Identifiability of the CJS model with time-variation</h2>
+<p>Now there is something important we need to be aware of: if we make
+this model fully-time dependent for both phi and p, the <strong>terminal
+parameters</strong> of <span class="math inline">\(\large
+\phi_T\)</span> and <span class="math inline">\(\large p_T\)</span> –
+the estimates of phi and p in the last year – are not identifiable.</p>
+<ul>
+<li><p>The model will return posteriors for both parameters (because
+each has a prior), but the model will <strong>not</strong> be able to
+separately <strong>estimate both parameters</strong>.</p></li>
+<li><p>Posteriors will actually be: <span class="math inline">\(\phi_T
+\times p_T\)</span></p></li>
+</ul>
+</div>
+<div id="identifiability-of-the-cjs-model-with-time-variation-2"
+class="section level2">
+<h2>Identifiability of the CJS model with time-variation 2</h2>
+<p><strong>Why is this?</strong> Here is a simple example, a CMR study
+with two occasions, where we captured 100 individuals in the first
+occasion and 60 were recaptured in occasion 2.</p>
+<p>Well, we can get 60 recaptures with survival of 0.8, and a recapture
+probability of 0.75, or with higher survival and lower recapture, or
+with lower survival and higher recapture.</p>
+<p>There is no unique solution! We must have more than 2 occasions and
+internal zeros to have enough information to disentangle survival and
+detection. So, always design your CJS study to have at least 3 or more
+sampling occasions.</p>
+</div>
+<div id="workarounds" class="section level2">
+<h2>Workarounds</h2>
+<p>Use a more simple model with a constant recapture probability.</p>
+<p>Include covariatsion on survival or recapture probabilities.</p>
+<p>Or use informed priors.</p>
+</div>
+<div id="assumptions-of-the-cjs-model" class="section level2">
+<h2>Assumptions of the CJS model</h2>
+<ol style="list-style-type: decimal">
+<li>Every animal has the same chance of capture, <span
+class="math inline">\(p\)</span></li>
+<li>Every animal has same probability of surviving <span
+class="math inline">\(\phi\)</span></li>
+<li>Marks are not lost</li>
+<li>Samples are instantaneous (short periods)<br />
+</li>
+<li>All emigration is permanent (<code>101</code> must indicate <span
+class="math inline">\(1 -  p\)</span>)</li>
+<li>Fates of individuals are independent of others</li>
+</ol>
+<p><strong>Design your study to meet these assumptions</strong>:</p>
+<ul>
+<li>Fixed study area</li>
+<li>Study area is ~large</li>
+<li>Samples are ~instantaneous</li>
+<li>Individuals are randomly sampled</li>
+</ul>
+</div>
+<div id="analysis-in-r" class="section level2">
+<h2>Analysis in R</h2>
+<p>Let’s explore what Cormack-Jolly-Seber analysis might look like in
+Program R.</p>
+<pre class="r"><code>#install.packages(&quot;AHMbook&quot;, &quot;wiqid&quot;) # install - only have to run once
+library(AHMbook) # load each package - run at start of exercise
+library(wiqid) </code></pre>
+<p>If you haven’t previously installed the packages ‘AHMbook’ and
+‘wiqid’, you will have to do so on your computer. Just run the install
+packages line one time, and then you never have to do it again on your
+machine.</p>
+<p>And then load each package before starting the analysis.</p>
+<p>In previously classes and labs, we learned how to simulate our own
+data, where we decided what all the fixed and random effects were, and
+how much random noise was present in the data. Unforunately, data
+simulation gets a little harder for Cormack-Jolly-Seber models, because
+there are multiple random processes that are hierarchically linked in
+the data.</p>
+<p>The good news is: the ‘AHMbook’ library has a built-in function to
+simulate data for us! Let’s take a look at this function, which is
+called ‘simCJS()’</p>
+<pre class="r"><code>help(simCJS)</code></pre>
+<p>We can tell the function to simulate data for us with, say, 6
+occasions, 20 marked animals each occasion, apparent surivival of 0.8,
+and recapture probability of 0.5.</p>
+<p>Let’s simulate the data, and examine the structure of the output
+object, which we always call ‘datum’.</p>
+<pre class="r"><code>datum &lt;- simCJS(n.occ = 6, n.marked = 20, phi = 0.8, p = 0.5, show.plot = FALSE)
+str(datum)</code></pre>
+<pre><code>## List of 9
+##  $ n.occ   : num 6
+##  $ n.marked: num [1:5] 20 20 20 20 20
+##  $ phi     : num [1:5] 0.8 0.8 0.8 0.8 0.8
+##  $ p       : num [1:5] 0.5 0.5 0.5 0.5 0.5
+##  $ z       : num [1:100, 1:6] 1 1 1 1 1 1 1 1 1 1 ...
+##  $ ch      : num [1:100, 1:6] 1 1 1 1 1 1 1 1 1 1 ...
+##  $ f       : int [1:100] 1 1 1 1 1 1 1 1 1 1 ...
+##  $ n.ind   : num 100
+##  $ n.alive : num [1:6] 20 34 48 59 68 55</code></pre>
+<p>This object saves various information about our simulation… but the
+key thing is: it saves (1) the ‘capture histories’ CH, and (2) the first
+year that we marked-and-released each animal, F. These two slots are
+raw-data requirements for our analyses.</p>
+<p>Let’s look at the capture histories:</p>
+<pre class="r"><code>head(datum$ch, 20)</code></pre>
+<pre><code>##       [,1] [,2] [,3] [,4] [,5] [,6]
+##  [1,]    1    1    1    0    1    0
+##  [2,]    1    0    0    1    0    0
+##  [3,]    1    1    0    0    0    0
+##  [4,]    1    1    0    0    0    0
+##  [5,]    1    0    0    0    0    0
+##  [6,]    1    1    0    0    0    1
+##  [7,]    1    1    1    0    1    1
+##  [8,]    1    1    1    1    1    1
+##  [9,]    1    0    0    0    0    0
+## [10,]    1    1    1    0    0    0
+## [11,]    1    0    0    0    0    0
+## [12,]    1    0    0    0    0    0
+## [13,]    1    0    0    0    0    0
+## [14,]    1    1    1    0    0    1
+## [15,]    1    0    0    0    0    0
+## [16,]    1    1    0    0    0    0
+## [17,]    1    0    0    0    0    0
+## [18,]    1    1    1    1    1    1
+## [19,]    1    1    0    1    0    0
+## [20,]    1    0    1    0    1    1</code></pre>
+<p>One other cool thing this function does, it that it will graph the
+fates of each individual for us, Z, and whether or not we observed each
+individual. We can quickly do that by re-running our simulation with the
+‘show.plot = TRUE’ option enabled.</p>
+<pre class="r"><code>datum &lt;- simCJS(n.occ = 6, n.marked = 20, phi = 0.8, p = 0.5, show.plot = TRUE)</code></pre>
+<p><img src="cjs_models_notes_files/figure-html/unnamed-chunk-6-1.png" width="672" /><img src="cjs_models_notes_files/figure-html/unnamed-chunk-6-2.png" width="672" /></p>
+<p>The first graph is the Z matric – whether or not each animal was
+alive.</p>
+<p>The second graph is our OBSERVED DATA, our capture histories – there
+is less black here, because even though many animals were alive, they
+went undetected!</p>
+<p>The third graph is both (1) the capture histories in black and (2)
+the unobserved but live/present. So we can see how frequently we miss
+animals due to imperfect detection in these data!</p>
+<p>The package ‘wiqid’ has built-in functions to perform CJS analyses
+using dataframes like the the one we just created. There are both
+frequentist and Bayesian options:</p>
+<pre class="r"><code>help(survCJS)</code></pre>
+<p>The help file describes both these models. The key thing is that we
+have to provide it data ‘DH’, which the help file calls ‘detection
+histories’ – but this is the same thing as our ‘capture histories’ data
+object. If we think survival or recapture probability vary by groups in
+our data (e.g., SEX), we can also provide it a ‘group’ variable and then
+tweak the ‘model’ formula to accommodate fixed-effects of groups.</p>
+<p>Now let’s see how to fit these models with a
+<strong>Frequentist</strong> approach.</p>
+<pre class="r"><code>results &lt;- survCJS(datum$ch)
+results</code></pre>
+<pre><code>## Call: survCJS(DH = datum$ch)
+## 
+## Real values (duplicates omitted):
+##         est  lowCI  uppCI
+## phi1 0.8007 0.7163 0.8648
+## p1   0.5811 0.4782 0.6774
+## 
+## AIC: 358.3194</code></pre>
+<p>This model says that apparent survival probability is 0.79, with
+confidence limits of 0.69–0.87. This estimate is very close to our
+‘truth’ of 0.8! And our confidence limits – our uncertainty of this
+estimate – also includes ‘truth’ basically smack dab in the middle. And
+same thing for recapture probability. So we know this model works.</p>
+<p>We can also ask it to make survival vary by year.</p>
+<pre class="r"><code>results2 &lt;- survCJS(datum$ch, phi ~ .time)
+results2</code></pre>
+<pre><code>## Call: survCJS(DH = datum$ch, model = phi ~ .time)
+## 
+## Real values (duplicates omitted):
+##         est  lowCI  uppCI
+## phi1 0.5550 0.3141 0.7726
+## phi2 0.9028 0.4845 0.9892
+## phi3 0.7896 0.5493 0.9204
+## phi4 0.8040 0.5535 0.9314
+## phi5 0.9290 0.1849 0.9987
+## p1   0.5657 0.4574 0.6680
+## 
+## AIC: 360.971</code></pre>
+<p>We now get 5 estimates of survival, related to each interval between
+our 6 sampling occasions. However, our confidence limits is really HIGH
+for some of these estimates – ranges from 0-1 in some years! Basically
+we have no idea what survival is in those years.</p>
+<p><strong>Q:</strong> Does anybody remember how we might compare and
+choose which of these models is better?</p>
+<p>The <strong>AIC</strong> value, Akaike’s Information Criterion, is a
+metric of model fit, where lower values indicate models that better fit
+our data. The simple model with no time effect had an AIC of 374,
+whereas the time-varying model had 378. We previously said our
+rule-of-thumb for model selection with AIC was that if the change in AIC
+between two models was 2 or more, that the better model has
+‘significantly better fit’. So this suggests the more simple model is
+significantly better.</p>
+<p>Let’s try to fit these using a <strong>Bayesian
+approach.</strong></p>
+<pre class="r"><code>results3 &lt;- BsurvCJS(datum$ch)
+results3</code></pre>
+<pre><code>## Object of class &#39;mcmcOutput&#39;; approx. size 803.97 kB 
+## Model fitted in JAGS with &#39;rjags&#39; functions 
+## MCMC chain generation took 0.28 secs 
+## The output has 3 chains each with 3334 draws.
+## It has 2 parameters with 10 nodes monitored:
+##     nodes
+## p       5
+## phi     5</code></pre>
+<p>Looking at the results… The Rhat statistic suggests that all of our
+parameters converge nicely, and the survival and recapture probabilities
+are same for all years because we did not specify time-variance. The
+estimates and Credible Intervals very clearly include TRUTH.</p>
+<p>When we fit the time-varying model, we see estimates oscillate a bit,
+but they all include TRUTH. Notice know though that the credible
+intervals here are much more narrow than the time-varying model fit with
+the frequentist approach – which I prefer.</p>
+<p>But, a disadvantage is that we no longer get a convenient metric,
+AIC, to compare models. It’s actually really difficult to evaluate model
+fit with hierarchical models!</p>
+<p>So, that’s all I have for today on CJS models. We’ll meet again this
+week in the lab, where we will learn how to write customizable code for
+these models in JAGS, check model accuracy using simulated data, analyze
+real datasets, and learn how to use posterior-predictive checks to do
+‘goodness-of-fit’ testing with our Bayesian models.</p>
+</div>
+
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+<script>
+$(document).ready(function ()  {
+
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

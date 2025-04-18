@@ -23,8 +23,4 @@ knitr::opts_chunk$set(
 
 [Lecture Slides](cjs_beamer_ppt.pdf)
 
-[Lab Slides](cjs_beamer_ppt.pdf)
-
-[R Code](https://brianfolt.github.io/NRES_710/CJS)
-
-[Data]()
+[R Code](https://brianfolt.github.io/NRES_710/cjs_lecture_code.R)
